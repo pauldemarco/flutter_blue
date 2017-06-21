@@ -16,7 +16,8 @@ abstract class IAdapter {
   /// Occurs when the adapter receives an advertisement for the first time of the current scan run.
   /// This means once per every <see cref="StartScanningForDevicesAsync(Guid[], Func&lt;IDevice, bool&gt;, CancellationToken)"/> call.
   //event EventHandler<DeviceEventArgs> DeviceDiscovered;
-  Stream<DeviceEventArgs> deviceDiscovered();
+  //Stream<DeviceEventArgs> deviceDiscovered();
+  Stream<IDevice> deviceDiscovered();
 
   /// Occurs when a device has been connected.
   //event EventHandler<DeviceEventArgs> DeviceConnected;
@@ -35,7 +36,7 @@ abstract class IAdapter {
   void scanTimeoutElapsed();
 
   /// Indicates, if the adapter is scanning for devices.
-  bool get isScanning;
+  Future<bool> get isScanning;
 
   /// Timeout for Ble scanning. Default is 10000.
   int scanTimeout;
@@ -63,11 +64,11 @@ abstract class IAdapter {
   /// <param name="cancellationToken">The token to monitor for cancellation requests. The default value is None.</param>
   /// <returns>A task that represents the asynchronous read operation. The Task will finish after the scan has ended.</returns>
   // TODO Implement Missing Parameters: Future startScanningForDevicesAsync({Set<Guid> serviceUuids = null, Function<IDevice, bool> deviceFilter = null, bool allowDuplicatesKey = false, CancellationToken cancellationToken = default(CancellationToken)});
-  Future startScanningForDevicesAsync({Set<Guid> serviceUuids = null});
+  Future startScanningForDevices({Set<Guid> serviceUuids = null});
 
   /// Stops scanning for BLE devices.
   /// <returns>A task that represents the asynchronous read operation. The Task will finish after the scan has ended.</returns>
-  Future stopScanningForDevicesAsync();
+  Future stopScanningForDevices();
 
   /// Connects to the <paramref name="device"/>.
   /// <param name="device">Device to connect to.</param>
@@ -77,12 +78,12 @@ abstract class IAdapter {
   /// <exception cref="DeviceConnectionException">Thrown if the device connection fails.</exception>
   /// <exception cref="ArgumentNullException">Thrown if the <paramref name="device"/> is null.</exception>
   // TODO Implement Missing Parameters: Future connectToDeviceAsync(IDevice device, ConnectParameters connectParameters = default(ConnectParameters), CancellationToken cancellationToken = default(CancellationToken));
-  Future connectToDeviceAsync(IDevice device);
+  Future connectToDevice(IDevice device);
 
   /// Disconnects from the <paramref name="device"/>.
   /// <param name="device">Device to connect from.</param>
   /// <returns>A task that represents the asynchronous read operation. The Task will finish after the device has been disconnected successfuly.</returns>
-  Future disconnectDeviceAsync(IDevice device);
+  Future disconnectDevice(IDevice device);
 
   /// Connects to a device whith a known GUID wihtout scanning and if in range. Does not scan for devices.
   /// <param name="deviceGuid"></param>
@@ -90,7 +91,7 @@ abstract class IAdapter {
   /// <param name="cancellationToken">The token to monitor for cancellation requests. The default value is None.</param>
   /// <returns></returns>
   // TODO Implement Missing Parameters: Future<IDevice> connectToKnownDeviceAsync(Guid deviceGuid, ConnectParameters connectParameters = default(ConnectParameters), CancellationToken cancellationToken = default(CancellationToken));
-  Future<IDevice> connectToKnownDeviceAsync(Guid deviceGuid);
+  Future<IDevice> connectToKnownDevice(Guid deviceGuid);
 
   /// Returns all BLE devices connected to the system. For android the implementations uses getConnectedDevices(GATT) & getBondedDevices()
   /// and for ios the implementation uses get retrieveConnectedPeripherals(services)

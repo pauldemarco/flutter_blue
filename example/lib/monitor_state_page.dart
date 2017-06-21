@@ -17,26 +17,42 @@ class _MonitorStatePageState extends State<MonitorStatePage> {
   FlutterBlue _flutterBlue = new FlutterBlue();
   StreamSubscription _scanSubscription;
   BluetoothState _state;
-  BluetoothState _oldState;
 
   @override
   initState() {
     super.initState();
     _state = BluetoothState.unknown;
-    _oldState = BluetoothState.unknown;
     _scanSubscription =
         _flutterBlue.ble.stateChanged().listen((state) {
           setState(() {
-            _oldState = state.oldState;
-            _state = state.newState;
+            _state = state;
           });
         });
   }
 
   @override
   void dispose() {
-    _scanSubscription.cancel();
-    _scanSubscription = null;
+    if(_scanSubscription != null) {
+      _scanSubscription.cancel();
+      _scanSubscription = null;
+    }
+  }
+
+  _getState() async {
+    BluetoothState state = await _flutterBlue.ble.state;
+    setState(() {
+      _state = state;
+    });
+  }
+
+  _isAvailable() async {
+    bool available = await _flutterBlue.ble.isAvailable;
+    print(available);
+  }
+
+  _isOn() async {
+    bool on = await _flutterBlue.ble.isOn;
+    print(on);
   }
 
   @override
@@ -47,9 +63,9 @@ class _MonitorStatePageState extends State<MonitorStatePage> {
       ),
       floatingActionButton: new FloatingActionButton(
           child: new Icon(Icons.search), 
-          onPressed: null),
+          onPressed: _isOn),
       body: new Center(
-        child: new Text(stringFromState(_oldState) + " " + stringFromState(_state)),
+        child: new Text(stringFromState(_state)),
       ),
     );
   }

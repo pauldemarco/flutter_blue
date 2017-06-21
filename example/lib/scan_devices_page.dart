@@ -33,7 +33,6 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
         state: DeviceState.disconnected));
     _scanSubscription = _flutterBlue.ble.adapter
         .deviceDiscovered()
-        .map((args) => args.device)
         .listen((device) {
       setState(() {
         var name = device.name;
@@ -56,7 +55,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
   }
 
   _searchClicked() async {
-    await _flutterBlue.ble.adapter.startScanningForDevicesAsync();
+    await _flutterBlue.ble.adapter.startScanningForDevices();
   }
 
   @override

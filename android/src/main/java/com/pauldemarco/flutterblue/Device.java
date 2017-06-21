@@ -1,6 +1,8 @@
 package com.pauldemarco.flutterblue;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Single;
 
@@ -14,13 +16,26 @@ public abstract class Device {
     final String name;
     final Object nativeDevice;
     int rssi;
-    DeviceState state;
-    List<AdvertisementRecord> advertisementRecords;
+    protected DeviceState state = DeviceState.DISCONNECTED;
+    protected byte[] advPacket;
 
-    public Device(Guid guid, String name, Object nativeDevice) {
+    public Device(Guid guid, String name, int rssi, Object nativeDevice, byte[] advPacket) {
         this.guid = guid;
         this.name = name;
+        this.rssi = rssi;
         this.nativeDevice = nativeDevice;
+        this.advPacket = advPacket;
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", this.guid.toString());
+        map.put("name", this.name);
+        map.put("nativeDevice", null);
+        map.put("rssi", this.rssi);
+        map.put("state", this.state.ordinal());
+        map.put("advPacket", this.advPacket);
+        return map;
     }
 
     public abstract Single<List<Service>> getServices();

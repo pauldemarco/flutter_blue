@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import rx.Completable;
+import rx.Observable;
 
 /**
  * This should be the exact same interface as Dart
@@ -16,13 +17,15 @@ public abstract class Adapter {
 
     public abstract boolean isScanning();
 
+    public abstract Observable<Device> deviceDiscovered();
+
     public abstract List<Device> getConnectedDevices();
 
     public abstract List<Device> getDiscoveredDevices();
 
-    public abstract Completable startScanningForDevices(Set<Guid> serviceUuids);
+    public abstract boolean startScanningForDevices(Set<Guid> serviceUuids);
 
-    public abstract Completable stopScanningForDevices();
+    public abstract boolean stopScanningForDevices();
 
     public abstract Completable connectToDevice(Device device);
 

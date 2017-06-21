@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/abstractions/contracts/bluetooth_state.dart';
 import 'package:flutter_blue/abstractions/contracts/i_adapter.dart';
 import 'package:flutter_blue/abstractions/contracts/i_bluetoothle.dart';
@@ -7,26 +8,28 @@ import 'package:flutter_blue/concrete/adapter.dart';
 import 'package:flutter_blue/eventchannels/bluetooth_state_event_channel.dart';
 
 class BluetoothLE implements IBluetoothLE {
+
+  final MethodChannel _channel = new MethodChannel("flutterblue.pauldemarco.com/bluetoothLe");
+  final EventChannel _eventChannel = new EventChannel("flutterblue.pauldemarco.com/bluetoothLe/state");
   
   final IAdapter _adapter;
   IAdapter get adapter => _adapter;
 
-  bool _isAvailable;
-  bool get isAvailable => _isAvailable;
+  Future<bool> get isOn =>
+      _channel.invokeMethod('isOn');
 
-  bool _isOn;
-  bool get isOn => _isOn;
+  Future<bool> get isAvailable =>
+      _channel.invokeMethod('isAvailable');
 
-  BluetoothState _state = BluetoothState.unknown;
-  Future<BluetoothState> get state => stateChanged().map((stateArg) => stateArg.newState).first;
+  Future<BluetoothState> get state =>
+      _channel.invokeMethod('getState')
+      .then((i) => BluetoothState.values[i]);
 
   BluetoothLE() : _adapter = new Adapter() {}
   
-  Stream<BluetoothStateChangedArgs> stateChanged() {
-    return BluetoothStateEventChannel.bluetoothState()
-        .where((s) => s != _state)
-        .map((s) => new BluetoothStateChangedArgs(_state, s))
-        .map((s){ _state = s.newState; return s; }); // TODO: This is not advised. Consider using rxDart and doOn() function to set local variable
+  Stream<BluetoothState> stateChanged() {
+    return _eventChannel.receiveBroadcastStream()
+        .map((i) => BluetoothState.values[i]);
   }
 
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'scan_devices_page.dart';
+import 'monitor_state_page.dart';
 
 void main() {
   runApp(new MyApp());

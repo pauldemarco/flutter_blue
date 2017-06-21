@@ -7,18 +7,18 @@ import 'package:flutter_blue/abstractions/eventargs/bluetooth_state_changed_args
 abstract class IBluetoothLE {
 
 /// Occurs when <see cref="State"/> has changed.
-// event EventHandler<BluetoothStateChangedArgs> StateChanged;
-Stream<BluetoothStateChangedArgs> stateChanged();
+//Stream<BluetoothStateChangedArgs> stateChanged(); // TODO: Consider previous state as well?
+Stream<BluetoothState> stateChanged();
 
 /// State of the bluetooth LE.
 Future<BluetoothState> get state;
 
 /// Indicates whether the device can communicate via bluetooth low energy.
-bool get isAvailable;
+Future<bool> get isAvailable;
 
 /// Indicates whether the bluetooth adapter is turned on or not.
 /// <c>true</c> if <see cref="State"/> is <c>BluetoothState.On</c>
-bool get isOn;
+Future<bool> get isOn;
 
 /// Adapter to that provides access to the physical bluetooth adapter.
 IAdapter get adapter;
