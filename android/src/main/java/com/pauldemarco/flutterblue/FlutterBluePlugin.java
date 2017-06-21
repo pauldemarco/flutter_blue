@@ -3,22 +3,22 @@ package com.pauldemarco.flutterblue;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 
+import com.pauldemarco.flutterblue.concrete.BluetoothLeImpl;
 import com.polidea.rxandroidble.RxBleAdapterStateObservable;
 import com.polidea.rxandroidble.RxBleAdapterStateObservable.BleAdapterState;
 import com.polidea.rxandroidble.RxBleClient;
 import com.polidea.rxandroidble.RxBleConnection;
 import com.polidea.rxandroidble.RxBleScanResult;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
+import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import rx.Subscription;
 
@@ -27,7 +27,10 @@ import rx.Subscription;
  */
 public class FlutterBluePlugin implements MethodCallHandler {
   private final Activity activity;
-  private final RxBleClient rxBleClient;
+  private final Registrar registrar;
+  private final BluetoothLe bluetoothLe;
+
+  
 
   /**
    * Plugin registration.
@@ -35,7 +38,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
   public static void registerWith(Registrar registrar) {
 
     // Initialize the plugin instance
-    final FlutterBluePlugin instance = new FlutterBluePlugin(registrar.activity());
+    final FlutterBluePlugin instance = new FlutterBluePlugin(registrar);
 
     // Setup any method and event channels
     final MethodChannel methodChannel = new MethodChannel(registrar.messenger(), "flutterblue.pauldemarco.com/methods");
@@ -49,9 +52,10 @@ public class FlutterBluePlugin implements MethodCallHandler {
     bluetoothStateChannel.setStreamHandler(instance.bluetoothStateHandler);
   }
 
-  FlutterBluePlugin(Activity activity){
-    this.activity = activity;
-    this.rxBleClient = RxBleClient.create(activity);
+  FlutterBluePlugin(Registrar r){
+    this.registrar = r;
+    this.activity = r.activity();
+    this.bluetoothLe = new BluetoothLeImpl(activity);
   }
 
   Subscription scanSubscription;
