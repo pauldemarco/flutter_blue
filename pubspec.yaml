@@ -1,0 +1,19 @@
+name: flutter_blue
+description: A new flutter plugin project.
+version: 0.0.1
+author:
+homepage:
+
+flutter:
+  plugin:
+    androidPackage: com.pauldemarco.flutterblue
+    pluginClass: FlutterBluePlugin
+
+dependencies:
+  flutter:
+    sdk: flutter
+  convert: "^2.0.1"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
