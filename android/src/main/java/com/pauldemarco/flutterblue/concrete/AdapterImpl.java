@@ -7,9 +7,14 @@ import com.pauldemarco.flutterblue.Adapter;
 import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
 import com.polidea.rxandroidble.RxBleClient;
-import com.polidea.rxandroidble.RxBleScanResult;
+import com.polidea.rxandroidble.RxBleDevice;
+import com.polidea.rxandroidble.scan.ScanFilter;
+import com.polidea.rxandroidble.scan.ScanResult;
+import com.polidea.rxandroidble.scan.ScanSettings;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.flutter.plugin.common.EventChannel;
@@ -38,6 +43,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
     private final EventChannel scanChannel;
     private Subscription scanSubscription;
     private PublishSubject<Device> scanResults;
+    private List<Device> connectedDevices = new ArrayList<>();
 
     public AdapterImpl(Registrar registrar, RxBleClient rxBleClient, BluetoothAdapter adapter) {
         this.rxBleClient = rxBleClient;
@@ -63,7 +69,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public List<Device> getConnectedDevices() {
-        return null;
+        return connectedDevices;
     }
 
     @Override
@@ -77,7 +83,14 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
             Log.d(TAG, "startScanningForDevices: Already Scanning");
             return false;
         }
-        scanSubscription = rxBleClient.scanBleDevices()
+        scanSubscription = rxBleClient.scanBleDevices(
+                new ScanSettings.Builder()
+                        // TODO: setScanMode
+                        .build(),
+                new ScanFilter.Builder()
+                        // TODO: setServiceUUIDs
+                        .build()
+        )
                 .map(s -> toDevice(s))
                 .subscribe(
                         d -> {
@@ -131,6 +144,28 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
             result.success(startScanningForDevices(null));
         } else if(call.method.equals("stopScanningForDevices")) {
             result.success(stopScanningForDevices());
+        } else if(call.method.equals("connectToDevice")) {
+            Map<String, Object> map = (Map<String, Object>)call.arguments;
+            String id = (String)map.get("id");
+            Guid guid = new Guid(id);
+            String name = (String)map.get("name");
+            int rssi = (int) map.get("rssi");
+            RxBleDevice nativeDevice = rxBleClient.getBleDevice(guid.toMac());
+            Device device = new DeviceImpl(guid, name, rssi, nativeDevice, null);
+            // Remove device in connected list if no longer connected
+            if(connectedDevices.contains(device)) {
+                int oldIndex = connectedDevices.indexOf(device);
+                Device existing = connectedDevices.get(oldIndex);
+                if(existing.isConnected()){
+                    result.success("Already connected to " + existing.getGuid().toMac());
+                    return;
+                } else {
+                    connectedDevices.remove(oldIndex);
+                }
+            }
+            connectedDevices.add(device);
+            device.connect(false);
+            result.success("Requested connection to " + device.getGuid().toMac());
         } else {
             result.notImplemented();
         }
@@ -158,8 +193,8 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         }
     };
 
-    private Device toDevice(RxBleScanResult scanResult) {
-        return DeviceImpl.fromScanResult(scanResult);
+    private Device toDevice(ScanResult scanResult) {
+        return new DeviceImpl(scanResult);
     }
 
 }

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter_blue/abstractions/advertisement_record.dart';
+import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
 import 'package:flutter_blue/concrete/device.dart';
 import 'package:flutter_blue/utils/guid.dart';

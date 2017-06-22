@@ -60,9 +60,8 @@ class Device implements IDevice {
   }
 
   bool operator ==(o) {
-   if(o is Device) {
-     return this.id == o.id;
-   }
-   return false;
+   if(o is! Device) return false;
+   return this.id == o.id;
   }
+
 }

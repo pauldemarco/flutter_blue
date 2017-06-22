@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
 import 'package:flutter_blue/concrete/device.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -56,6 +57,14 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
 
   _searchClicked() async {
     await _flutterBlue.ble.adapter.startScanningForDevices();
+    _getDiscoveredDevices();
+  }
+
+  _getDiscoveredDevices() {
+    List<IDevice> discovered = _flutterBlue.ble.adapter.discoveredDevices;
+    for(IDevice d in discovered) {
+      print("${d.id} ${d.name} ${d.rssi}");
+    }
   }
 
   @override

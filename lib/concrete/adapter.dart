@@ -22,8 +22,8 @@ class Adapter implements IAdapter {
   // TODO: implement connectedDevices
   List<IDevice> get connectedDevices => null;
 
-  // TODO: implement discoveredDevices
-  List<IDevice> get discoveredDevices => null;
+  List<IDevice> _discoveredDevices = new List<IDevice>();
+  List<IDevice> get discoveredDevices => _discoveredDevices;
 
   Future<bool> get isScanning =>
       _methods.invokeMethod("isScanning");
@@ -46,7 +46,15 @@ class Adapter implements IAdapter {
 
   Stream<IDevice> deviceDiscovered() {
     return _scanChannel.receiveBroadcastStream()
-        .map((m) => new Device.fromMap(m));
+        .map((m) {
+          var d = new Device.fromMap(m);
+          if(_discoveredDevices.contains(d)) {
+            _discoveredDevices.remove(d);
+          }
+          _discoveredDevices.add(d);
+          return d;
+        }
+    );
   }
 
   void scanTimeoutElapsed() {
@@ -54,7 +62,7 @@ class Adapter implements IAdapter {
   }
 
   Future connectToDevice(IDevice device) {
-    return NativeMethods.connectToDevice(device);
+    return _methods.invokeMethod("connectToDevice", device.toMap());
   }
 
   Future<IDevice> connectToKnownDevice(Guid deviceGuid) {
@@ -70,6 +78,7 @@ class Adapter implements IAdapter {
   }
 
   Future startScanningForDevices({Set<Guid> serviceUuids: null}) async{
+    _discoveredDevices.clear();
     // TODO: implement service UUID filtering
     bool scanning = await isScanning;
     if(scanning) return new Future.value("Already scanning.");
