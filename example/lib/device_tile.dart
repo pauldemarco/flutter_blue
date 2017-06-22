@@ -5,8 +5,13 @@ import 'animated_rssi.dart';
 
 class DeviceTile extends StatelessWidget {
   final Device device;
+  final deviceTapped;
 
-  const DeviceTile(this.device);
+  const DeviceTile(this.device, this.deviceTapped);
+
+  void _handleTap() {
+    deviceTapped(device);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +19,7 @@ class DeviceTile extends StatelessWidget {
       leading: new AnimatedRssi(device.rssi),
       title: new Text(device.name),
       subtitle: new Text(device.id.toString()),
+      onTap: _handleTap,
     );;
   }
 }

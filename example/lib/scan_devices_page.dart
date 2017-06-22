@@ -67,6 +67,10 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     }
   }
 
+  _deviceTapped(Device device) {
+    _flutterBlue.ble.adapter.connectToDevice(device);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -80,6 +84,6 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
   }
 
   List<DeviceTile> _createListItemsFromString() {
-    return devices.map((s) => new DeviceTile(s)).toList();
+    return devices.map((s) => new DeviceTile(s, _deviceTapped)).toList();
   }
 }

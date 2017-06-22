@@ -11,6 +11,7 @@ import com.polidea.rxandroidble.RxBleDevice;
 import com.polidea.rxandroidble.scan.ScanResult;
 import com.polidea.rxandroidble.utils.ConnectionSharingAdapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +115,7 @@ public class DeviceImpl extends Device {
                     );
 
         }
+        return Single.just(new ArrayList<>());
     }
 
     @Override
