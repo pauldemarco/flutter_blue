@@ -8,6 +8,7 @@ import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
 import com.polidea.rxandroidble.RxBleClient;
 import com.polidea.rxandroidble.RxBleDevice;
+import com.polidea.rxandroidble.RxBleScanResult;
 import com.polidea.rxandroidble.scan.ScanFilter;
 import com.polidea.rxandroidble.scan.ScanResult;
 import com.polidea.rxandroidble.scan.ScanSettings;
@@ -41,8 +42,9 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
     private final BluetoothAdapter adapter;
     private final MethodChannel methodChannel;
     private final EventChannel scanChannel;
-    private Subscription scanSubscription;
-    private PublishSubject<Device> scanResults;
+    private final ScanChannelHandler scanChannelHandler = new ScanChannelHandler();
+    private Observable<ScanResult> scanObservable;
+    private final PublishSubject<Void> stopScanningTrigger = PublishSubject.create();
     private List<Device> connectedDevices = new ArrayList<>();
 
     public AdapterImpl(Registrar registrar, RxBleClient rxBleClient, BluetoothAdapter adapter) {
@@ -51,20 +53,40 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         this.methodChannel = new MethodChannel(registrar.messenger(), "flutterblue.pauldemarco.com/adapter");
         this.scanChannel = new EventChannel(registrar.messenger(), "flutterblue.pauldemarco.com/adapter/scanResults");
         this.methodChannel.setMethodCallHandler(this);
-        this.scanChannel.setStreamHandler(scanResultsHandler);
+        this.scanChannel.setStreamHandler(scanChannelHandler);
+    }
+
+    @Override
+    public void deviceDiscovered(Device device) {
+        if(scanChannelHandler.eventSink != null) {
+            scanChannelHandler.eventSink.success(device);
+        }
+        methodChannel.invokeMethod("deviceDiscovered", device.toMap());
+    }
+
+    @Override
+    public void deviceConnected(Device device) {
+        methodChannel.invokeMethod("deviceConnected", device.toMap());
+    }
+
+    @Override
+    public void deviceDisconnected(Device device) {
+        methodChannel.invokeMethod("deviceDisconnected", device.toMap());
+    }
+
+    @Override
+    public void deviceConnectionLost(Device device) {
+        methodChannel.invokeMethod("deviceConnectionLost", device.toMap());
+    }
+
+    @Override
+    public void scanTimeoutElapsed() {
+        methodChannel.invokeMethod("scanTimeoutElapsed", null);
     }
 
     @Override
     public boolean isScanning() {
         return adapter.isDiscovering();
-    }
-
-    @Override
-    public Observable<Device> deviceDiscovered() {
-        if(scanResults == null) {
-            scanResults = PublishSubject.create();
-        }
-        return scanResults;
     }
 
     @Override
@@ -79,46 +101,39 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public boolean startScanningForDevices(Set<Guid> serviceUuids) {
-        if(scanSubscription != null) {
-            Log.d(TAG, "startScanningForDevices: Already Scanning");
-            return false;
+        if(!isScanning()) {
+            scanObservable = prepareScanObservable();
+            scanObservable
+                    .map(this::toDevice)
+                    .subscribe(
+                            this::deviceDiscovered,
+                            this::onScanError
+                    );
         }
-        scanSubscription = rxBleClient.scanBleDevices(
-                new ScanSettings.Builder()
-                        // TODO: setScanMode
-                        .build(),
-                new ScanFilter.Builder()
-                        // TODO: setServiceUUIDs
-                        .build()
-        )
-                .map(s -> toDevice(s))
-                .subscribe(
-                        d -> {
-                            if(scanResults != null) {
-                                scanResults.onNext(d);
-                            }
-                        },
-                        e -> {
-                            if(scanResults != null) {
-                                scanResults.onError(e);
-                            }
-                        }
-                );
         return true;
     }
 
     @Override
-    public boolean stopScanningForDevices() {
-        if(scanSubscription != null) {
-            scanSubscription.unsubscribe();
-            scanSubscription = null;
-        }
-        return true;
+    public void stopScanningForDevices() {
+        stopScanningTrigger.onNext(null);
     }
 
     @Override
     public Completable connectToDevice(Device device) {
-        return null;
+        // Remove device in connected list if no longer connected
+        if(connectedDevices.contains(device)) {
+            int oldIndex = connectedDevices.indexOf(device);
+            Device existing = connectedDevices.get(oldIndex);
+            if(existing.isConnected()){
+                result.success("Already connected to " + existing.getGuid().toMac());
+                return;
+            } else {
+                connectedDevices.remove(oldIndex);
+            }
+        }
+        connectedDevices.add(device);
+        device.connect(false);
+        return Completable.complete();
     }
 
     @Override
@@ -143,7 +158,8 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         } else if(call.method.equals("startScanningForDevices")) {
             result.success(startScanningForDevices(null));
         } else if(call.method.equals("stopScanningForDevices")) {
-            result.success(stopScanningForDevices());
+            stopScanningForDevices();
+            result.success(true);
         } else if(call.method.equals("connectToDevice")) {
             Map<String, Object> map = (Map<String, Object>)call.arguments;
             String id = (String)map.get("id");
@@ -152,46 +168,47 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
             int rssi = (int) map.get("rssi");
             RxBleDevice nativeDevice = rxBleClient.getBleDevice(guid.toMac());
             Device device = new DeviceImpl(guid, name, rssi, nativeDevice, null);
-            // Remove device in connected list if no longer connected
-            if(connectedDevices.contains(device)) {
-                int oldIndex = connectedDevices.indexOf(device);
-                Device existing = connectedDevices.get(oldIndex);
-                if(existing.isConnected()){
-                    result.success("Already connected to " + existing.getGuid().toMac());
-                    return;
-                } else {
-                    connectedDevices.remove(oldIndex);
-                }
-            }
-            connectedDevices.add(device);
-            device.connect(false);
-            result.success("Requested connection to " + device.getGuid().toMac());
+            connectToDevice(device).subscribe(
+                    () -> result.success("Requested connection to " + device.getGuid().toMac()),
+                    throwable -> result.error("Device connection error", throwable.getMessage(), throwable)
+            );
         } else {
             result.notImplemented();
         }
     }
 
-    private final StreamHandler scanResultsHandler = new StreamHandler() {
-        Subscription subscription;
+    private Observable<ScanResult> prepareScanObservable() {
+        return rxBleClient.scanBleDevices(
+                new ScanSettings.Builder()
+                        // setScanMode
+                        .build(),
+                new ScanFilter.Builder()
+                        // setServiceUUIDs
+                        .build()
+        )
+                .takeUntil(stopScanningTrigger);
+    }
+
+    private class ScanChannelHandler implements StreamHandler {
+        public EventSink eventSink;
 
         @Override
         public void onListen(Object o, EventSink eventSink) {
-            if(subscription == null) {
-                subscription = deviceDiscovered().subscribe(
-                        d -> eventSink.success(d.toMap()),
-                        e -> eventSink.error("SCAN_ERROR", e.getMessage(), e)
-                );
-            }
+            this.eventSink = eventSink;
         }
 
         @Override
         public void onCancel(Object o) {
-            if(subscription != null) {
-                subscription.unsubscribe();
-                subscription = null;
-            }
+            eventSink = null;
         }
     };
+
+    private void onScanError(Throwable e) {
+        if(scanChannelHandler.eventSink != null) {
+            scanChannelHandler.eventSink.error("SCAN_ERROR", e.getMessage(), e);
+        }
+        Log.e(TAG, "onScanError: " + e.getMessage());
+    }
 
     private Device toDevice(ScanResult scanResult) {
         return new DeviceImpl(scanResult);
