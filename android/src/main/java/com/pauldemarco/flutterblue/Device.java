@@ -28,6 +28,8 @@ public abstract class Device {
 
     public abstract void disconnect();
 
+    public abstract void stateChanged(State state);
+
     public abstract Single<List<Service>> getServices();
 
     public abstract Single<Service> getService(Guid id);

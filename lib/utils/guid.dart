@@ -1,10 +1,47 @@
 import 'package:convert/convert.dart';
+import 'dart:typed_data';
+import 'package:collection/collection.dart';
 
 class Guid {
 
-  final List<int> _bytes = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  final List<int> _bytes;
+  final int _hashCode;
 
-  Guid(String input) {
+  Guid._internal(List<int> bytes) : _bytes = bytes, _hashCode = _calcHashCode(bytes);
+
+  Guid(String input) : this._internal(_fromString(input));
+
+  Guid.fromMac(String input) : this._internal(_fromMacString(input));
+
+  Guid.empty(): this._internal(new List.filled(16, 0));
+
+  static List<int> _fromMacString(input) {
+    var bytes = new List<int>.filled(16, 0);
+
+    if(input == null){
+      throw new ArgumentError("Input was null");
+    }
+    input = input.toLowerCase();
+
+    final RegExp regex = new RegExp('[0-9a-f]{2}');
+    Iterable<Match> matches = regex.allMatches(input);
+
+    if(matches.length != 6){
+      throw new FormatException("The format is invalid: " + input);
+    }
+
+    int i = 0;
+    for(Match match in matches) {
+      var hexString = input.substring(match.start,match.end);
+      bytes[i] = hex.decode(hexString)[0];
+      i++;
+    }
+
+    return bytes;
+  }
+
+  static List<int> _fromString(input) {
+    var bytes = new List<int>.filled(16, 0);
     if(input == null){
       throw new ArgumentError("Input was null");
     }
@@ -21,53 +58,16 @@ class Guid {
     int i = 0;
     for(Match match in matches) {
       var hexString = input.substring(match.start,match.end);
-      _bytes[i] = hex.decode(hexString)[0];
+      bytes[i] = hex.decode(hexString)[0];
       i++;
     }
+    return bytes;
   }
 
-  Guid.fromMac(String input) {
-    if(input == null){
-      throw new ArgumentError("Input was null");
-    }
-    input = input.toLowerCase();
-
-    final RegExp regex = new RegExp('[0-9a-f]{2}');
-    Iterable<Match> matches = regex.allMatches(input);
-
-    if(matches.length != 6){
-      throw new FormatException("The format is invalid: " + input);
-    }
-
-    int i = 0;
-    for(Match match in matches) {
-      var hexString = input.substring(match.start,match.end);
-      _bytes[i] = hex.decode(hexString)[0];
-      i++;
-    }
-
+  static int _calcHashCode(List<int> bytes) {
+    const equality = const ListEquality<int>();
+    return equality.hash(bytes);
   }
-
-  Guid.empty(){
-    for(int i=0; i < _bytes.length; i++) {
-      _bytes[i] = 0;
-    }
-  }
-
-  bool operator ==(o) {
-    if(o is Guid){
-      for(int i=0; i < _bytes.length; i++) {
-        if(_bytes.length != o._bytes.length) {
-          return false;
-        }
-        if(_bytes[i] != o._bytes[i]){
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
 
   @override
   String toString() {
@@ -82,5 +82,10 @@ class Guid {
   List<int> toByteArray() {
     return _bytes;
   }
+
+  operator ==(other) =>
+    other is Guid && this.hashCode == other.hashCode;
+
+  int get hashCode => _hashCode;
 
 }

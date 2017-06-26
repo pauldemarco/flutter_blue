@@ -33,6 +33,20 @@ main() {
       expect("[36, 10, 100, 80, 164, 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]", guid.toByteArray().toString());
       print(guid.toString());
     });
+
+    test('hashCode', (){
+      var guid = new Guid.fromMac("24:0A:64:50:A4:67");
+      var guid2 = new Guid.fromMac("24:0A:64:50:A4:67");
+      expect(guid.hashCode, guid2.hashCode);
+    });
+
+    test('empty() equality', (){
+      var guid = new Guid.empty();
+      var guid2 = new Guid.empty();
+      var guid3 = new Guid.fromMac("24:0A:64:50:A4:67");
+      expect(guid == guid2, true);
+      expect(guid == guid3, false);
+    });
   });
 
 }

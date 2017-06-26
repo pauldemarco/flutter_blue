@@ -38,5 +38,12 @@ main() {
       expect(devices.contains(device3), false);
     });
 
+    test('sets', () {
+      Set<Device> devices = new Set();
+      devices.add(device);
+      expect(devices.contains(device2), true);
+      expect(devices.contains(device3), false);
+    });
+
   });
 }

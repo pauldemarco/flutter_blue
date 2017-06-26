@@ -21,7 +21,8 @@ abstract class IAdapter {
 
   /// Occurs when a device has been connected.
   //event EventHandler<DeviceEventArgs> DeviceConnected;
-  void deviceConnected(DeviceEventArgs args);
+  //void deviceConnected(DeviceEventArgs args);
+  Stream<IDevice> deviceConnected();
 
   /// Occurs when a device has been disconnected. This occurs on intentional disconnects after <see cref="DisconnectDeviceAsync"/>.
   //event EventHandler<DeviceEventArgs> DeviceDisconnected;
@@ -47,10 +48,10 @@ abstract class IAdapter {
   ScanMode scanMode;
 
   /// List of last discovered devices.
-  List<IDevice> get discoveredDevices;
+  Set<IDevice> get discoveredDevices;
 
   /// List of currently connected devices.
-  List<IDevice> get connectedDevices;
+  Set<IDevice> get connectedDevices;
 
   /// Starts scanning for BLE devices that fulfill the <paramref name="deviceFilter"/>.
   /// DeviceDiscovered will only be called, if <paramref name="deviceFilter"/> returns <c>true</c> for the discovered device.

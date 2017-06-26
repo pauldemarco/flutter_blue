@@ -6,6 +6,7 @@ import android.util.Log;
 import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
 import com.pauldemarco.flutterblue.Service;
+import com.pauldemarco.flutterblue.utils.MyStreamHandler;
 import com.polidea.rxandroidble.RxBleConnection;
 import com.polidea.rxandroidble.RxBleDevice;
 import com.polidea.rxandroidble.scan.ScanResult;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.PluginRegistry.Registrar;
 import rx.Observable;
 import rx.Single;
 import rx.subjects.PublishSubject;
@@ -34,26 +37,31 @@ public class DeviceImpl extends Device {
     private State state = State.DISCONNECTED;
     private byte[] advPacket;
 
+    private final EventChannel statusChannel;
+    private final MyStreamHandler statusStream = new MyStreamHandler();
+
     private final PublishSubject<Void> disconnectTriggerSubject = PublishSubject.create();
     private Observable<RxBleConnection> connectionObservable;
 
-    public DeviceImpl(Guid guid, String name, int rssi, RxBleDevice nativeDevice, byte[] advPacket) {
+    public DeviceImpl(Registrar registrar, Guid guid, String name, RxBleDevice nativeDevice, int rssi, byte[] advPacket) {
         this.guid = guid;
         this.name = name;
         this.rssi = rssi;
         this.nativeDevice = nativeDevice;
         this.advPacket = advPacket;
         this.state = toState(nativeDevice.getConnectionState());
+        this.statusChannel = new EventChannel(registrar.messenger(), "flutterblue.pauldemarco.com/device/"+guid.toString()+"/status");
     }
 
-    public DeviceImpl(ScanResult scanResult) {
+
+    public static DeviceImpl fromScanResult(Registrar registrar, ScanResult scanResult) {
         String mac = scanResult.getBleDevice().getMacAddress();
-        this.guid = Guid.fromMac(mac);
-        this.name = scanResult.getBleDevice().getName();
-        this.rssi = scanResult.getRssi();
-        this.nativeDevice = scanResult.getBleDevice();
-        this.advPacket = scanResult.getScanRecord().getBytes();
-        this.state = toState(nativeDevice.getConnectionState());
+        Guid guid = Guid.fromMac(mac);
+        String name = scanResult.getBleDevice().getName();
+        int rssi = scanResult.getRssi();
+        RxBleDevice nativeDevice = scanResult.getBleDevice();
+        byte[] advPacket = scanResult.getScanRecord().getBytes();
+        return new DeviceImpl(registrar, guid, name, nativeDevice, rssi, advPacket);
     }
 
     public Map<String, Object> toMap() {
@@ -85,6 +93,13 @@ public class DeviceImpl extends Device {
                     },
                     this::onConnectionFailure
             );
+            nativeDevice.observeConnectionStateChanges()
+                    .takeUntil(disconnectTriggerSubject)
+                    .map((s) -> toState(s))
+                    .subscribe(
+                            this::stateChanged,
+                            this::onConnectionStateFailure
+                    );
         }
         return true;
     }
@@ -97,6 +112,13 @@ public class DeviceImpl extends Device {
     @Override
     public Guid getGuid() {
         return this.guid;
+    }
+
+    @Override
+    public void stateChanged(State state) {
+        if(statusStream.eventSink != null) {
+            statusStream.eventSink.success(state);
+        }
     }
 
     @Override
@@ -125,7 +147,17 @@ public class DeviceImpl extends Device {
 
     @Override
     public Single<Boolean> updateRssi() {
-        return null;
+        if(isConnected()) {
+            connectionObservable
+                    .flatMap((connection) -> connection.readRssi())
+                    .subscribe(
+                            rssi -> {
+                                this.rssi = rssi;
+                            },
+                            this::onConnectionFailure
+                    );
+        }
+        return Single.just(true);
     }
 
     @Override
@@ -146,6 +178,10 @@ public class DeviceImpl extends Device {
 
     private void onConnectionFailure(Throwable throwable) {
         Log.e(TAG, "onConnectionFailure" + this.guid.toMac() + ", message:" + throwable.getMessage());
+    }
+
+    private void onConnectionStateFailure(Throwable throwable) {
+        Log.e(TAG, "onConnectionStateFailure" + this.guid.toMac() + ", message:" + throwable.getMessage());
     }
 
     private State toState(RxBleConnection.RxBleConnectionState state) {
@@ -171,5 +207,10 @@ public class DeviceImpl extends Device {
         if(getClass() != o.getClass()) return false;
         DeviceImpl other = (DeviceImpl) o;
         return guid.equals(other.getGuid());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.guid.hashCode();
     }
 }

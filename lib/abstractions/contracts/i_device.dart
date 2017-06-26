@@ -32,6 +32,9 @@ abstract class IDevice {
   /// - ...
   List<AdvertisementRecord> get advertisementRecords;
 
+  /// Stream of connection state changes for device
+  Stream<DeviceState> stateChanged();
+
   /// Gets all services of the device.
   /// <returns>A task that represents the asynchronous read operation. The Result property will contain a list of all available services.</returns>
   Future<List<IService>> getServicesAsync();

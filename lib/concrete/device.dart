@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/abstractions/advertisement_record.dart';
 import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_blue/utils/guid.dart';
 
 class Device implements IDevice {
 
-  // We must use a Guid since the Mac address is not exposed on iOS
   final Guid id;
   final String name;
   final Object nativeDevice;
@@ -17,16 +17,20 @@ class Device implements IDevice {
   final DeviceState state;
   final List<AdvertisementRecord> advertisementRecords;
 
-  Device({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi, this.state});
+  final EventChannel _statusChannel;
+
+  Device._internal({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi, this.state})
+        : _statusChannel = new EventChannel("flutterblue.pauldemarco.com/device/${id.toString()}/status");
 
   Device.fromMap(map)
-      : id = new Guid(map['id']),
-        name = (map['name'] != null) ? map['name'] : 'Unknown',
-        rssi = map['rssi'],
-        nativeDevice = map['nativeDevice'],
-        state = DeviceState.values[map['state']],
-        advertisementRecords = AdvertisementRecord.listFromBytes(map['advPacket']) {
-  }
+      : this._internal(
+          id: new Guid(map['id']),
+          name: (map['name'] != null) ? map['name'] : 'Unknown',
+          rssi: map['rssi'],
+          nativeDevice: map['nativeDevice'],
+          state: DeviceState.values[map['state']],
+          advertisementRecords: AdvertisementRecord.listFromBytes(map['advPacket'])
+      );
 
   Map<String, dynamic> toMap() {
     var map = new Map();
@@ -37,6 +41,12 @@ class Device implements IDevice {
     map["state"] = state.index;
     //map["advertisementRecords"] = advertisementRecords; TODO: Need to serialize this as well
     return map;
+  }
+
+  @override
+  Stream<DeviceState> stateChanged() {
+    return _statusChannel.receiveBroadcastStream()
+        .map((i) => DeviceState.values[i]);
   }
 
   @override
@@ -59,9 +69,8 @@ class Device implements IDevice {
     // TODO: implement updateRssiAsync
   }
 
-  bool operator ==(o) {
-   if(o is! Device) return false;
-   return this.id == o.id;
-  }
+  operator ==(other) =>
+      other is Device && id.hashCode == other.id.hashCode;
 
+  int get hashCode => id.hashCode;
 }

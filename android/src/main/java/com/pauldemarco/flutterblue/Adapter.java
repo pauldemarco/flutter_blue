@@ -26,9 +26,9 @@ public abstract class Adapter {
 
     public abstract void scanTimeoutElapsed();
 
-    public abstract List<Device> getConnectedDevices();
+    public abstract Set<Device> getConnectedDevices();
 
-    public abstract List<Device> getDiscoveredDevices();
+    public abstract Set<Device> getDiscoveredDevices();
 
     public abstract boolean startScanningForDevices(Set<Guid> serviceUuids);
 

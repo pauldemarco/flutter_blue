@@ -54,4 +54,9 @@ public class Guid {
         Guid guid = (Guid)obj;
         return this.uuid.equals(guid.uuid);
     }
+
+    @Override
+    public int hashCode() {
+        return this.uuid.hashCode();
+    }
 }

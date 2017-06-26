@@ -13,17 +13,18 @@ import 'package:flutter_blue/utils/guid.dart';
 class Adapter implements IAdapter {
 
   final MethodChannel _methods = new MethodChannel("flutterblue.pauldemarco.com/adapter");
-  final EventChannel _scanChannel = new EventChannel("flutterblue.pauldemarco.com/adapter/scanResults");
+  final EventChannel _discoveredChannel = new EventChannel("flutterblue.pauldemarco.com/adapter/deviceDiscovered");
+  final EventChannel _connectedChannel = new EventChannel("flutterblue.pauldemarco.com/adapter/deviceConnected");
 
   ScanMode scanMode = ScanMode.lowPower;
 
   int scanTimeout = 10000;
 
-  // TODO: implement connectedDevices
-  List<IDevice> get connectedDevices => null;
+  Set<IDevice> _connectedDevices = new Set<IDevice>();
+  Set<IDevice> get connectedDevices => _connectedDevices;
 
-  List<IDevice> _discoveredDevices = new List<IDevice>();
-  List<IDevice> get discoveredDevices => _discoveredDevices;
+  Set<IDevice> _discoveredDevices = new Set<IDevice>();
+  Set<IDevice> get discoveredDevices => _discoveredDevices;
 
   Future<bool> get isScanning =>
       _methods.invokeMethod("isScanning");
@@ -32,8 +33,20 @@ class Adapter implements IAdapter {
     // TODO: implement deviceAdvertised
   }
 
-  void deviceConnected(DeviceEventArgs args) {
-    // TODO: implement deviceConnected
+  Stream<IDevice> deviceConnected() {
+    return _connectedChannel.receiveBroadcastStream()
+        .map((m) {
+      var d = new Device.fromMap(m);
+      if(_connectedDevices.contains(d)) {
+        // TODO: Handle situation where connected device is already in connected list
+        // Device device = _connectedDevices.lookup(d);
+        // device.disconnect();
+        _connectedDevices.remove(d);
+      }
+      _connectedDevices.add(d);
+      return d;
+    }
+    );
   }
 
   void deviceConnectionLost(DeviceErrorEventArgs args) {
@@ -45,7 +58,7 @@ class Adapter implements IAdapter {
   }
 
   Stream<IDevice> deviceDiscovered() {
-    return _scanChannel.receiveBroadcastStream()
+    return _discoveredChannel.receiveBroadcastStream()
         .map((m) {
           var d = new Device.fromMap(m);
           if(_discoveredDevices.contains(d)) {
