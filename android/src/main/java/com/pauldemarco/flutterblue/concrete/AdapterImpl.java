@@ -62,17 +62,13 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public void deviceDiscovered(Device device) {
-        if(discoveredStream.eventSink != null) {
-            discoveredStream.eventSink.success(device);
-        }
+        discoveredStream.onNext(device);
     }
 
     @Override
     public void deviceConnected(Device device) {
         connectedDevices.add(device);
-        if(connectedStream.eventSink != null) {
-            connectedStream.eventSink.success(device);
-        }
+        connectedStream.onNext(device);
     }
 
     @Override
@@ -188,9 +184,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
     }
 
     private void onScanError(Throwable e) {
-        if(discoveredStream.eventSink != null) {
-            discoveredStream.eventSink.error("SCAN_ERROR", e.getMessage(), e);
-        }
+        discoveredStream.onError("SCAN_ERROR", e);
         Log.e(TAG, "onScanError: " + e.getMessage());
     }
 

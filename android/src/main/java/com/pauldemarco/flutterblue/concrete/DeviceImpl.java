@@ -125,9 +125,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
 
     @Override
     public void stateChanged(State state) {
-        if(statusStream.eventSink != null) {
-            statusStream.eventSink.success(state);
-        }
+        statusStream.onNext(state);
     }
 
     @Override

@@ -24,6 +24,16 @@ class Device implements IDevice {
         : _methodChannel = new MethodChannel("flutterblue.pauldemarco.com/device/${id.toString()}/methods"),
           _statusChannel = new EventChannel("flutterblue.pauldemarco.com/device/${id.toString()}/status");
 
+  Device({id, name, nativeDevice, rssi, state, advertisementRecords})
+      : this._internal(
+      id: id,
+      name: name,
+      rssi: rssi,
+      nativeDevice: nativeDevice,
+      state: state,
+      advertisementRecords: advertisementRecords
+  );
+
   Device.fromMap(map)
       : this._internal(
           id: new Guid(map['id']),

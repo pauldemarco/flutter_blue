@@ -6,6 +6,8 @@ dependencies:
     sdk: flutter
   flutter_blue:
     path: ../
+  intl: '>=0.14.0 <0.15.0'
+  intl_translation: '>=0.14.0 <0.15.0'
   convert: "^2.0.1"
 
 # For information on the generic Dart part of this file, see the
