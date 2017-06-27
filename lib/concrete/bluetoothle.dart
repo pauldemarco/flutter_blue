@@ -9,7 +9,7 @@ import 'package:flutter_blue/eventchannels/bluetooth_state_event_channel.dart';
 
 class BluetoothLE implements IBluetoothLE {
 
-  final MethodChannel _channel = new MethodChannel("flutterblue.pauldemarco.com/bluetoothLe");
+  final MethodChannel _channel = new MethodChannel("flutterblue.pauldemarco.com/bluetoothLe/methods");
   final EventChannel _eventChannel = new EventChannel("flutterblue.pauldemarco.com/bluetoothLe/state");
   
   final IAdapter _adapter;

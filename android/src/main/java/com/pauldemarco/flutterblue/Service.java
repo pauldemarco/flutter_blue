@@ -1,6 +1,8 @@
 package com.pauldemarco.flutterblue;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import rx.Single;
 
@@ -10,23 +12,34 @@ import rx.Single;
 
 public abstract class Service {
 
-    final Guid guid;
+    protected final Guid guid;
 
-    final String name;
+    protected final boolean isPrimary;
 
-    final boolean isPrimary;
+    protected final Device device;
 
-    final Device device;
+    protected final List<Service> includedServices;
 
-    public Service(Guid guid, String name, boolean isPrimary, Device device) {
+    protected final List<Characteristic> characteristics;
+
+    public Service(Guid guid, boolean isPrimary, Device device) {
         this.guid = guid;
-        this.name = name;
         this.isPrimary = isPrimary;
         this.device = device;
+        this.includedServices = new ArrayList<>();
+        this.characteristics = new ArrayList<>();
     }
+
+    public Guid getGuid() {
+        return guid;
+    }
+
+    public abstract Single<List<Service>> getIncludedServices();
 
     public abstract Single<List<Characteristic>> getCharacteristics();
 
     public abstract Single<Characteristic> getCharacteristic();
+
+    public abstract Map<String, Object> toMap();
 
 }

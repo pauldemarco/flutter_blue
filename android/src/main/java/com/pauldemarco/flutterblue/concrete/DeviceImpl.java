@@ -1,14 +1,15 @@
 package com.pauldemarco.flutterblue.concrete;
 
-import android.bluetooth.BluetoothGattService;
 import android.util.Log;
 
+import com.pauldemarco.flutterblue.ChannelPaths;
 import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
 import com.pauldemarco.flutterblue.Service;
 import com.pauldemarco.flutterblue.utils.MyStreamHandler;
 import com.polidea.rxandroidble.RxBleConnection;
 import com.polidea.rxandroidble.RxBleDevice;
+import com.polidea.rxandroidble.RxBleDeviceServices;
 import com.polidea.rxandroidble.scan.ScanResult;
 import com.polidea.rxandroidble.utils.ConnectionSharingAdapter;
 
@@ -18,6 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import rx.Observable;
 import rx.Single;
@@ -27,7 +32,7 @@ import rx.subjects.PublishSubject;
  * Created by paul on 6/21/17.
  */
 
-public class DeviceImpl extends Device {
+public class DeviceImpl extends Device implements MethodCallHandler {
     private static final String TAG = "DeviceImpl";
 
     private final Guid guid;
@@ -37,6 +42,7 @@ public class DeviceImpl extends Device {
     private State state = State.DISCONNECTED;
     private byte[] advPacket;
 
+    private final MethodChannel methodChannel;
     private final EventChannel statusChannel;
     private final MyStreamHandler statusStream = new MyStreamHandler();
 
@@ -50,7 +56,10 @@ public class DeviceImpl extends Device {
         this.nativeDevice = nativeDevice;
         this.advPacket = advPacket;
         this.state = toState(nativeDevice.getConnectionState());
-        this.statusChannel = new EventChannel(registrar.messenger(), "flutterblue.pauldemarco.com/device/"+guid.toString()+"/status");
+        this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.getDeviceMethodsPath(guid.toString()));
+        this.methodChannel.setMethodCallHandler(this);
+        this.statusChannel = new EventChannel(registrar.messenger(), ChannelPaths.getDeviceStatusPath(guid.toString()));
+        statusChannel.setStreamHandler(statusStream);
     }
 
 
@@ -124,25 +133,35 @@ public class DeviceImpl extends Device {
     @Override
     public Single<List<Service>> getServices() {
         if(isConnected()) {
-            connectionObservable
+            return connectionObservable
                     .flatMap(RxBleConnection::discoverServices)
                     .first() // Disconnect automatically after discovery
-                    .subscribe(
-                            services -> {
-                                for(BluetoothGattService service : services.getBluetoothGattServices()) {
-                                    Log.d(TAG, "getServices: service uuid:" + service.getUuid().toString());
-                                }
-                            },
-                            this::onConnectionFailure
-                    );
+                    .map(RxBleDeviceServices::getBluetoothGattServices)
+                    .flatMapIterable(services -> services)
+                    .map(service -> (Service)new ServiceImpl(service, this))
+                    .toList()
+                    .toSingle();
 
+        } else {
+            return Single.error(new Throwable("Not connected to device"));
         }
-        return Single.just(new ArrayList<>());
     }
 
     @Override
     public Single<Service> getService(Guid id) {
-        return null;
+        if(isConnected()) {
+            return connectionObservable
+                    .flatMap(RxBleConnection::discoverServices)
+                    .first() // Disconnect automatically after discovery
+                    .map(RxBleDeviceServices::getBluetoothGattServices)
+                    .flatMapIterable(services -> services)
+                    .map(service -> (Service)new ServiceImpl(service, this))
+                    .filter(service -> service.getGuid() == id)
+                    .toSingle();
+
+        } else {
+            return Single.error(new Throwable("Not connected to device"));
+        }
     }
 
     @Override
@@ -212,5 +231,32 @@ public class DeviceImpl extends Device {
     @Override
     public int hashCode() {
         return this.guid.hashCode();
+    }
+
+    @Override
+    public void onMethodCall(MethodCall call, Result result) {
+        if (call.method.equals("getServices")) {
+            getServices().subscribe(
+                services -> {
+                    List<Map<String,Object>> maps = new ArrayList<>(services.size());
+                    for(Service s : services) {
+                        maps.add(s.toMap());
+                    }
+                    result.success(maps);
+                },
+                throwable -> {
+                    result.error("getServices ERROR", throwable.getMessage(), throwable);
+                }
+            );
+        } else if (call.method.equals("getService")) {
+            String id = (String)call.arguments;
+            Guid guid = new Guid(id);
+            getService(guid).subscribe(
+                service -> result.success(service.toMap()),
+                throwable -> result.error("getService ERROR", throwable.getMessage(), throwable)
+            );
+        } else {
+            result.notImplemented();
+        }
     }
 }

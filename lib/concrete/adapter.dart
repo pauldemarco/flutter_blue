@@ -12,7 +12,7 @@ import 'package:flutter_blue/utils/guid.dart';
 
 class Adapter implements IAdapter {
 
-  final MethodChannel _methods = new MethodChannel("flutterblue.pauldemarco.com/adapter");
+  final MethodChannel _methods = new MethodChannel("flutterblue.pauldemarco.com/adapter/methods");
   final EventChannel _discoveredChannel = new EventChannel("flutterblue.pauldemarco.com/adapter/deviceDiscovered");
   final EventChannel _connectedChannel = new EventChannel("flutterblue.pauldemarco.com/adapter/deviceConnected");
 

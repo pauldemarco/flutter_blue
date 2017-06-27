@@ -37,7 +37,7 @@ abstract class IDevice {
 
   /// Gets all services of the device.
   /// <returns>A task that represents the asynchronous read operation. The Result property will contain a list of all available services.</returns>
-  Future<List<IService>> getServicesAsync();
+  Future<List<IService>> getServices();
 
   /// Gets the first service with the Id <paramref name="id"/>.
   /// <param name="id">The id of the searched service.</param>
@@ -46,7 +46,7 @@ abstract class IDevice {
   /// The Result property will contain the service with the specified <paramref name="id"/>.
   /// If the service doesn't exist, the Result will be null.
   /// </returns>
-  Future<IService> getServiceAsync(Guid id);
+  Future<IService> getService(Guid id);
 
   /// Updates the rssi value.
   ///

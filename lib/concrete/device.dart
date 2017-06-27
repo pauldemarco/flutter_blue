@@ -17,10 +17,12 @@ class Device implements IDevice {
   final DeviceState state;
   final List<AdvertisementRecord> advertisementRecords;
 
+  final MethodChannel _methodChannel;
   final EventChannel _statusChannel;
 
   Device._internal({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi, this.state})
-        : _statusChannel = new EventChannel("flutterblue.pauldemarco.com/device/${id.toString()}/status");
+        : _methodChannel = new MethodChannel("flutterblue.pauldemarco.com/device/${id.toString()}/methods"),
+          _statusChannel = new EventChannel("flutterblue.pauldemarco.com/device/${id.toString()}/status");
 
   Device.fromMap(map)
       : this._internal(
@@ -50,13 +52,13 @@ class Device implements IDevice {
   }
 
   @override
-  Future<IService> getServiceAsync(Guid id) {
-    // TODO: implement getServiceAsync
+  Future<IService> getService(Guid id) {
+    return _methodChannel.invokeMethod("getService", id.toString());
   }
 
   @override
-  Future<List<IService>> getServicesAsync() {
-    // TODO: implement getServicesAsync
+  Future<List<IService>> getServices() {
+    return _methodChannel.invokeMethod("getServices");
   }
 
   @override

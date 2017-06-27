@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.util.Log;
 
 import com.pauldemarco.flutterblue.Adapter;
+import com.pauldemarco.flutterblue.ChannelPaths;
 import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
 import com.pauldemarco.flutterblue.utils.MyStreamHandler;
@@ -51,11 +52,11 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         this.registrar = registrar;
         this.rxBleClient = rxBleClient;
         this.adapter = adapter;
-        this.methodChannel = new MethodChannel(registrar.messenger(), "flutterblue.pauldemarco.com/adapter");
+        this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.ADAPTER_METHODS);
         this.methodChannel.setMethodCallHandler(this);
-        this.discoveredChannel = new EventChannel(registrar.messenger(), "flutterblue.pauldemarco.com/adapter/deviceDiscovered");
+        this.discoveredChannel = new EventChannel(registrar.messenger(), ChannelPaths.ADAPTER_DEVICE_DISCOVERED);
         this.discoveredChannel.setStreamHandler(discoveredStream);
-        this.connectedChannel = new EventChannel(registrar.messenger(), "flutterblue.pauldemarco.com/adapter/deviceConnected");
+        this.connectedChannel = new EventChannel(registrar.messenger(), ChannelPaths.ADAPTER_DEVICE_CONNECTED);
         this.connectedChannel.setStreamHandler(connectedStream);
     }
 
@@ -64,7 +65,6 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         if(discoveredStream.eventSink != null) {
             discoveredStream.eventSink.success(device);
         }
-        methodChannel.invokeMethod("deviceDiscovered", device.toMap());
     }
 
     @Override
@@ -73,22 +73,18 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         if(connectedStream.eventSink != null) {
             connectedStream.eventSink.success(device);
         }
-        methodChannel.invokeMethod("deviceConnected", device.toMap());
     }
 
     @Override
     public void deviceDisconnected(Device device) {
-        methodChannel.invokeMethod("deviceDisconnected", device.toMap());
     }
 
     @Override
     public void deviceConnectionLost(Device device) {
-        methodChannel.invokeMethod("deviceConnectionLost", device.toMap());
     }
 
     @Override
     public void scanTimeoutElapsed() {
-        methodChannel.invokeMethod("scanTimeoutElapsed", null);
     }
 
     @Override

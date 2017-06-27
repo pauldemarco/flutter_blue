@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 
 import com.pauldemarco.flutterblue.BluetoothLe;
 import com.pauldemarco.flutterblue.BluetoothState;
+import com.pauldemarco.flutterblue.ChannelPaths;
 import com.polidea.rxandroidble.RxBleAdapterStateObservable;
 import com.polidea.rxandroidble.RxBleClient;
 
@@ -27,7 +28,7 @@ public class BluetoothLeImpl extends BluetoothLe implements MethodCallHandler, S
     private final Activity activity;
     private final RxBleClient rxBleClient;
     private final MethodChannel methodChannel;
-    private final EventChannel eventChannel;
+    private final EventChannel stateChannel;
     private final BluetoothAdapter bluetoothAdapter;
     private Subscription stateSubscription;
 
@@ -37,10 +38,10 @@ public class BluetoothLeImpl extends BluetoothLe implements MethodCallHandler, S
         this.activity = registrar.activity();
         this.rxBleClient = rxBleClient;
         this.bluetoothAdapter = bluetoothAdapter;
-        this.methodChannel = new MethodChannel(registrar.messenger(), "flutterblue.pauldemarco.com/bluetoothLe");
-        this.eventChannel = new EventChannel(registrar.messenger(), "flutterblue.pauldemarco.com/bluetoothLe/state");
+        this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.BLUETOOTHLE_METHODS);
+        this.stateChannel = new EventChannel(registrar.messenger(), ChannelPaths.BLUETOOTHLE_STATE);
         this.methodChannel.setMethodCallHandler(this);
-        this.eventChannel.setStreamHandler(this);
+        this.stateChannel.setStreamHandler(this);
     }
 
     @Override
