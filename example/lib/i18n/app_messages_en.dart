@@ -15,8 +15,6 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => {
-    "market" : MessageLookupByLibrary.simpleMessage("MARKET"),
-    "portfolio" : MessageLookupByLibrary.simpleMessage("PORTFOLIO"),
-    "title" : MessageLookupByLibrary.simpleMessage("FlutterBlue")
+
   };
 }

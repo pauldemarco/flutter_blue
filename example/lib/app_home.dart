@@ -2,51 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show debugDumpRenderTree, debugDumpLayerTree, debugDumpSemanticsTree;
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_blue_example/app_configuration.dart';
-import 'package:flutter_blue_example/app_settings.dart';
 import 'package:flutter_blue_example/app_strings.dart';
 
 typedef void ModeUpdater(DisplayMode mode);
 
-class NavigationIconView {
-  NavigationIconView({
-    Widget icon,
-    Widget title,
-    Color color,
-    TickerProvider vsync,
-    this.page,
-  }) : item = new BottomNavigationBarItem(
-          icon: icon,
-          title: title,
-          backgroundColor: color,
-        ),
-        controller = new AnimationController(
-          duration: kThemeAnimationDuration,
-          vsync: vsync,
-        ) {
-    _animation = new CurvedAnimation(
-      parent: controller,
-      curve: const Interval(0.5, 1.0, curve: Curves.fastOutSlowIn),
-    );
-  }
-
-  final WidgetBuilder page;
-  final BottomNavigationBarItem item;
-  final AnimationController controller;
-  CurvedAnimation _animation;
-
-  FadeTransition transition(BuildContext context) {
-    return new FadeTransition(
-      opacity: _animation,
-      child: new SlideTransition(
-        position: new FractionalOffsetTween(
-          begin: const FractionalOffset(0.0, 0.02), // Small offset from the top.
-          end: FractionalOffset.topLeft,
-        ).animate(_animation),
-        child: page(context)
-      ),
-    );
-  }
-}
+enum _StockMenuItem { autorefresh, refresh, speedUp, speedDown }
+enum AppHomeTab { market, portfolio }
 
 class _NotImplementedDialog extends StatelessWidget {
   @override
@@ -82,8 +43,10 @@ class _NotImplementedDialog extends StatelessWidget {
 }
 
 class AppHome extends StatefulWidget {
-  const AppHome(this.configuration, this.updater);
+  const AppHome(this.stocks, this.symbols, this.configuration, this.updater);
 
+  final Map<String, Object> stocks;
+  final List<String> symbols;
   final AppConfiguration configuration;
   final ValueChanged<AppConfiguration> updater;
 
@@ -91,108 +54,298 @@ class AppHome extends StatefulWidget {
   AppHomeState createState() => new AppHomeState();
 }
 
-class AppHomeState extends State<AppHome> with TickerProviderStateMixin {
-  int _currentIndex = 0;
+class AppHomeState extends State<AppHome> {
 
-  List<NavigationIconView> _navigationViews;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _isSearching = false;
+  final TextEditingController _searchQuery = new TextEditingController();
+  bool _autorefresh = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _navigationViews = <NavigationIconView>[
-      new NavigationIconView(
-        icon: const Icon(Icons.bluetooth),
-        title: const Text('Devices'),
-        color: Colors.blue,
-        vsync: this,
-        page: (BuildContext context) => new Container(child: const Center(child: const Text('Devices')), color: Colors.white),
-      ),
-      new NavigationIconView(
-        icon: const Icon(Icons.settings),
-        title: const Text('Settings'),
-        color: Colors.blueGrey,
-        vsync: this,
-        page: (BuildContext context) => new AppSettings(widget.configuration, widget.updater),
-      ),
-    ];
-
-    for (NavigationIconView view in _navigationViews)
-      view.controller.addListener(_rebuild);
-
-    _navigationViews[_currentIndex].controller.value = 1.0;
-  }
-
-  @override
-  void dispose() {
-    for (NavigationIconView view in _navigationViews)
-      view.controller.dispose();
-    super.dispose();
-  }
-
-  void _rebuild() {
+  void _handleSearchBegin() {
+    ModalRoute.of(context).addLocalHistoryEntry(new LocalHistoryEntry(
+      onRemove: () {
+        setState(() {
+          _isSearching = false;
+          _searchQuery.clear();
+        });
+      },
+    ));
     setState(() {
-      // Rebuild in order to animate views.
+      _isSearching = true;
     });
   }
 
+  void _handleSearchEnd() {
+    Navigator.pop(context);
+  }
+
+  void _handleDisplayModeChange(DisplayMode value) {
+    if (widget.updater != null)
+      widget.updater(widget.configuration.copyWith(displayMode: value));
+  }
+
+  void _handleStockMenu(BuildContext context, _StockMenuItem value) {
+    switch(value) {
+      case _StockMenuItem.autorefresh:
+        setState(() {
+          _autorefresh = !_autorefresh;
+        });
+        break;
+      case _StockMenuItem.refresh:
+        showDialog<Null>(
+            context: context,
+            child: new _NotImplementedDialog()
+        );
+        break;
+      case _StockMenuItem.speedUp:
+        timeDilation /= 5.0;
+        break;
+      case _StockMenuItem.speedDown:
+        timeDilation *= 5.0;
+        break;
+    }
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return new Drawer(
+      child: new ListView(
+        children: <Widget>[
+          const DrawerHeader(child: const Center(child: const Text('Stocks'))),
+          const ListTile(
+            leading: const Icon(Icons.assessment),
+            title: const Text('Stock List'),
+            selected: true,
+          ),
+          const ListTile(
+            leading: const Icon(Icons.account_balance),
+            title: const Text('Account Balance'),
+            enabled: false,
+          ),
+          new ListTile(
+            leading: const Icon(Icons.dvr),
+            title: const Text('Dump App to Console'),
+            onTap: () {
+              try {
+                debugDumpApp();
+                debugDumpRenderTree();
+                debugDumpLayerTree();
+                debugDumpSemanticsTree();
+              } catch (e, stack) {
+                debugPrint('Exception while dumping app:\n$e\n$stack');
+              }
+            },
+          ),
+          const Divider(),
+          new ListTile(
+            leading: const Icon(Icons.thumb_up),
+            title: const Text('Optimistic'),
+            trailing: new Radio<DisplayMode>(
+              value: DisplayMode.light,
+              groupValue: widget.configuration.displayMode,
+              onChanged: _handleDisplayModeChange,
+            ),
+            onTap: () {
+              _handleDisplayModeChange(DisplayMode.light);
+            },
+          ),
+          new ListTile(
+            leading: const Icon(Icons.thumb_down),
+            title: const Text('Pessimistic'),
+            trailing: new Radio<DisplayMode>(
+              value: DisplayMode.dark,
+              groupValue: widget.configuration.displayMode,
+              onChanged: _handleDisplayModeChange,
+            ),
+            onTap: () {
+              _handleDisplayModeChange(DisplayMode.dark);
+            },
+          ),
+          const Divider(),
+          new ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: _handleShowSettings,
+          ),
+          new ListTile(
+            leading: const Icon(Icons.help),
+            title: const Text('About'),
+            onTap: _handleShowAbout,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleShowSettings() {
+    Navigator.popAndPushNamed(context, '/settings');
+  }
+
+  void _handleShowAbout() {
+    showAboutDialog(context: context);
+  }
 
   Widget buildAppBar() {
     return new AppBar(
+      elevation: 0.0,
       title: new Text(AppStrings.of(context).title()),
+      actions: <Widget>[
+        new IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: _handleSearchBegin,
+          tooltip: 'Search',
+        ),
+        new PopupMenuButton<_StockMenuItem>(
+          onSelected: (_StockMenuItem value) { _handleStockMenu(context, value); },
+          itemBuilder: (BuildContext context) => <PopupMenuItem<_StockMenuItem>>[
+            new CheckedPopupMenuItem<_StockMenuItem>(
+              value: _StockMenuItem.autorefresh,
+              checked: _autorefresh,
+              child: const Text('Autorefresh'),
+            ),
+            const PopupMenuItem<_StockMenuItem>(
+              value: _StockMenuItem.refresh,
+              child: const Text('Refresh'),
+            ),
+            const PopupMenuItem<_StockMenuItem>(
+              value: _StockMenuItem.speedUp,
+              child: const Text('Increase animation speed'),
+            ),
+            const PopupMenuItem<_StockMenuItem>(
+              value: _StockMenuItem.speedDown,
+              child: const Text('Decrease animation speed'),
+            ),
+          ],
+        ),
+      ],
+      bottom: new TabBar(
+        tabs: <Widget>[
+          new Tab(text: AppStrings.of(context).market()),
+          new Tab(text: AppStrings.of(context).portfolio()),
+        ],
+      ),
+    );
+  }
+
+  /*Iterable<Stock> _getStockList(Iterable<String> symbols) {
+    return symbols.map((String symbol) => widget.stocks[symbol])
+        .where((Stock stock) => stock != null);
+  }
+
+  Iterable<Stock> _filterBySearchQuery(Iterable<Stock> stocks) {
+    if (_searchQuery.text.isEmpty)
+      return stocks;
+    final RegExp regexp = new RegExp(_searchQuery.text, caseSensitive: false);
+    return stocks.where((Stock stock) => stock.symbol.contains(regexp));
+  }
+
+  void _buyStock(Stock stock) {
+    setState(() {
+      stock.percentChange = 100.0 * (1.0 / stock.lastSale);
+      stock.lastSale += 1.0;
+    });
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      content: new Text("Purchased ${stock.symbol} for ${stock.lastSale}"),
+      action: new SnackBarAction(
+        label: "BUY MORE",
+        onPressed: () {
+          _buyStock(stock);
+        },
+      ),
+    ));
+  }
+
+  Widget _buildStockList(BuildContext context, Iterable<Stock> stocks, AppHomeTab tab) {
+    return new StockList(
+      stocks: stocks.toList(),
+      onAction: _buyStock,
+      onOpen: (Stock stock) {
+        Navigator.pushNamed(context, '/stock/${stock.symbol}');
+      },
+      onShow: (Stock stock) {
+        _scaffoldKey.currentState.showBottomSheet<Null>((BuildContext context) => new StockSymbolBottomSheet(stock: stock));
+      },
+    );
+  }
+
+  Widget _buildStockTab(BuildContext context, AppHomeTab tab, List<String> stockSymbols) {
+    return new Container(
+      key: new ValueKey<AppHomeTab>(tab),
+      child: _buildStockList(context, _filterBySearchQuery(_getStockList(stockSymbols)).toList(), tab),
+    );
+  }
+  */
+
+  static const List<String> portfolioSymbols = const <String>["AAPL","FIZZ", "FIVE", "FLAT", "ZINC", "ZNGA"];
+
+  // TODO(abarth): Should we factor this into a SearchBar in the framework?
+  Widget buildSearchBar() {
+    return new AppBar(
+      leading: new IconButton(
+        icon: const Icon(Icons.arrow_back),
+        color: Theme.of(context).accentColor,
+        onPressed: _handleSearchEnd,
+        tooltip: 'Back',
+      ),
+      title: new TextField(
+        controller: _searchQuery,
+        autofocus: true,
+        decoration: const InputDecoration(
+          hintText: 'Search stocks',
+        ),
+      ),
+      backgroundColor: Theme.of(context).canvasColor,
+    );
+  }
+
+  void _handleCreateCompany() {
+    showModalBottomSheet<Null>(
+      context: context,
+      builder: (BuildContext context) => new _CreateCompanySheet(),
     );
   }
 
   Widget buildFloatingActionButton() {
     return new FloatingActionButton(
       tooltip: 'Create company',
-      child: const Icon(Icons.search),
+      child: const Icon(Icons.add),
       backgroundColor: Colors.redAccent,
-      onPressed: null,
+      onPressed: _handleCreateCompany,
     );
-  }
-
-  Widget _buildTransitionsStack() {
-    final List<FadeTransition> transitions = <FadeTransition>[];
-
-    for (NavigationIconView view in _navigationViews)
-      transitions.add(view.transition(context));
-
-    // We want to have the newly animating (fading in) views on top.
-    transitions.sort((FadeTransition a, FadeTransition b) {
-      final Animation<double> aAnimation = a.listenable;
-      final Animation<double> bAnimation = b.listenable;
-      final double aValue = aAnimation.value;
-      final double bValue = bAnimation.value;
-      return aValue.compareTo(bValue);
-    });
-
-    return new Stack(children: transitions);
   }
 
   @override
   Widget build(BuildContext context) {
-    final BottomNavigationBar botNavBar = new BottomNavigationBar(
-      items: _navigationViews
-          .map((NavigationIconView navigationView) => navigationView.item)
-          .toList(),
-      currentIndex: _currentIndex,
-      type: BottomNavigationBarType.shifting,
-      onTap: (int index) {
-        setState(() {
-          _navigationViews[_currentIndex].controller.reverse();
-          _currentIndex = index;
-          _navigationViews[_currentIndex].controller.forward();
-        });
-      },
-    );
-
-    return new Scaffold(
-      //appBar: buildAppBar(),
-      floatingActionButton: buildFloatingActionButton(),
-      bottomNavigationBar: botNavBar,
-      body: new Center(
-          child: _buildTransitionsStack()
+    return new DefaultTabController(
+      length: 2,
+      child: new Scaffold(
+        key: _scaffoldKey,
+        appBar: _isSearching ? buildSearchBar() : buildAppBar(),
+        floatingActionButton: buildFloatingActionButton(),
+        drawer: _buildDrawer(context),
+        body: new TabBarView(
+          children: <Widget>[
+            /*_buildStockTab(context, AppHomeTab.market, widget.symbols),
+            _buildStockTab(context, AppHomeTab.portfolio, portfolioSymbols),*/
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _CreateCompanySheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO(ianh): Fill this out.
+    return new Column(
+      children: <Widget>[
+        const TextField(
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: 'Company Name',
+          ),
+        ),
+      ],
     );
   }
 }

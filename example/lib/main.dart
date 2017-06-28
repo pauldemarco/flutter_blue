@@ -57,7 +57,7 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
       case DisplayMode.light:
         return new ThemeData(
             brightness: Brightness.light,
-            primarySwatch: Colors.blue
+            primarySwatch: Colors.purple
         );
       case DisplayMode.dark:
         return new ThemeData(
@@ -110,7 +110,7 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
         showPerformanceOverlay: _configuration.showPerformanceOverlay,
         showSemanticsDebugger: _configuration.showSemanticsDebugger,
         routes: <String, WidgetBuilder>{
-          '/':         (BuildContext context) => new AppHome(_configuration, configurationUpdater),
+          '/':         (BuildContext context) => new AppHome(_stocks, _symbols, _configuration, configurationUpdater),
           '/settings': (BuildContext context) => new AppSettings(_configuration, configurationUpdater)
         },
         onGenerateRoute: _getRoute,

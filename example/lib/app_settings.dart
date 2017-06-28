@@ -190,6 +190,9 @@ class AppSettingsState extends State<AppSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return buildSettingsPane(context);
+    return new Scaffold(
+      appBar: buildAppBar(context),
+      body: buildSettingsPane(context)
+    );
   }
 }
