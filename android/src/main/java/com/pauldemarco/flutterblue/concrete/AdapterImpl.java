@@ -34,7 +34,7 @@ import rx.subjects.PublishSubject;
  */
 
 public class AdapterImpl extends Adapter implements MethodCallHandler {
-    private static final String TAG = "Adapter";
+    private static final String TAG = "AdapterImpl";
 
     private final Registrar registrar;
     private final RxBleClient rxBleClient;
@@ -62,13 +62,13 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public void deviceDiscovered(Device device) {
-        discoveredStream.onNext(device);
+        discoveredStream.onNext(device.toMap());
     }
 
     @Override
     public void deviceConnected(Device device) {
         connectedDevices.add(device);
-        connectedStream.onNext(device);
+        connectedStream.onNext(device.toMap());
     }
 
     @Override
@@ -185,10 +185,10 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     private void onScanError(Throwable e) {
         discoveredStream.onError("SCAN_ERROR", e);
-        Log.e(TAG, "onScanError: " + e.getMessage());
+        Log.e(TAG, "onScanError: " + e.getMessage(), e);
     }
 
-    private Device toDevice(ScanResult scanResult) {
+    private DeviceImpl toDevice(ScanResult scanResult) {
         return DeviceImpl.fromScanResult(registrar, scanResult);
     }
 

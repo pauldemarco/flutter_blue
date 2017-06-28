@@ -57,12 +57,12 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
       case DisplayMode.light:
         return new ThemeData(
             brightness: Brightness.light,
-            primarySwatch: Colors.purple
+            primarySwatch: Colors.blue
         );
       case DisplayMode.dark:
         return new ThemeData(
             brightness: Brightness.dark,
-            accentColor: Colors.redAccent
+            accentColor: Colors.blueAccent
         );
     }
     assert(_configuration.displayMode != null);

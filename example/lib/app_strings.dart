@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 // Locale-specific values for the strings live in the i18n/*.arb files.
 //
 // To generate the app_messages_*.dart files from the ARB files, run:
-//   pub run intl:generate_from_arb --output-dir=lib/i18n --generated-file-prefix=app_ --no-use-deferred-loading lib/app_strings.dart lib/i18n/app_*.arb
+//   flutter packages pub run intl_translation:generate_from_arb --output-dir=lib/i18n --generated-file-prefix=app_ --no-use-deferred-loading lib/*.dart lib/i18n/*.arb
 
 class AppStrings extends LocaleQueryData {
   static AppStrings of(BuildContext context) {
@@ -22,15 +22,21 @@ class AppStrings extends LocaleQueryData {
     desc: 'Title for the Stocks application'
   );
 
-  String market() => Intl.message(
-    'MARKET',
-    name: 'market',
-    desc: 'Label for the Market tab'
+  String devices() => Intl.message(
+    'Devices',
+    name: 'devices',
+    desc: 'Title for the Devices application'
   );
 
-  String portfolio() => Intl.message(
-    'PORTFOLIO',
-    name: 'portfolio',
-    desc: 'Label for the Portfolio tab'
+  String scanner() => Intl.message(
+    'SCANNER',
+    name: 'scanner',
+    desc: 'Label for the Scanner tab'
+  );
+
+  String bonded() => Intl.message(
+    'BONDED',
+    name: 'bonded',
+    desc: 'Label for the Bonded tab'
   );
 }

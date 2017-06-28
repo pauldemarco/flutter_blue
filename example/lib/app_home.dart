@@ -3,11 +3,12 @@ import 'package:flutter/rendering.dart' show debugDumpRenderTree, debugDumpLayer
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_blue_example/app_configuration.dart';
 import 'package:flutter_blue_example/app_strings.dart';
+import 'package:flutter_blue_example/scan_devices_page.dart';
 
 typedef void ModeUpdater(DisplayMode mode);
 
 enum _StockMenuItem { autorefresh, refresh, speedUp, speedDown }
-enum AppHomeTab { market, portfolio }
+enum AppHomeTab { scanner, bonded }
 
 class _NotImplementedDialog extends StatelessWidget {
   @override
@@ -110,16 +111,11 @@ class AppHomeState extends State<AppHome> {
     return new Drawer(
       child: new ListView(
         children: <Widget>[
-          const DrawerHeader(child: const Center(child: const Text('Stocks'))),
+          const DrawerHeader(child: const Center(child: const Text('FlutterBlue'))),
           const ListTile(
-            leading: const Icon(Icons.assessment),
-            title: const Text('Stock List'),
+            leading: const Icon(Icons.bluetooth_searching),
+            title: const Text('Devices'),
             selected: true,
-          ),
-          const ListTile(
-            leading: const Icon(Icons.account_balance),
-            title: const Text('Account Balance'),
-            enabled: false,
           ),
           new ListTile(
             leading: const Icon(Icons.dvr),
@@ -137,8 +133,8 @@ class AppHomeState extends State<AppHome> {
           ),
           const Divider(),
           new ListTile(
-            leading: const Icon(Icons.thumb_up),
-            title: const Text('Optimistic'),
+            leading: const Icon(Icons.brightness_high),
+            title: const Text('Light mode'),
             trailing: new Radio<DisplayMode>(
               value: DisplayMode.light,
               groupValue: widget.configuration.displayMode,
@@ -149,8 +145,8 @@ class AppHomeState extends State<AppHome> {
             },
           ),
           new ListTile(
-            leading: const Icon(Icons.thumb_down),
-            title: const Text('Pessimistic'),
+            leading: const Icon(Icons.brightness_low),
+            title: const Text('Dark mode'),
             trailing: new Radio<DisplayMode>(
               value: DisplayMode.dark,
               groupValue: widget.configuration.displayMode,
@@ -187,7 +183,7 @@ class AppHomeState extends State<AppHome> {
   Widget buildAppBar() {
     return new AppBar(
       elevation: 0.0,
-      title: new Text(AppStrings.of(context).title()),
+      title: new Text(AppStrings.of(context).devices()),
       actions: <Widget>[
         new IconButton(
           icon: const Icon(Icons.search),
@@ -217,12 +213,12 @@ class AppHomeState extends State<AppHome> {
           ],
         ),
       ],
-      bottom: new TabBar(
+      /*bottom: new TabBar(
         tabs: <Widget>[
-          new Tab(text: AppStrings.of(context).market()),
-          new Tab(text: AppStrings.of(context).portfolio()),
+          new Tab(text: AppStrings.of(context).scanner()),
+          new Tab(text: AppStrings.of(context).bonded()),
         ],
-      ),
+      ),*/
     );
   }
 
@@ -275,7 +271,13 @@ class AppHomeState extends State<AppHome> {
   }
   */
 
-  static const List<String> portfolioSymbols = const <String>["AAPL","FIZZ", "FIVE", "FLAT", "ZINC", "ZNGA"];
+  Widget _buildScannerTab(BuildContext context, AppHomeTab tab) {
+    return new ScanDevicesPage(
+        key: new ValueKey<AppHomeTab>(tab),
+        );
+  }
+
+  static const List<String> bondedSymbols = const <String>["AAPL","FIZZ", "FIVE", "FLAT", "ZINC", "ZNGA"];
 
   // TODO(abarth): Should we factor this into a SearchBar in the framework?
   Widget buildSearchBar() {
@@ -320,12 +322,12 @@ class AppHomeState extends State<AppHome> {
       child: new Scaffold(
         key: _scaffoldKey,
         appBar: _isSearching ? buildSearchBar() : buildAppBar(),
-        floatingActionButton: buildFloatingActionButton(),
+        //floatingActionButton: buildFloatingActionButton(),
         drawer: _buildDrawer(context),
         body: new TabBarView(
           children: <Widget>[
-            /*_buildStockTab(context, AppHomeTab.market, widget.symbols),
-            _buildStockTab(context, AppHomeTab.portfolio, portfolioSymbols),*/
+            _buildScannerTab(context, AppHomeTab.scanner),
+           // _buildStockTab(context, AppHomeTab.bonded, bondedSymbols),
           ],
         ),
       ),

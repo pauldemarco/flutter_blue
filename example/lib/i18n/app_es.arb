@@ -1,21 +1,28 @@
 {
-  "title": "Acciones",
+  "title": "FlutterBlue",
   "@title": {
-    "description": "Title for the Stocks application",
+    "description": "Title for the FlutterBlue application",
     "type": "text",
     "placeholders": {}
   },
 
-  "market": "MERCADO",
-  "@market": {
-    "description": "Label for the Market tab",
+  "devices": "Dispositivos",
+      "@devices": {
+        "description": "Title for Devices Page",
+        "type": "text",
+        "placeholders": {}
+      },
+
+  "scanner": "ESCANER",
+  "@scanner": {
+    "description": "Label for the Scanner tab",
     "type": "text",
     "placeholders": {}
   },
 
-  "portfolio": "CARTERA",
-  "@portfolio": {
-    "description": "Label for the Portfolio tab",
+  "bonded": "GARANTIZADO",
+  "@bonded": {
+    "description": "Label for the Bonded tab",
     "type": "text",
     "placeholders": {}
   }

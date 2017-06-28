@@ -21,13 +21,14 @@ class ScanDevicesPage extends StatefulWidget {
 class _ScanDevicesPageState extends State<ScanDevicesPage> {
   FlutterBlue _flutterBlue = new FlutterBlue();
   StreamSubscription _scanSubscription;
-  List<Device> devices;
+  bool _isScanning = false;
+  List<Device> _devices;
 
   @override
   initState() {
     super.initState();
-    devices = new List<Device>();
-    devices.add(new Device(
+    _devices = new List<Device>();
+    _devices.add(new Device(
         id: new Guid.fromMac("01:02:03:04:05:06"),
         name: "Test Device",
         rssi: 123,
@@ -40,10 +41,10 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
         var rssi = device.rssi;
         var id = device.id.toString();
         print("Device name: $name rssi: $rssi id: $id");
-        if (devices.contains(device)) {
-          devices[devices.indexOf(device)] = device;
+        if (_devices.contains(device)) {
+          _devices[_devices.indexOf(device)] = device;
         } else {
-          devices.add(device);
+          _devices.add(device);
         }
       });
     });
@@ -56,12 +57,19 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
   }
 
   _searchClicked() async {
+    setState(() {
+      _devices.clear();
+      _isScanning = true;
+    });
     await _flutterBlue.ble.adapter.startScanningForDevices();
-    _getDiscoveredDevices();
+    setState(() {
+      _isScanning = false;
+    });
+    //_getDiscoveredDevices();
   }
 
   _getDiscoveredDevices() {
-    List<IDevice> discovered = _flutterBlue.ble.adapter.discoveredDevices;
+    Set<IDevice> discovered = _flutterBlue.ble.adapter.discoveredDevices;
     for(IDevice d in discovered) {
       print("${d.id} ${d.name} ${d.rssi}");
     }
@@ -71,19 +79,40 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     _flutterBlue.ble.adapter.connectToDevice(device);
   }
 
+  _buildLinearProgressIndicator(BuildContext context) {
+    if(!_isScanning) {
+      return new Container(height: 6.0,);
+    }
+    return new LinearProgressIndicator(value: null,);
+  }
+
+  _buildFloatingActionButton(BuildContext context) {
+    if(_isScanning) {
+      return null;
+    }
+    return new FloatingActionButton(
+        child: new Icon(Icons.search),
+        onPressed: _searchClicked
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
+      /*appBar: new AppBar(
         title: new Text('Plugin example app'),
-      ),
-      floatingActionButton: new FloatingActionButton(
-          child: new Icon(Icons.search), onPressed: _searchClicked),
-      body: new ListView(children: _createListItemsFromString()),
+      ),*/
+      floatingActionButton: _buildFloatingActionButton(context),
+      body: new Stack(
+          children: <Widget>[
+            _buildLinearProgressIndicator(context),
+            new ListView(children: _createListItemsFromString()),
+            ],
+      )
     );
   }
 
   List<DeviceTile> _createListItemsFromString() {
-    return devices.map((s) => new DeviceTile(s, _deviceTapped)).toList();
+    return _devices.map((s) => new DeviceTile(s, _deviceTapped)).toList();
   }
 }

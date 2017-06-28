@@ -1,21 +1,28 @@
 {
-  "title": "Stocks",
+  "title": "FlutterBlue",
   "@title": {
-    "description": "Title for the Stocks application",
+    "description": "Title for the FlutterBlue application",
     "type": "text",
     "placeholders": {}
   },
 
-  "market": "MARKET",
-  "@market": {
-    "description": "Label for the Market tab",
+  "devices": "Devices",
+    "@devices": {
+      "description": "Title for Devices Page",
+      "type": "text",
+      "placeholders": {}
+    },
+
+  "scanner": "SCANNER",
+  "@scanner": {
+    "description": "Label for the Scanner tab",
     "type": "text",
     "placeholders": {}
   },
 
-  "portfolio": "PORTFOLIO",
-  "@portfolio": {
-    "description": "Label for the Portfolio tab",
+  "bonded": "BONDED",
+  "@bonded": {
+    "description": "Label for the Bonded tab",
     "type": "text",
     "placeholders": {}
   }

@@ -24,7 +24,7 @@ public class MyStreamHandler implements StreamHandler {
 
         public void onError(String tag, Throwable t) {
             if(eventSink != null) {
-                eventSink.error(tag, t.getMessage(), t);
+                eventSink.error(tag, t.getMessage(), null);
             }
         }
     }
