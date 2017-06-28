@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 // Locale-specific values for the strings live in the i18n/*.arb files.
 //
 // To generate the app_messages_*.dart files from the ARB files, run:
-//   pub run intl:generate_from_arb --output-dir=lib/i18n --generated-file-prefix=app_ --no-use-deferred-loading lib/app_strings.dart lib/i18n/app_*.arb
+//   flutter packages pub run intl_translation:generate_from_arb --output-dir=lib/i18n --generated-file-prefix=app_ --no-use-deferred-loading lib/*.dart lib/i18n/*.arb
 
 class AppStrings extends LocaleQueryData {
   static AppStrings of(BuildContext context) {
