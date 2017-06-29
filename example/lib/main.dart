@@ -42,7 +42,7 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
   @override
   void initState() {
     super.initState();
-    _devices = _flutterBlue.ble.adapter.discoveredDevices;
+    _devices = _flutterBlue.ble.adapter.devices;
     /*new StockDataFetcher((StockData data) {
       setState(() {
         data.appendTo(_stocks, _symbols);

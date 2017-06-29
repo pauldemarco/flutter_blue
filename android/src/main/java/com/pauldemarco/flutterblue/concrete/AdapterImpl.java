@@ -46,7 +46,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
     private final MyStreamHandler connectedStream = new MyStreamHandler();
     private Observable<ScanResult> scanObservable;
     private final PublishSubject<Void> stopScanningTrigger = PublishSubject.create();
-    private Set<Device> connectedDevices = new HashSet<>();
+    private Set<Device> devices = new HashSet<>();
 
     public AdapterImpl(Registrar registrar, RxBleClient rxBleClient, BluetoothAdapter adapter) {
         this.registrar = registrar;
@@ -62,12 +62,13 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public void deviceDiscovered(Device device) {
+        devices.add(device);
         discoveredStream.onNext(device.toMap());
     }
 
     @Override
     public void deviceConnected(Device device) {
-        connectedDevices.add(device);
+        devices.add(device);
         connectedStream.onNext(device.toMap());
     }
 
@@ -90,7 +91,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public Set<Device> getConnectedDevices() {
-        return connectedDevices;
+        return null;
     }
 
     @Override
@@ -119,12 +120,6 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public Completable connectToDevice(Device device) {
-        // TODO: Handle situation where device is already in connected list
-        if(connectedDevices.contains(device)) {
-            // Device d = connectedDevices.get(connectedDevices.indexOf(device));
-            // d.disconnect();
-            connectedDevices.remove(device);
-        }
         device.connect(false);
         deviceConnected(device);
         return Completable.complete();
@@ -157,13 +152,23 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
         } else if(call.method.equals("connectToDevice")) {
             Map<String, Object> map = (Map<String, Object>)call.arguments;
             String id = (String)map.get("id");
-            Guid guid = new Guid(id);
+            final Guid guid = new Guid(id);
             String name = (String)map.get("name");
             int rssi = (int) map.get("rssi");
-            RxBleDevice nativeDevice = rxBleClient.getBleDevice(guid.toMac());
-            Device device = new DeviceImpl(registrar, guid, name, nativeDevice, rssi, null);
+            Device device = null;
+            for(Device d : devices) {
+                if(d.getGuid().equals(guid)){
+                    Log.d(TAG, "onMethodCall: Set already contains device with id " + guid.toString());
+                    device = d;
+                }
+            }
+            if(device == null){
+                Log.d(TAG, "onMethodCall: Set does not contain device");
+                RxBleDevice nativeDevice = rxBleClient.getBleDevice(guid.toMac());
+                device = new DeviceImpl(registrar, guid, name, nativeDevice, rssi, null);
+            }
             connectToDevice(device).subscribe(
-                    () -> result.success("Requested connection to " + device.getGuid().toMac()),
+                    () -> result.success("Requested connection to " + guid.toMac()),
                     throwable -> result.error("Device connection error", throwable.getMessage(), throwable)
             );
         } else {
@@ -189,6 +194,17 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
     }
 
     private DeviceImpl toDevice(ScanResult scanResult) {
+        String mac = scanResult.getBleDevice().getMacAddress();
+        Guid guid = Guid.fromMac(mac);
+        for(Device d : devices) {
+            if(d.getGuid().equals(guid)){
+                Log.d(TAG, "toDevice: Set already contains device with id " + guid.toString());
+                d.setRssi(scanResult.getRssi());
+                d.setAdvPacket(scanResult.getScanRecord().getBytes());
+                return (DeviceImpl)d;
+            }
+        }
+        Log.d(TAG, "toDevice: Set does not contain device");
         return DeviceImpl.fromScanResult(registrar, scanResult);
     }
 

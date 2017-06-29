@@ -32,7 +32,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
         id: new Guid.fromMac("01:02:03:04:05:06"),
         name: "Test Device",
         rssi: 123,
-        state: DeviceState.disconnected));
+    ));
     _scanSubscription = _flutterBlue.ble.adapter
         .deviceDiscovered()
         .listen((device) {

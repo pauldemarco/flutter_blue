@@ -17,7 +17,7 @@ public class ChannelPaths {
     public final static String ADAPTER_DEVICE_DISCOVERED = ADAPTER + "deviceDiscovered";
     public final static String ADAPTER_DEVICE_CONNECTED = ADAPTER + "deviceConnected";
 
-    public final static String DEVICE = ROOT + "devices/";
+    public final static String DEVICE = ROOT + "device/";
     public final static String getDevicePath(String id){
         return DEVICE + id + "/";
     }

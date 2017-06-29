@@ -13,24 +13,23 @@ class Device implements IDevice {
   final Guid id;
   final String name;
   final Object nativeDevice;
-  final int rssi;
-  final DeviceState state;
+  int rssi;
+  Future<DeviceState> get state => _methodChannel.invokeMethod("getState").then((i) => DeviceState.values[i]);
   final List<AdvertisementRecord> advertisementRecords;
 
   final MethodChannel _methodChannel;
   final EventChannel _statusChannel;
 
-  Device._internal({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi, this.state})
+  Device._internal({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi})
         : _methodChannel = new MethodChannel("flutterblue.pauldemarco.com/device/${id.toString()}/methods"),
           _statusChannel = new EventChannel("flutterblue.pauldemarco.com/device/${id.toString()}/status");
 
-  Device({id, name, nativeDevice, rssi, state, advertisementRecords})
+  Device({id, name, nativeDevice, rssi, advertisementRecords})
       : this._internal(
       id: id,
       name: name,
       rssi: rssi,
       nativeDevice: nativeDevice,
-      state: state,
       advertisementRecords: advertisementRecords
   );
 
@@ -40,7 +39,6 @@ class Device implements IDevice {
           name: (map['name'] != null) ? map['name'] : 'Unknown',
           rssi: map['rssi'],
           nativeDevice: map['nativeDevice'],
-          state: DeviceState.values[map['state']],
           advertisementRecords: AdvertisementRecord.listFromBytes(map['advPacket'])
       );
 
@@ -50,13 +48,13 @@ class Device implements IDevice {
     map["name"] = name;
     map["nativeDevice"] = null;
     map["rssi"] = rssi;
-    map["state"] = state.index;
     //map["advertisementRecords"] = advertisementRecords; TODO: Need to serialize this as well
     return map;
   }
 
   @override
   Stream<DeviceState> stateChanged() {
+    print("stateChanged requested for " + id.toString());
     return _statusChannel.receiveBroadcastStream()
         .map((i) => DeviceState.values[i]);
   }
@@ -85,4 +83,5 @@ class Device implements IDevice {
       other is Device && id.hashCode == other.id.hashCode;
 
   int get hashCode => id.hashCode;
+
 }

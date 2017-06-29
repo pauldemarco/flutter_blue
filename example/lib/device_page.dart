@@ -26,7 +26,11 @@ class _DevicePageState extends State<DevicePage> {
   void initState() {
     super.initState();
     _device = widget.device;
-    _deviceState = _device.state;
+    _device.state.then((s) {
+      setState((){
+        _deviceState = s;
+      });
+    });
     _stateSubscription = _device.stateChanged()
       .listen((s) {
         setState((){
@@ -40,6 +44,7 @@ class _DevicePageState extends State<DevicePage> {
   void dispose() {
     _stateSubscription?.cancel();
     _stateSubscription = null;
+    super.dispose();
   }
 
   @override
@@ -65,8 +70,9 @@ class _DevicePageState extends State<DevicePage> {
     );
   }
 
-  _connect() {
-    _flutterBlue.ble.adapter.connectToDevice(_device);
+  _connect() async {
+    String result = await _flutterBlue.ble.adapter.connectToDevice(_device);
+    print(result);
   }
 
 }

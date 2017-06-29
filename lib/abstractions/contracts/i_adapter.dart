@@ -47,6 +47,9 @@ abstract class IAdapter {
   /// Default: <see cref="ScanMode.LowPower"/>
   ScanMode scanMode;
 
+  /// List of all devices, whether connected or not.
+  Set<IDevice> get devices;
+
   /// List of last discovered devices.
   Set<IDevice> get discoveredDevices;
 

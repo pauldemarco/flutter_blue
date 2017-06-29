@@ -38,4 +38,8 @@ public abstract class Device {
 
     public abstract Single<Integer> requestMtu(int requestValue);
 
+    public abstract void setRssi(int rssi);
+
+    public abstract void setAdvPacket(byte[] advPacket);
+
 }

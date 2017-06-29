@@ -15,7 +15,7 @@ abstract class IDevice {
 
   /// Last known rssi value in decibals.
   /// Can be updated via <see cref="UpdateRssiAsync()"/>.
-  int get rssi;
+  int rssi;
 
   /// Gets the native device object reference. Should be cast to the
   /// appropriate type on each platform.
@@ -23,7 +23,7 @@ abstract class IDevice {
   Object get nativeDevice;
 
   /// State of the device.
-  DeviceState get state;
+  Future<DeviceState> get state;
 
   /// All the advertisment records
   /// For example:

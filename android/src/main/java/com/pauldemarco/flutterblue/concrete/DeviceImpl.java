@@ -73,6 +73,14 @@ public class DeviceImpl extends Device implements MethodCallHandler {
         return new DeviceImpl(registrar, guid, name, nativeDevice, rssi, advPacket);
     }
 
+    public void setRssi(int rssi) {
+        this.rssi = rssi;
+    }
+
+    public void setAdvPacket(byte[] advPacket){
+        this.advPacket = advPacket;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", this.guid.toString());
@@ -125,6 +133,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
 
     @Override
     public void stateChanged(State state) {
+        Log.d(TAG, "stateChanged: " + state.ordinal());
         statusStream.onNext(state.ordinal());
     }
 
@@ -253,6 +262,8 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                 service -> result.success(service.toMap()),
                 throwable -> result.error("getService ERROR", throwable.getMessage(), throwable)
             );
+        } else if (call.method.equals("getState")) {
+            result.success(toState(nativeDevice.getConnectionState()).ordinal());
         } else {
             result.notImplemented();
         }
