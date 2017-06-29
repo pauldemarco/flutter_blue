@@ -21,8 +21,8 @@ class Device implements IDevice {
   final EventChannel _statusChannel;
 
   Device._internal({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi})
-        : _methodChannel = new MethodChannel("flutterblue.pauldemarco.com/device/${id.toString()}/methods"),
-          _statusChannel = new EventChannel("flutterblue.pauldemarco.com/device/${id.toString()}/status");
+        : _methodChannel = new MethodChannel("flutterblue.pauldemarco.com/devices/${id.toString()}/methods"),
+          _statusChannel = new EventChannel("flutterblue.pauldemarco.com/devices/${id.toString()}/status");
 
   Device({id, name, nativeDevice, rssi, advertisementRecords})
       : this._internal(

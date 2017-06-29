@@ -2,6 +2,7 @@ package com.pauldemarco.flutterblue.concrete;
 
 import android.bluetooth.BluetoothGattService;
 
+import com.pauldemarco.flutterblue.ChannelPaths;
 import com.pauldemarco.flutterblue.Characteristic;
 import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
@@ -12,24 +13,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry.Registrar;
 import rx.Single;
 
 /**
  * Created by paul on 6/26/17.
  */
 
-public class ServiceImpl extends Service {
+public class ServiceImpl extends Service implements MethodCallHandler {
 
+    private final MethodChannel methodChannel;
 
-    public ServiceImpl(Guid guid, boolean isPrimary, Device device) {
+    public ServiceImpl(Registrar registrar, Guid guid, Device device, boolean isPrimary) {
         super(guid, isPrimary, device);
+        this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.getServiceMethodsPath(device.getGuid().toString(), guid.toString()));
+
     }
 
-    public ServiceImpl(BluetoothGattService service, Device device) {
+    public ServiceImpl(Registrar registrar, BluetoothGattService service, Device device) {
         this(
+                registrar,
                 new Guid(service.getUuid()),
-                service.getType()==BluetoothGattService.SERVICE_TYPE_PRIMARY,
-                device
+                device,
+                service.getType()==BluetoothGattService.SERVICE_TYPE_PRIMARY
         );
     }
 
@@ -67,5 +77,19 @@ public class ServiceImpl extends Service {
         }
         m.put("characteristics", outCharacteristics);*/
         return m;
+    }
+
+    @Override
+    public void onMethodCall(MethodCall call, Result result) {
+        if (call.method.equals("getIncludedServices")) {
+
+        } else if (call.method.equals("getCharacteristics")) {
+
+        } else if (call.method.equals("getCharacteristic")) {
+            String id = (String)call.arguments;
+            Guid guid = new Guid(id);
+        } else {
+            result.notImplemented();
+        }
     }
 }

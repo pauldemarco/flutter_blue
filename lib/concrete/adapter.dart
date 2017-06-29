@@ -83,7 +83,7 @@ class Adapter implements IAdapter {
   }
 
   Future disconnectDevice(IDevice device) {
-    // TODO: implement disconnectDeviceAsync
+    return _methods.invokeMethod("disconnectDevice", device.toMap());
   }
 
   List<IDevice> getSystemConnectedOrPairedDevices({Set<Guid> services: null}) {

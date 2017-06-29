@@ -42,6 +42,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     private State state = State.DISCONNECTED;
     private byte[] advPacket;
 
+    private final Registrar registrar;
     private final MethodChannel methodChannel;
     private final EventChannel statusChannel;
     private final MyStreamHandler statusStream = new MyStreamHandler();
@@ -50,6 +51,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     private Observable<RxBleConnection> connectionObservable;
 
     public DeviceImpl(Registrar registrar, Guid guid, String name, RxBleDevice nativeDevice, int rssi, byte[] advPacket) {
+        this.registrar = registrar;
         this.guid = guid;
         this.name = name;
         this.rssi = rssi;
@@ -145,7 +147,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                     .first() // Disconnect automatically after discovery
                     .map(RxBleDeviceServices::getBluetoothGattServices)
                     .flatMapIterable(services -> services)
-                    .map(service -> (Service)new ServiceImpl(service, this))
+                    .map(service -> (Service)new ServiceImpl(registrar, service, this))
                     .toList()
                     .toSingle();
 
@@ -162,7 +164,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                     .first() // Disconnect automatically after discovery
                     .map(RxBleDeviceServices::getBluetoothGattServices)
                     .flatMapIterable(services -> services)
-                    .map(service -> (Service)new ServiceImpl(service, this))
+                    .map(service -> (Service)new ServiceImpl(registrar, service, this))
                     .filter(service -> service.getGuid() == id)
                     .toSingle();
 
@@ -203,7 +205,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     }
 
     private void onConnectionFailure(Throwable throwable) {
-        Log.e(TAG, "onConnectionFailure" + this.guid.toMac() + ", message:" + throwable.getMessage());
+        Log.e(TAG, "onConnectionFailure" + this.guid.toMac(), throwable);
     }
 
     private void onConnectionStateFailure(Throwable throwable) {

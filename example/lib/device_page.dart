@@ -47,6 +47,23 @@ class _DevicePageState extends State<DevicePage> {
     super.dispose();
   }
 
+  _buildFloatingActionButton(BuildContext context) {
+    if(_deviceState == DeviceState.connected) {
+      return new FloatingActionButton(
+          child: new Icon(Icons.bluetooth_disabled),
+          backgroundColor: Colors.red,
+          onPressed: _disconnect
+      );
+    } else if(_deviceState == DeviceState.disconnected) {
+      return new FloatingActionButton(
+          child: new Icon(Icons.bluetooth_connected),
+          backgroundColor: Colors.green,
+          onPressed: _connect
+      );
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -63,15 +80,17 @@ class _DevicePageState extends State<DevicePage> {
                 )
             )
         ),
-      floatingActionButton: new FloatingActionButton(
-          child: new Icon(Icons.bluetooth_connected),
-          onPressed: _connect
-      ),
+      floatingActionButton: _buildFloatingActionButton(context),
     );
   }
 
   _connect() async {
     String result = await _flutterBlue.ble.adapter.connectToDevice(_device);
+    print(result);
+  }
+
+  _disconnect() async {
+    String result = await _flutterBlue.ble.adapter.disconnectDevice(_device);
     print(result);
   }
 

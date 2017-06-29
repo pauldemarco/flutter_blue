@@ -127,7 +127,9 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public Completable disconnectDevice(Device device) {
-        return null;
+        device.disconnect();
+        deviceDisconnected(device);
+        return Completable.complete();
     }
 
     @Override
@@ -171,6 +173,27 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
                     () -> result.success("Requested connection to " + guid.toMac()),
                     throwable -> result.error("Device connection error", throwable.getMessage(), throwable)
             );
+        } else if(call.method.equals("disconnectDevice")) {
+            Map<String, Object> map = (Map<String, Object>)call.arguments;
+            String id = (String)map.get("id");
+            final Guid guid = new Guid(id);
+            String name = (String)map.get("name");
+            int rssi = (int) map.get("rssi");
+            Device device = null;
+            for(Device d : devices) {
+                if(d.getGuid().equals(guid)){
+                    Log.d(TAG, "disconnectDevice: Found device with id " + guid.toString());
+                    device = d;
+                }
+            }
+            if(device != null){
+                disconnectDevice(device).subscribe(
+                    () -> result.success("Disconnected from " + guid.toMac()),
+                    throwable -> result.error("Device disconnection error", throwable.getMessage(), throwable)
+                );
+            } else {
+                result.success("Device not found in Set");
+            }
         } else {
             result.notImplemented();
         }
