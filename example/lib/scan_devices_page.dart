@@ -76,7 +76,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
   }
 
   _deviceTapped(Device device) {
-    _flutterBlue.ble.adapter.connectToDevice(device);
+    Navigator.pushNamed(context, '/device/${device.id.toString()}');
   }
 
   _buildLinearProgressIndicator(BuildContext context) {

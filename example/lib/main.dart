@@ -7,10 +7,13 @@ import 'package:flutter/rendering.dart' show
   debugPaintLayerBordersEnabled,
   debugPaintPointersEnabled,
   debugRepaintRainbowEnabled;
+import 'package:flutter_blue/abstractions/contracts/i_device.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_blue_example/app_configuration.dart';
 import 'package:flutter_blue_example/app_home.dart';
 import 'package:flutter_blue_example/app_settings.dart';
 import 'package:flutter_blue_example/app_strings.dart';
+import 'package:flutter_blue_example/device_page.dart';
 import 'package:intl/intl.dart';
 import 'i18n/app_messages_all.dart';
 
@@ -21,8 +24,8 @@ class FlutterBlueApp extends StatefulWidget {
 
 class FlutterBlueAppState extends State<FlutterBlueApp> {
 
-  final Map<String, Object> _stocks = <String, Object>{};
-  final List<String> _symbols = <String>[];
+  final FlutterBlue _flutterBlue = new FlutterBlue();
+  Set<IDevice> _devices;
 
   AppConfiguration _configuration = new AppConfiguration(
       displayMode: DisplayMode.light,
@@ -39,6 +42,7 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
   @override
   void initState() {
     super.initState();
+    _devices = _flutterBlue.ble.adapter.discoveredDevices;
     /*new StockDataFetcher((StockData data) {
       setState(() {
         data.appendTo(_stocks, _symbols);
@@ -73,15 +77,17 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
     final List<String> path = settings.name.split('/');
     if (path[0] != '')
       return null;
-    if (path[1] == 'stock') {
+    if (path[1] == 'device') {
       if (path.length != 3)
         return null;
-      /*if (_stocks.containsKey(path[2])) {
-        return new MaterialPageRoute<Null>(
-            settings: settings,
-            builder: (BuildContext context) => new StockSymbolPage(stock: _stocks[path[2]])
-        );
-      }*/
+      for(IDevice d in _devices) {
+        if(d.id.toString() == path[2]) {
+          return new MaterialPageRoute<Null>(
+              settings: settings,
+              builder: (BuildContext context) => new DevicePage(device: d)
+          );
+        }
+      }
     }
     return null;
   }
@@ -110,7 +116,7 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
         showPerformanceOverlay: _configuration.showPerformanceOverlay,
         showSemanticsDebugger: _configuration.showSemanticsDebugger,
         routes: <String, WidgetBuilder>{
-          '/':         (BuildContext context) => new AppHome(_stocks, _symbols, _configuration, configurationUpdater),
+          '/':         (BuildContext context) => new AppHome(_configuration, configurationUpdater),
           '/settings': (BuildContext context) => new AppSettings(_configuration, configurationUpdater)
         },
         onGenerateRoute: _getRoute,

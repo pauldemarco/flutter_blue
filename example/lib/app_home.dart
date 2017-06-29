@@ -44,10 +44,10 @@ class _NotImplementedDialog extends StatelessWidget {
 }
 
 class AppHome extends StatefulWidget {
-  const AppHome(this.stocks, this.symbols, this.configuration, this.updater);
+  const AppHome(this.configuration, this.updater);
 
-  final Map<String, Object> stocks;
-  final List<String> symbols;
+  final Map<String, Object> stocks = null;
+  final List<String> symbols = null;
   final AppConfiguration configuration;
   final ValueChanged<AppConfiguration> updater;
 

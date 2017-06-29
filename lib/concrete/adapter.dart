@@ -37,6 +37,9 @@ class Adapter implements IAdapter {
     return _connectedChannel.receiveBroadcastStream()
         .map((m) {
       var d = new Device.fromMap(m);
+      if(_discoveredDevices.contains(d)) {
+        d = _discoveredDevices.lookup(d);
+      }
       if(_connectedDevices.contains(d)) {
         // TODO: Handle situation where connected device is already in connected list
         // Device device = _connectedDevices.lookup(d);
