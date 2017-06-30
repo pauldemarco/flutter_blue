@@ -11,20 +11,17 @@ main() {
     var device = new Device(
         id: new Guid.fromMac("01:02:03:04:05:06"),
         name: "Test Device",
-        rssi: 123,
-        state: DeviceState.disconnected);
+        rssi: 123,);
 
     var device2 = new Device(
         id: new Guid.fromMac("01:02:03:04:05:06"),
         name: "Test Device",
-        rssi: 123,
-        state: DeviceState.disconnected);
+        rssi: 123,);
 
     var device3 = new Device(
         id: new Guid.fromMac("02:02:03:04:05:07"),
         name: "Test Device",
-        rssi: 123,
-        state: DeviceState.disconnected);
+        rssi: 123,);
 
     test('equality', (){
       expect(device, device2);

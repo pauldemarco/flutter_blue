@@ -79,6 +79,16 @@ class Guid {
     return "$one-$two-$three-$four-$five";
   }
 
+  String toMac() {
+    String one = hex.encode(_bytes.sublist(0,1));
+    String two = hex.encode(_bytes.sublist(1,2));
+    String three = hex.encode(_bytes.sublist(2,3));
+    String four = hex.encode(_bytes.sublist(3,4));
+    String five = hex.encode(_bytes.sublist(4,5));
+    String six = hex.encode(_bytes.sublist(5,6));
+    return "$one:$two:$three:$four:$five:$six".toUpperCase();
+  }
+
   List<int> toByteArray() {
     return _bytes;
   }

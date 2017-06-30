@@ -4,13 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
 import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
+import 'package:flutter_blue/abstractions/known_services.dart';
 import 'package:flutter_blue/concrete/characteristic.dart';
 import 'package:flutter_blue/utils/guid.dart';
 
 class Service implements IService {
-  Service._internal({this.id, this.device, this.isPrimary, this.name, List<Map<String,Object>> includedServices, List<Map<String,Object>> characteristics})
+  Service._internal({this.id, this.device, this.isPrimary, List<Map<String,Object>> includedServices, List<Map<String,Object>> characteristics})
       : _methodChannel = new MethodChannel(
-            "flutterblue.pauldemarco.com/devices/${device.id.toString()}/services/${id.toString()}/methods") {
+            "flutterblue.pauldemarco.com/devices/${device.id.toString()}/services/${id.toString()}/methods"),
+        name = KnownServices.lookup(id).name
+  {
     if(includedServices != null) {
       var s = includedServices.map((m) {
         m.putIfAbsent("device", () => this.device);
@@ -27,14 +30,13 @@ class Service implements IService {
     }
   }
 
-  Service({id, device, isPrimary, name})
+  Service({id, device, isPrimary})
       : this._internal(
-            id: id, device: device, isPrimary: isPrimary, name: name);
+            id: id, device: device, isPrimary: isPrimary);
 
   Service.fromMap(map)
       : this._internal(
       id: new Guid(map['id']),
-      name: (map['name'] != null) ? map['name'] : 'Unknown',
       device: map['device'],
       isPrimary: map['isPrimary'],
       includedServices: map['includedServices'],

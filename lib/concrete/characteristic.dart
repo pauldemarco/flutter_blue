@@ -7,22 +7,23 @@ import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
 import 'package:flutter_blue/abstractions/contracts/i_descriptor.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/eventargs/characteristic_updated_args.dart';
+import 'package:flutter_blue/abstractions/known_characteristics.dart';
 import 'package:flutter_blue/utils/guid.dart';
 
 class Characteristic implements ICharacteristic{
 
-  Characteristic._internal({this.id, this.name, this.value, this.stringValue, this.properties, this.writeType, this.canRead, this.canReadEncrypted, this.canWrite, this.canWriteEncrypted, this.service})
+  Characteristic._internal({this.id, this.value, this.stringValue, this.properties, this.writeType, this.canRead, this.canReadEncrypted, this.canWrite, this.canWriteEncrypted, this.service})
       : _methodChannel = new MethodChannel(
-      "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/methods");
+      "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/methods"),
+        name = KnownCharacteristics.lookup(id).name;
 
-  Characteristic({id, name, value, stringValue, properties, writeType, canRead, canReadEncrypted, canWrite, canWriteEncrypted, service})
+  Characteristic({id, value, stringValue, properties, writeType, canRead, canReadEncrypted, canWrite, canWriteEncrypted, service})
       : this._internal(
-      id: id, name: name, value: value, stringValue: stringValue, properties: properties, writeType: writeType, canRead: canRead, canReadEncrypted: canReadEncrypted, canWrite: canWrite, canWriteEncrypted: canWriteEncrypted, service: service);
+      id: id, value: value, stringValue: stringValue, properties: properties, writeType: writeType, canRead: canRead, canReadEncrypted: canReadEncrypted, canWrite: canWrite, canWriteEncrypted: canWriteEncrypted, service: service);
 
   Characteristic.fromMap(map)
       : this._internal(
     id: new Guid(map['id']),
-    name: null,
     properties: map['properties'],
     writeType: CharacteristicWriteType.values[map['writeType']],
     canRead: map['canRead'],

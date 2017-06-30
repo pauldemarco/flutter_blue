@@ -33,6 +33,11 @@ main() {
       expect("[36, 10, 100, 80, 164, 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]", guid.toByteArray().toString());
     });
 
+    test('fromMac()', (){
+      var guid = new Guid.fromMac("24:0A:64:50:A4:67");
+      expect("24:0A:64:50:A4:67", guid.toMac());
+    });
+
     test('hashCode', (){
       var guid = new Guid.fromMac("24:0A:64:50:A4:67");
       var guid2 = new Guid.fromMac("24:0A:64:50:A4:67");

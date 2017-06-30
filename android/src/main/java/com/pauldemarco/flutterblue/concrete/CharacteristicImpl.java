@@ -1,6 +1,7 @@
 package com.pauldemarco.flutterblue.concrete;
 
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.util.Log;
 
 import com.pauldemarco.flutterblue.ChannelPaths;
 import com.pauldemarco.flutterblue.Characteristic;
@@ -36,7 +37,7 @@ public class CharacteristicImpl extends Characteristic {
 
     public static CharacteristicImpl fromGattCharacteristic(Registrar registrar, BluetoothGattCharacteristic c, Service service, Device device) {
         Guid guid = new Guid(c.getUuid());
-        String name = null; // TODO: Get name if UUID is a known characteristic
+        String name = null; // TODO: Get name if UUID is a known characteristic (do this on dart side instead?)
         int properties = c.getProperties();
         int writeTypeInt = c.getWriteType();
         CharacteristicWriteType writeType = CharacteristicWriteType.DEFAULT;
@@ -48,6 +49,7 @@ public class CharacteristicImpl extends Characteristic {
                 writeType = CharacteristicWriteType.WITH_RESPONSE;
                 break;
         }
+        // Permissions will always be zero, see issue #6
         int permissions = c.getPermissions();
         boolean canRead = (permissions & BluetoothGattCharacteristic.PERMISSION_READ) == BluetoothGattCharacteristic.PERMISSION_READ;
         boolean canReadEncrypted = (permissions & BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED) == BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED;

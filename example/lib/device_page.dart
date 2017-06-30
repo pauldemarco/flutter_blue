@@ -63,7 +63,26 @@ class _DevicePageState extends State<DevicePage> {
           onPressed: _connect
       );
     }
+  }
 
+  _buildServiceList(BuildContext context) {
+    var children = <Widget>[];
+    for(IService s in _device.services) {
+      var sChildren = <Widget>[];
+      if(s.characteristics.length > 0) {
+        for(ICharacteristic c in s.characteristics){
+          sChildren.add(new ListTile(title: new Text(c.name)));
+        }
+      } else {
+        sChildren.add(const Text('The service is empty.'));
+      }
+      children.add(new ExpansionTile(
+        title: new Text(s.name),
+        backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+        children: sChildren,
+      ));
+    }
+    return children;
   }
 
   @override
@@ -72,15 +91,8 @@ class _DevicePageState extends State<DevicePage> {
         appBar: new AppBar(
             title: new Text(_device.name)
         ),
-        body: new SingleChildScrollView(
-            child: new Container(
-                margin: const EdgeInsets.all(20.0),
-                child: new Card(
-                    child: new Text(
-                        _deviceState.toString()
-                    )
-                )
-            )
+        body: new ListView(
+            children: _buildServiceList(context),
         ),
       floatingActionButton: _buildFloatingActionButton(context),
     );
@@ -90,6 +102,9 @@ class _DevicePageState extends State<DevicePage> {
     String result = await _flutterBlue.ble.adapter.connectToDevice(_device);
     print(result);
     Set<IService> services = await _device.getServices();
+    setState(() {
+
+    });
     for(IService s in services) {
       printService(s);
     }
@@ -101,7 +116,7 @@ class _DevicePageState extends State<DevicePage> {
       printService(q);
     }
     for(ICharacteristic c in s.characteristics) {
-      print("Characteristic id: ${c.id} canRead: ${c.canRead} canReadEncrypted: ${c.canReadEncrypted} canWrite: ${c.canWrite} canWriteEncrypted: ${c.canWriteEncrypted}");
+      print("Characteristic id: ${c.id} properties: ${c.properties} canRead: ${c.canRead} canReadEncrypted: ${c.canReadEncrypted} canWrite: ${c.canWrite} canWriteEncrypted: ${c.canWriteEncrypted}");
     }
   }
 

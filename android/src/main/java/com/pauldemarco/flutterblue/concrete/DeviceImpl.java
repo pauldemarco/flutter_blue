@@ -112,6 +112,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
             nativeDevice.observeConnectionStateChanges()
                     .takeUntil(disconnectTriggerSubject)
                     .map((s) -> toState(s))
+                    .doOnCompleted(() -> stateChanged(State.DISCONNECTED))
                     .subscribe(
                             this::stateChanged,
                             this::onConnectionStateFailure

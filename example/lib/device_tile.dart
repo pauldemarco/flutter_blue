@@ -18,7 +18,7 @@ class DeviceTile extends StatelessWidget {
     return new ListTile(
       leading: new AnimatedRssi(device.rssi),
       title: new Text(device.name),
-      subtitle: new Text(device.id.toString()),
+      subtitle: new Text(device.id.toMac()),
       onTap: _handleTap,
     );;
   }

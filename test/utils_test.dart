@@ -14,8 +14,6 @@ main() {
     var min = -90.0;
     var max = -60.0;
     var value = -66.0;
-    print(inverseLerp(min, max, value));
-    print(inverseLerp(min, max, value).clamp(0.0,1.0));
     expect(inverseLerp(min,max,value), 0.8);
   });
 }
