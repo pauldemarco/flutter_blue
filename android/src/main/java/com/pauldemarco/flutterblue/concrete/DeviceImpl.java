@@ -15,8 +15,10 @@ import com.polidea.rxandroidble.utils.ConnectionSharingAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
@@ -24,6 +26,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import rx.Completable;
 import rx.Observable;
 import rx.Single;
 import rx.subjects.PublishSubject;
@@ -41,6 +44,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     private int rssi;
     private State state = State.DISCONNECTED;
     private byte[] advPacket;
+    private Set<Service> services = new HashSet<>();
 
     private final Registrar registrar;
     private final MethodChannel methodChannel;
@@ -100,18 +104,11 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     }
 
     @Override
-    public boolean connect(boolean autoConnect) {
+    public Completable connect(boolean autoConnect) {
         if(!isConnected()) {
             if(connectionObservable != null) {
                 Log.e(TAG, "connect: connectionObservable not null!!");
             }
-            connectionObservable = prepareConnectionObservable(autoConnect);
-            connectionObservable.subscribe(
-                    rxBleConnection -> {
-                        Log.d(TAG, "connect: " + this.guid.toMac() + " connected");
-                    },
-                    this::onConnectionFailure
-            );
             nativeDevice.observeConnectionStateChanges()
                     .takeUntil(disconnectTriggerSubject)
                     .map((s) -> toState(s))
@@ -119,8 +116,17 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                             this::stateChanged,
                             this::onConnectionStateFailure
                     );
+            connectionObservable = prepareConnectionObservable(autoConnect);
+            connectionObservable.subscribe(
+                    rxBleConnection -> {
+                        Log.d(TAG, "connect: " + this.guid.toMac() + " connected");
+                    },
+                    this::onConnectionFailure
+            );
+            return connectionObservable.first().toCompletable();
+        } else {
+            return Completable.error(new Throwable("Already connected to device"));
         }
-        return true;
     }
 
     @Override
@@ -142,12 +148,17 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     @Override
     public Single<List<Service>> getServices() {
         if(isConnected()) {
+            services.clear();
             return connectionObservable
                     .flatMap(RxBleConnection::discoverServices)
                     .first() // Disconnect automatically after discovery
                     .map(RxBleDeviceServices::getBluetoothGattServices)
                     .flatMapIterable(services -> services)
-                    .map(service -> (Service)new ServiceImpl(registrar, service, this))
+                    .map(service -> {
+                        Service s = new ServiceImpl(registrar, service, this);
+                        services.add(s); // add to local set
+                        return s;
+                    })
                     .toList()
                     .toSingle();
 
@@ -229,20 +240,6 @@ public class DeviceImpl extends Device implements MethodCallHandler {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null) return false;
-        if(getClass() != o.getClass()) return false;
-        DeviceImpl other = (DeviceImpl) o;
-        return guid.equals(other.getGuid());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.guid.hashCode();
-    }
-
-    @Override
     public void onMethodCall(MethodCall call, Result result) {
         if (call.method.equals("getServices")) {
             getServices().subscribe(
@@ -269,5 +266,19 @@ public class DeviceImpl extends Device implements MethodCallHandler {
         } else {
             result.notImplemented();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null) return false;
+        if(getClass() != o.getClass()) return false;
+        DeviceImpl other = (DeviceImpl) o;
+        return guid.equals(other.getGuid());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.guid.hashCode();
     }
 }

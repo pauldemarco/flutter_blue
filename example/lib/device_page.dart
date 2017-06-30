@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
 import 'package:flutter_blue/abstractions/contracts/i_device.dart';
+import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
@@ -87,6 +89,20 @@ class _DevicePageState extends State<DevicePage> {
   _connect() async {
     String result = await _flutterBlue.ble.adapter.connectToDevice(_device);
     print(result);
+    Set<IService> services = await _device.getServices();
+    for(IService s in services) {
+      printService(s);
+    }
+  }
+
+  printService(IService s) {
+    print("Service id: ${s.id} isPrimary: ${s.isPrimary}");
+    for(IService q in s.includedServices) {
+      printService(q);
+    }
+    for(ICharacteristic c in s.characteristics) {
+      print("Characteristic id: ${c.id} canRead: ${c.canRead} canReadEncrypted: ${c.canReadEncrypted} canWrite: ${c.canWrite} canWriteEncrypted: ${c.canWriteEncrypted}");
+    }
   }
 
   _disconnect() async {

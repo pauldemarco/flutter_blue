@@ -1,6 +1,7 @@
 package com.pauldemarco.flutterblue;
 
 import java.util.List;
+import java.util.Map;
 
 import rx.Completable;
 import rx.Single;
@@ -11,34 +12,41 @@ import rx.Single;
 
 public abstract class Characteristic {
 
-    final Guid guid;
+    protected final Guid guid;
 
-    final String uuid;
+    protected final String name;
 
-    final String name;
+    protected final int properties;
 
-    final CharacteristicPropertyType properties;
+    protected final CharacteristicWriteType writeType;
 
-    final CharacteristicWriteType writeType;
+    protected final boolean canRead;
 
-    final boolean canRead;
+    protected final boolean canReadEncrypted;
 
-    final boolean canWrite;
+    protected final boolean canWrite;
 
-    final boolean canUpdate;
+    protected final boolean canWriteEncrypted;
 
-    final Service service;
+    protected final Service service;
 
-    public Characteristic(Guid guid, String uuid, String name, CharacteristicPropertyType properties, CharacteristicWriteType writeType, boolean canRead, boolean canWrite, boolean canUpdate, Service service) {
+    protected final Device device;
+
+    public Characteristic(Guid guid, String name, int properties, CharacteristicWriteType writeType, boolean canRead, boolean canReadEncrypted, boolean canWrite, boolean canWriteEncrypted, Service service, Device device) {
         this.guid = guid;
-        this.uuid = uuid;
         this.name = name;
         this.properties = properties;
         this.writeType = writeType;
         this.canRead = canRead;
+        this.canReadEncrypted = canReadEncrypted;
         this.canWrite = canWrite;
-        this.canUpdate = canUpdate;
+        this.canWriteEncrypted = canWriteEncrypted;
         this.service = service;
+        this.device = device;
+    }
+
+    public Guid getGuid() {
+        return guid;
     }
 
     byte[] value;
@@ -58,4 +66,6 @@ public abstract class Characteristic {
     public abstract Single<List<Descriptor>> getDescriptors();
 
     public abstract Single<Descriptor> getDescriptor(Guid id);
+
+    public abstract Map<String, Object> toMap();
 }

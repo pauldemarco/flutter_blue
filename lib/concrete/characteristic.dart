@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue/abstractions/characteristic_prop_type.dart';
 import 'package:flutter_blue/abstractions/characteristic_write_type.dart';
 import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
@@ -10,12 +11,28 @@ import 'package:flutter_blue/utils/guid.dart';
 
 class Characteristic implements ICharacteristic{
 
+  Characteristic._internal({this.id, this.name, this.value, this.stringValue, this.properties, this.writeType, this.canRead, this.canReadEncrypted, this.canWrite, this.canWriteEncrypted, this.service})
+      : _methodChannel = new MethodChannel(
+      "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/methods");
+
+  Characteristic({id, name, value, stringValue, properties, writeType, canRead, canReadEncrypted, canWrite, canWriteEncrypted, service})
+      : this._internal(
+      id: id, name: name, value: value, stringValue: stringValue, properties: properties, writeType: writeType, canRead: canRead, canReadEncrypted: canReadEncrypted, canWrite: canWrite, canWriteEncrypted: canWriteEncrypted, service: service);
+
+  Characteristic.fromMap(map)
+      : this._internal(
+    id: new Guid(map['id']),
+    name: null,
+    properties: map['properties'],
+    writeType: CharacteristicWriteType.values[map['writeType']],
+    canRead: map['canRead'],
+    canReadEncrypted: map['canReadEncrypted'],
+    canWrite: map['canWrite'],
+    canWriteEncrypted: map['canWriteEncrypted'],
+    service: map['service']);
+
   /// Id of the characteristic.
   final Guid id;
-
-  /// TODO: review: do we need this in any case?
-  /// Uuid of the characteristic.
-  final String uuid;
 
   /// Name of the charakteristic.
   /// Returns the name if the <see cref="Id"/> is a id of a standard characteristic.
@@ -28,24 +45,23 @@ class Characteristic implements ICharacteristic{
   final String stringValue;
 
   /// Properties of the characteristic.
-  final CharacteristicPropertyType properties;
+  final int properties;
 
   /// Specifies how the <see cref="WriteAsync"/> function writes the value.
-  CharacteristicWriteType writeType;
+  final CharacteristicWriteType writeType;
 
-  /// Indicates wheter the characteristic can be read or not.
+  /// Indicates whether the characteristic can be read or not.
   final bool canRead;
+  final bool canReadEncrypted;
 
-  /// Indicates wheter the characteristic can be written or not.
+  /// Indicates whether the characteristic can be written or not.
   final bool canWrite;
-
-  /// Indicates wheter the characteristic supports notify or not.
-  final bool canUpdate;
+  final bool canWriteEncrypted;
 
   /// Returns the parent service. Use this to access the device.
   final IService service;
 
-  Characteristic({this.id, this.uuid, this.name, this.value, this.stringValue, this.properties, this.canRead, this.canWrite, this.canUpdate, this.service});
+  final MethodChannel _methodChannel;
 
   @override
   void valueUpdated(CharacteristicUpdatedEventArgs args) {
@@ -80,6 +96,24 @@ class Characteristic implements ICharacteristic{
   Future<List<IDescriptor>> getDescriptorsAsync() {
     // TODO: implement getDescriptorsAsync
   }
+
+  Map<String, dynamic> toMap() {
+    var map = new Map();
+    map["id"] = id.toString();
+    map["name"] = name;
+    map["properties"] = properties;
+    map["writeType"] = writeType;
+    map["canRead"] = canRead;
+    map["canReadEncrypted"] = canReadEncrypted;
+    map["canWrite"] = canWrite;
+    map["canWriteEncrypted"] = canWriteEncrypted;
+    return map;
+  }
+
+  operator ==(other) =>
+      other is Characteristic && id.hashCode == other.id.hashCode;
+
+  int get hashCode => id.hashCode;
 }
 
 typedef void ValueChanged<T>(T value);

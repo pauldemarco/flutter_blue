@@ -22,8 +22,7 @@ class Adapter implements IAdapter {
 
   int scanTimeout = 10000;
 
-  Set<IDevice> _devices = new Set<IDevice>();
-  Set<IDevice> get devices => _devices;
+  final Set<IDevice> devices = new Set<IDevice>();
 
   Set<IDevice> _connectedDevices = new Set<IDevice>();
   Set<IDevice> get connectedDevices => _connectedDevices;
@@ -40,10 +39,10 @@ class Adapter implements IAdapter {
   Stream<IDevice> deviceConnected() {
     return _connectedChannel.receiveBroadcastStream().map((m) {
       var d = new Device.fromMap(m);
-      if (_devices.contains(d)) {
-        d = _devices.lookup(d);
+      if (devices.contains(d)) {
+        d = devices.lookup(d);
       } else {
-        _devices.add(d);
+        devices.add(d);
       }
       return d;
     });
@@ -60,12 +59,12 @@ class Adapter implements IAdapter {
   Stream<IDevice> deviceDiscovered() {
     return _discoveredChannel.receiveBroadcastStream().map((m) {
       var d = new Device.fromMap(m);
-      var existing = _devices.lookup(d);
+      var existing = devices.lookup(d);
       if (existing != null) {
         existing.rssi = d.rssi;
         return existing;
       }
-      _devices.add(d);
+      devices.add(d);
       return d;
     });
   }

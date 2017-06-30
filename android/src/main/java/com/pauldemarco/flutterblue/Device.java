@@ -3,6 +3,7 @@ package com.pauldemarco.flutterblue;
 import java.util.List;
 import java.util.Map;
 
+import rx.Completable;
 import rx.Single;
 
 /**
@@ -24,7 +25,7 @@ public abstract class Device {
 
     public abstract boolean isConnected();
 
-    public abstract boolean connect(boolean autoConnect);
+    public abstract Completable connect(boolean autoConnect);
 
     public abstract void disconnect();
 

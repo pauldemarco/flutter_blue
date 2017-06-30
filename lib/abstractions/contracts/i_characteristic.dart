@@ -19,10 +19,6 @@ void valueUpdated(CharacteristicUpdatedEventArgs args);
 /// Id of the characteristic.
 Guid get id;
 
-/// TODO: review: do we need this in any case?
-/// Uuid of the characteristic.
-String get uuid;
-
 /// Name of the charakteristic.
 /// Returns the name if the <see cref="Id"/> is a id of a standard characteristic.
 String get name;
@@ -34,19 +30,18 @@ Uint8List get value;
 String get stringValue;
 
 /// Properties of the characteristic.
-CharacteristicPropertyType get properties;
+int get properties;
 
 /// Specifies how the <see cref="WriteAsync"/> function writes the value.
-CharacteristicWriteType writeType;
+CharacteristicWriteType get writeType;
 
-/// Indicates wheter the characteristic can be read or not.
+/// Indicates whether the characteristic can be read or not.
 bool get canRead;
+bool get canReadEncrypted;
 
-/// Indicates wheter the characteristic can be written or not.
+/// Indicates whether the characteristic can be written or not.
 bool get canWrite;
-
-/// Indicates wheter the characteristic supports notify or not.
-bool get canUpdate;
+bool get canWriteEncrypted;
 
 /// Returns the parent service. Use this to access the device.
 IService get service;
@@ -91,5 +86,7 @@ Future<List<IDescriptor>> getDescriptorsAsync();
 /// </returns>
 Future<IDescriptor> getDescriptorAsync(Guid id);
 
+/// Serializes to map for use over the platform stream
+Map<String, dynamic> toMap();
 
 }

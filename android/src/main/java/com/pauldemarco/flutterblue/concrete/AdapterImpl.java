@@ -120,9 +120,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public Completable connectToDevice(Device device) {
-        device.connect(false);
-        deviceConnected(device);
-        return Completable.complete();
+        return device.connect(false);
     }
 
     @Override
@@ -170,7 +168,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
                 device = new DeviceImpl(registrar, guid, name, nativeDevice, rssi, null);
             }
             connectToDevice(device).subscribe(
-                    () -> result.success("Requested connection to " + guid.toMac()),
+                    () -> result.success("Connected to " + guid.toMac()),
                     throwable -> result.error("Device connection error", throwable.getMessage(), throwable)
             );
         } else if(call.method.equals("disconnectDevice")) {

@@ -6,56 +6,57 @@ import 'package:flutter_blue/abstractions/advertisement_record.dart';
 import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
+import 'package:flutter_blue/concrete/service.dart';
 import 'package:flutter_blue/utils/guid.dart';
 
 class Device implements IDevice {
-
   final Guid id;
   final String name;
   final Object nativeDevice;
   int rssi;
-  Future<DeviceState> get state => _methodChannel.invokeMethod("getState").then((i) => DeviceState.values[i]);
+  Future<DeviceState> get state => _methodChannel
+      .invokeMethod("getState")
+      .then((i) => DeviceState.values[i]);
   final List<AdvertisementRecord> advertisementRecords;
+
+  final Set<IService> services = new Set<IService>();
 
   final MethodChannel _methodChannel;
   final EventChannel _statusChannel;
 
-  Device._internal({this.advertisementRecords, this.id, this.name, this.nativeDevice, this.rssi})
-        : _methodChannel = new MethodChannel("flutterblue.pauldemarco.com/devices/${id.toString()}/methods"),
-          _statusChannel = new EventChannel("flutterblue.pauldemarco.com/devices/${id.toString()}/status");
+  Device._internal(
+      {this.advertisementRecords,
+      this.id,
+      this.name,
+      this.nativeDevice,
+      this.rssi})
+      : _methodChannel = new MethodChannel(
+            "flutterblue.pauldemarco.com/devices/${id.toString()}/methods"),
+        _statusChannel = new EventChannel(
+            "flutterblue.pauldemarco.com/devices/${id.toString()}/status");
 
   Device({id, name, nativeDevice, rssi, advertisementRecords})
       : this._internal(
-      id: id,
-      name: name,
-      rssi: rssi,
-      nativeDevice: nativeDevice,
-      advertisementRecords: advertisementRecords
-  );
+            id: id,
+            name: name,
+            rssi: rssi,
+            nativeDevice: nativeDevice,
+            advertisementRecords: advertisementRecords);
 
   Device.fromMap(map)
       : this._internal(
-          id: new Guid(map['id']),
-          name: (map['name'] != null) ? map['name'] : 'Unknown',
-          rssi: map['rssi'],
-          nativeDevice: map['nativeDevice'],
-          advertisementRecords: AdvertisementRecord.listFromBytes(map['advPacket'])
-      );
-
-  Map<String, dynamic> toMap() {
-    var map = new Map();
-    map["id"] = id.toString();
-    map["name"] = name;
-    map["nativeDevice"] = null;
-    map["rssi"] = rssi;
-    //map["advertisementRecords"] = advertisementRecords; TODO: Need to serialize this as well
-    return map;
-  }
+            id: new Guid(map['id']),
+            name: (map['name'] != null) ? map['name'] : 'Unknown',
+            rssi: map['rssi'],
+            nativeDevice: map['nativeDevice'],
+            advertisementRecords:
+                AdvertisementRecord.listFromBytes(map['advPacket']));
 
   @override
   Stream<DeviceState> stateChanged() {
     print("stateChanged requested for " + id.toString());
-    return _statusChannel.receiveBroadcastStream()
+    return _statusChannel
+        .receiveBroadcastStream()
         .map((i) => DeviceState.values[i]);
   }
 
@@ -65,8 +66,17 @@ class Device implements IDevice {
   }
 
   @override
-  Future<List<IService>> getServices() {
-    return _methodChannel.invokeMethod("getServices");
+  Future<Set<IService>> getServices() {
+    services.clear();
+    return _methodChannel
+        .invokeMethod("getServices")
+        .then((List<Map<String, Object>> s) {
+      for (Map<String, Object> m in s) {
+        m.putIfAbsent("device", () => this);
+        services.add(new Service.fromMap(m));
+      }
+      return services;
+    });
   }
 
   @override
@@ -79,9 +89,17 @@ class Device implements IDevice {
     // TODO: implement updateRssiAsync
   }
 
-  operator ==(other) =>
-      other is Device && id.hashCode == other.id.hashCode;
+  Map<String, dynamic> toMap() {
+    var map = new Map();
+    map["id"] = id.toString();
+    map["name"] = name;
+    map["nativeDevice"] = null;
+    map["rssi"] = rssi;
+    //map["advertisementRecords"] = advertisementRecords; TODO: Need to serialize this as well
+    return map;
+  }
+
+  operator ==(other) => other is Device && id.hashCode == other.id.hashCode;
 
   int get hashCode => id.hashCode;
-
 }

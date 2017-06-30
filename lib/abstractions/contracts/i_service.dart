@@ -19,6 +19,12 @@ abstract class IService {
   /// Returns the parent device.
   IDevice get device;
 
+  /// Set to hold all included services
+  Set<IService> get includedServices;
+
+  /// Set to hold all characteristics
+  Set<ICharacteristic> get characteristics;
+
   /// Gets the list of included services
   Future<List<IService>> getIncludedServices();
 
@@ -28,4 +34,7 @@ abstract class IService {
   /// Gets the first characteristic with the Id <paramref name="id"/>.
   /// <param name="id">The id of the searched characteristic.</param>
   Future<ICharacteristic> getCharacteristic(Guid id);
+
+  /// Serializes to map for use over the platform stream
+  Map<String, dynamic> toMap();
 }

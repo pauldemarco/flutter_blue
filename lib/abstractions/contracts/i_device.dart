@@ -32,12 +32,15 @@ abstract class IDevice {
   /// - ...
   List<AdvertisementRecord> get advertisementRecords;
 
+  /// Set to hold all of your services
+  Set<IService> get services;
+
   /// Stream of connection state changes for device
   Stream<DeviceState> stateChanged();
 
   /// Gets all services of the device.
   /// <returns>A task that represents the asynchronous read operation. The Result property will contain a list of all available services.</returns>
-  Future<List<IService>> getServices();
+  Future<Set<IService>> getServices();
 
   /// Gets the first service with the Id <paramref name="id"/>.
   /// <param name="id">The id of the searched service.</param>
@@ -68,7 +71,7 @@ abstract class IDevice {
   /// <param name="requestValue">The requested MTU</param>
   Future<int> requestMtuAsync(int requestValue);
 
-  /// Serializes the map for use over the platform stream
+  /// Serializes to map for use over the platform stream
   Map<String, dynamic> toMap();
 
 }

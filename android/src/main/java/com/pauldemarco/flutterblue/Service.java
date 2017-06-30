@@ -1,8 +1,10 @@
 package com.pauldemarco.flutterblue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import rx.Single;
 
@@ -18,7 +20,7 @@ public abstract class Service {
 
     protected final Device device;
 
-    protected final List<Service> includedServices;
+    protected final Set<Service> includedServices;
 
     protected final List<Characteristic> characteristics;
 
@@ -26,7 +28,7 @@ public abstract class Service {
         this.guid = guid;
         this.isPrimary = isPrimary;
         this.device = device;
-        this.includedServices = new ArrayList<>();
+        this.includedServices = new HashSet<>();
         this.characteristics = new ArrayList<>();
     }
 

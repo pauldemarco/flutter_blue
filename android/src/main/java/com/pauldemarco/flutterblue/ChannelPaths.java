@@ -35,4 +35,12 @@ public class ChannelPaths {
     public final static String getServiceMethodsPath(String deviceId, String serviceId){
         return getServicePath(deviceId, serviceId) + "methods";
     }
+
+    public final static String CHARACTERISTICS = "characteristics/";
+    public final static String getCharacteristicPath(String deviceId, String serviceId, String charId){
+        return getServicePath(deviceId, serviceId) + CHARACTERISTICS + charId + "/";
+    }
+    public final static String getCharacteristicMethodsPath(String deviceId, String serviceId, String charId){
+        return getCharacteristicPath(deviceId, serviceId, charId) + "methods";
+    }
 }
