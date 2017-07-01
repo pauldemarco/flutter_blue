@@ -46,8 +46,8 @@ public class CharacteristicImpl extends Characteristic implements MethodCallHand
     private final BluetoothGattCharacteristic nativeCharacteristic;
     private final PublishSubject<Void> stopUpdatesTriggerSubject = PublishSubject.create();
 
-    public CharacteristicImpl(Registrar registrar, Guid guid, String name, int properties, CharacteristicWriteType writeType, boolean canRead, boolean canReadEncrypted, boolean canWrite, boolean canWriteEncrypted, Service service, Device device, Observable<RxBleConnection> connectionObservable, BluetoothGattCharacteristic nativeCharacteristic) {
-        super(guid, name, properties, writeType, canRead, canReadEncrypted, canWrite, canWriteEncrypted, service, device);
+    public CharacteristicImpl(Registrar registrar, Guid guid, String name, int properties, CharacteristicWriteType writeType, Service service, Device device, Observable<RxBleConnection> connectionObservable, BluetoothGattCharacteristic nativeCharacteristic) {
+        super(guid, name, properties, writeType, service, device);
         this.registrar = registrar;
         this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.getCharacteristicMethodsPath(device.getGuid().toString(), service.getGuid().toString(), guid.toString()));
         this.methodChannel.setMethodCallHandler(this);
@@ -71,13 +71,8 @@ public class CharacteristicImpl extends Characteristic implements MethodCallHand
                 writeType = CharacteristicWriteType.WITH_RESPONSE;
                 break;
         }
-        // Permissions will always be zero, see issue #6
-        int permissions = c.getPermissions();
-        boolean canRead = (permissions & BluetoothGattCharacteristic.PERMISSION_READ) == BluetoothGattCharacteristic.PERMISSION_READ;
-        boolean canReadEncrypted = (permissions & BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED) == BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED;
-        boolean canWrite = (permissions & BluetoothGattCharacteristic.PERMISSION_WRITE) == BluetoothGattCharacteristic.PERMISSION_WRITE;
-        boolean canWriteEncrypted = (permissions & BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED) == BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED;
-        return new CharacteristicImpl(registrar, guid, name, properties, writeType, canRead, canReadEncrypted, canWrite, canWriteEncrypted, service, device, connectionObservable, c);
+        // c.getPermissions() will always be zero, see issue #6. Use only client properties instead
+        return new CharacteristicImpl(registrar, guid, name, properties, writeType, service, device, connectionObservable, c);
     }
 
     @Override
@@ -93,6 +88,7 @@ public class CharacteristicImpl extends Characteristic implements MethodCallHand
     public Completable write(byte[] data) {
         return connectionObservable
                 .flatMap(rxBleConnection -> rxBleConnection.writeCharacteristic(guid.toUUID(), data))
+                .doOnNext(valueStream::onNext)
                 .toCompletable();
     }
 
@@ -179,10 +175,6 @@ public class CharacteristicImpl extends Characteristic implements MethodCallHand
         m.put("name", this.name);
         m.put("properties", this.properties);
         m.put("writeType", this.writeType.ordinal());
-        m.put("canRead", this.canRead);
-        m.put("canReadEncrypted", this.canReadEncrypted);
-        m.put("canWrite", this.canWrite);
-        m.put("canWriteEncrypted", this.canWriteEncrypted);
         return m;
     }
 

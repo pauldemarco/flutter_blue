@@ -17,7 +17,6 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   String title;
   Uint8List value = new Uint8List(1);
   bool isUpdating = false;
-  bool canRead
   StreamSubscription valueStream;
 
   @override
@@ -43,6 +42,18 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
     Uint8List value = await widget.characteristic.read();
     setState(() {
       this.value = value;
+    });
+  }
+
+  _write() async{
+    Uint8List data = new Uint8List(4);
+    data[0] = 0x01;
+    data[1] = 0x02;
+    data[2] = 0x03;
+    data[3] = 0x04;
+    await widget.characteristic.write(data);
+    setState(() {
+      this.value = data;
     });
   }
 
@@ -74,6 +85,26 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
     }
   }
 
+  _buildIconsList() {
+    var items = <Widget>[];
+    if(widget.characteristic.canRead) {
+      items.add(new IconButton(
+        icon: new Icon(Icons.file_download),
+        onPressed: _read,
+      ));
+    }
+    if(widget.characteristic.canWrite) {
+      items.add(new IconButton(
+        icon: new Icon(Icons.file_upload),
+        onPressed: _write,
+      ));
+    }
+    if(widget.characteristic.canNotify || widget.characteristic.canIndicate) {
+      items.add(_buildNotifyIcon());
+    }
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new ListTile(
@@ -81,13 +112,7 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
         subtitle: new Text(value.toString()),
         onTap: _startUpdates,
         trailing: new Row(
-          children: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.file_download),
-              onPressed: _read,
-            ),
-            _buildNotifyIcon(),
-          ],
+          children: _buildIconsList()
         ),
     );
   }

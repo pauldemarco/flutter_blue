@@ -20,27 +20,15 @@ public abstract class Characteristic {
 
     protected final CharacteristicWriteType writeType;
 
-    protected final boolean canRead;
-
-    protected final boolean canReadEncrypted;
-
-    protected final boolean canWrite;
-
-    protected final boolean canWriteEncrypted;
-
     protected final Service service;
 
     protected final Device device;
 
-    public Characteristic(Guid guid, String name, int properties, CharacteristicWriteType writeType, boolean canRead, boolean canReadEncrypted, boolean canWrite, boolean canWriteEncrypted, Service service, Device device) {
+    public Characteristic(Guid guid, String name, int properties, CharacteristicWriteType writeType, Service service, Device device) {
         this.guid = guid;
         this.name = name;
         this.properties = properties;
         this.writeType = writeType;
-        this.canRead = canRead;
-        this.canReadEncrypted = canReadEncrypted;
-        this.canWrite = canWrite;
-        this.canWriteEncrypted = canWriteEncrypted;
         this.service = service;
         this.device = device;
     }

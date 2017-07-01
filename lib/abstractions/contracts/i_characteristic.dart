@@ -29,19 +29,23 @@ Uint8List get value;
 /// Gets <see cref="Value"/> as UTF8 encoded string representation.
 String get stringValue;
 
-/// Properties of the characteristic.
-int get properties;
-
 /// Specifies how the <see cref="WriteAsync"/> function writes the value.
 CharacteristicWriteType get writeType;
 
-/// Indicates whether the characteristic can be read or not.
-bool get canRead;
-bool get canReadEncrypted;
+/// Raw value of properties
+int get properties;
 
-/// Indicates whether the characteristic can be written or not.
+/// Properties of the characteristic.
+bool get canBroadcast;
+bool get canRead;
+bool get canWriteWithoutResponse;
 bool get canWrite;
-bool get canWriteEncrypted;
+bool get canNotify;
+bool get canIndicate;
+bool get canAuthenticatedSignedWrites;
+bool get hasExtendedProperties;
+bool get isNotifyEncryptionRequired;
+bool get isIndicateEncryptionRequired;
 
 /// Returns the parent service. Use this to access the device.
 IService get service;

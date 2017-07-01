@@ -17,10 +17,6 @@ class Characteristic implements ICharacteristic {
       this.stringValue,
       this.properties,
       this.writeType,
-      this.canRead,
-      this.canReadEncrypted,
-      this.canWrite,
-      this.canWriteEncrypted,
       this.service})
       : _methodChannel = new MethodChannel(
             "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/methods"),
@@ -34,10 +30,6 @@ class Characteristic implements ICharacteristic {
       stringValue,
       properties,
       writeType,
-      canRead,
-      canReadEncrypted,
-      canWrite,
-      canWriteEncrypted,
       service})
       : this._internal(
             id: id,
@@ -45,10 +37,6 @@ class Characteristic implements ICharacteristic {
             stringValue: stringValue,
             properties: properties,
             writeType: writeType,
-            canRead: canRead,
-            canReadEncrypted: canReadEncrypted,
-            canWrite: canWrite,
-            canWriteEncrypted: canWriteEncrypted,
             service: service);
 
   Characteristic.fromMap(map)
@@ -56,10 +44,6 @@ class Characteristic implements ICharacteristic {
             id: new Guid(map['id']),
             properties: map['properties'],
             writeType: CharacteristicWriteType.values[map['writeType']],
-            canRead: map['canRead'],
-            canReadEncrypted: map['canReadEncrypted'],
-            canWrite: map['canWrite'],
-            canWriteEncrypted: map['canWriteEncrypted'],
             service: map['service']);
 
   /// Id of the characteristic.
@@ -82,12 +66,16 @@ class Characteristic implements ICharacteristic {
   final CharacteristicWriteType writeType;
 
   /// Indicates whether the characteristic can be read or not.
-  final bool canRead;
-  final bool canReadEncrypted;
-
-  /// Indicates whether the characteristic can be written or not.
-  final bool canWrite;
-  final bool canWriteEncrypted;
+  bool get canBroadcast => (properties & CharacteristicPropertyType.broadcast) == CharacteristicPropertyType.broadcast;
+  bool get canRead => (properties & CharacteristicPropertyType.read) == CharacteristicPropertyType.read;
+  bool get canWriteWithoutResponse => (properties & CharacteristicPropertyType.writeWithoutResponse) == CharacteristicPropertyType.writeWithoutResponse;
+  bool get canWrite => (properties & CharacteristicPropertyType.write) == CharacteristicPropertyType.write;
+  bool get canNotify => (properties & CharacteristicPropertyType.notify) == CharacteristicPropertyType.notify;
+  bool get canIndicate => (properties & CharacteristicPropertyType.indicate) == CharacteristicPropertyType.indicate;
+  bool get canAuthenticatedSignedWrites => (properties & CharacteristicPropertyType.authenticatedSignedWrites) == CharacteristicPropertyType.authenticatedSignedWrites;
+  bool get hasExtendedProperties => (properties & CharacteristicPropertyType.extendedProperties) == CharacteristicPropertyType.extendedProperties;
+  bool get isNotifyEncryptionRequired => (properties & CharacteristicPropertyType.notifyEncryptionRequired) == CharacteristicPropertyType.notifyEncryptionRequired;
+  bool get isIndicateEncryptionRequired => (properties & CharacteristicPropertyType.indicateEncryptionRequired) == CharacteristicPropertyType.indicateEncryptionRequired;
 
   /// Returns the parent service. Use this to access the device.
   final IService service;
@@ -96,6 +84,7 @@ class Characteristic implements ICharacteristic {
   bool _isUpdating = false;
   bool get isUpdating => _isUpdating;
 
+  /// Platform channels
   final MethodChannel _methodChannel;
   final EventChannel _valueChannel;
 
@@ -142,10 +131,6 @@ class Characteristic implements ICharacteristic {
     map["name"] = name;
     map["properties"] = properties;
     map["writeType"] = writeType;
-    map["canRead"] = canRead;
-    map["canReadEncrypted"] = canReadEncrypted;
-    map["canWrite"] = canWrite;
-    map["canWriteEncrypted"] = canWriteEncrypted;
     return map;
   }
 

@@ -7,12 +7,12 @@ abstract class CharacteristicPropertyType {
   /// <summary>
   /// Characteristic value can be broadcasted.
   /// </summary>
-  static const int broadcast = 1;
+  static const broadcast = 1;
 
   /// <summary>
   /// Characteristic value can be read.
   /// </summary>
-  static const int read = 2;
+  static const read = 2;
 
   /// <summary>
   /// Characteristic value can be written without response.
