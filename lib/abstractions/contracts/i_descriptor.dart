@@ -23,11 +23,11 @@ abstract class IDescriptor {
   /// <returns>A task that represents the asynchronous read operation. The Result property will contain the read bytes.</returns>
   /// <exception cref="InvalidOperationException">Thrown if characteristic doesn't support read. See: <see cref="CanRead"/></exception>
   /// <exception cref="Exception">Thrown if the reading of the value failed.</exception>
-  Future<Uint8List> readAsync();
+  Future<Uint8List> read();
 
   /// Sends <paramref name="data"/> as characteristic value to the device.
   /// <param name="data">Data that should be written.</param>
   /// <exception cref="ArgumentNullException">Thrwon if <paramref name="data"/> is null.</exception>
   /// <exception cref="Exception">Thrwon if writing of the value failed.</exception>
-  Future writeAsync(Uint8List data);
+  Future write(Uint8List data);
 }

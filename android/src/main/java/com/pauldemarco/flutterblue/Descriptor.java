@@ -1,5 +1,10 @@
 package com.pauldemarco.flutterblue;
 
+import android.bluetooth.BluetoothGattDescriptor;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import rx.Completable;
 import rx.Single;
 
@@ -27,4 +32,11 @@ public abstract class Descriptor {
     public abstract Single<Byte[]> read();
 
     public abstract Completable write(byte[] data);
+
+    public static Map<String, Object> toMap(BluetoothGattDescriptor descriptor) {
+        Map<String, Object> m = new HashMap<>();
+        m.put("id", new Guid(descriptor.getUuid()).toString());
+        m.put("value", descriptor.getValue());
+        return m;
+    }
 }

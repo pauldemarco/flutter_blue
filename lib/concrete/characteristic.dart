@@ -10,27 +10,57 @@ import 'package:flutter_blue/abstractions/eventargs/characteristic_updated_args.
 import 'package:flutter_blue/abstractions/known_characteristics.dart';
 import 'package:flutter_blue/utils/guid.dart';
 
-class Characteristic implements ICharacteristic{
-
-  Characteristic._internal({this.id, this.value, this.stringValue, this.properties, this.writeType, this.canRead, this.canReadEncrypted, this.canWrite, this.canWriteEncrypted, this.service})
+class Characteristic implements ICharacteristic {
+  Characteristic._internal(
+      {this.id,
+      this.value,
+      this.stringValue,
+      this.properties,
+      this.writeType,
+      this.canRead,
+      this.canReadEncrypted,
+      this.canWrite,
+      this.canWriteEncrypted,
+      this.service})
       : _methodChannel = new MethodChannel(
-      "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/methods"),
+            "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/methods"),
+        _valueChannel = new EventChannel(
+            "flutterblue.pauldemarco.com/devices/${service.device.id.toString()}/services/${service.id.toString()}/characteristics/${id.toString()}/value"),
         name = KnownCharacteristics.lookup(id).name;
 
-  Characteristic({id, value, stringValue, properties, writeType, canRead, canReadEncrypted, canWrite, canWriteEncrypted, service})
+  Characteristic(
+      {id,
+      value,
+      stringValue,
+      properties,
+      writeType,
+      canRead,
+      canReadEncrypted,
+      canWrite,
+      canWriteEncrypted,
+      service})
       : this._internal(
-      id: id, value: value, stringValue: stringValue, properties: properties, writeType: writeType, canRead: canRead, canReadEncrypted: canReadEncrypted, canWrite: canWrite, canWriteEncrypted: canWriteEncrypted, service: service);
+            id: id,
+            value: value,
+            stringValue: stringValue,
+            properties: properties,
+            writeType: writeType,
+            canRead: canRead,
+            canReadEncrypted: canReadEncrypted,
+            canWrite: canWrite,
+            canWriteEncrypted: canWriteEncrypted,
+            service: service);
 
   Characteristic.fromMap(map)
       : this._internal(
-    id: new Guid(map['id']),
-    properties: map['properties'],
-    writeType: CharacteristicWriteType.values[map['writeType']],
-    canRead: map['canRead'],
-    canReadEncrypted: map['canReadEncrypted'],
-    canWrite: map['canWrite'],
-    canWriteEncrypted: map['canWriteEncrypted'],
-    service: map['service']);
+            id: new Guid(map['id']),
+            properties: map['properties'],
+            writeType: CharacteristicWriteType.values[map['writeType']],
+            canRead: map['canRead'],
+            canReadEncrypted: map['canReadEncrypted'],
+            canWrite: map['canWrite'],
+            canWriteEncrypted: map['canWriteEncrypted'],
+            service: map['service']);
 
   /// Id of the characteristic.
   final Guid id;
@@ -48,7 +78,7 @@ class Characteristic implements ICharacteristic{
   /// Properties of the characteristic.
   final int properties;
 
-  /// Specifies how the <see cref="WriteAsync"/> function writes the value.
+  /// Specifies how the <see cref="Write"/> function writes the value.
   final CharacteristicWriteType writeType;
 
   /// Indicates whether the characteristic can be read or not.
@@ -62,40 +92,48 @@ class Characteristic implements ICharacteristic{
   /// Returns the parent service. Use this to access the device.
   final IService service;
 
+  /// Returns whether we are currently notifying
+  bool _isUpdating = false;
+  bool get isUpdating => _isUpdating;
+
   final MethodChannel _methodChannel;
+  final EventChannel _valueChannel;
 
-  @override
-  void valueUpdated(CharacteristicUpdatedEventArgs args) {
-    // TODO: implement valueUpdated
+  Stream<Uint8List> valueUpdated() {
+    print("valueUpdated(): updates requested for " + id.toString());
+    return _valueChannel.receiveBroadcastStream();
   }
 
   @override
-  Future<Uint8List> readAsync() {
-    // TODO: implement readAsync
+  Future<Uint8List> read() {
+    return _methodChannel.invokeMethod('read');
   }
 
   @override
-  Future startUpdatesAsync() {
-    // TODO: implement startUpdatesAsync
+  Future<bool> write(Uint8List data) {
+    return _methodChannel.invokeMethod('write', data);
   }
 
   @override
-  Future stopUpdatesAsync() {
-    // TODO: implement stopUpdatesAsync
+  Future startUpdates() {
+    return _methodChannel.invokeMethod('startUpdates')
+        .then((b) => _isUpdating = true);
   }
 
   @override
-  Future<bool> writeAsync(Uint8List data) {
-    // TODO: implement writeAsync
-  }
-  @override
-  Future<IDescriptor> getDescriptorAsync(Guid id) {
-    // TODO: implement getDescriptorAsync
+  Future stopUpdates() {
+    return _methodChannel.invokeMethod('stopUpdates')
+        .then((b) => _isUpdating = false);
   }
 
   @override
-  Future<List<IDescriptor>> getDescriptorsAsync() {
-    // TODO: implement getDescriptorsAsync
+  Future<IDescriptor> getDescriptor(Guid id) {
+    return _methodChannel.invokeMethod('getDescriptor', id.toString());
+  }
+
+  @override
+  Future<List<IDescriptor>> getDescriptors() {
+    return _methodChannel.invokeMethod('getDescriptors');
   }
 
   Map<String, dynamic> toMap() {

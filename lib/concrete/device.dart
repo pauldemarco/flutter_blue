@@ -10,20 +10,6 @@ import 'package:flutter_blue/concrete/service.dart';
 import 'package:flutter_blue/utils/guid.dart';
 
 class Device implements IDevice {
-  final Guid id;
-  final String name;
-  final Object nativeDevice;
-  int rssi;
-  Future<DeviceState> get state => _methodChannel
-      .invokeMethod("getState")
-      .then((i) => DeviceState.values[i]);
-  final List<AdvertisementRecord> advertisementRecords;
-
-  final Set<IService> services = new Set<IService>();
-
-  final MethodChannel _methodChannel;
-  final EventChannel _statusChannel;
-
   Device._internal(
       {this.advertisementRecords,
       this.id,
@@ -51,6 +37,20 @@ class Device implements IDevice {
             nativeDevice: map['nativeDevice'],
             advertisementRecords:
                 AdvertisementRecord.listFromBytes(map['advPacket']));
+
+  final Guid id;
+  final String name;
+  final Object nativeDevice;
+  int rssi;
+  Future<DeviceState> get state => _methodChannel
+      .invokeMethod("getState")
+      .then((i) => DeviceState.values[i]);
+  final List<AdvertisementRecord> advertisementRecords;
+
+  final Set<IService> services = new Set<IService>();
+
+  final MethodChannel _methodChannel;
+  final EventChannel _statusChannel;
 
   @override
   Stream<DeviceState> stateChanged() {

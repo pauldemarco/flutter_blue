@@ -5,6 +5,7 @@ import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_example/service_tile.dart';
 
 class DevicePage extends StatefulWidget {
 
@@ -68,19 +69,7 @@ class _DevicePageState extends State<DevicePage> {
   _buildServiceList(BuildContext context) {
     var children = <Widget>[];
     for(IService s in _device.services) {
-      var sChildren = <Widget>[];
-      if(s.characteristics.length > 0) {
-        for(ICharacteristic c in s.characteristics){
-          sChildren.add(new ListTile(title: new Text(c.name)));
-        }
-      } else {
-        sChildren.add(const Text('The service is empty.'));
-      }
-      children.add(new ExpansionTile(
-        title: new Text(s.name),
-        backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
-        children: sChildren,
-      ));
+      children.add(new ServiceTile(service: s,));
     }
     return children;
   }

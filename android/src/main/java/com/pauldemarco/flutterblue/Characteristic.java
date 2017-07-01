@@ -55,13 +55,13 @@ public abstract class Characteristic {
         return new String(value);
     }
 
-    public abstract Single<Byte[]> read();
+    public abstract Single<byte[]> read();
 
-    public abstract Single<Boolean> write(byte[] data);
+    public abstract Completable write(byte[] data);
 
     public abstract Completable startUpdates();
 
-    public abstract Completable stopUpdates();
+    public abstract void stopUpdates();
 
     public abstract Single<List<Descriptor>> getDescriptors();
 

@@ -14,7 +14,7 @@ abstract class ICharacteristic
 /// Event gets raised, when the davice notifies a value change on this characteristic.
 /// To start listening, call <see cref="StartUpdates"/>.
 //event EventHandler<CharacteristicUpdatedEventArgs> ValueUpdated;
-void valueUpdated(CharacteristicUpdatedEventArgs args);
+Stream<Uint8List> valueUpdated();
 
 /// Id of the characteristic.
 Guid get id;
@@ -46,11 +46,14 @@ bool get canWriteEncrypted;
 /// Returns the parent service. Use this to access the device.
 IService get service;
 
+/// Returns whether the characteristic is currently notifying
+bool get isUpdating;
+
 /// Reads the characteristic value from the device. The result is also stored inisde the Value property.
 /// <returns>A task that represents the asynchronous read operation. The Result property will contain the read bytes.</returns>
 /// <exception cref="InvalidOperationException">Thrown if characteristic doesn't support read. See: <see cref="CanRead"/></exception>
 /// <exception cref="CharacteristicReadException">Thrown if the reading of the value failed.</exception>
-Future<Uint8List> readAsync();
+Future<Uint8List> read();
 
 /// Sends <paramref name="data"/> as characteristic value to the device.
 /// <param name="data">Data that should be written.</param>
@@ -62,20 +65,20 @@ Future<Uint8List> readAsync();
 /// </returns>
 /// <exception cref="InvalidOperationException">Thrown if characteristic doesn't support write. See: <see cref="CanWrite"/></exception>
 /// <exception cref="ArgumentNullException">Thrwon if <paramref name="data"/> is null.</exception>
-Future<bool> writeAsync(Uint8List data);
+Future<bool> write(Uint8List data);
 
 /// Starts listening for notify events on this characteristic.
 /// <exception cref="InvalidOperationException">Thrown if characteristic doesn't support notify. See: <see cref="CanUpdate"/></exception>
 /// <exception cref="Exception">Thrown if an error occurs while starting notifications </exception>
-Future startUpdatesAsync();
+Future startUpdates();
 
 /// Stops listening for notify events on this characteristic.
 /// <exception cref="Exception">Thrown if an error occurs while starting notifications </exception>
-Future stopUpdatesAsync();
+Future stopUpdates();
 
 /// Gets the descriptors of the characteristic.
 /// <returns>A task that represents the asynchronous read operation. The Result property will contain a list of descriptors.</returns>
-Future<List<IDescriptor>> getDescriptorsAsync();
+Future<List<IDescriptor>> getDescriptors();
 
 /// Gets the first descriptor with the Id <paramref name="id"/>.
 /// <param name="id">The id of the searched descriptor.</param>
@@ -84,7 +87,7 @@ Future<List<IDescriptor>> getDescriptorsAsync();
 /// The Result property will contain the descriptor with the specified <paramref name="id"/>.
 /// If the descriptor doesn't exist, the Result will be null.
 /// </returns>
-Future<IDescriptor> getDescriptorAsync(Guid id);
+Future<IDescriptor> getDescriptor(Guid id);
 
 /// Serializes to map for use over the platform stream
 Map<String, dynamic> toMap();

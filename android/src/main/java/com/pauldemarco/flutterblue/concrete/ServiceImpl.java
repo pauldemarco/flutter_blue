@@ -8,6 +8,7 @@ import com.pauldemarco.flutterblue.Characteristic;
 import com.pauldemarco.flutterblue.Device;
 import com.pauldemarco.flutterblue.Guid;
 import com.pauldemarco.flutterblue.Service;
+import com.polidea.rxandroidble.RxBleConnection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import rx.Observable;
 import rx.Single;
 
 /**
@@ -29,26 +31,29 @@ public class ServiceImpl extends Service implements MethodCallHandler {
 
     private final Registrar registrar;
     private final MethodChannel methodChannel;
+    private final Observable<RxBleConnection> connectionObservable;
 
-    public ServiceImpl(Registrar registrar, Guid guid, Device device, boolean isPrimary) {
+    public ServiceImpl(Registrar registrar, Guid guid, Device device, boolean isPrimary, Observable<RxBleConnection> connectionObservable) {
         super(guid, isPrimary, device);
         this.registrar = registrar;
         this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.getServiceMethodsPath(device.getGuid().toString(), guid.toString()));
+        this.connectionObservable = connectionObservable;
     }
 
-    public ServiceImpl(Registrar registrar, BluetoothGattService service, Device device) {
+    public ServiceImpl(Registrar registrar, BluetoothGattService service, Device device, Observable<RxBleConnection> connectionObservable) {
         this(
                 registrar,
                 new Guid(service.getUuid()),
                 device,
-                service.getType()==BluetoothGattService.SERVICE_TYPE_PRIMARY
+                service.getType()==BluetoothGattService.SERVICE_TYPE_PRIMARY,
+                connectionObservable
         );
         for(BluetoothGattService s : service.getIncludedServices()) {
-            ServiceImpl innerService = new ServiceImpl(registrar, s, device);
+            ServiceImpl innerService = new ServiceImpl(registrar, s, device, connectionObservable);
             includedServices.add(innerService);
         }
         for(BluetoothGattCharacteristic nativeChar : service.getCharacteristics()) {
-            CharacteristicImpl c = CharacteristicImpl.fromGattCharacteristic(registrar, nativeChar, this, device);
+            CharacteristicImpl c = CharacteristicImpl.fromGattCharacteristic(registrar, nativeChar, this, device, connectionObservable);
             characteristics.add(c);
         }
     }

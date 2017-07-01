@@ -43,6 +43,10 @@ public class Guid {
         return mac.toUpperCase();
     }
 
+    public UUID toUUID() {
+        return uuid;
+    }
+
     public String toString() {
         return uuid.toString();
     }

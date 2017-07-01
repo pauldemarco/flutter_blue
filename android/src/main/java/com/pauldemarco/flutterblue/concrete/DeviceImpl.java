@@ -87,17 +87,6 @@ public class DeviceImpl extends Device implements MethodCallHandler {
         this.advPacket = advPacket;
     }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", this.guid.toString());
-        map.put("name", this.name);
-        map.put("nativeDevice", null);
-        map.put("rssi", this.rssi);
-        map.put("state", this.state.ordinal());
-        map.put("advPacket", this.advPacket);
-        return map;
-    }
-
     @Override
     public boolean isConnected() {
         return nativeDevice.getConnectionState() == RxBleConnection.RxBleConnectionState.CONNECTED;
@@ -156,7 +145,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                     .map(RxBleDeviceServices::getBluetoothGattServices)
                     .flatMapIterable(services -> services)
                     .map(service -> {
-                        Service s = new ServiceImpl(registrar, service, this);
+                        Service s = new ServiceImpl(registrar, service, this, connectionObservable);
                         services.add(s); // add to local set
                         return s;
                     })
@@ -176,7 +165,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                     .first() // Disconnect automatically after discovery
                     .map(RxBleDeviceServices::getBluetoothGattServices)
                     .flatMapIterable(services -> services)
-                    .map(service -> (Service)new ServiceImpl(registrar, service, this))
+                    .map(service -> (Service)new ServiceImpl(registrar, service, this, connectionObservable))
                     .filter(service -> service.getGuid() == id)
                     .toSingle();
 
@@ -267,6 +256,17 @@ public class DeviceImpl extends Device implements MethodCallHandler {
         } else {
             result.notImplemented();
         }
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", this.guid.toString());
+        map.put("name", this.name);
+        map.put("nativeDevice", null);
+        map.put("rssi", this.rssi);
+        map.put("state", this.state.ordinal());
+        map.put("advPacket", this.advPacket);
+        return map;
     }
 
     @Override

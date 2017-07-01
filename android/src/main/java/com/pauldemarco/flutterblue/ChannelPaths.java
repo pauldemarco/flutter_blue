@@ -43,4 +43,7 @@ public class ChannelPaths {
     public final static String getCharacteristicMethodsPath(String deviceId, String serviceId, String charId){
         return getCharacteristicPath(deviceId, serviceId, charId) + "methods";
     }
+    public final static String getCharacteristicValuePath(String deviceId, String serviceId, String charId){
+        return getCharacteristicPath(deviceId, serviceId, charId) + "value";
+    }
 }
