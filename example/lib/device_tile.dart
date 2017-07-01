@@ -20,6 +20,6 @@ class DeviceTile extends StatelessWidget {
       title: new Text(device.name),
       subtitle: new Text(device.id.toMac()),
       onTap: _handleTap,
-    );
+    );;
   }
 }

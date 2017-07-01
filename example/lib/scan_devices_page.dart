@@ -91,7 +91,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
       return null;
     }
     return new FloatingActionButton(
-        child: new Icon(Icons.search),
+        child: new Icon(Icons.bluetooth_searching),
         onPressed: _searchClicked
     );
   }
@@ -108,7 +108,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
             _buildLinearProgressIndicator(context),
             new ListView(children: _createListItemsFromString()),
             ],
-      )
+      ),
     );
   }
 

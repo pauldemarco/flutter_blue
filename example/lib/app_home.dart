@@ -182,7 +182,7 @@ class AppHomeState extends State<AppHome> {
 
   Widget buildAppBar() {
     return new AppBar(
-      elevation: 0.0,
+      //elevation: 0.0,
       title: new Text(AppStrings.of(context).devices()),
       actions: <Widget>[
         new IconButton(

@@ -169,7 +169,7 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
             }
             connectToDevice(device).subscribe(
                     () -> result.success("Connected to " + guid.toMac()),
-                    throwable -> result.error("Device connection error", throwable.getMessage(), throwable)
+                    throwable -> result.error("Device connection error", throwable.getMessage(), null)
             );
         } else if(call.method.equals("disconnectDevice")) {
             Map<String, Object> map = (Map<String, Object>)call.arguments;

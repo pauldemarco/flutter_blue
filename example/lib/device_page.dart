@@ -54,13 +54,12 @@ class _DevicePageState extends State<DevicePage> {
     if(_deviceState == DeviceState.connected) {
       return new FloatingActionButton(
           child: new Icon(Icons.bluetooth_disabled),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
           onPressed: _disconnect
       );
     } else if(_deviceState == DeviceState.disconnected) {
       return new FloatingActionButton(
           child: new Icon(Icons.bluetooth_connected),
-          backgroundColor: Colors.green,
           onPressed: _connect
       );
     }
@@ -105,7 +104,7 @@ class _DevicePageState extends State<DevicePage> {
       printService(q);
     }
     for(ICharacteristic c in s.characteristics) {
-      print("Characteristic id: ${c.id} properties: ${c.properties} canRead: ${c.canRead} canReadEncrypted: ${c.canReadEncrypted} canWrite: ${c.canWrite} canWriteEncrypted: ${c.canWriteEncrypted}");
+      print("Characteristic id: ${c.id} properties: ${c.properties}");
     }
   }
 
