@@ -39,7 +39,7 @@ class AdvertisementRecordType {
   static const URI                            = const AdvertisementRecordType._internal(36);
   static const INDOOR_POSITIONING             = const AdvertisementRecordType._internal(37);
   static const TRANSPORT_DISCOVERY_DATA       = const AdvertisementRecordType._internal(38);
-  static const 3D_INFORMATION_DATA            = const AdvertisementRecordType._internal(61);
+  static const INFORMATION_DATA_3D            = const AdvertisementRecordType._internal(61);
   static const MANUF_SPECIF_DATA              = const AdvertisementRecordType._internal(255);
 
   final int _type;
