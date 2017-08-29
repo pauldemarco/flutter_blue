@@ -8,7 +8,7 @@ import 'package:flutter_blue/abstractions/eventargs/device_event_args.dart';
 import 'package:flutter_blue/concrete/device.dart';
 import 'package:flutter_blue/eventchannels/scan_results_event_channel.dart';
 import 'package:flutter_blue/methodchannels/native_methods.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 class Adapter implements IAdapter {
   final MethodChannel _methods =
@@ -78,15 +78,19 @@ class Adapter implements IAdapter {
   }
 
   Future<IDevice> connectToKnownDevice(Guid deviceGuid) {
-    // TODO: implement connectToKnownDeviceAsync
+    throw new UnimplementedError('connectToKnownDevice is unimplemented!');
   }
 
   Future disconnectDevice(IDevice device) {
     return _methods.invokeMethod("disconnectDevice", device.toMap());
   }
 
-  List<IDevice> getSystemConnectedOrPairedDevices({Set<Guid> services: null}) {
-    // TODO: implement getSystemConnectedOrPairedDevices
+  Future<List<IDevice>> getSystemConnectedOrPairedDevices({Set<Guid> services: null}) {
+    return _methods.invokeMethod("getSystemConnectedOrPairedDevices")
+        .asStream()
+        .expand((_) => _)
+        .map((d) => new Device.fromMap(d))
+        .toList();
   }
 
   Future startScanningForDevices({Set<Guid> serviceUuids: null}) async {

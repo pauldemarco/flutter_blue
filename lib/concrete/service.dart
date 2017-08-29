@@ -6,7 +6,7 @@ import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/known_services.dart';
 import 'package:flutter_blue/concrete/characteristic.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 class Service implements IService {
   Service._internal({this.id, this.device, this.isPrimary, List<Map<String,Object>> includedServices, List<Map<String,Object>> characteristics})
@@ -62,7 +62,13 @@ class Service implements IService {
 
   @override
   Future<ICharacteristic> getCharacteristic(Guid id) {
-    return _methodChannel.invokeMethod("getCharacteristic", id.toString());
+    return _methodChannel.invokeMethod("getCharacteristic", id.toString())
+        .asStream()
+        .map((m) {
+          m.putIfAbsent("service", () => this);
+          return new Characteristic.fromMap(m);
+        })
+        .first;
   }
 
   Map<String, dynamic> toMap() {

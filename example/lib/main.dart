@@ -14,8 +14,6 @@ import 'package:flutter_blue_example/app_home.dart';
 import 'package:flutter_blue_example/app_settings.dart';
 import 'package:flutter_blue_example/app_strings.dart';
 import 'package:flutter_blue_example/device_page.dart';
-import 'package:intl/intl.dart';
-import 'i18n/app_messages_all.dart';
 
 class FlutterBlueApp extends StatefulWidget {
   @override
@@ -92,13 +90,6 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
     return null;
   }
 
-  Future<LocaleQueryData> _onLocaleChanged(Locale locale) async {
-    final String localeString = locale.toString();
-    await initializeMessages(localeString);
-    Intl.defaultLocale = localeString;
-    return AppStrings.instance;
-  }
-
   @override
   Widget build(BuildContext context) {
     assert(() {
@@ -112,6 +103,9 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
     return new MaterialApp(
         title: 'FlutterBlue',
         theme: theme,
+      localizationsDelegates: <_AppLocalizationsDelegate>[
+        new _AppLocalizationsDelegate(),
+      ],
         debugShowMaterialGrid: _configuration.debugShowGrid,
         showPerformanceOverlay: _configuration.showPerformanceOverlay,
         showSemanticsDebugger: _configuration.showSemanticsDebugger,
@@ -120,9 +114,16 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
           '/settings': (BuildContext context) => new AppSettings(_configuration, configurationUpdater)
         },
         onGenerateRoute: _getRoute,
-        onLocaleChanged: _onLocaleChanged
     );
   }
+}
+
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppStrings> {
+  @override
+  Future<AppStrings> load(Locale locale) => AppStrings.load(locale);
+
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 void main() {

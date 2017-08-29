@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_blue/abstractions/advertisement_record.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 /// A bluetooth LE device.
 abstract class IDevice {
@@ -70,6 +70,12 @@ abstract class IDevice {
   /// A task that represents the asynchronous operation. The result contains the negotiated MTU size between master and slave</returns>
   /// <param name="requestValue">The requested MTU</param>
   Future<int> requestMtuAsync(int requestValue);
+
+  /// Initiates a bonding with the device
+  Future createBond();
+
+  /// Checks if device is bonded
+  Future<bool> isBonded();
 
   /// Serializes to map for use over the platform stream
   Map<String, dynamic> toMap();

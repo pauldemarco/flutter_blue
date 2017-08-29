@@ -8,7 +8,7 @@ import 'package:flutter_blue/abstractions/contracts/i_descriptor.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/eventargs/characteristic_updated_args.dart';
 import 'package:flutter_blue/abstractions/known_characteristics.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 class Characteristic implements ICharacteristic {
   Characteristic._internal(

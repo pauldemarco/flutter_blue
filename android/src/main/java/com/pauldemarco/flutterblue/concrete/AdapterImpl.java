@@ -1,6 +1,7 @@
 package com.pauldemarco.flutterblue.concrete;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.util.Log;
 
 import com.pauldemarco.flutterblue.Adapter;
@@ -14,10 +15,7 @@ import com.polidea.rxandroidble.scan.ScanFilter;
 import com.polidea.rxandroidble.scan.ScanResult;
 import com.polidea.rxandroidble.scan.ScanSettings;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
@@ -137,7 +135,12 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
 
     @Override
     public List<Device> getSystemConnectedOrPairedDevices(Set<Guid> services) {
-        return null;
+        List<Device> devices = new ArrayList<>();
+        for(RxBleDevice d : rxBleClient.getBondedDevices()) {
+            Device device = new DeviceImpl(registrar, Guid.fromMac(d.getMacAddress()), d.getName(), d, 0, new byte[]{});
+            devices.add(device);
+        }
+       return devices;
     }
 
     @Override
@@ -192,6 +195,13 @@ public class AdapterImpl extends Adapter implements MethodCallHandler {
             } else {
                 result.success("Device not found in Set");
             }
+        } else if(call.method.equals("getSystemConnectedOrPairedDevices")) {
+            List<Device> devices = getSystemConnectedOrPairedDevices(null);
+            List<Map> mapsOfDevices = new ArrayList<>();
+            for(Device d : devices) {
+                mapsOfDevices.add(d.toMap());
+            }
+            result.success(mapsOfDevices);
         } else {
             result.notImplemented();
         }

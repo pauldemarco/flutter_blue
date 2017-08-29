@@ -7,7 +7,7 @@ import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/device_state.dart';
 import 'package:flutter_blue/concrete/service.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 class Device implements IDevice {
   Device._internal(
@@ -54,7 +54,6 @@ class Device implements IDevice {
 
   @override
   Stream<DeviceState> stateChanged() {
-    print("stateChanged requested for " + id.toString());
     return _statusChannel
         .receiveBroadcastStream()
         .map((i) => DeviceState.values[i]);
@@ -62,7 +61,13 @@ class Device implements IDevice {
 
   @override
   Future<IService> getService(Guid id) {
-    return _methodChannel.invokeMethod("getService", id.toString());
+    return _methodChannel.invokeMethod("getService", id.toString())
+        .asStream()
+        .map((m) {
+          m.putIfAbsent("device", () => this);
+          return new Service.fromMap(m);
+        })
+        .first;
   }
 
   @override
@@ -87,6 +92,16 @@ class Device implements IDevice {
   @override
   Future<bool> updateRssiAsync() {
     // TODO: implement updateRssiAsync
+  }
+
+  @override
+  Future<bool> createBond() {
+    return _methodChannel.invokeMethod("createBond");
+  }
+
+  @override
+  Future<bool> isBonded() {
+    return _methodChannel.invokeMethod("isBonded");
   }
 
   Map<String, dynamic> toMap() {

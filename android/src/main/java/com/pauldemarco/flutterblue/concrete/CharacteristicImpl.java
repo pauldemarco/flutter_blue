@@ -88,7 +88,7 @@ public class CharacteristicImpl extends Characteristic implements MethodCallHand
     public Completable write(byte[] data) {
         return connectionObservable
                 .flatMap(rxBleConnection -> rxBleConnection.writeCharacteristic(guid.toUUID(), data))
-                .doOnNext(valueStream::onNext)
+                //.doOnNext(valueStream::onNext)
                 .toCompletable();
     }
 

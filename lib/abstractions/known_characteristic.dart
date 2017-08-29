@@ -1,4 +1,4 @@
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 class KnownCharacteristic {
   final String name;

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
 import 'package:flutter_blue/abstractions/contracts/i_device.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 /// A bluetooth LE GATT service.
 abstract class IService {

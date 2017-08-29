@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 /// A descriptor for a GATT characteristic.
 abstract class IDescriptor {

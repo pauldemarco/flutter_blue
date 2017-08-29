@@ -44,7 +44,7 @@ class AdvertisementRecordType {
 
   final int _type;
 
-  const AdvertisementRecordType._internal(this._mode);
+  const AdvertisementRecordType._internal(this._type);
 }
 
 enum AdvertisementRecordTypeEnum {

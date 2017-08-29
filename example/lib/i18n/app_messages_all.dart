@@ -11,7 +11,8 @@ import 'package:intl/src/intl_helpers.dart';
 import 'app_messages_en.dart' as messages_en;
 import 'app_messages_es.dart' as messages_es;
 
-Map<String, Function> _deferredLibraries = {
+typedef Future<dynamic> LibraryLoader();
+Map<String, LibraryLoader> _deferredLibraries = {
   'en': () => new Future.value(null),
   'es': () => new Future.value(null),
 };

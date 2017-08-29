@@ -6,7 +6,7 @@ import 'package:flutter_blue/abstractions/characteristic_write_type.dart';
 import 'package:flutter_blue/abstractions/contracts/i_descriptor.dart';
 import 'package:flutter_blue/abstractions/contracts/i_service.dart';
 import 'package:flutter_blue/abstractions/eventargs/characteristic_updated_args.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 /// A bluetooth LE GATT characteristic.
 abstract class ICharacteristic

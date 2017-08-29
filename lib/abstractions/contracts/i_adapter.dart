@@ -4,7 +4,7 @@ import 'package:flutter_blue/abstractions/contracts/i_device.dart';
 import 'package:flutter_blue/abstractions/contracts/scan_mode.dart';
 import 'package:flutter_blue/abstractions/eventargs/device_error_event_args.dart';
 import 'package:flutter_blue/abstractions/eventargs/device_event_args.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 /// The bluetooth LE Adapter.
 abstract class IAdapter {
@@ -107,6 +107,6 @@ abstract class IAdapter {
   /// In order to use the device in the app you have to first call ConnectAsync.
   /// <param name="services">IMPORTANT: Only considered by iOS due to platform limitations. Filters devices by advertised services. SET THIS VALUE FOR ANY RESULTS</param>
   /// <returns>List of IDevices connected to the OS.  In case of no devices the list is empty.</returns>
-  List<IDevice> getSystemConnectedOrPairedDevices({Set<Guid> services = null});
+  Future<List<IDevice>> getSystemConnectedOrPairedDevices({Set<Guid> services = null});
 
 }

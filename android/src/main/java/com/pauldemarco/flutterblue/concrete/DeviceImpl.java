@@ -1,5 +1,6 @@
 package com.pauldemarco.flutterblue.concrete;
 
+import android.bluetooth.BluetoothDevice;
 import android.util.Log;
 
 import com.pauldemarco.flutterblue.ChannelPaths;
@@ -166,7 +167,7 @@ public class DeviceImpl extends Device implements MethodCallHandler {
                     .map(RxBleDeviceServices::getBluetoothGattServices)
                     .flatMapIterable(services -> services)
                     .map(service -> (Service)new ServiceImpl(registrar, service, this, connectionObservable))
-                    .filter(service -> service.getGuid() == id)
+                    .filter(service -> service.getGuid().equals(id))
                     .toSingle();
 
         } else {
@@ -253,6 +254,18 @@ public class DeviceImpl extends Device implements MethodCallHandler {
             );
         } else if (call.method.equals("getState")) {
             result.success(toState(nativeDevice.getConnectionState()).ordinal());
+        } else if (call.method.equals("createBond")) {
+            if(nativeDevice.getBluetoothDevice().createBond()) {
+                result.success(true);
+            } else {
+                result.error("CREATE_BOND_STATE FAILED", "", "");
+            }
+        } else if (call.method.equals("isBonded")) {
+            if(nativeDevice.getBluetoothDevice().getBondState() == BluetoothDevice.BOND_BONDED) {
+                result.success(true);
+            } else {
+                result.success(false);
+            }
         } else {
             result.notImplemented();
         }

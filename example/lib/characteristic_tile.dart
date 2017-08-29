@@ -14,6 +14,7 @@ class CharacteristicTile extends StatefulWidget {
 }
 
 class _CharacteristicTileState extends State<CharacteristicTile> {
+  String id;
   String title;
   Uint8List value = new Uint8List(1);
   bool isUpdating = false;
@@ -21,7 +22,9 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
 
   @override
   void initState() {
+    id = widget.characteristic.id.toString();
     title = widget.characteristic.name;
+    widget.characteristic.getDescriptors().then((d) => print('Descriptor List! $d'));
     valueStream = widget.characteristic.valueUpdated()
         .listen((d) {
           setState(() {
@@ -108,12 +111,18 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-        title: new Text(title),
-        subtitle: new Text(value.toString()),
-        onTap: _startUpdates,
-        trailing: new Row(
-          children: _buildIconsList()
-        ),
+      dense: true,
+      title: new Text(title),
+      subtitle: new Column(
+      children: <Widget>[
+        new Text(id),
+        new Text(value.toString())
+        ],
+      ),
+      onTap: _startUpdates,
+      trailing: new Row(
+        children: _buildIconsList()
+      ),
     );
   }
 }

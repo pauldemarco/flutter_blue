@@ -1,5 +1,5 @@
-import 'package:flutter_blue/utils/guid.dart';
 import 'package:flutter_blue/abstractions/known_service.dart';
+import 'package:guid/guid.dart';
 
 class KnownServices {
 

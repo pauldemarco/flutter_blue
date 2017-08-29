@@ -13,6 +13,10 @@ dependencies:
   flutter:
     sdk: flutter
   convert: "^2.0.1"
+  guid:
+    git:
+      url: git://github.com/pauldemarco/guid.git
+
 
 dev_dependencies:
   flutter_test:

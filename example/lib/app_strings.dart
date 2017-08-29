@@ -1,42 +1,53 @@
+import 'dart:async';
+
+import 'package:flutter_blue_example/i18n/app_messages_all.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 
-// Wrappers for strings that are shown in the UI.  The strings can be
-// translated for different locales using the Dart intl package.
-//
-// Locale-specific values for the strings live in the i18n/*.arb files.
-//
-// To generate the app_messages_*.dart files from the ARB files, run:
-//   flutter packages pub run intl_translation:generate_from_arb --output-dir=lib/i18n --generated-file-prefix=app_ --no-use-deferred-loading lib/*.dart lib/i18n/*.arb
+// Information about how this file relates to i18n/stock_messages_all.dart and how the i18n files
+// were generated can be found in i18n/regenerate.md.
 
-class AppStrings extends LocaleQueryData {
-  static AppStrings of(BuildContext context) {
-    return LocaleQuery.of(context);
+class AppStrings {
+  AppStrings(Locale locale) : _localeName = locale.toString();
+
+  final String _localeName;
+
+  static Future<AppStrings> load(Locale locale) {
+    return initializeMessages(locale.toString())
+        .then((Null _) {
+      return new AppStrings(locale);
+    });
   }
 
-  static final AppStrings instance = new AppStrings();
+  static AppStrings of(BuildContext context) {
+    return Localizations.of<AppStrings>(context, AppStrings);
+  }
 
   String title() => Intl.message(
     'Stocks',
     name: 'title',
-    desc: 'Title for the Stocks application'
+    desc: 'Title for the Stocks application',
+    locale: _localeName,
   );
 
   String devices() => Intl.message(
     'Devices',
     name: 'devices',
-    desc: 'Title for the Devices application'
+    desc: 'Title for the Devices application',
+    locale: _localeName,
   );
 
   String scanner() => Intl.message(
     'SCANNER',
     name: 'scanner',
-    desc: 'Label for the Scanner tab'
+    desc: 'Label for the Scanner tab',
+    locale: _localeName,
   );
 
   String bonded() => Intl.message(
     'BONDED',
     name: 'bonded',
-    desc: 'Label for the Bonded tab'
+    desc: 'Label for the Bonded tab',
+    locale: _localeName,
   );
 }

@@ -37,6 +37,7 @@ public class ServiceImpl extends Service implements MethodCallHandler {
         super(guid, isPrimary, device);
         this.registrar = registrar;
         this.methodChannel = new MethodChannel(registrar.messenger(), ChannelPaths.getServiceMethodsPath(device.getGuid().toString(), guid.toString()));
+        this.methodChannel.setMethodCallHandler(this);
         this.connectionObservable = connectionObservable;
     }
 
@@ -109,6 +110,13 @@ public class ServiceImpl extends Service implements MethodCallHandler {
         } else if (call.method.equals("getCharacteristic")) {
             String id = (String)call.arguments;
             Guid guid = new Guid(id);
+            for(Characteristic c : characteristics) {
+                if(guid.equals(c.getGuid())) {
+                    result.success(c.toMap());
+                    return;
+                }
+            }
+            result.error("GET_CHARACTERISTIC_ERROR", "Characteristic not found with id " + guid.toString(), null);
         } else {
             result.notImplemented();
         }

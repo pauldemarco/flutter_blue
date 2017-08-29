@@ -11,6 +11,7 @@ class ServiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
     var children = <Widget>[];
     if(service.characteristics.length > 0) {
       for(ICharacteristic c in service.characteristics){
@@ -20,7 +21,14 @@ class ServiceTile extends StatelessWidget {
       children.add(const Text('The service is empty.'));
     }
     return new ExpansionTile(
-      title: new Text(service.name),
+      title: new Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Text(service.name, style: theme.textTheme.subhead),
+          new Text('UUID: 0x${service.id.toString().substring(4, 8)}', style: theme.textTheme.caption),
+          new Text((service.isPrimary) ? 'PRIMARY SERVICE' : 'SECONDARY SERVICE', style: theme.textTheme.caption,),
+        ],
+      ),
       backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
       children: children,
     );

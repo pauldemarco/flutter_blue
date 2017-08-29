@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter_blue/abstractions/contracts/i_characteristic.dart';
 import 'package:flutter_blue/abstractions/contracts/i_descriptor.dart';
 import 'package:flutter_blue/abstractions/known_descriptors.dart';
-import 'package:flutter_blue/utils/guid.dart';
+import 'package:guid/guid.dart';
 
 class Descriptor implements IDescriptor {
 
