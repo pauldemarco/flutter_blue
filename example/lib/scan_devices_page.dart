@@ -1,13 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/abstractions/contracts/i_device.dart';
-import 'package:flutter_blue/abstractions/device_state.dart';
 import 'package:flutter_blue/concrete/device.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:guid/guid.dart';
-
-import 'device_tile.dart';
 
 class ScanDevicesPage extends StatefulWidget {
   ScanDevicesPage({Key key, this.title}) : super(key: key);
@@ -19,81 +14,61 @@ class ScanDevicesPage extends StatefulWidget {
 }
 
 class _ScanDevicesPageState extends State<ScanDevicesPage> {
-  FlutterBlue _flutterBlue = new FlutterBlue();
+  FlutterBlue _flutterBlue = FlutterBlue.instance;
   StreamSubscription _scanSubscription;
-  bool _isScanning = false;
-  List<Device> _devices;
-
-  @override
-  initState() {
-    super.initState();
-    _devices = new List<Device>();
-    _devices.add(new Device(
-        id: new Guid.fromMac("01:02:03:04:05:06"),
-        name: "Test Device",
-        rssi: 123,
-    ));
-    _scanSubscription = _flutterBlue.ble.adapter
-        .deviceDiscovered()
-        .listen((device) {
-      setState(() {
-        var name = device.name;
-        var rssi = device.rssi;
-        var id = device.id.toString();
-        print("Device name: $name rssi: $rssi id: $id");
-        if (_devices.contains(device)) {
-          _devices[_devices.indexOf(device)] = device;
-        } else {
-          _devices.add(device);
-        }
-      });
-    });
-  }
 
   @override
   void dispose() {
-    _scanSubscription.cancel();
+    _scanSubscription?.cancel();
     _scanSubscription = null;
   }
 
-  _searchClicked() async {
-    setState(() {
-      _devices.clear();
-      _isScanning = true;
-    });
-    await _flutterBlue.ble.adapter.startScanningForDevices();
-    setState(() {
-      _isScanning = false;
-    });
-    //_getDiscoveredDevices();
-  }
-
-  _getDiscoveredDevices() {
-    Set<IDevice> discovered = _flutterBlue.ble.adapter.discoveredDevices;
-    for(IDevice d in discovered) {
-      print("${d.id} ${d.name} ${d.rssi}");
+  _startScan() {
+    if(_scanSubscription == null) {
+      _scanSubscription = _flutterBlue.startScan()
+          .listen((scanResult) {
+        setState(() {
+          var name = scanResult.name;
+          var rssi = scanResult.rssi;
+          var id = scanResult.identifier.toMac();
+          print("Device name: $name rssi: $rssi id: $id");
+        });
+      });
+      setState((){});
     }
   }
+
+  _stopScan() async {
+    _flutterBlue.stopScan();
+    _scanSubscription?.cancel();
+    _scanSubscription = null;
+    setState((){});
+  }
+
 
   _deviceTapped(Device device) {
     Navigator.pushNamed(context, '/device/${device.id.toString()}');
   }
 
   _buildLinearProgressIndicator(BuildContext context) {
-    if(!_isScanning) {
+    if(_scanSubscription == null) {
       return new Container(height: 6.0,);
     }
     return new LinearProgressIndicator(value: null,);
   }
 
   _buildFloatingActionButton(BuildContext context) {
-    if(_isScanning) {
-      return null;
+    if(_scanSubscription != null) {
+      return new FloatingActionButton(
+          child: new Icon(Icons.stop),
+          onPressed: _stopScan
+      );
+    } else {
+      return new FloatingActionButton(
+          child: new Icon(Icons.search),
+          onPressed: _startScan
+      );
     }
-    return new FloatingActionButton(
-        child: new Icon(Icons.bluetooth_searching),
-        onPressed: _searchClicked
-    );
   }
 
   @override
@@ -106,13 +81,10 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
       body: new Stack(
           children: <Widget>[
             _buildLinearProgressIndicator(context),
-            new ListView(children: _createListItemsFromString()),
+            new ListView(children: <Widget>[const Text('Hello')]),
             ],
       ),
     );
   }
 
-  List<DeviceTile> _createListItemsFromString() {
-    return _devices.map((s) => new DeviceTile(s, _deviceTapped)).toList();
-  }
 }

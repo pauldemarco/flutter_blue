@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_package = "com.pauldemarco.flutterblue";
+option java_outer_classname = "Protos";
+option objc_class_prefix = "Protos";
+
+// The advertisement data are different in Android and iOS. Instead of defining
+// the data structure in Dart code, we define it in proto so that it can be used
+// in both Java and Obj-C.
+message AdvertisementData {
+  string local_name = 1;
+  bytes manufacturer_data = 2;
+  map<string, bytes> service_data = 3;  // Map of service UUIDs to their data.
+  int32 tx_power_level = 4;
+  bool connectable = 5;
+}
+
+message ScanSettings {
+  int32 android_scan_mode = 1;
+  repeated string service_uuids = 2;
+}
+
+message ScanResult {
+  string remote_id = 1;  // The received peer's ID.
+  string name = 2;  // The peer's name.
+  int32 rssi = 3;
+  AdvertisementData advertisement_data = 4;
+}

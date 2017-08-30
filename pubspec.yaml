@@ -16,6 +16,7 @@ dependencies:
   guid:
     git:
       url: git://github.com/pauldemarco/guid.git
+  protobuf: '^0.5.5'
 
 
 dev_dependencies:

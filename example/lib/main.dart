@@ -7,13 +7,11 @@ import 'package:flutter/rendering.dart' show
   debugPaintLayerBordersEnabled,
   debugPaintPointersEnabled,
   debugRepaintRainbowEnabled;
-import 'package:flutter_blue/abstractions/contracts/i_device.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_blue_example/app_configuration.dart';
 import 'package:flutter_blue_example/app_home.dart';
 import 'package:flutter_blue_example/app_settings.dart';
 import 'package:flutter_blue_example/app_strings.dart';
-import 'package:flutter_blue_example/device_page.dart';
+import 'package:flutter_blue_example/scan_devices_page.dart';
 
 class FlutterBlueApp extends StatefulWidget {
   @override
@@ -21,9 +19,6 @@ class FlutterBlueApp extends StatefulWidget {
 }
 
 class FlutterBlueAppState extends State<FlutterBlueApp> {
-
-  final FlutterBlue _flutterBlue = new FlutterBlue();
-  Set<IDevice> _devices;
 
   AppConfiguration _configuration = new AppConfiguration(
       displayMode: DisplayMode.light,
@@ -40,12 +35,6 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
   @override
   void initState() {
     super.initState();
-    _devices = _flutterBlue.ble.adapter.devices;
-    /*new StockDataFetcher((StockData data) {
-      setState(() {
-        data.appendTo(_stocks, _symbols);
-      });
-    });*/
   }
 
   void configurationUpdater(AppConfiguration value) {
@@ -78,14 +67,14 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
     if (path[1] == 'device') {
       if (path.length != 3)
         return null;
-      for(IDevice d in _devices) {
+      /*for(IDevice d in _devices) {
         if(d.id.toString() == path[2]) {
           return new MaterialPageRoute<Null>(
               settings: settings,
               builder: (BuildContext context) => new DevicePage(device: d)
           );
         }
-      }
+      }*/
     }
     return null;
   }
@@ -110,7 +99,7 @@ class FlutterBlueAppState extends State<FlutterBlueApp> {
         showPerformanceOverlay: _configuration.showPerformanceOverlay,
         showSemanticsDebugger: _configuration.showSemanticsDebugger,
         routes: <String, WidgetBuilder>{
-          '/':         (BuildContext context) => new AppHome(_configuration, configurationUpdater),
+          '/':         (BuildContext context) => new ScanDevicesPage(),
           '/settings': (BuildContext context) => new AppSettings(_configuration, configurationUpdater)
         },
         onGenerateRoute: _getRoute,

@@ -1,8 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.pauldemarco.flutterblue"
-  android:versionCode="1"
-  android:versionName="0.0.1">
-
-  <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="21" />
+  package="com.pauldemarco.flutterblue">
   <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 </manifest>

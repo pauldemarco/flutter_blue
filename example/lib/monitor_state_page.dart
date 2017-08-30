@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/abstractions/contracts/bluetooth_state.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
 class MonitorStatePage extends StatefulWidget {
@@ -14,7 +13,7 @@ class MonitorStatePage extends StatefulWidget {
 }
 
 class _MonitorStatePageState extends State<MonitorStatePage> {
-  FlutterBlue _flutterBlue = new FlutterBlue();
+  FlutterBlue _flutterBlue = FlutterBlue.instance;
   StreamSubscription _scanSubscription;
   BluetoothState _state;
 
@@ -23,7 +22,7 @@ class _MonitorStatePageState extends State<MonitorStatePage> {
     super.initState();
     _state = BluetoothState.unknown;
     _scanSubscription =
-        _flutterBlue.ble.stateChanged().listen((state) {
+        _flutterBlue.onStateChanged().listen((state) {
           setState(() {
             _state = state;
           });
@@ -39,19 +38,19 @@ class _MonitorStatePageState extends State<MonitorStatePage> {
   }
 
   _getState() async {
-    BluetoothState state = await _flutterBlue.ble.state;
+    BluetoothState state = await _flutterBlue.state;
     setState(() {
       _state = state;
     });
   }
 
   _isAvailable() async {
-    bool available = await _flutterBlue.ble.isAvailable;
+    bool available = await _flutterBlue.isAvailable;
     print(available);
   }
 
   _isOn() async {
-    bool on = await _flutterBlue.ble.isOn;
+    bool on = await _flutterBlue.isOn;
     print(on);
   }
 

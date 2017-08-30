@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:flutter_blue/abstractions/contracts/bluetooth_state.dart';
+import 'package:flutter_blue/src/bluetooth_state.dart';
 
 /// Put's the EventChannel behind a data conversion layer
 /// EventChannel int's are converted to BluetoothState objects

@@ -1,4 +1,4 @@
-import 'package:flutter_blue/abstractions/contracts/bluetooth_state.dart';
+import 'package:flutter_blue/src/bluetooth_state.dart';
 
 class BluetoothStateChangedArgs {
   final BluetoothState oldState;

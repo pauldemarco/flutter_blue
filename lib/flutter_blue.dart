@@ -1,23 +1,10 @@
+library flutter_blue;
+
 import 'dart:async';
 
-import 'package:flutter_blue/concrete/bluetoothle.dart';
-import 'package:meta/meta.dart' show visibleForTesting;
+import 'package:flutter/services.dart';
+import 'package:guid/guid.dart';
+import 'gen/flutterblue.pb.dart' as protos;
 
-
-class FlutterBlue {
-  static FlutterBlue _instance;
-
-  factory FlutterBlue() {
-    if (_instance == null) {
-      _instance = new FlutterBlue.private(new BluetoothLE());
-    }
-    return _instance;
-  }
-
-  @visibleForTesting
-  FlutterBlue.private(this._ble);
-
-  final BluetoothLE _ble;
-  BluetoothLE get ble => _ble;
-
-}
+part 'src/flutter_blue.dart';
+part 'src/constants.dart';
