@@ -4,9 +4,19 @@ option java_package = "com.pauldemarco.flutterblue";
 option java_outer_classname = "Protos";
 option objc_class_prefix = "Protos";
 
-// The advertisement data are different in Android and iOS. Instead of defining
-// the data structure in Dart code, we define it in proto so that it can be used
-// in both Java and Obj-C.
+message BluetoothState {
+  enum State {
+    UNKNOWN = 0;
+    UNAVAILABLE = 1;
+    UNAUTHORIZED = 2;
+    TURNING_ON = 3;
+    ON = 4;
+    TURNING_OFF = 5;
+    OFF = 6;
+  };
+  State state = 1;
+}
+
 message AdvertisementData {
   string local_name = 1;
   bytes manufacturer_data = 2;
@@ -25,4 +35,62 @@ message ScanResult {
   string name = 2;  // The peer's name.
   int32 rssi = 3;
   AdvertisementData advertisement_data = 4;
+}
+
+message ConnectOptions {
+  string remote_id = 1;
+  bool android_auto_connect = 2;
+}
+
+message BluetoothDevice {
+  enum Type {
+    UNKNOWN = 0;
+    CLASSIC = 1;
+    LE = 2;
+    DUAL = 3;
+  };
+
+  string remote_id = 1;
+  string name = 2;
+  Type type = 3;
+}
+
+message BluetoothService {
+  string uuid = 1;
+  string remote_id = 2;
+  bool is_primary = 3; // Indicates whether the type of service is primary or secondary.
+  repeated BluetoothCharacteristic characteristics = 4; // A list of characteristics that have been discovered in this service.
+  repeated BluetoothService included_services = 5; // A list of included services that have been discovered in this service.
+}
+
+message BluetoothCharacteristic {
+  string uuid = 1;
+  string serviceUuid = 2; // The service that this characteristic belongs to.
+  repeated BluetoothDescriptor descriptors = 3; // A list of descriptors that have been discovered in this characteristic.
+  CharacteristicProperties properties = 4; // The properties of the characteristic.
+  bool is_notifying = 5; // Indicates whether the characteristic is currently notifying a subscribed central of its value.
+  bytes value = 6;
+}
+
+message BluetoothDescriptor {
+  string uuid = 1;
+  string characteristicUuid = 2; // The characteristic that this descriptor belongs to.
+  bytes value = 3;
+}
+
+message CharacteristicProperties {
+  bool broadcast = 1;
+  bool read = 2;
+  bool write_without_response = 3;
+  bool write = 4;
+  bool notify = 5;
+  bool indicate = 6;
+  bool authenticated_signed_writes = 7;
+  bool extended_properties = 8;
+  bool notify_encryption_required = 9;
+  bool indicate_encryption_required = 10;
+}
+
+message DiscoverServicesResult {
+  repeated BluetoothService services = 1;
 }
