@@ -92,5 +92,39 @@ message CharacteristicProperties {
 }
 
 message DiscoverServicesResult {
-  repeated BluetoothService services = 1;
+  string remote_id = 1;
+  repeated BluetoothService services = 2;
+}
+
+message ReadAttributeRequest {
+  string remote_id = 1;
+  string uuid = 2;
+  string service_uuid = 3;
+  string secondary_service_uuid = 4;
+}
+
+message ReadAttributeResponse {
+  ReadAttributeRequest request = 1;
+  bytes value = 2;
+}
+
+message WriteCharacteristicRequest {
+  enum WriteType {
+    WITH_RESPONSE = 0;
+    WITHOUT_RESPONSE = 1;
+  }
+  string remote_id = 1;
+  string uuid = 2;
+  string service_uuid = 3;
+  string secondary_service_uuid = 4;
+  WriteType type = 5;
+  bytes value = 6;
+}
+
+message WriteDescriptorRequest {
+  string remote_id = 1;
+  string uuid = 2;
+  string service_uuid = 3;
+  string secondary_service_uuid = 4;
+  bytes value = 5;
 }

@@ -144,7 +144,58 @@ const CharacteristicProperties$json = const {
 const DiscoverServicesResult$json = const {
   '1': 'DiscoverServicesResult',
   '2': const [
-    const {'1': 'services', '3': 1, '4': 3, '5': 11, '6': '.BluetoothService', '10': 'services'},
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'services', '3': 2, '4': 3, '5': 11, '6': '.BluetoothService', '10': 'services'},
+  ],
+};
+
+const ReadAttributeRequest$json = const {
+  '1': 'ReadAttributeRequest',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'uuid', '3': 2, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
+    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+  ],
+};
+
+const ReadAttributeResponse$json = const {
+  '1': 'ReadAttributeResponse',
+  '2': const [
+    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.ReadAttributeRequest', '10': 'request'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 12, '10': 'value'},
+  ],
+};
+
+const WriteCharacteristicRequest$json = const {
+  '1': 'WriteCharacteristicRequest',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'uuid', '3': 2, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
+    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+    const {'1': 'type', '3': 5, '4': 1, '5': 14, '6': '.WriteCharacteristicRequest.WriteType', '10': 'type'},
+    const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
+  ],
+  '4': const [WriteCharacteristicRequest_WriteType$json],
+};
+
+const WriteCharacteristicRequest_WriteType$json = const {
+  '1': 'WriteType',
+  '2': const [
+    const {'1': 'WITH_RESPONSE', '2': 0},
+    const {'1': 'WITHOUT_RESPONSE', '2': 1},
+  ],
+};
+
+const WriteDescriptorRequest$json = const {
+  '1': 'WriteDescriptorRequest',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'uuid', '3': 2, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
+    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+    const {'1': 'value', '3': 5, '4': 1, '5': 12, '10': 'value'},
   ],
 };
 

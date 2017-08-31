@@ -3,8 +3,9 @@ part of flutter_blue;
 class FlutterBlue {
   final MethodChannel _channel = const MethodChannel('$NAMESPACE/methods');
   final EventChannel _stateChannel = const EventChannel('$NAMESPACE/state');
-  final EventChannel _scanResultChannel =
-      const EventChannel('$NAMESPACE/scanResult');
+  final EventChannel _scanResultChannel = const EventChannel('$NAMESPACE/scanResult');
+  final EventChannel _servicesDiscoveredChannel = const EventChannel('$NAMESPACE/servicesDiscovered');
+  final EventChannel _characteristicReadChannel = const EventChannel('$NAMESPACE/characteristicRead');
 
   /// Singleton boilerplate
   FlutterBlue._() {

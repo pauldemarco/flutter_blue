@@ -59,3 +59,21 @@ class BluetoothDevice_Type extends ProtobufEnum {
   const BluetoothDevice_Type._(int v, String n) : super(v, n);
 }
 
+class WriteCharacteristicRequest_WriteType extends ProtobufEnum {
+  static const WriteCharacteristicRequest_WriteType WITH_RESPONSE = const WriteCharacteristicRequest_WriteType._(0, 'WITH_RESPONSE');
+  static const WriteCharacteristicRequest_WriteType WITHOUT_RESPONSE = const WriteCharacteristicRequest_WriteType._(1, 'WITHOUT_RESPONSE');
+
+  static const List<WriteCharacteristicRequest_WriteType> values = const <WriteCharacteristicRequest_WriteType> [
+    WITH_RESPONSE,
+    WITHOUT_RESPONSE,
+  ];
+
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static WriteCharacteristicRequest_WriteType valueOf(int value) => _byValue[value] as WriteCharacteristicRequest_WriteType;
+  static void $checkItem(WriteCharacteristicRequest_WriteType v) {
+    if (v is! WriteCharacteristicRequest_WriteType) checkItemFailed(v, 'WriteCharacteristicRequest_WriteType');
+  }
+
+  const WriteCharacteristicRequest_WriteType._(int v, String n) : super(v, n);
+}
+

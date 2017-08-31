@@ -523,7 +523,8 @@ class _ReadonlyCharacteristicProperties extends CharacteristicProperties with Re
 
 class DiscoverServicesResult extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DiscoverServicesResult')
-    ..pp<BluetoothService>(1, 'services', PbFieldType.PM, BluetoothService.$checkItem, BluetoothService.create)
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..pp<BluetoothService>(2, 'services', PbFieldType.PM, BluetoothService.$checkItem, BluetoothService.create)
     ..hasRequiredFields = false
   ;
 
@@ -543,8 +544,211 @@ class DiscoverServicesResult extends GeneratedMessage {
     if (v is! DiscoverServicesResult) checkItemFailed(v, 'DiscoverServicesResult');
   }
 
-  List<BluetoothService> get services => $_get(0, 1, null);
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  List<BluetoothService> get services => $_get(1, 2, null);
 }
 
 class _ReadonlyDiscoverServicesResult extends DiscoverServicesResult with ReadonlyMessageMixin {}
+
+class ReadAttributeRequest extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('ReadAttributeRequest')
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..a<String>(2, 'uuid', PbFieldType.OS)
+    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
+    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
+    ..hasRequiredFields = false
+  ;
+
+  ReadAttributeRequest() : super();
+  ReadAttributeRequest.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ReadAttributeRequest.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ReadAttributeRequest clone() => new ReadAttributeRequest()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static ReadAttributeRequest create() => new ReadAttributeRequest();
+  static PbList<ReadAttributeRequest> createRepeated() => new PbList<ReadAttributeRequest>();
+  static ReadAttributeRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyReadAttributeRequest();
+    return _defaultInstance;
+  }
+  static ReadAttributeRequest _defaultInstance;
+  static void $checkItem(ReadAttributeRequest v) {
+    if (v is! ReadAttributeRequest) checkItemFailed(v, 'ReadAttributeRequest');
+  }
+
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  String get uuid => $_get(1, 2, '');
+  set uuid(String v) { $_setString(1, 2, v); }
+  bool hasUuid() => $_has(1, 2);
+  void clearUuid() => clearField(2);
+
+  String get serviceUuid => $_get(2, 3, '');
+  set serviceUuid(String v) { $_setString(2, 3, v); }
+  bool hasServiceUuid() => $_has(2, 3);
+  void clearServiceUuid() => clearField(3);
+
+  String get secondaryServiceUuid => $_get(3, 4, '');
+  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
+  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  void clearSecondaryServiceUuid() => clearField(4);
+}
+
+class _ReadonlyReadAttributeRequest extends ReadAttributeRequest with ReadonlyMessageMixin {}
+
+class ReadAttributeResponse extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('ReadAttributeResponse')
+    ..a<ReadAttributeRequest>(1, 'request', PbFieldType.OM, ReadAttributeRequest.getDefault, ReadAttributeRequest.create)
+    ..a<List<int>>(2, 'value', PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  ReadAttributeResponse() : super();
+  ReadAttributeResponse.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ReadAttributeResponse.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ReadAttributeResponse clone() => new ReadAttributeResponse()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static ReadAttributeResponse create() => new ReadAttributeResponse();
+  static PbList<ReadAttributeResponse> createRepeated() => new PbList<ReadAttributeResponse>();
+  static ReadAttributeResponse getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyReadAttributeResponse();
+    return _defaultInstance;
+  }
+  static ReadAttributeResponse _defaultInstance;
+  static void $checkItem(ReadAttributeResponse v) {
+    if (v is! ReadAttributeResponse) checkItemFailed(v, 'ReadAttributeResponse');
+  }
+
+  ReadAttributeRequest get request => $_get(0, 1, null);
+  set request(ReadAttributeRequest v) { setField(1, v); }
+  bool hasRequest() => $_has(0, 1);
+  void clearRequest() => clearField(1);
+
+  List<int> get value => $_get(1, 2, null);
+  set value(List<int> v) { $_setBytes(1, 2, v); }
+  bool hasValue() => $_has(1, 2);
+  void clearValue() => clearField(2);
+}
+
+class _ReadonlyReadAttributeResponse extends ReadAttributeResponse with ReadonlyMessageMixin {}
+
+class WriteCharacteristicRequest extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('WriteCharacteristicRequest')
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..a<String>(2, 'uuid', PbFieldType.OS)
+    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
+    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
+    ..e<WriteCharacteristicRequest_WriteType>(5, 'type', PbFieldType.OE, WriteCharacteristicRequest_WriteType.WITH_RESPONSE, WriteCharacteristicRequest_WriteType.valueOf)
+    ..a<List<int>>(6, 'value', PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  WriteCharacteristicRequest() : super();
+  WriteCharacteristicRequest.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  WriteCharacteristicRequest.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  WriteCharacteristicRequest clone() => new WriteCharacteristicRequest()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static WriteCharacteristicRequest create() => new WriteCharacteristicRequest();
+  static PbList<WriteCharacteristicRequest> createRepeated() => new PbList<WriteCharacteristicRequest>();
+  static WriteCharacteristicRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyWriteCharacteristicRequest();
+    return _defaultInstance;
+  }
+  static WriteCharacteristicRequest _defaultInstance;
+  static void $checkItem(WriteCharacteristicRequest v) {
+    if (v is! WriteCharacteristicRequest) checkItemFailed(v, 'WriteCharacteristicRequest');
+  }
+
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  String get uuid => $_get(1, 2, '');
+  set uuid(String v) { $_setString(1, 2, v); }
+  bool hasUuid() => $_has(1, 2);
+  void clearUuid() => clearField(2);
+
+  String get serviceUuid => $_get(2, 3, '');
+  set serviceUuid(String v) { $_setString(2, 3, v); }
+  bool hasServiceUuid() => $_has(2, 3);
+  void clearServiceUuid() => clearField(3);
+
+  String get secondaryServiceUuid => $_get(3, 4, '');
+  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
+  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  void clearSecondaryServiceUuid() => clearField(4);
+
+  WriteCharacteristicRequest_WriteType get type => $_get(4, 5, null);
+  set type(WriteCharacteristicRequest_WriteType v) { setField(5, v); }
+  bool hasType() => $_has(4, 5);
+  void clearType() => clearField(5);
+
+  List<int> get value => $_get(5, 6, null);
+  set value(List<int> v) { $_setBytes(5, 6, v); }
+  bool hasValue() => $_has(5, 6);
+  void clearValue() => clearField(6);
+}
+
+class _ReadonlyWriteCharacteristicRequest extends WriteCharacteristicRequest with ReadonlyMessageMixin {}
+
+class WriteDescriptorRequest extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('WriteDescriptorRequest')
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..a<String>(2, 'uuid', PbFieldType.OS)
+    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
+    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
+    ..a<List<int>>(5, 'value', PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  WriteDescriptorRequest() : super();
+  WriteDescriptorRequest.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  WriteDescriptorRequest.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  WriteDescriptorRequest clone() => new WriteDescriptorRequest()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static WriteDescriptorRequest create() => new WriteDescriptorRequest();
+  static PbList<WriteDescriptorRequest> createRepeated() => new PbList<WriteDescriptorRequest>();
+  static WriteDescriptorRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyWriteDescriptorRequest();
+    return _defaultInstance;
+  }
+  static WriteDescriptorRequest _defaultInstance;
+  static void $checkItem(WriteDescriptorRequest v) {
+    if (v is! WriteDescriptorRequest) checkItemFailed(v, 'WriteDescriptorRequest');
+  }
+
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  String get uuid => $_get(1, 2, '');
+  set uuid(String v) { $_setString(1, 2, v); }
+  bool hasUuid() => $_has(1, 2);
+  void clearUuid() => clearField(2);
+
+  String get serviceUuid => $_get(2, 3, '');
+  set serviceUuid(String v) { $_setString(2, 3, v); }
+  bool hasServiceUuid() => $_has(2, 3);
+  void clearServiceUuid() => clearField(3);
+
+  String get secondaryServiceUuid => $_get(3, 4, '');
+  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
+  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  void clearSecondaryServiceUuid() => clearField(4);
+
+  List<int> get value => $_get(4, 5, null);
+  set value(List<int> v) { $_setBytes(4, 5, v); }
+  bool hasValue() => $_has(4, 5);
+  void clearValue() => clearField(5);
+}
+
+class _ReadonlyWriteDescriptorRequest extends WriteDescriptorRequest with ReadonlyMessageMixin {}
 

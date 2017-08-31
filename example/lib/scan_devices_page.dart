@@ -19,6 +19,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
   List<ScanResult> scanResults = new List();
   bool isScanning = false;
   ScanResult activeScanResult;
+  BluetoothDevice device;
 
   @override
   void initState() {
@@ -78,8 +79,9 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
 
   _connect() async {
     print('Connect clicked!');
-    BluetoothDevice device = await _flutterBlue.connect(new DeviceIdentifier('D4:35:2A:DD:54:C7'), autoConnect: false);
+    device = await _flutterBlue.connect(new DeviceIdentifier('D4:35:2A:DD:54:C7'), autoConnect: false);
     print('Device connected: ${device.id} ${device.name} ${device.type}');
+    List<BluetoothService> services = await device.discoverServices();
   }
 
   _disconnect() async {
@@ -87,9 +89,24 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     await _flutterBlue.cancelConnection(new DeviceIdentifier('D4:35:2A:DD:54:C7'));
   }
 
-  _getState() async {
-    BluetoothState state = await _flutterBlue.state;
-    print(state);
+  _readAll() async {
+    var services = await device.services;
+    for(int i=0;i<100;i++) {
+      for (BluetoothService s in services) {
+        print('${s.deviceId} Service discovered:: uuid=${s.uuid} isPrimary=${s
+            .isPrimary}');
+        for (BluetoothCharacteristic c in s.characteristics) {
+          print('Reading characteristic ${c.uuid}');
+          List<int> value = await device.readCharacteristic(c);
+          print('Read: $value');
+        }
+      }
+    }
+  }
+
+  _getServices() async {
+    var services = await device.services;
+    services.forEach((s) => print('${s.deviceId} Service discovered:: uuid=${s.uuid} isPrimary=${s.isPrimary}'));
   }
 
   _buildLinearProgressIndicator(BuildContext context) {
@@ -145,11 +162,15 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
         ),
         new RaisedButton(
           onPressed: () => _disconnect(),
-          child: const Text('DISCONNECT'),
+          child: const Text('DISC'),
         ),
         new RaisedButton(
-          onPressed: () => _getState(),
-          child: const Text('STATE'),
+          onPressed: () => _readAll(),
+          child: const Text('READ'),
+        ),
+        new RaisedButton(
+          onPressed: () => _getServices(),
+          child: const Text('SERVICES'),
         )
       ],
     );

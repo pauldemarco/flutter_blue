@@ -17,7 +17,7 @@ class BluetoothCharacteristic {
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p) :
       uuid = new Guid(p.uuid),
       serviceUuid = new Guid(p.serviceUuid),
-      descriptors = p.descriptors.map((d) => new BluetoothDescriptor.fromProto(d)),
+      descriptors = p.descriptors.map((d) => new BluetoothDescriptor.fromProto(d)).toList(),
       properties = new CharacteristicProperties.fromProto(p.properties);
 }
 

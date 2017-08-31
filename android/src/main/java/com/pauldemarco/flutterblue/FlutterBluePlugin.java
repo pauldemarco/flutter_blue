@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanCallback;
@@ -18,12 +19,13 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.util.Log;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.EventSink;
@@ -45,6 +47,8 @@ public class FlutterBluePlugin implements MethodCallHandler {
     private final MethodChannel channel;
     private final EventChannel stateChannel;
     private final EventChannel scanResultChannel;
+    private final EventChannel servicesDiscoveredChannel;
+    private final EventChannel characteristicReadChannel;
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, Result> mConnectionRequests = new HashMap<>();
@@ -62,11 +66,15 @@ public class FlutterBluePlugin implements MethodCallHandler {
         this.channel = new MethodChannel(registrar.messenger(), NAMESPACE+"/methods");
         this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/state");
         this.scanResultChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/scanResult");
+        this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
+        this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
         this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
         stateChannel.setStreamHandler(stateHandler);
         scanResultChannel.setStreamHandler(scanResultsHandler);
+        servicesDiscoveredChannel.setStreamHandler(servicesDiscoveredHandler);
+        characteristicReadChannel.setStreamHandler(characteristicReadHandler);
     }
 
     @Override
@@ -142,7 +150,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
             case "connect":
             {
-                printConnectionRequests();
                 byte[] data = call.arguments();
                 Protos.ConnectOptions options;
                 try {
@@ -188,7 +195,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
             case "disconnect":
             {
-                printConnectionRequests();
                 String deviceId = (String)call.arguments;
                 BluetoothGatt gattServer = mGattServers.remove(deviceId);
                 if(gattServer != null) {
@@ -204,20 +210,94 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 break;
             }
 
+            case "discoverServices":
+            {
+                String deviceId = (String)call.arguments;
+                BluetoothGatt gattServer = mGattServers.get(deviceId);
+                if(gattServer == null) {
+                    result.error("discover_services_error", "no instance of BluetoothGatt, have you connected first?", null);
+                    return;
+                }
+                if(gattServer.discoverServices()) {
+                    result.success(null);
+                } else {
+                    result.error("discover_services_error", "unknown reason", null);
+                }
+                break;
+            }
+
+            case "services":
+            {
+                String deviceId = (String)call.arguments;
+                BluetoothGatt gattServer = mGattServers.get(deviceId);
+                if(gattServer == null) {
+                    result.error("get_services_error", "no instance of BluetoothGatt, have you connected first?", null);
+                    return;
+                }
+                if(gattServer.getServices().isEmpty()) {
+                    result.error("get_services_error", "services are empty, have you called discoverServices() yet?", null);
+                    return;
+                }
+                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
+                p.setRemoteId(deviceId);
+                for(BluetoothGattService s : gattServer.getServices()){
+                    p.addServices(ProtoMaker.from(gattServer.getDevice(), s));
+                }
+                result.success(p.build().toByteArray());
+                break;
+            }
+
+            case "readCharacteristic":
+            {
+                byte[] data = call.arguments();
+                Protos.ReadAttributeRequest request;
+                try {
+                    request = Protos.ReadAttributeRequest.newBuilder().mergeFrom(data).build();
+                } catch (InvalidProtocolBufferException e) {
+                    result.error("RuntimeException", e.getMessage(), e);
+                    break;
+                }
+                BluetoothGatt gattServer = mGattServers.get(request.getRemoteId());
+                if(gattServer == null) {
+                    result.error("read_characteristic_error", "no instance of BluetoothGatt, have you connected first?", null);
+                    return;
+                }
+                BluetoothGattService primaryService = gattServer.getService(UUID.fromString(request.getServiceUuid()));
+                if(primaryService == null) {
+                    result.error("read_characteristic_error", "service (" + request.getServiceUuid() + ") could not be located on the device", null);
+                    return;
+                }
+                BluetoothGattService secondaryService = null;
+                if(request.getSecondaryServiceUuid().length() > 0) {
+                    for(BluetoothGattService s : primaryService.getIncludedServices()){
+                        if(s.getUuid().equals(UUID.fromString(request.getSecondaryServiceUuid()))){
+                            secondaryService = s;
+                        }
+                    }
+                    if(secondaryService == null) {
+                        result.error("read_characteristic_error", "secondary service (" + request.getSecondaryServiceUuid() + ") could not be located on the device", null);
+                        return;
+                    }
+                }
+                BluetoothGattService service = (secondaryService != null) ? secondaryService : primaryService;
+                BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(request.getUuid()));
+                if(characteristic == null) {
+                    result.error("read_characteristic_error", "characteristic (" + request.getUuid() + ") could not be located in the service ("+service.getUuid().toString()+")", null);
+                    return;
+                }
+
+                if(gattServer.readCharacteristic(characteristic)) {
+                    result.success(null);
+                } else {
+                    result.error("read_characteristic_error", "unknown reason. occurs if readCharacteristic was called before last read finished.", null);
+                }
+                break;
+            }
+
             default:
             {
                 result.notImplemented();
                 break;
-            }
-        }
-    }
-
-
-    private void printConnectionRequests() {
-        synchronized (mConnectionRequests) {
-            for(Iterator<Map.Entry<String, Result>> it = mConnectionRequests.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<String, Result> entry = it.next();
-                Log.d(TAG, "printConnectionRequests: deviceId:" + entry.getKey());
             }
         }
     }
@@ -373,6 +453,32 @@ public class FlutterBluePlugin implements MethodCallHandler {
         }
     };
 
+    private EventSink servicesDiscoveredSink;
+    private final StreamHandler servicesDiscoveredHandler = new StreamHandler() {
+        @Override
+        public void onListen(Object o, EventChannel.EventSink eventSink) {
+            servicesDiscoveredSink = eventSink;
+        }
+
+        @Override
+        public void onCancel(Object o) {
+            servicesDiscoveredSink = null;
+        }
+    };
+
+    private EventSink characteristicReadSink;
+    private final StreamHandler characteristicReadHandler = new StreamHandler() {
+        @Override
+        public void onListen(Object o, EventChannel.EventSink eventSink) {
+            characteristicReadSink = eventSink;
+        }
+
+        @Override
+        public void onCancel(Object o) {
+            characteristicReadSink = null;
+        }
+    };
+
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -398,12 +504,44 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            Log.d(TAG, "onServicesDiscovered: ");
+            Log.d(TAG, "onServicesDiscovered: " + gatt.getServices().size() + " sink:" + servicesDiscoveredSink);
+            if(servicesDiscoveredSink != null) {
+                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
+                p.setRemoteId(gatt.getDevice().getAddress());
+                for(BluetoothGattService s : gatt.getServices()) {
+                    p.addServices(ProtoMaker.from(gatt.getDevice(), s));
+                }
+                servicesDiscoveredSink.success(p.build().toByteArray());
+            }
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicRead: ");
+            if(characteristicReadSink != null) {
+                // Rebuild the ReadAttributeRequest and send back along with response
+                Protos.ReadAttributeRequest.Builder q = Protos.ReadAttributeRequest.newBuilder();
+                q.setRemoteId(gatt.getDevice().getAddress());
+                q.setUuid(characteristic.getUuid().toString());
+                if(characteristic.getService().getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY) {
+                    q.setServiceUuid(characteristic.getService().getUuid().toString());
+                } else {
+                    // Reverse search to find service
+                    for(BluetoothGattService s : gatt.getServices()) {
+                        for(BluetoothGattService ss : s.getIncludedServices()) {
+                            if(ss.getUuid().equals(characteristic.getService().getUuid())){
+                                q.setServiceUuid(s.getUuid().toString());
+                                q.setSecondaryServiceUuid(ss.getUuid().toString());
+                                break;
+                            }
+                        }
+                    }
+                }
+                Protos.ReadAttributeResponse.Builder p = Protos.ReadAttributeResponse.newBuilder();
+                p.setRequest(q);
+                p.setValue(ByteString.copyFrom(characteristic.getValue()));
+                characteristicReadSink.success(p.build().toByteArray());
+            }
         }
 
         @Override
