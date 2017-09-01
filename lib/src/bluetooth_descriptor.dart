@@ -8,7 +8,7 @@ class BluetoothDescriptor {
   final Guid uuid;
   final Guid serviceUuid; // The service that this descriptor belongs to.
   final Guid characteristicUuid; // The characteristic that this descriptor belongs to.
-  Uint8List value;
+  List<int> value;
 
   BluetoothDescriptor({@required this.uuid, @required this.serviceUuid, @required this.characteristicUuid});
 
