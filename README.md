@@ -47,12 +47,28 @@ services.forEach((service) {
 
 ### Read and write characteristics
 ```dart
-// Read all characteristics
+// Reads all characteristics
 var characteristics = service.characteristics;
 for(BluetoothCharacteristic c in characteristics) {
     List<int> value = await device.readCharacteristic(c);
     print(value);
 }
+
+// Writes to a characteristic
+await device.writeCharacteristic(c, [0x12, 0x34])
+```
+
+### Read and write descriptors
+```dart
+// Reads all descriptors
+var descriptors = characteristic.descriptors;
+for(BluetoothDescriptor d in descriptors) {
+    List<int> value = await device.readDescriptor(d);
+    print(value);
+}
+
+// Writes to a descriptor
+await device.writeDescriptor(d, [0x12, 0x34])
 ```
 
 ### FlutterBlue API
