@@ -123,7 +123,9 @@ class BluetoothDevice {
         (d.request.serviceUuid == request.serviceUuid))
       .first
       .then((w) => w.success)
-      .then((success) => (!success) ? throw new Exception('Failed to write the characteristic') : null);
+      .then((success) => (!success) ? throw new Exception('Failed to write the characteristic') : null)
+      .then((_) => characteristic.value = value)
+      .then((_) => null);
   }
 
   /// Writes the value of a descriptor
@@ -149,7 +151,9 @@ class BluetoothDevice {
         (d.request.serviceUuid == request.serviceUuid))
         .first
         .then((w) => w.success)
-        .then((success) => (!success) ? throw new Exception('Failed to write the descriptor') : null);
+        .then((success) => (!success) ? throw new Exception('Failed to write the descriptor') : null)
+        .then((_) => descriptor.value = value)
+        .then((_) => null);;
   }
 
   /// Sets notifications or indications for the value of a specified characteristic

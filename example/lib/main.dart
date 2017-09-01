@@ -22,51 +22,59 @@ class FlutterBlueApp extends StatefulWidget {
 
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
+
+  /// Scanning
   StreamSubscription _scanSubscription;
-  List<ScanResult> scanResults = new List();
-  List<BluetoothService> services = new List();
+  Map<DeviceIdentifier, ScanResult> scanResults = new Map();
   bool isScanning = false;
-  ScanResult activeScanResult;
+
+  /// State
+  StreamSubscription _stateSubscription;
+  BluetoothState state = BluetoothState.unknown;
+
+  /// Device
   BluetoothDevice device;
+  bool get isConnected => (device != null);
+  List<BluetoothService> services = new List();
 
   @override
   void initState() {
     super.initState();
-    _flutterBlue.onStateChanged().listen((s) {
-      print('State changed: $s');
+    // Immediately get the state of FlutterBlue
+    _flutterBlue.state.then((s) {
+      setState(() {
+        state = s;
+      });
+    });
+    // Subscribe to state changes
+    _stateSubscription = _flutterBlue.onStateChanged().listen((s) {
+      setState(() {
+        state = s;
+      });
     });
   }
 
   @override
   void dispose() {
+    _stateSubscription?.cancel();
+    _stateSubscription = null;
     _scanSubscription?.cancel();
     _scanSubscription = null;
+    super.dispose();
   }
 
   _startScan() {
-    if(_scanSubscription == null) {
-      _scanSubscription = _flutterBlue.startScan()
-          .listen((scanResult) {
-        bool exists = false;
-        for(int i=0; i<scanResults.length; i++){
-          if(scanResults[i].identifier == scanResult.identifier){
-            setState(() {
-              scanResults[i] = scanResult;
-            });
-            exists = true;
-          }
-        }
-        if(!exists){
-          setState(() {
-            scanResults.add(scanResult);
-          });
-        }
-        print("Device name: ${scanResult.name} rssi: ${scanResult.rssi} id: ${scanResult.identifier}");
-      });
+    _scanSubscription = _flutterBlue
+        .startScan()
+        .timeout(new Duration(seconds: 5), onTimeout: (s) => _stopScan())
+        .listen((scanResult) {
       setState(() {
-        isScanning = true;
+        scanResults[scanResult.identifier] = scanResult;
       });
-    }
+    });
+    setState(() {
+      isScanning = true;
+    });
   }
 
   _stopScan() {
@@ -78,29 +86,25 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
+  _connect(ScanResult r) async {
+    // Connect to device
+    BluetoothDevice d = await _flutterBlue.connect(r.identifier);
+    setState(() {
+      device = d;
+    });
 
-  _scanResultTapped(ScanResult result) async {
-    print('ScanResult tapped: ${result.identifier}');
-    activeScanResult = result;
-    //Navigator.pushNamed(context, '/device/${device.id.toString()}');
-  }
-
-  _connect() async {
-    print('Connect clicked!');
-    device = await _flutterBlue.connect(new DeviceIdentifier('D4:35:2A:DD:54:C7'), autoConnect: false);
-    print('Device connected: ${device.id} ${device.name} ${device.type}');
-    services = await device.discoverServices();
-    setState(() {});
+    // Discover the services
+    List<BluetoothService> s = await device.discoverServices();
+    setState(() {
+      services = s;
+    });
   }
 
   _disconnect() async {
-    print('Disconnect clicked!');
-    await _flutterBlue.cancelConnection(new DeviceIdentifier('D4:35:2A:DD:54:C7'));
-  }
-
-  _refresh() async {
-    services = await device.services;
-    setState((){});
+    await _flutterBlue.cancelConnection(device.id);
+    setState(() {
+      device = null;
+    });
   }
 
   _readCharacteristic(BluetoothCharacteristic c) async {
@@ -109,7 +113,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _writeCharacteristic(BluetoothCharacteristic c) async {
-    await device.writeCharacteristic(c, [0x12, 0x34], type: CharacteristicWriteType.withResponse);
+    await device.writeCharacteristic(c, [0x12, 0x34],
+        type: CharacteristicWriteType.withResponse);
     setState(() {});
   }
 
@@ -123,52 +128,65 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     setState(() {});
   }
 
-  _buildLinearProgressIndicator(BuildContext context) {
-    var widget;
-    if(isScanning) {
-      widget = new LinearProgressIndicator(value: null,);
-    } else {
-      widget = new Container(height: 6.0,);
-    }
-    return widget;
-  }
-
   _buildScanningButton(BuildContext context) {
-    if(isScanning) {
+    if (isConnected || state != BluetoothState.on) {
+      return null;
+    }
+    if (isScanning) {
       return new FloatingActionButton(
-          child: new Icon(Icons.stop),
-          onPressed: _stopScan
+        child: new Icon(Icons.stop),
+        onPressed: _stopScan,
+        backgroundColor: Colors.red,
       );
     } else {
       return new FloatingActionButton(
-          child: new Icon(Icons.search),
-          onPressed: _startScan
-      );
+          child: new Icon(Icons.search), onPressed: _startScan);
     }
   }
 
-  List<Widget> _buildScanResultTiles(BuildContext context) {
-    return scanResults.map((s) => new ListTile(
-      title: new Text(s.name),
-      subtitle: new Text(s.identifier.toString()),
-      leading: new Text(s.rssi.toString()),
-      onTap: () => _scanResultTapped(s),
-    )).toList();
+  _buildScanResultTiles(BuildContext context) {
+    return scanResults.values
+        .map((s) => new ListTile(
+              title: new Text(s.name),
+              subtitle: new Text(s.identifier.toString()),
+              leading: new Text(s.rssi.toString()),
+              onTap: () => _connect(s),
+            ))
+        .toList();
   }
 
-  Widget _buildDescriptorTile(BuildContext context, BluetoothDescriptor d){
+  _buildDescriptorTile(BuildContext context, BluetoothDescriptor d) {
+    var title = new Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text('Descriptor'),
+        new Text('0x${d.uuid.toString().toUpperCase().substring(4, 8)}',
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(color: Theme.of(context).textTheme.caption.color))
+      ],
+    );
     return new ListTile(
       title: new ListTile(
-        title: new Text('Descriptor 0x'+d.uuid.toString().toUpperCase().substring(4,8)),
+        title: title,
         subtitle: new Text(d.value.toString()),
         trailing: new Row(
           children: <Widget>[
             new IconButton(
-              icon: const Icon(Icons.file_download),
+              icon: new Icon(
+                Icons.file_download,
+                color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+              ),
               onPressed: () => _readDescriptor(d),
             ),
             new IconButton(
-              icon: const Icon(Icons.file_upload),
+              icon: new Icon(
+                Icons.file_upload,
+                color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+              ),
               onPressed: () => _writeDescriptor(d),
             )
           ],
@@ -177,99 +195,150 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     );
   }
 
-  Widget _buildCharacteristicTile(BuildContext context, BluetoothCharacteristic c){
-    var descriptorTiles = c.descriptors.map((d) => _buildDescriptorTile(context, d)).toList();
-    return new ExpansionTile(
-      title: new ListTile(
-        title: new Text('Characteristic 0x'+c.uuid.toString().toUpperCase().substring(4,8)),
+  _buildCharacteristicTile(BuildContext context, BluetoothCharacteristic c) {
+    var descriptorTiles =
+        c.descriptors.map((d) => _buildDescriptorTile(context, d)).toList();
+    var actions = new Row(
+      children: <Widget>[
+        new IconButton(
+          icon: new Icon(
+            Icons.file_download,
+            color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+          ),
+          onPressed: () => _readCharacteristic(c),
+        ),
+        new IconButton(
+          icon: new Icon(Icons.file_upload,
+              color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
+          onPressed: () => _writeCharacteristic(c),
+        )
+      ],
+    );
+
+    var title = new Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Text('Characteristic'),
+        new Text('0x${c.uuid.toString().toUpperCase().substring(4, 8)}',
+            style: Theme
+                .of(context)
+                .textTheme
+                .body1
+                .copyWith(color: Theme.of(context).textTheme.caption.color))
+      ],
+    );
+
+    if (descriptorTiles.length > 0) {
+      return new ExpansionTile(
+        title: new ListTile(
+          title: title,
+          subtitle: new Text(c.value.toString()),
+          trailing: actions,
+        ),
+        children: descriptorTiles,
+      );
+    } else {
+      return new ListTile(
+        title: title,
         subtitle: new Text(c.value.toString()),
-        trailing: new Row(
+        trailing: actions,
+      );
+    }
+  }
+
+  _buildServiceTile(BuildContext context, BluetoothService s) {
+    var characteristicsTiles = s.characteristics
+        .map((c) => _buildCharacteristicTile(context, c))
+        .toList();
+    if (characteristicsTiles.length > 0) {
+      return new ExpansionTile(
+        title: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new IconButton(
-              icon: const Icon(Icons.file_download),
-              onPressed: () => _readCharacteristic(c),
-            ),
-            new IconButton(
-              icon: const Icon(Icons.file_upload),
-              onPressed: () => _writeCharacteristic(c),
-            )
+            const Text('Service'),
+            new Text('0x${s.uuid.toString().toUpperCase().substring(4, 8)}',
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .body1
+                    .copyWith(color: Theme.of(context).textTheme.caption.color))
           ],
         ),
-      ),
-      children: descriptorTiles,
-    );
+        children: characteristicsTiles,
+      );
+    } else {
+      return new ListTile(
+        title: const Text('Service'),
+        subtitle:
+            new Text('0x${s.uuid.toString().toUpperCase().substring(4, 8)}'),
+      );
+    }
   }
 
-  Widget _buildServiceTile(BuildContext context, BluetoothService s){
-    var characteristicsTiles = s.characteristics.map((c) => _buildCharacteristicTile(context, c)).toList();
-    return new ExpansionTile(
-      title: new Text('Service 0x'+s.uuid.toString().toUpperCase().substring(4,8)),
-      children: characteristicsTiles,
-    );
+  _buildServiceTiles(BuildContext context) {
+    return services.map((s) => _buildServiceTile(context, s)).toList();
   }
 
-  Widget _buildScanPage(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Scan for devices'),
-      ),
-      floatingActionButton: _buildScanningButton(context),
-      body: new Stack(
-        children: <Widget>[
-          _buildLinearProgressIndicator(context),
-          new ListView(children: _buildScanResultTiles(context)),
-        ],
-      ),
-      persistentFooterButtons: <Widget>[
-        new RaisedButton(
-          onPressed: () => _connect(),
-          child: const Text('CONNECT'),
-        ),
-        new RaisedButton(
+  _buildActionButtons(BuildContext context) {
+    if (isConnected) {
+      return <Widget>[
+        new IconButton(
+          icon: const Icon(Icons.cancel),
           onPressed: () => _disconnect(),
-          child: const Text('DISC'),
-        ),
-        new RaisedButton(
-          onPressed: () => _refresh(),
-          child: const Text('REFRESH'),
         )
-      ],
+      ];
+    }
+  }
+
+  _buildAlertTile(BuildContext context) {
+    return new Container(
+      color: Colors.redAccent,
+      child: new ListTile(
+        title: new Text(
+          'Bluetooth is not turned on!',
+          style: Theme.of(context).primaryTextTheme.subhead,
+        ),
+        trailing: new Icon(
+          Icons.error,
+          color: Theme.of(context).primaryTextTheme.subhead.color,
+        ),
+      ),
     );
   }
 
-  Widget _buildDevicePage(BuildContext context) {
-    var serviceTiles = services.map((s) => _buildServiceTile(context, s)).toList();
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Device connected'),
-      ),
-      body: new Stack(
-        children: <Widget>[
-          _buildLinearProgressIndicator(context),
-          new ListView(children: serviceTiles),
-        ],
-      ),
-      persistentFooterButtons: <Widget>[
-        new RaisedButton(
-          onPressed: () => _connect(),
-          child: const Text('CONNECT'),
-        ),
-        new RaisedButton(
-          onPressed: () => _disconnect(),
-          child: const Text('DISC'),
-        ),
-        new RaisedButton(
-          onPressed: () => _refresh(),
-          child: const Text('REFRESH'),
-        )
-      ],
-    );
+  _buildProgressBarTile(BuildContext context) {
+    return new LinearProgressIndicator();
   }
 
   @override
   Widget build(BuildContext context) {
+    var tiles = new List();
+    if (state != BluetoothState.on) {
+      tiles.add(_buildAlertTile(context));
+    }
+    if (isConnected) {
+      tiles.addAll(_buildServiceTiles(context));
+    } else {
+      tiles.addAll(_buildScanResultTiles(context));
+    }
     return new MaterialApp(
-    home: (device == null) ? _buildScanPage(context) : _buildDevicePage(context),
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: const Text('FlutterBlue'),
+          actions: _buildActionButtons(context),
+        ),
+        floatingActionButton: _buildScanningButton(context),
+        body: new Stack(
+          children: <Widget>[
+            (isScanning) ? _buildProgressBarTile(context) : new Container(),
+            new ListView(
+              children: tiles,
+            )
+          ],
+        ),
+      ),
     );
   }
 }
