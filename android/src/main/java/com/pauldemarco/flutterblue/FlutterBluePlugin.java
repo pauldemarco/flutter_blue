@@ -49,6 +49,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
     private final EventChannel scanResultChannel;
     private final EventChannel servicesDiscoveredChannel;
     private final EventChannel characteristicReadChannel;
+    private final EventChannel descriptorReadChannel;
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, Result> mConnectionRequests = new HashMap<>();
@@ -68,6 +69,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
         this.scanResultChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/scanResult");
         this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
         this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
+        this.descriptorReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/descriptorRead");
         this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
@@ -75,6 +77,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
         scanResultChannel.setStreamHandler(scanResultsHandler);
         servicesDiscoveredChannel.setStreamHandler(servicesDiscoveredHandler);
         characteristicReadChannel.setStreamHandler(characteristicReadHandler);
+        descriptorReadChannel.setStreamHandler(descriptorReadHandler);
     }
 
     @Override
@@ -250,47 +253,139 @@ public class FlutterBluePlugin implements MethodCallHandler {
             case "readCharacteristic":
             {
                 byte[] data = call.arguments();
-                Protos.ReadAttributeRequest request;
+                Protos.ReadCharacteristicRequest request;
                 try {
-                    request = Protos.ReadAttributeRequest.newBuilder().mergeFrom(data).build();
+                    request = Protos.ReadCharacteristicRequest.newBuilder().mergeFrom(data).build();
                 } catch (InvalidProtocolBufferException e) {
                     result.error("RuntimeException", e.getMessage(), e);
                     break;
                 }
-                BluetoothGatt gattServer = mGattServers.get(request.getRemoteId());
-                if(gattServer == null) {
-                    result.error("read_characteristic_error", "no instance of BluetoothGatt, have you connected first?", null);
-                    return;
-                }
-                BluetoothGattService primaryService = gattServer.getService(UUID.fromString(request.getServiceUuid()));
-                if(primaryService == null) {
-                    result.error("read_characteristic_error", "service (" + request.getServiceUuid() + ") could not be located on the device", null);
-                    return;
-                }
-                BluetoothGattService secondaryService = null;
-                if(request.getSecondaryServiceUuid().length() > 0) {
-                    for(BluetoothGattService s : primaryService.getIncludedServices()){
-                        if(s.getUuid().equals(UUID.fromString(request.getSecondaryServiceUuid()))){
-                            secondaryService = s;
-                        }
-                    }
-                    if(secondaryService == null) {
-                        result.error("read_characteristic_error", "secondary service (" + request.getSecondaryServiceUuid() + ") could not be located on the device", null);
-                        return;
-                    }
-                }
-                BluetoothGattService service = (secondaryService != null) ? secondaryService : primaryService;
-                BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(request.getUuid()));
-                if(characteristic == null) {
-                    result.error("read_characteristic_error", "characteristic (" + request.getUuid() + ") could not be located in the service ("+service.getUuid().toString()+")", null);
+
+                BluetoothGatt gattServer;
+                BluetoothGattCharacteristic characteristic;
+                try {
+                    gattServer = locateGatt(request.getRemoteId());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                } catch(Exception e) {
+                    result.error("read_characteristic_error", e.getMessage(), null);
                     return;
                 }
 
                 if(gattServer.readCharacteristic(characteristic)) {
                     result.success(null);
                 } else {
-                    result.error("read_characteristic_error", "unknown reason. occurs if readCharacteristic was called before last read finished.", null);
+                    result.error("read_characteristic_error", "unknown reason, may occur if readCharacteristic was called before last read finished.", null);
                 }
+                break;
+            }
+
+            case "readDescriptor":
+            {
+                byte[] data = call.arguments();
+                Protos.ReadDescriptorRequest request;
+                try {
+                    request = Protos.ReadDescriptorRequest.newBuilder().mergeFrom(data).build();
+                } catch (InvalidProtocolBufferException e) {
+                    result.error("RuntimeException", e.getMessage(), e);
+                    break;
+                }
+
+                BluetoothGatt gattServer;
+                BluetoothGattCharacteristic characteristic;
+                BluetoothGattDescriptor descriptor;
+                try {
+                    gattServer = locateGatt(request.getRemoteId());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    descriptor = locateDescriptor(characteristic, request.getDescriptorUuid());
+                } catch(Exception e) {
+                    result.error("read_descriptor_error", e.getMessage(), null);
+                    return;
+                }
+
+                if(gattServer.readDescriptor(descriptor)) {
+                    result.success(null);
+                } else {
+                    result.error("read_descriptor_error", "unknown reason, may occur if readDescriptor was called before last read finished.", null);
+                }
+                break;
+            }
+
+            case "writeCharacteristic":
+            {
+                byte[] data = call.arguments();
+                Protos.WriteCharacteristicRequest request;
+                try {
+                    request = Protos.WriteCharacteristicRequest.newBuilder().mergeFrom(data).build();
+                } catch (InvalidProtocolBufferException e) {
+                    result.error("RuntimeException", e.getMessage(), e);
+                    break;
+                }
+
+                BluetoothGatt gattServer;
+                BluetoothGattCharacteristic characteristic;
+                try {
+                    gattServer = locateGatt(request.getRemoteId());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                } catch(Exception e) {
+                    result.error("write_characteristic_error", e.getMessage(), null);
+                    return;
+                }
+
+                // Set characteristic to new value
+                if(!characteristic.setValue(request.getValue().toByteArray())){
+                    result.error("write_characteristic_error", "could not set the local value of characteristic", null);
+                }
+
+                // Apply the correct write type
+                if(request.getWriteType() == Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE) {
+                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                } else {
+                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                }
+
+                if(!gattServer.writeCharacteristic(characteristic)){
+                    result.error("write_characteristic_error", "writeCharacteristic failed", null);
+                    return;
+                }
+
+                result.success(null);
+                break;
+            }
+
+            case "writeDescriptor":
+            {
+                byte[] data = call.arguments();
+                Protos.WriteDescriptorRequest request;
+                try {
+                    request = Protos.WriteDescriptorRequest.newBuilder().mergeFrom(data).build();
+                } catch (InvalidProtocolBufferException e) {
+                    result.error("RuntimeException", e.getMessage(), e);
+                    break;
+                }
+
+                BluetoothGatt gattServer;
+                BluetoothGattCharacteristic characteristic;
+                BluetoothGattDescriptor descriptor;
+                try {
+                    gattServer = locateGatt(request.getRemoteId());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    descriptor = locateDescriptor(characteristic, request.getDescriptorUuid());
+                } catch(Exception e) {
+                    result.error("write_descriptor_error", e.getMessage(), null);
+                    return;
+                }
+
+                // Set descriptor to new value
+                if(!descriptor.setValue(request.getValue().toByteArray())){
+                    result.error("write_descriptor_error", "could not set the local value for descriptor", null);
+                }
+
+                if(!gattServer.writeDescriptor(descriptor)){
+                    result.error("write_descriptor_error", "writeCharacteristic failed", null);
+                    return;
+                }
+
+                result.success(null);
                 break;
             }
 
@@ -300,6 +395,46 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 break;
             }
         }
+    }
+
+    private BluetoothGatt locateGatt(String remoteId) throws Exception {
+        BluetoothGatt gattServer = mGattServers.get(remoteId);
+        if(gattServer == null) {
+            throw new Exception("no instance of BluetoothGatt, have you connected first?");
+        }
+        return gattServer;
+    }
+
+    private BluetoothGattCharacteristic locateCharacteristic(BluetoothGatt gattServer, String serviceId, String secondaryServiceId, String characteristicId) throws Exception {
+        BluetoothGattService primaryService = gattServer.getService(UUID.fromString(serviceId));
+        if(primaryService == null) {
+            throw new Exception("service (" + serviceId + ") could not be located on the device");
+        }
+        BluetoothGattService secondaryService = null;
+        if(secondaryServiceId.length() > 0) {
+            for(BluetoothGattService s : primaryService.getIncludedServices()){
+                if(s.getUuid().equals(UUID.fromString(secondaryServiceId))){
+                    secondaryService = s;
+                }
+            }
+            if(secondaryService == null) {
+                throw new Exception("secondary service (" + secondaryServiceId + ") could not be located on the device");
+            }
+        }
+        BluetoothGattService service = (secondaryService != null) ? secondaryService : primaryService;
+        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(characteristicId));
+        if(characteristic == null) {
+            throw new Exception("characteristic (" + characteristicId + ") could not be located in the service ("+service.getUuid().toString()+")");
+        }
+        return characteristic;
+    }
+
+    private BluetoothGattDescriptor locateDescriptor(BluetoothGattCharacteristic characteristic, String descriptorId) throws Exception {
+        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(descriptorId));
+        if(descriptor == null) {
+            throw new Exception("descriptor (" + descriptorId + ") could not be located in the characteristic ("+characteristic.getUuid().toString()+")");
+        }
+        return descriptor;
     }
 
     private final StreamHandler stateHandler = new StreamHandler() {
@@ -344,7 +479,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
             registrar.activity().unregisterReceiver(mReceiver);
         }
     };
-
 
     private void startScan(Protos.ScanSettings settings) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -479,6 +613,19 @@ public class FlutterBluePlugin implements MethodCallHandler {
         }
     };
 
+    private EventSink descriptorReadSink;
+    private final StreamHandler descriptorReadHandler = new StreamHandler() {
+        @Override
+        public void onListen(Object o, EventChannel.EventSink eventSink) {
+            descriptorReadSink = eventSink;
+        }
+
+        @Override
+        public void onCancel(Object o) {
+            descriptorReadSink = null;
+        }
+    };
+
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -520,9 +667,9 @@ public class FlutterBluePlugin implements MethodCallHandler {
             Log.d(TAG, "onCharacteristicRead: ");
             if(characteristicReadSink != null) {
                 // Rebuild the ReadAttributeRequest and send back along with response
-                Protos.ReadAttributeRequest.Builder q = Protos.ReadAttributeRequest.newBuilder();
+                Protos.ReadCharacteristicRequest.Builder q = Protos.ReadCharacteristicRequest.newBuilder();
                 q.setRemoteId(gatt.getDevice().getAddress());
-                q.setUuid(characteristic.getUuid().toString());
+                q.setCharacteristicUuid(characteristic.getUuid().toString());
                 if(characteristic.getService().getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY) {
                     q.setServiceUuid(characteristic.getService().getUuid().toString());
                 } else {
@@ -537,7 +684,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
                         }
                     }
                 }
-                Protos.ReadAttributeResponse.Builder p = Protos.ReadAttributeResponse.newBuilder();
+                Protos.ReadCharacteristicResponse.Builder p = Protos.ReadCharacteristicResponse.newBuilder();
                 p.setRequest(q);
                 p.setValue(ByteString.copyFrom(characteristic.getValue()));
                 characteristicReadSink.success(p.build().toByteArray());
@@ -547,6 +694,14 @@ public class FlutterBluePlugin implements MethodCallHandler {
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             Log.d(TAG, "onCharacteristicWrite: ");
+            Protos.WriteCharacteristicRequest.Builder request = Protos.WriteCharacteristicRequest.newBuilder();
+            request.setRemoteId(gatt.getDevice().getAddress());
+            request.setCharacteristicUuid(characteristic.getUuid().toString());
+            request.setServiceUuid(characteristic.getService().getUuid().toString());
+            Protos.WriteCharacteristicResponse.Builder p = Protos.WriteCharacteristicResponse.newBuilder();
+            p.setRequest(request);
+            p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
+            channel.invokeMethod("WriteCharacteristicResponse", p.build().toByteArray());
         }
 
         @Override
@@ -557,11 +712,45 @@ public class FlutterBluePlugin implements MethodCallHandler {
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorRead: ");
+            if(descriptorReadSink != null) {
+                // Rebuild the ReadAttributeRequest and send back along with response
+                Protos.ReadDescriptorRequest.Builder q = Protos.ReadDescriptorRequest.newBuilder();
+                q.setRemoteId(gatt.getDevice().getAddress());
+                q.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
+                q.setDescriptorUuid(descriptor.getUuid().toString());
+                if(descriptor.getCharacteristic().getService().getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY) {
+                    q.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
+                } else {
+                    // Reverse search to find service
+                    for(BluetoothGattService s : gatt.getServices()) {
+                        for(BluetoothGattService ss : s.getIncludedServices()) {
+                            if(ss.getUuid().equals(descriptor.getCharacteristic().getService().getUuid())){
+                                q.setServiceUuid(s.getUuid().toString());
+                                q.setSecondaryServiceUuid(ss.getUuid().toString());
+                                break;
+                            }
+                        }
+                    }
+                }
+                Protos.ReadDescriptorResponse.Builder p = Protos.ReadDescriptorResponse.newBuilder();
+                p.setRequest(q);
+                p.setValue(ByteString.copyFrom(descriptor.getValue()));
+                descriptorReadSink.success(p.build().toByteArray());
+            }
         }
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             Log.d(TAG, "onDescriptorWrite: ");
+            Protos.WriteDescriptorRequest.Builder request = Protos.WriteDescriptorRequest.newBuilder();
+            request.setRemoteId(gatt.getDevice().getAddress());
+            request.setDescriptorUuid(descriptor.getUuid().toString());
+            request.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
+            request.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
+            Protos.WriteDescriptorResponse.Builder p = Protos.WriteDescriptorResponse.newBuilder();
+            p.setRequest(request);
+            p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
+            channel.invokeMethod("WriteDescriptorResponse", p.build().toByteArray());
         }
 
         @Override

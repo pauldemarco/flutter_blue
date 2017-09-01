@@ -6,14 +6,14 @@ class FlutterBlue {
   final EventChannel _scanResultChannel = const EventChannel('$NAMESPACE/scanResult');
   final EventChannel _servicesDiscoveredChannel = const EventChannel('$NAMESPACE/servicesDiscovered');
   final EventChannel _characteristicReadChannel = const EventChannel('$NAMESPACE/characteristicRead');
+  final EventChannel _descriptorReadChannel = const EventChannel('$NAMESPACE/descriptorRead');
+  final StreamController<MethodCall> _methodStreamController = new StreamController.broadcast(); // ignore: close_sinks
+  Stream<MethodCall> get _methodStream => _methodStreamController.stream; // Used internally to dispatch methods from platform.
 
   /// Singleton boilerplate
   FlutterBlue._() {
     _channel.setMethodCallHandler((MethodCall call) {
-      if (call.method == 'Event') {
-        //final Event event = new Event._(call.arguments);
-        //_observers[call.arguments['handle']].add(event);
-      }
+      _methodStreamController.add(call);
     });
   }
   static FlutterBlue _instance = new FlutterBlue._();

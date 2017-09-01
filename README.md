@@ -1,10 +1,15 @@
-# flutter_blue
+# FlutterBlue
+## Bluetooth plugin for flutter
 
-A new flutter plugin project.
+|                | Android |   iOS   |
+| :------------- | :-----: | :-----: |
+| startScanning  |   :white_check_mark:   |   :white_medium_square:   |
 
-## Getting Started
+- [ ] 
+- [ ] Scan for nearby devices
+- [ ] 
 
-For help getting started with Flutter, view our online
-[documentation](http://flutter.io/).
-
-For help on editing plugin code, view the [documentation](https://flutter.io/platform-plugins/#edit-code).
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |

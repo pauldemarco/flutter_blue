@@ -53,6 +53,7 @@ public class ProtoMaker {
         Protos.BluetoothDescriptor.Builder p = Protos.BluetoothDescriptor.newBuilder();
         p.setUuid(descriptor.getUuid().toString());
         p.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
+        p.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
         if(descriptor.getValue() != null)
             p.setValue(ByteString.copyFrom(descriptor.getValue()));
         return p.build();

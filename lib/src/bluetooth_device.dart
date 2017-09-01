@@ -41,9 +41,9 @@ class BluetoothDevice {
   /// Retrieves the value of a specified characteristic
   Future<List<int>> readCharacteristic(
       BluetoothCharacteristic characteristic) async {
-    var request = protos.ReadAttributeRequest.create()
+    var request = protos.ReadCharacteristicRequest.create()
       ..remoteId = id.toString()
-      ..uuid = characteristic.uuid.toString()
+      ..characteristicUuid = characteristic.uuid.toString()
       ..serviceUuid = characteristic.serviceUuid.toString();
 
     await FlutterBlue.instance._channel
@@ -52,29 +52,100 @@ class BluetoothDevice {
     return await FlutterBlue.instance._characteristicReadChannel
         .receiveBroadcastStream()
         .map((List<int> data) =>
-            new protos.ReadAttributeResponse.fromBuffer(data))
-        .where((d) => (d.request.remoteId == request.remoteId) &&
-              (d.request.uuid == request.uuid) &&
-              (d.request.serviceUuid == request.serviceUuid))
+            new protos.ReadCharacteristicResponse.fromBuffer(data))
+        .where((d) =>
+            (d.request.remoteId == request.remoteId) &&
+            (d.request.characteristicUuid == request.characteristicUuid) &&
+            (d.request.serviceUuid == request.serviceUuid))
         .map((d) => d.value)
-        .first;
+        .first
+        .then((d) => characteristic.value = d);
   }
 
   /// Retrieves the value of a specified characteristic descriptor
-  Future<List<int>> readDescriptor(BluetoothDescriptor descriptor) {
-    return new Future.error(new UnimplementedError());
+  Future<List<int>> readDescriptor(BluetoothDescriptor descriptor) async {
+    var request = protos.ReadDescriptorRequest.create()
+      ..remoteId = id.toString()
+      ..descriptorUuid = descriptor.uuid.toString()
+      ..characteristicUuid = descriptor.characteristicUuid.toString()
+      ..serviceUuid = descriptor.serviceUuid.toString();
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('readDescriptor', request.writeToBuffer());
+
+    return await FlutterBlue.instance._descriptorReadChannel
+        .receiveBroadcastStream()
+        .map((List<int> data) =>
+            new protos.ReadDescriptorResponse.fromBuffer(data))
+        .where((d) =>
+            (d.request.remoteId == request.remoteId) &&
+            (d.request.descriptorUuid == request.descriptorUuid) &&
+            (d.request.characteristicUuid == request.characteristicUuid) &&
+            (d.request.serviceUuid == request.serviceUuid))
+        .map((d) => d.value)
+        .first
+        .then((d) => descriptor.value = d);
   }
 
-  /// Writes the value of a characteristic
-  Future<Null> writeCharacteristic(BluetoothCharacteristic characteristic,
+  /// Writes the value of a characteristic.
+  /// [CharacteristicWriteType.withoutResponse]: the write is not
+  /// guaranteed and will return immediately with success.
+  /// [CharacteristicWriteType.withResponse]: the method will return after the
+  /// write operation has either passed or failed.
+  Future<Null> writeCharacteristic(BluetoothCharacteristic characteristic, List<int> value,
       {CharacteristicWriteType type =
-          CharacteristicWriteType.withoutResponse}) {
-    return new Future.error(new UnimplementedError());
+          CharacteristicWriteType.withoutResponse}) async {
+    var request = protos.WriteCharacteristicRequest.create()
+      ..remoteId = id.toString()
+      ..characteristicUuid = characteristic.uuid.toString()
+      ..serviceUuid = characteristic.serviceUuid.toString()
+      ..writeType = protos.WriteCharacteristicRequest_WriteType.valueOf(type.index)
+      ..value = value;
+
+    var result = await FlutterBlue.instance._channel
+        .invokeMethod('writeCharacteristic', request.writeToBuffer());
+
+    if(type == CharacteristicWriteType.withoutResponse) {
+      return result;
+    }
+
+    return await FlutterBlue.instance._methodStream
+      .where((m) => m.method == "WriteCharacteristicResponse")
+      .map((m) => m.arguments)
+      .map((List<int> data) => new protos.WriteCharacteristicResponse.fromBuffer(data))
+      .where((d) =>
+        (d.request.remoteId == request.remoteId) &&
+        (d.request.characteristicUuid == request.characteristicUuid) &&
+        (d.request.serviceUuid == request.serviceUuid))
+      .first
+      .then((w) => w.success)
+      .then((success) => (!success) ? throw new Exception('Failed to write the characteristic') : null);
   }
 
   /// Writes the value of a characteristic descriptor
-  Future<Null> writeDescriptor(BluetoothDescriptor descriptor) {
-    return new Future.error(new UnimplementedError());
+  Future<Null> writeDescriptor(BluetoothDescriptor descriptor, List<int> value) async {
+    var request = protos.WriteDescriptorRequest.create()
+      ..remoteId = id.toString()
+      ..descriptorUuid = descriptor.uuid.toString()
+      ..characteristicUuid = descriptor.characteristicUuid.toString()
+      ..serviceUuid = descriptor.serviceUuid.toString()
+      ..value = value;
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('writeDescriptor', request.writeToBuffer());
+
+    return await FlutterBlue.instance._methodStream
+        .where((m) => m.method == "WriteDescriptorResponse")
+        .map((m) => m.arguments)
+        .map((List<int> data) => new protos.WriteDescriptorResponse.fromBuffer(data))
+        .where((d) =>
+        (d.request.remoteId == request.remoteId) &&
+        (d.request.descriptorUuid == request.descriptorUuid) &&
+        (d.request.characteristicUuid == request.characteristicUuid) &&
+        (d.request.serviceUuid == request.serviceUuid))
+        .first
+        .then((w) => w.success)
+        .then((success) => (!success) ? throw new Exception('Failed to write the descriptor') : null);
   }
 
   /// Sets notifications or indications for the value of a specified characteristic

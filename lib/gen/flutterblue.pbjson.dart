@@ -120,8 +120,9 @@ const BluetoothDescriptor$json = const {
   '1': 'BluetoothDescriptor',
   '2': const [
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
-    const {'1': 'characteristicUuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
-    const {'1': 'value', '3': 3, '4': 1, '5': 12, '10': 'value'},
+    const {'1': 'serviceUuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
+    const {'1': 'characteristicUuid', '3': 3, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'value', '3': 4, '4': 1, '5': 12, '10': 'value'},
   ],
 };
 
@@ -149,20 +150,39 @@ const DiscoverServicesResult$json = const {
   ],
 };
 
-const ReadAttributeRequest$json = const {
-  '1': 'ReadAttributeRequest',
+const ReadCharacteristicRequest$json = const {
+  '1': 'ReadCharacteristicRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'uuid', '3': 2, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'characteristic_uuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
   ],
 };
 
-const ReadAttributeResponse$json = const {
-  '1': 'ReadAttributeResponse',
+const ReadCharacteristicResponse$json = const {
+  '1': 'ReadCharacteristicResponse',
   '2': const [
-    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.ReadAttributeRequest', '10': 'request'},
+    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.ReadCharacteristicRequest', '10': 'request'},
+    const {'1': 'value', '3': 2, '4': 1, '5': 12, '10': 'value'},
+  ],
+};
+
+const ReadDescriptorRequest$json = const {
+  '1': 'ReadDescriptorRequest',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'descriptor_uuid', '3': 2, '4': 1, '5': 9, '10': 'descriptorUuid'},
+    const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
+    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+    const {'1': 'characteristic_uuid', '3': 5, '4': 1, '5': 9, '10': 'characteristicUuid'},
+  ],
+};
+
+const ReadDescriptorResponse$json = const {
+  '1': 'ReadDescriptorResponse',
+  '2': const [
+    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.ReadDescriptorRequest', '10': 'request'},
     const {'1': 'value', '3': 2, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -171,10 +191,10 @@ const WriteCharacteristicRequest$json = const {
   '1': 'WriteCharacteristicRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'uuid', '3': 2, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'characteristic_uuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'type', '3': 5, '4': 1, '5': 14, '6': '.WriteCharacteristicRequest.WriteType', '10': 'type'},
+    const {'1': 'write_type', '3': 5, '4': 1, '5': 14, '6': '.WriteCharacteristicRequest.WriteType', '10': 'writeType'},
     const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
   ],
   '4': const [WriteCharacteristicRequest_WriteType$json],
@@ -188,14 +208,31 @@ const WriteCharacteristicRequest_WriteType$json = const {
   ],
 };
 
+const WriteCharacteristicResponse$json = const {
+  '1': 'WriteCharacteristicResponse',
+  '2': const [
+    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.WriteCharacteristicRequest', '10': 'request'},
+    const {'1': 'success', '3': 2, '4': 1, '5': 8, '10': 'success'},
+  ],
+};
+
 const WriteDescriptorRequest$json = const {
   '1': 'WriteDescriptorRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'uuid', '3': 2, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'descriptor_uuid', '3': 2, '4': 1, '5': 9, '10': 'descriptorUuid'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'value', '3': 5, '4': 1, '5': 12, '10': 'value'},
+    const {'1': 'characteristic_uuid', '3': 5, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
+  ],
+};
+
+const WriteDescriptorResponse$json = const {
+  '1': 'WriteDescriptorResponse',
+  '2': const [
+    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.WriteDescriptorRequest', '10': 'request'},
+    const {'1': 'success', '3': 2, '4': 1, '5': 8, '10': 'success'},
   ],
 };
 

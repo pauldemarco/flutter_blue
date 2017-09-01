@@ -74,8 +74,9 @@ message BluetoothCharacteristic {
 
 message BluetoothDescriptor {
   string uuid = 1;
-  string characteristicUuid = 2; // The characteristic that this descriptor belongs to.
-  bytes value = 3;
+  string serviceUuid = 2; // The service that this descriptor belongs to.
+  string characteristicUuid = 3; // The characteristic that this descriptor belongs to.
+  bytes value = 4;
 }
 
 message CharacteristicProperties {
@@ -96,15 +97,28 @@ message DiscoverServicesResult {
   repeated BluetoothService services = 2;
 }
 
-message ReadAttributeRequest {
+message ReadCharacteristicRequest {
   string remote_id = 1;
-  string uuid = 2;
+  string characteristic_uuid = 2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
 }
 
-message ReadAttributeResponse {
-  ReadAttributeRequest request = 1;
+message ReadCharacteristicResponse {
+  ReadCharacteristicRequest request = 1;
+  bytes value = 2;
+}
+
+message ReadDescriptorRequest {
+  string remote_id = 1;
+  string descriptor_uuid = 2;
+  string service_uuid = 3;
+  string secondary_service_uuid = 4;
+  string characteristic_uuid = 5;
+}
+
+message ReadDescriptorResponse {
+  ReadDescriptorRequest request = 1;
   bytes value = 2;
 }
 
@@ -114,17 +128,28 @@ message WriteCharacteristicRequest {
     WITHOUT_RESPONSE = 1;
   }
   string remote_id = 1;
-  string uuid = 2;
+  string characteristic_uuid = 2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
-  WriteType type = 5;
+  WriteType write_type = 5;
   bytes value = 6;
+}
+
+message WriteCharacteristicResponse {
+  WriteCharacteristicRequest request = 1;
+  bool success = 2;
 }
 
 message WriteDescriptorRequest {
   string remote_id = 1;
-  string uuid = 2;
+  string descriptor_uuid = 2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
-  bytes value = 5;
+  string characteristic_uuid = 5;
+  bytes value = 6;
+}
+
+message WriteDescriptorResponse {
+  WriteDescriptorRequest request = 1;
+  bool success = 2;
 }

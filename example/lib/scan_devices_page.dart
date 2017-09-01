@@ -17,6 +17,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   StreamSubscription _scanSubscription;
   List<ScanResult> scanResults = new List();
+  List<BluetoothService> services = new List();
   bool isScanning = false;
   ScanResult activeScanResult;
   BluetoothDevice device;
@@ -81,7 +82,8 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     print('Connect clicked!');
     device = await _flutterBlue.connect(new DeviceIdentifier('D4:35:2A:DD:54:C7'), autoConnect: false);
     print('Device connected: ${device.id} ${device.name} ${device.type}');
-    List<BluetoothService> services = await device.discoverServices();
+    services = await device.discoverServices();
+    setState(() {});
   }
 
   _disconnect() async {
@@ -89,24 +91,29 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     await _flutterBlue.cancelConnection(new DeviceIdentifier('D4:35:2A:DD:54:C7'));
   }
 
-  _readAll() async {
-    var services = await device.services;
-    for(int i=0;i<100;i++) {
-      for (BluetoothService s in services) {
-        print('${s.deviceId} Service discovered:: uuid=${s.uuid} isPrimary=${s
-            .isPrimary}');
-        for (BluetoothCharacteristic c in s.characteristics) {
-          print('Reading characteristic ${c.uuid}');
-          List<int> value = await device.readCharacteristic(c);
-          print('Read: $value');
-        }
-      }
-    }
+  _refresh() async {
+    services = await device.services;
+    setState((){});
   }
 
-  _getServices() async {
-    var services = await device.services;
-    services.forEach((s) => print('${s.deviceId} Service discovered:: uuid=${s.uuid} isPrimary=${s.isPrimary}'));
+  _readCharacteristic(BluetoothCharacteristic c) async {
+    await device.readCharacteristic(c);
+    setState(() {});
+  }
+
+  _writeCharacteristic(BluetoothCharacteristic c) async {
+    await device.writeCharacteristic(c, [0x12, 0x34], type: CharacteristicWriteType.withResponse);
+    setState(() {});
+  }
+
+  _readDescriptor(BluetoothDescriptor d) async {
+    await device.readDescriptor(d);
+    setState(() {});
+  }
+
+  _writeDescriptor(BluetoothDescriptor d) async {
+    await device.writeDescriptor(d, [0x12, 0x34]);
+    setState(() {});
   }
 
   _buildLinearProgressIndicator(BuildContext context) {
@@ -119,7 +126,7 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     return widget;
   }
 
-  _buildFloatingActionButton(BuildContext context) {
+  _buildScanningButton(BuildContext context) {
     if(isScanning) {
       return new FloatingActionButton(
           child: new Icon(Icons.stop),
@@ -142,18 +149,69 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
     )).toList();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildDescriptorTile(BuildContext context, BluetoothDescriptor d){
+    return new ListTile(
+      title: new ListTile(
+        title: new Text('Descriptor 0x'+d.uuid.toString().toUpperCase().substring(4,8)),
+        subtitle: new Text(d.value.toString()),
+        trailing: new Row(
+          children: <Widget>[
+            new IconButton(
+              icon: const Icon(Icons.file_download),
+              onPressed: () => _readDescriptor(d),
+            ),
+            new IconButton(
+              icon: const Icon(Icons.file_upload),
+              onPressed: () => _writeDescriptor(d),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCharacteristicTile(BuildContext context, BluetoothCharacteristic c){
+    var descriptorTiles = c.descriptors.map((d) => _buildDescriptorTile(context, d)).toList();
+    return new ExpansionTile(
+      title: new ListTile(
+        title: new Text('Characteristic 0x'+c.uuid.toString().toUpperCase().substring(4,8)),
+        subtitle: new Text(c.value.toString()),
+        trailing: new Row(
+          children: <Widget>[
+            new IconButton(
+              icon: const Icon(Icons.file_download),
+              onPressed: () => _readCharacteristic(c),
+            ),
+            new IconButton(
+              icon: const Icon(Icons.file_upload),
+              onPressed: () => _writeCharacteristic(c),
+            )
+          ],
+        ),
+      ),
+      children: descriptorTiles,
+    );
+  }
+
+  Widget _buildServiceTile(BuildContext context, BluetoothService s){
+    var characteristicsTiles = s.characteristics.map((c) => _buildCharacteristicTile(context, c)).toList();
+    return new ExpansionTile(
+      title: new Text('Service 0x'+s.uuid.toString().toUpperCase().substring(4,8)),
+      children: characteristicsTiles,
+    );
+  }
+  
+  Widget _buildScanPage(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Scan for devices'),
       ),
-      floatingActionButton: _buildFloatingActionButton(context),
+      floatingActionButton: _buildScanningButton(context),
       body: new Stack(
-          children: <Widget>[
-            _buildLinearProgressIndicator(context),
-            new ListView(children: _buildScanResultTiles(context)),
-            ],
+        children: <Widget>[
+          _buildLinearProgressIndicator(context),
+          new ListView(children: _buildScanResultTiles(context)),
+        ],
       ),
       persistentFooterButtons: <Widget>[
         new RaisedButton(
@@ -165,15 +223,49 @@ class _ScanDevicesPageState extends State<ScanDevicesPage> {
           child: const Text('DISC'),
         ),
         new RaisedButton(
-          onPressed: () => _readAll(),
-          child: const Text('READ'),
-        ),
-        new RaisedButton(
-          onPressed: () => _getServices(),
-          child: const Text('SERVICES'),
+          onPressed: () => _refresh(),
+          child: const Text('REFRESH'),
         )
       ],
     );
+  }
+
+  Widget _buildDevicePage(BuildContext context) {
+    var serviceTiles = services.map((s) => _buildServiceTile(context, s)).toList();
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Device connected'),
+      ),
+      body: new Stack(
+        children: <Widget>[
+          _buildLinearProgressIndicator(context),
+          new ListView(children: serviceTiles),
+        ],
+      ),
+      persistentFooterButtons: <Widget>[
+        new RaisedButton(
+          onPressed: () => _connect(),
+          child: const Text('CONNECT'),
+        ),
+        new RaisedButton(
+          onPressed: () => _disconnect(),
+          child: const Text('DISC'),
+        ),
+        new RaisedButton(
+          onPressed: () => _refresh(),
+          child: const Text('REFRESH'),
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if(device == null) {
+      return _buildScanPage(context);
+    } else {
+      return _buildDevicePage(context);
+    }
   }
 
 
