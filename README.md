@@ -15,6 +15,46 @@ Using the FlutterBlue instance, you can scan for and connect to nearby devices (
 Once connected to a device, the BluetoothDevice object can discover services ([BluetoothService](lib/src/bluetooth_service.dart)), characteristics ([BluetoothCharacteristic](lib/src/bluetooth_characteristic.dart)), and descriptors ([BluetoothDescriptor](lib/src/bluetooth_descriptor.dart)).
 The BluetoothDevice object is then used to directly interact with characteristics and descriptors.
 
+## Usage
+### Obtain an instance
+```dart
+FlutterBlue flutterBlue = FlutterBlue.instance;
+```
+
+### Scan for devices
+```dart
+/// Start scanning
+StreamSubscription scanSubscription = flutterBlue.startScan().listen((scanResult) {
+    // do something with scan result
+});
+
+/// Stop scanning
+flutterBlue.stopScan();
+```
+
+### Connect to a device
+```dart
+BluetoothDevice device = await flutterBlue.connect(scanResult.identifier);
+```
+
+### Discover services
+```dart
+List<BluetoothService> services = await device.discoverServices();
+services.forEach((service) {
+    // do something with service
+});
+```
+
+### Read and write characteristics
+```dart
+// Read all characteristics
+var characteristics = service.characteristics;
+for(BluetoothCharacteristic c in characteristics) {
+    List<int> value = await device.readCharacteristic(c);
+    print(value);
+}
+```
+
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
