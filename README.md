@@ -1,7 +1,16 @@
-# FlutterBlue
 <p align="center">
-<img alt="Bluetooth plugin for flutter" src="site/flutterblue.png" />
+<img alt="FlutterBlue" src="site/flutterblue.png" />
 </p>
+
+
+## Introduction
+
+FlutterBlue is a bluetooth plugin for [Flutter](http://www.flutter.io), a new mobile SDK to help developers build modern apps for iOS and Android.
+
+## Cross-Platform Bluetooth LE
+FlutterBlue aims to offer the most from both platforms (iOS and Android).
+
+Using the FlutterBlue instance, you can scan for and connect to nearby devices ([BluetoothDevice](lib/src/bluetooth_device.dart)). Once connected to a device, the BluetoothDevice object can discover services ([BluetoothService](lib/src/bluetooth_service.dart)), characteristics ([BluetoothCharacteristic](lib/src/bluetooth_characteristic.dart)), and descriptors ([BluetoothDescriptor](lib/src/bluetooth_descriptor.dart)).  The BluetoothDevice can then be used to interact directly with characteristics and descriptors.
 
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
