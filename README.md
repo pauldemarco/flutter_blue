@@ -70,7 +70,7 @@ for(BluetoothDescriptor d in descriptors) {
 // Writes to a descriptor
 await device.writeDescriptor(d, [0x12, 0x34])
 ```
-
+## Reference
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
