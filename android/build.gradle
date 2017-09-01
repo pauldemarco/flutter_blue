@@ -51,9 +51,6 @@ android {
             proto {
                 srcDir '../protos'
             }
-            java {
-                exclude '**/old/'
-            }
         }
     }
 }
