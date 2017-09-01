@@ -62,7 +62,7 @@ class BluetoothDevice {
         .then((d) => characteristic.value = d);
   }
 
-  /// Retrieves the value of a specified characteristic descriptor
+  /// Retrieves the value of a specified descriptor
   Future<List<int>> readDescriptor(BluetoothDescriptor descriptor) async {
     var request = protos.ReadDescriptorRequest.create()
       ..remoteId = id.toString()
@@ -122,7 +122,7 @@ class BluetoothDevice {
       .then((success) => (!success) ? throw new Exception('Failed to write the characteristic') : null);
   }
 
-  /// Writes the value of a characteristic descriptor
+  /// Writes the value of a descriptor
   Future<Null> writeDescriptor(BluetoothDescriptor descriptor, List<int> value) async {
     var request = protos.WriteDescriptorRequest.create()
       ..remoteId = id.toString()
