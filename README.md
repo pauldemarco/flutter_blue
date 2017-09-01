@@ -1,5 +1,7 @@
 # FlutterBlue
-## Bluetooth plugin for flutter
+<p align="center">
+<img alt="Bluetooth plugin for flutter" src="site/flutterblue.png" />
+</p>
 
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
