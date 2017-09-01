@@ -1,7 +1,8 @@
+<br>
 <p align="center">
 <img alt="FlutterBlue" src="site/flutterblue.png" />
 </p>
-
+<br><br>
 
 ## Introduction
 
