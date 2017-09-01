@@ -12,6 +12,7 @@ dependencies:
   guid:
       git:
         url: git://github.com/pauldemarco/guid.git
+  protobuf: '^0.5.5'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

@@ -1,8 +1,8 @@
 name: flutter_blue
-description: A new flutter plugin project.
+description: Bluetooth plugin for Flutter
 version: 0.0.1
-author:
-homepage:
+author: Paul DeMarco
+homepage: https://github.com/pauldemarco/flutter_blue
 
 flutter:
   plugin:
@@ -16,6 +16,7 @@ dependencies:
   guid:
     git:
       url: git://github.com/pauldemarco/guid.git
+  protobuf: '^0.5.5'
 
 
 dev_dependencies:
