@@ -17,7 +17,7 @@ The BluetoothDevice object is then used to directly interact with characteristic
 
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
-| :--------------- | :----------------: | :------------------: |  :-------------------------------: |
+| :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | startScan        | :white_check_mark: | :white_large_square: | Starts a scan for Bluetooth Low Energy devices. |
 | stopScan         | :white_check_mark: | :white_large_square: | Stops a scan for Bluetooth Low Energy devices. |
 | connect          | :white_check_mark: | :white_large_square: | Establishes a connection to the Bluetooth Device. |
@@ -27,7 +27,7 @@ The BluetoothDevice object is then used to directly interact with characteristic
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
-| :-------------------------- | :------------------: | :------------------: |  :-------------------------------: |
+| :-------------------------- | :------------------: | :------------------: |  :-------------------------------- |
 | discoverServices            |  :white_check_mark:  | :white_large_square: | Discovers services offered by the remote device as well as their characteristics and descriptors. |
 | services                    |  :white_check_mark:  | :white_large_square: | Gets a list of services. Requires that discoverServices() has completed. |
 | readCharacteristic          |  :white_check_mark:  | :white_large_square: | Retrieves the value of a specified characteristic.  |
