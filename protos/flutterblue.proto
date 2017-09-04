@@ -70,9 +70,9 @@ message BluetoothService {
 message BluetoothCharacteristic {
   string uuid = 1;
   string serviceUuid = 2; // The service that this characteristic belongs to.
-  repeated BluetoothDescriptor descriptors = 3; // A list of descriptors that have been discovered in this characteristic.
-  CharacteristicProperties properties = 4; // The properties of the characteristic.
-  bool is_notifying = 5; // Indicates whether the characteristic is currently notifying a subscribed central of its value.
+  string secondaryServiceUuid = 3; // The secondary service if nested
+  repeated BluetoothDescriptor descriptors = 4; // A list of descriptors that have been discovered in this characteristic.
+  CharacteristicProperties properties = 5; // The properties of the characteristic.
   bytes value = 6;
 }
 
@@ -109,8 +109,8 @@ message ReadCharacteristicRequest {
 }
 
 message ReadCharacteristicResponse {
-  ReadCharacteristicRequest request = 1;
-  bytes value = 2;
+  string remote_id = 1;
+  BluetoothCharacteristic characteristic = 2;
 }
 
 message ReadDescriptorRequest {
@@ -156,4 +156,17 @@ message WriteDescriptorRequest {
 message WriteDescriptorResponse {
   WriteDescriptorRequest request = 1;
   bool success = 2;
+}
+
+message SetNotificationRequest {
+  string remote_id = 1;
+  string service_uuid = 2;
+  string secondary_service_uuid = 3;
+  string characteristic_uuid = 4;
+  bool enable = 5;
+}
+
+message OnNotificationResponse {
+  string remote_id = 1;
+  BluetoothCharacteristic characteristic = 2;
 }

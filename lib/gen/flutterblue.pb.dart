@@ -342,9 +342,9 @@ class BluetoothCharacteristic extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothCharacteristic')
     ..a<String>(1, 'uuid', PbFieldType.OS)
     ..a<String>(2, 'serviceUuid', PbFieldType.OS)
-    ..pp<BluetoothDescriptor>(3, 'descriptors', PbFieldType.PM, BluetoothDescriptor.$checkItem, BluetoothDescriptor.create)
-    ..a<CharacteristicProperties>(4, 'properties', PbFieldType.OM, CharacteristicProperties.getDefault, CharacteristicProperties.create)
-    ..a<bool>(5, 'isNotifying', PbFieldType.OB)
+    ..a<String>(3, 'secondaryServiceUuid', PbFieldType.OS)
+    ..pp<BluetoothDescriptor>(4, 'descriptors', PbFieldType.PM, BluetoothDescriptor.$checkItem, BluetoothDescriptor.create)
+    ..a<CharacteristicProperties>(5, 'properties', PbFieldType.OM, CharacteristicProperties.getDefault, CharacteristicProperties.create)
     ..a<List<int>>(6, 'value', PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -375,17 +375,17 @@ class BluetoothCharacteristic extends GeneratedMessage {
   bool hasServiceUuid() => $_has(1, 2);
   void clearServiceUuid() => clearField(2);
 
-  List<BluetoothDescriptor> get descriptors => $_get(2, 3, null);
+  String get secondaryServiceUuid => $_get(2, 3, '');
+  set secondaryServiceUuid(String v) { $_setString(2, 3, v); }
+  bool hasSecondaryServiceUuid() => $_has(2, 3);
+  void clearSecondaryServiceUuid() => clearField(3);
 
-  CharacteristicProperties get properties => $_get(3, 4, null);
-  set properties(CharacteristicProperties v) { setField(4, v); }
-  bool hasProperties() => $_has(3, 4);
-  void clearProperties() => clearField(4);
+  List<BluetoothDescriptor> get descriptors => $_get(3, 4, null);
 
-  bool get isNotifying => $_get(4, 5, false);
-  set isNotifying(bool v) { $_setBool(4, 5, v); }
-  bool hasIsNotifying() => $_has(4, 5);
-  void clearIsNotifying() => clearField(5);
+  CharacteristicProperties get properties => $_get(4, 5, null);
+  set properties(CharacteristicProperties v) { setField(5, v); }
+  bool hasProperties() => $_has(4, 5);
+  void clearProperties() => clearField(5);
 
   List<int> get value => $_get(5, 6, null);
   set value(List<int> v) { $_setBytes(5, 6, v); }
@@ -610,8 +610,8 @@ class _ReadonlyReadCharacteristicRequest extends ReadCharacteristicRequest with 
 
 class ReadCharacteristicResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ReadCharacteristicResponse')
-    ..a<ReadCharacteristicRequest>(1, 'request', PbFieldType.OM, ReadCharacteristicRequest.getDefault, ReadCharacteristicRequest.create)
-    ..a<List<int>>(2, 'value', PbFieldType.OY)
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..a<BluetoothCharacteristic>(2, 'characteristic', PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
     ..hasRequiredFields = false
   ;
 
@@ -631,15 +631,15 @@ class ReadCharacteristicResponse extends GeneratedMessage {
     if (v is! ReadCharacteristicResponse) checkItemFailed(v, 'ReadCharacteristicResponse');
   }
 
-  ReadCharacteristicRequest get request => $_get(0, 1, null);
-  set request(ReadCharacteristicRequest v) { setField(1, v); }
-  bool hasRequest() => $_has(0, 1);
-  void clearRequest() => clearField(1);
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
 
-  List<int> get value => $_get(1, 2, null);
-  set value(List<int> v) { $_setBytes(1, 2, v); }
-  bool hasValue() => $_has(1, 2);
-  void clearValue() => clearField(2);
+  BluetoothCharacteristic get characteristic => $_get(1, 2, null);
+  set characteristic(BluetoothCharacteristic v) { setField(2, v); }
+  bool hasCharacteristic() => $_has(1, 2);
+  void clearCharacteristic() => clearField(2);
 }
 
 class _ReadonlyReadCharacteristicResponse extends ReadCharacteristicResponse with ReadonlyMessageMixin {}
@@ -925,4 +925,94 @@ class WriteDescriptorResponse extends GeneratedMessage {
 }
 
 class _ReadonlyWriteDescriptorResponse extends WriteDescriptorResponse with ReadonlyMessageMixin {}
+
+class SetNotificationRequest extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('SetNotificationRequest')
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..a<String>(2, 'serviceUuid', PbFieldType.OS)
+    ..a<String>(3, 'secondaryServiceUuid', PbFieldType.OS)
+    ..a<String>(4, 'characteristicUuid', PbFieldType.OS)
+    ..a<bool>(5, 'enable', PbFieldType.OB)
+    ..hasRequiredFields = false
+  ;
+
+  SetNotificationRequest() : super();
+  SetNotificationRequest.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  SetNotificationRequest.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  SetNotificationRequest clone() => new SetNotificationRequest()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static SetNotificationRequest create() => new SetNotificationRequest();
+  static PbList<SetNotificationRequest> createRepeated() => new PbList<SetNotificationRequest>();
+  static SetNotificationRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlySetNotificationRequest();
+    return _defaultInstance;
+  }
+  static SetNotificationRequest _defaultInstance;
+  static void $checkItem(SetNotificationRequest v) {
+    if (v is! SetNotificationRequest) checkItemFailed(v, 'SetNotificationRequest');
+  }
+
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  String get serviceUuid => $_get(1, 2, '');
+  set serviceUuid(String v) { $_setString(1, 2, v); }
+  bool hasServiceUuid() => $_has(1, 2);
+  void clearServiceUuid() => clearField(2);
+
+  String get secondaryServiceUuid => $_get(2, 3, '');
+  set secondaryServiceUuid(String v) { $_setString(2, 3, v); }
+  bool hasSecondaryServiceUuid() => $_has(2, 3);
+  void clearSecondaryServiceUuid() => clearField(3);
+
+  String get characteristicUuid => $_get(3, 4, '');
+  set characteristicUuid(String v) { $_setString(3, 4, v); }
+  bool hasCharacteristicUuid() => $_has(3, 4);
+  void clearCharacteristicUuid() => clearField(4);
+
+  bool get enable => $_get(4, 5, false);
+  set enable(bool v) { $_setBool(4, 5, v); }
+  bool hasEnable() => $_has(4, 5);
+  void clearEnable() => clearField(5);
+}
+
+class _ReadonlySetNotificationRequest extends SetNotificationRequest with ReadonlyMessageMixin {}
+
+class OnNotificationResponse extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('OnNotificationResponse')
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..a<BluetoothCharacteristic>(2, 'characteristic', PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
+    ..hasRequiredFields = false
+  ;
+
+  OnNotificationResponse() : super();
+  OnNotificationResponse.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  OnNotificationResponse.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  OnNotificationResponse clone() => new OnNotificationResponse()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static OnNotificationResponse create() => new OnNotificationResponse();
+  static PbList<OnNotificationResponse> createRepeated() => new PbList<OnNotificationResponse>();
+  static OnNotificationResponse getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyOnNotificationResponse();
+    return _defaultInstance;
+  }
+  static OnNotificationResponse _defaultInstance;
+  static void $checkItem(OnNotificationResponse v) {
+    if (v is! OnNotificationResponse) checkItemFailed(v, 'OnNotificationResponse');
+  }
+
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  BluetoothCharacteristic get characteristic => $_get(1, 2, null);
+  set characteristic(BluetoothCharacteristic v) { setField(2, v); }
+  bool hasCharacteristic() => $_has(1, 2);
+  void clearCharacteristic() => clearField(2);
+}
+
+class _ReadonlyOnNotificationResponse extends OnNotificationResponse with ReadonlyMessageMixin {}
 

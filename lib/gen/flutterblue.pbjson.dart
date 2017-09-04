@@ -109,9 +109,9 @@ const BluetoothCharacteristic$json = const {
   '2': const [
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
     const {'1': 'serviceUuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'descriptors', '3': 3, '4': 3, '5': 11, '6': '.BluetoothDescriptor', '10': 'descriptors'},
-    const {'1': 'properties', '3': 4, '4': 1, '5': 11, '6': '.CharacteristicProperties', '10': 'properties'},
-    const {'1': 'is_notifying', '3': 5, '4': 1, '5': 8, '10': 'isNotifying'},
+    const {'1': 'secondaryServiceUuid', '3': 3, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+    const {'1': 'descriptors', '3': 4, '4': 3, '5': 11, '6': '.BluetoothDescriptor', '10': 'descriptors'},
+    const {'1': 'properties', '3': 5, '4': 1, '5': 11, '6': '.CharacteristicProperties', '10': 'properties'},
     const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -163,8 +163,8 @@ const ReadCharacteristicRequest$json = const {
 const ReadCharacteristicResponse$json = const {
   '1': 'ReadCharacteristicResponse',
   '2': const [
-    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.ReadCharacteristicRequest', '10': 'request'},
-    const {'1': 'value', '3': 2, '4': 1, '5': 12, '10': 'value'},
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'characteristic', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristic'},
   ],
 };
 
@@ -233,6 +233,25 @@ const WriteDescriptorResponse$json = const {
   '2': const [
     const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.WriteDescriptorRequest', '10': 'request'},
     const {'1': 'success', '3': 2, '4': 1, '5': 8, '10': 'success'},
+  ],
+};
+
+const SetNotificationRequest$json = const {
+  '1': 'SetNotificationRequest',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'service_uuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
+    const {'1': 'secondary_service_uuid', '3': 3, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+    const {'1': 'characteristic_uuid', '3': 4, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'enable', '3': 5, '4': 1, '5': 8, '10': 'enable'},
+  ],
+};
+
+const OnNotificationResponse$json = const {
+  '1': 'OnNotificationResponse',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'characteristic', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristic'},
   ],
 };
 

@@ -7,22 +7,47 @@ part of flutter_blue;
 class BluetoothCharacteristic {
   final Guid uuid;
   final Guid serviceUuid; // The service that this characteristic belongs to.
-  final List<BluetoothDescriptor> descriptors;
+  final Guid
+      secondaryServiceUuid; // The nested service that this characteristic belongs to.
   final CharacteristicProperties properties;
-  bool isNotifying = false;
+  final List<BluetoothDescriptor> descriptors;
+  bool get isNotifying {
+    try {
+      var cccd = descriptors.singleWhere((d) =>
+      d.uuid == BluetoothDescriptor.CCCD);
+      return ((cccd.value[0] & 0x01) > 0 || (cccd.value[0] & 0x02) > 0);
+    } catch(e) {
+      return false;
+    }
+  }
   List<int> value;
 
   BluetoothCharacteristic(
       {@required this.uuid,
       @required this.serviceUuid,
+      this.secondaryServiceUuid,
       @required this.descriptors,
       @required this.properties});
 
-  BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p) :
-      uuid = new Guid(p.uuid),
-      serviceUuid = new Guid(p.serviceUuid),
-      descriptors = p.descriptors.map((d) => new BluetoothDescriptor.fromProto(d)).toList(),
-      properties = new CharacteristicProperties.fromProto(p.properties);
+  BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
+      : uuid = new Guid(p.uuid),
+        serviceUuid = new Guid(p.serviceUuid),
+        secondaryServiceUuid = (p.secondaryServiceUuid.length > 0) ? new Guid(p.secondaryServiceUuid): null,
+        descriptors = p.descriptors
+            .map((d) => new BluetoothDescriptor.fromProto(d))
+            .toList(),
+        properties = new CharacteristicProperties.fromProto(p.properties),
+        value = p.value;
+
+  void updateDescriptors(List<BluetoothDescriptor> newDescriptors) {
+    for(var d in descriptors) {
+      for(var newD in newDescriptors){
+        if(d.uuid == newD.uuid) {
+          d.value = newD.value;
+        }
+      }
+    }
+  }
 }
 
 class CharacteristicProperties {
@@ -49,8 +74,8 @@ class CharacteristicProperties {
       this.notifyEncryptionRequired = false,
       this.indicateEncryptionRequired = false});
 
-  CharacteristicProperties.fromProto(protos.CharacteristicProperties p) :
-        broadcast = p.broadcast,
+  CharacteristicProperties.fromProto(protos.CharacteristicProperties p)
+      : broadcast = p.broadcast,
         read = p.read,
         writeWithoutResponse = p.writeWithoutResponse,
         write = p.write,

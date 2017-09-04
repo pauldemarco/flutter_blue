@@ -1,6 +1,6 @@
 <br>
 <p align="center">
-<img alt="FlutterBlue" src="site/flutterblue.png" />
+<img alt="FlutterBlue" src="https://github.com/pauldemarco/flutter_blue/blob/master/site/flutterblue.png?raw=true" />
 </p>
 <br><br>
 
@@ -70,6 +70,15 @@ for(BluetoothDescriptor d in descriptors) {
 // Writes to a descriptor
 await device.writeDescriptor(d, [0x12, 0x34])
 ```
+
+### Set notifications
+```dart
+await device.setNotifyValue(characteristic, true);
+device.onValueChanged(characteristic).listen((value) {
+    // do something with new value
+});
+```
+
 ## Reference
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
@@ -90,7 +99,8 @@ await device.writeDescriptor(d, [0x12, 0x34])
 | readDescriptor              |  :white_check_mark:  | :white_large_square: | Retrieves the value of a specified descriptor.  |
 | writeCharacteristic         |  :white_check_mark:  | :white_large_square: | Writes the value of a characteristic. |
 | writeDescriptor             |  :white_check_mark:  | :white_large_square: | Writes the value of a descriptor. |
-| setNotifyValue              | :white_large_square: | :white_large_square: | Sets notifications or indications for the value of a specified characteristic. |
+| setNotifyValue              |  :white_check_mark:  | :white_large_square: | Sets notifications or indications for the value of a specified characteristic. |
+| onValueChanged              |  :white_check_mark:  | :white_large_square: | Notifies when the Bluetooth Characteristic's value has changed. |
 | canSendWriteWithoutResponse | :white_large_square: | :white_large_square: | Indicates whether the Bluetooth Device can send a write without response. |
 | state                       | :white_large_square: | :white_large_square: | Gets the current state of the Bluetooth Device. |
 | onStateChanged              | :white_large_square: | :white_large_square: | Stream of state changes for the Bluetooth Device. |
