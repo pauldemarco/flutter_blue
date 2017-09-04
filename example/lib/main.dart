@@ -36,6 +36,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   BluetoothDevice device;
   bool get isConnected => (device != null);
   List<BluetoothService> services = new List();
+  StreamSubscription<List<int>> valueChangedSubscription;
 
   @override
   void initState() {
@@ -128,6 +129,20 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     setState(() {});
   }
 
+  _setNotification(BluetoothCharacteristic c) async {
+    if(c.isNotifying) {
+      await device.setNotifyValue(c, false);
+    } else {
+      await device.setNotifyValue(c, true);
+      valueChangedSubscription = device.onValueChanged(c).listen((d) {
+        setState(() {
+          print('onValueChanged $d');
+        });
+      });
+    }
+    setState(() {});
+  }
+
   _buildScanningButton(BuildContext context) {
     if (isConnected || state != BluetoothState.on) {
       return null;
@@ -211,6 +226,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
           icon: new Icon(Icons.file_upload,
               color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
           onPressed: () => _writeCharacteristic(c),
+        ),
+        new IconButton(
+          icon: new Icon(c.isNotifying ? Icons.sync_disabled : Icons.sync,
+              color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
+          onPressed: () => _setNotification(c),
         )
       ],
     );
