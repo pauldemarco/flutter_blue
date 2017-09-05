@@ -37,6 +37,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   bool get isConnected => (device != null);
   List<BluetoothService> services = new List();
   StreamSubscription<List<int>> valueChangedSubscription;
+  BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
 
   @override
   void initState() {
@@ -99,6 +100,19 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     setState(() {
       services = s;
     });
+
+    // Update the connection state
+    var state = await device.state;
+    setState(() {
+      deviceState = state;
+    });
+
+    // Subscribe to connection changes
+    device.onStateChanged().listen((s) {
+      setState(() {
+        deviceState = s;
+      });
+    });
   }
 
   _disconnect() async {
@@ -130,7 +144,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _setNotification(BluetoothCharacteristic c) async {
-    if(c.isNotifying) {
+    if (c.isNotifying) {
       await device.setNotifyValue(c, false);
     } else {
       await device.setNotifyValue(c, true);
@@ -141,6 +155,14 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       });
     }
     setState(() {});
+  }
+
+  _refreshDeviceState(BluetoothDevice d) async {
+    var state = await d.state;
+    setState(() {
+      deviceState = state;
+      print('State refreshed: $deviceState');
+    });
   }
 
   _buildScanningButton(BuildContext context) {
@@ -328,6 +350,20 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     );
   }
 
+  _buildDeviceStateTile(BuildContext context) {
+    return new ListTile(
+        leading: (deviceState == BluetoothDeviceState.connected)
+            ? const Icon(Icons.bluetooth_connected)
+            : const Icon(Icons.bluetooth_disabled),
+        title: new Text('Device is ${deviceState.toString().split('.')[1]}.'),
+        subtitle: new Text('${device.id}'),
+        trailing: new IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: () => _refreshDeviceState(device),
+          color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+        ));
+  }
+
   _buildProgressBarTile(BuildContext context) {
     return new LinearProgressIndicator();
   }
@@ -339,6 +375,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       tiles.add(_buildAlertTile(context));
     }
     if (isConnected) {
+      tiles.add(_buildDeviceStateTile(context));
       tiles.addAll(_buildServiceTiles(context));
     } else {
       tiles.addAll(_buildScanResultTiles(context));
