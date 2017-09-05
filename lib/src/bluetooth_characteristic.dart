@@ -50,6 +50,8 @@ class BluetoothCharacteristic {
   }
 }
 
+enum CharacteristicWriteType { withResponse, withoutResponse }
+
 class CharacteristicProperties {
   final bool broadcast;
   final bool read;

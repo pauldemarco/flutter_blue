@@ -255,3 +255,22 @@ const OnNotificationResponse$json = const {
   ],
 };
 
+const DeviceStateResponse$json = const {
+  '1': 'DeviceStateResponse',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'state', '3': 2, '4': 1, '5': 14, '6': '.DeviceStateResponse.BluetoothDeviceState', '10': 'state'},
+  ],
+  '4': const [DeviceStateResponse_BluetoothDeviceState$json],
+};
+
+const DeviceStateResponse_BluetoothDeviceState$json = const {
+  '1': 'BluetoothDeviceState',
+  '2': const [
+    const {'1': 'DISCONNECTED', '2': 0},
+    const {'1': 'CONNECTING', '2': 1},
+    const {'1': 'CONNECTED', '2': 2},
+    const {'1': 'DISCONNECTING', '2': 3},
+  ],
+};
+

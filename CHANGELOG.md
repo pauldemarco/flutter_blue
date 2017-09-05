@@ -1,3 +1,8 @@
+## 0.2.0
+
+* Added state and onStateChanged for BluetoothDevice
+* Updated example to show new functionality
+
 ## 0.1.1
 
 * Fixed image for pub.dartlang.org

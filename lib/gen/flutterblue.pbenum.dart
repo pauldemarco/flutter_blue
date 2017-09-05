@@ -77,3 +77,25 @@ class WriteCharacteristicRequest_WriteType extends ProtobufEnum {
   const WriteCharacteristicRequest_WriteType._(int v, String n) : super(v, n);
 }
 
+class DeviceStateResponse_BluetoothDeviceState extends ProtobufEnum {
+  static const DeviceStateResponse_BluetoothDeviceState DISCONNECTED = const DeviceStateResponse_BluetoothDeviceState._(0, 'DISCONNECTED');
+  static const DeviceStateResponse_BluetoothDeviceState CONNECTING = const DeviceStateResponse_BluetoothDeviceState._(1, 'CONNECTING');
+  static const DeviceStateResponse_BluetoothDeviceState CONNECTED = const DeviceStateResponse_BluetoothDeviceState._(2, 'CONNECTED');
+  static const DeviceStateResponse_BluetoothDeviceState DISCONNECTING = const DeviceStateResponse_BluetoothDeviceState._(3, 'DISCONNECTING');
+
+  static const List<DeviceStateResponse_BluetoothDeviceState> values = const <DeviceStateResponse_BluetoothDeviceState> [
+    DISCONNECTED,
+    CONNECTING,
+    CONNECTED,
+    DISCONNECTING,
+  ];
+
+  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
+  static DeviceStateResponse_BluetoothDeviceState valueOf(int value) => _byValue[value] as DeviceStateResponse_BluetoothDeviceState;
+  static void $checkItem(DeviceStateResponse_BluetoothDeviceState v) {
+    if (v is! DeviceStateResponse_BluetoothDeviceState) checkItemFailed(v, 'DeviceStateResponse_BluetoothDeviceState');
+  }
+
+  const DeviceStateResponse_BluetoothDeviceState._(int v, String n) : super(v, n);
+}
+

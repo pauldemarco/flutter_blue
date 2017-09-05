@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothProfile;
 
 import com.google.protobuf.ByteString;
 
@@ -85,5 +86,27 @@ public class ProtoMaker {
                 .setNotifyEncryptionRequired((properties & 256) != 0)
                 .setIndicateEncryptionRequired((properties & 512) != 0)
                 .build();
+    }
+
+    static Protos.DeviceStateResponse from(BluetoothDevice device, int state) throws Exception {
+        Protos.DeviceStateResponse.Builder p = Protos.DeviceStateResponse.newBuilder();
+        switch(state) {
+            case BluetoothProfile.STATE_DISCONNECTING:
+                p.setState(Protos.DeviceStateResponse.BluetoothDeviceState.DISCONNECTING);
+                break;
+            case BluetoothProfile.STATE_CONNECTED:
+                p.setState(Protos.DeviceStateResponse.BluetoothDeviceState.CONNECTED);
+                break;
+            case BluetoothProfile.STATE_CONNECTING:
+                p.setState(Protos.DeviceStateResponse.BluetoothDeviceState.CONNECTING);
+                break;
+            case BluetoothProfile.STATE_DISCONNECTED:
+                p.setState(Protos.DeviceStateResponse.BluetoothDeviceState.DISCONNECTED);
+                break;
+            default:
+                throw new Exception("device state is unknown");
+        }
+        p.setRemoteId(device.getAddress());
+        return p.build();
     }
 }

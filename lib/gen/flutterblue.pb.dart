@@ -1016,3 +1016,39 @@ class OnNotificationResponse extends GeneratedMessage {
 
 class _ReadonlyOnNotificationResponse extends OnNotificationResponse with ReadonlyMessageMixin {}
 
+class DeviceStateResponse extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('DeviceStateResponse')
+    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..e<DeviceStateResponse_BluetoothDeviceState>(2, 'state', PbFieldType.OE, DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, DeviceStateResponse_BluetoothDeviceState.valueOf)
+    ..hasRequiredFields = false
+  ;
+
+  DeviceStateResponse() : super();
+  DeviceStateResponse.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  DeviceStateResponse.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  DeviceStateResponse clone() => new DeviceStateResponse()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static DeviceStateResponse create() => new DeviceStateResponse();
+  static PbList<DeviceStateResponse> createRepeated() => new PbList<DeviceStateResponse>();
+  static DeviceStateResponse getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyDeviceStateResponse();
+    return _defaultInstance;
+  }
+  static DeviceStateResponse _defaultInstance;
+  static void $checkItem(DeviceStateResponse v) {
+    if (v is! DeviceStateResponse) checkItemFailed(v, 'DeviceStateResponse');
+  }
+
+  String get remoteId => $_get(0, 1, '');
+  set remoteId(String v) { $_setString(0, 1, v); }
+  bool hasRemoteId() => $_has(0, 1);
+  void clearRemoteId() => clearField(1);
+
+  DeviceStateResponse_BluetoothDeviceState get state => $_get(1, 2, null);
+  set state(DeviceStateResponse_BluetoothDeviceState v) { setField(2, v); }
+  bool hasState() => $_has(1, 2);
+  void clearState() => clearField(2);
+}
+
+class _ReadonlyDeviceStateResponse extends DeviceStateResponse with ReadonlyMessageMixin {}
+

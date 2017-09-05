@@ -221,6 +221,19 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 break;
             }
 
+            case "deviceState":
+            {
+                String deviceId = (String)call.arguments;
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+                int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+                try {
+                    result.success(ProtoMaker.from(device, state).toByteArray());
+                } catch(Exception e) {
+                    result.error("device_state_error", e.getMessage(), null);
+                }
+                break;
+            }
+
             case "discoverServices":
             {
                 String deviceId = (String)call.arguments;
@@ -732,6 +745,12 @@ public class FlutterBluePlugin implements MethodCallHandler {
                         result.error("connect_error", "Error in BluetoothGattCallback, status:" + status + " newState:" + newState, null);
                     }
                 }
+            }
+            // Main method call, for onStateChanged streams
+            try {
+                channel.invokeMethod("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

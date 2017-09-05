@@ -174,7 +174,7 @@ class BluetoothDevice {
         });
   }
 
-  /// Notifies when the Bluetooth Characteristic's value has changed.
+  /// Notifies when the characteristic's value has changed.
   /// setNotification() should be run first to enable them on the peripheral
   Stream<List<int>> onValueChanged(BluetoothCharacteristic characteristic) {
     return FlutterBlue.instance._characteristicNotifiedChannel
@@ -190,13 +190,21 @@ class BluetoothDevice {
         });
   }
 
-  /// The current connection state of the peripheral
+  /// The current connection state of the device
   Future<BluetoothDeviceState> get state =>
-      new Future.error(new UnimplementedError());
+      FlutterBlue.instance._channel.invokeMethod('deviceState', id.toString())
+          .then((List<int> data) => new protos.DeviceStateResponse.fromBuffer(data))
+          .then((p) => BluetoothDeviceState.values[p.state.value]);
 
-  /// Notifies when the Bluetooth Device connection state has changed
-  Stream<BluetoothDeviceState> onStateChanged() =>
-      new Future.error(new UnimplementedError()).asStream();
+  /// Notifies when the device connection state has changed
+  Stream<BluetoothDeviceState> onStateChanged() {
+    return FlutterBlue.instance._methodStream
+        .where((m) => m.method == "DeviceState")
+        .map((m) => m.arguments)
+        .map((List<int> data) => new protos.DeviceStateResponse.fromBuffer(data))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => BluetoothDeviceState.values[p.state.value]);
+  }
 
   /// Indicates whether the Bluetooth Device can send a write without response
   Future<bool> get canSendWriteWithoutResponse =>
@@ -204,7 +212,5 @@ class BluetoothDevice {
 }
 
 enum BluetoothDeviceType { unknown, classic, le, dual }
-
-enum CharacteristicWriteType { withResponse, withoutResponse }
 
 enum BluetoothDeviceState { disconnected, connecting, connected, disconnecting }

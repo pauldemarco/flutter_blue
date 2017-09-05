@@ -101,8 +101,7 @@ device.onValueChanged(characteristic).listen((value) {
 | readDescriptor              |  :white_check_mark:  | :white_large_square: | Retrieves the value of a specified descriptor.  |
 | writeCharacteristic         |  :white_check_mark:  | :white_large_square: | Writes the value of a characteristic. |
 | writeDescriptor             |  :white_check_mark:  | :white_large_square: | Writes the value of a descriptor. |
-| setNotifyValue              |  :white_check_mark:  | :white_large_square: | Sets notifications or indications for the value of a specified characteristic. |
-| onValueChanged              |  :white_check_mark:  | :white_large_square: | Notifies when the Bluetooth Characteristic's value has changed. |
-| canSendWriteWithoutResponse | :white_large_square: | :white_large_square: | Indicates whether the Bluetooth Device can send a write without response. |
-| state                       | :white_large_square: | :white_large_square: | Gets the current state of the Bluetooth Device. |
-| onStateChanged              | :white_large_square: | :white_large_square: | Stream of state changes for the Bluetooth Device. |
+| setNotifyValue              |  :white_check_mark:  | :white_large_square: | Sets notifications or indications on the specified characteristic. |
+| onValueChanged              |  :white_check_mark:  | :white_large_square: | Notifies when the characteristic's value has changed. |
+| state                       |  :white_check_mark:  | :white_large_square: | Gets the current state of the Bluetooth Device. |
+| onStateChanged              |  :white_check_mark:  | :white_large_square: | Notifies of state changes for the Bluetooth Device. |
