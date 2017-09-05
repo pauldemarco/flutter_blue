@@ -31,7 +31,7 @@ StreamSubscription scanSubscription = flutterBlue.startScan().listen((scanResult
 });
 
 /// Stop scanning
-flutterBlue.stopScan();
+scanSubscription.cancel();
 ```
 
 ### Connect to a device
