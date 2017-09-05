@@ -55,11 +55,21 @@ class FlutterBlue {
     var settings = protos.ScanSettings.create()
       ..androidScanMode = scanMode.value
       ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
+    StreamSubscription subscription;
+    final controller = new StreamController(onCancel: () {
+      stopScan();
+      subscription.cancel();
+    });
 
     await _channel.invokeMethod('startScan', settings.writeToBuffer());
 
-    yield* _scanResultChannel
-        .receiveBroadcastStream()
+    subscription = _scanResultChannel.receiveBroadcastStream().listen(
+          controller.add,
+          onError: controller.addError,
+          onDone: controller.close,
+        );
+
+    yield* controller.stream
         .map((List<int> data) => new protos.ScanResult.fromBuffer(data))
         .map((p) => new ScanResult.fromProto(p));
   }
