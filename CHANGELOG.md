@@ -1,3 +1,9 @@
+## 0.2.1
+* BREAKING CHANGE: removed `stopScan` from API, use `scanSubscription.cancel()` instead
+* Automatically stops scan when `startScan` subscription is canceled (thanks to @brianegan)
+* Added `timeout` parameter to `startScan`
+* Updated example app to show new scan functionality
+
 ## 0.2.0
 
 * Added state and onStateChanged for BluetoothDevice

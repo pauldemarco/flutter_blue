@@ -51,13 +51,15 @@ class FlutterBlue {
     ScanMode scanMode = ScanMode.lowLatency,
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
+    Duration timeout,
   }) async* {
     var settings = protos.ScanSettings.create()
       ..androidScanMode = scanMode.value
       ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
     StreamSubscription subscription;
     final controller = new StreamController(onCancel: () {
-      stopScan();
+      print('onCancel');
+      _stopScan();
       subscription.cancel();
     });
 
@@ -69,13 +71,18 @@ class FlutterBlue {
           onDone: controller.close,
         );
 
-    yield* controller.stream
+    var stream = controller.stream;
+    if(timeout != null) {
+      stream = stream.timeout(timeout, onTimeout: (s) => controller.close());
+    }
+
+    yield* stream
         .map((List<int> data) => new protos.ScanResult.fromBuffer(data))
         .map((p) => new ScanResult.fromProto(p));
   }
 
   /// Stops a scan for Bluetooth Low Energy devices
-  Future<Null> stopScan() => _channel.invokeMethod('stopScan');
+  Future<Null> _stopScan() => _channel.invokeMethod('stopScan');
 
   /// Establishes a connection to the Bluetooth Device.
   /// Upon a successful connection, this method will return a [BluetoothDevice].

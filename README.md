@@ -86,7 +86,6 @@ device.onValueChanged(characteristic).listen((value) {
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | startScan        | :white_check_mark: | :white_large_square: | Starts a scan for Bluetooth Low Energy devices. |
-| stopScan         | :white_check_mark: | :white_large_square: | Stops a scan for Bluetooth Low Energy devices. |
 | connect          | :white_check_mark: | :white_large_square: | Establishes a connection to the Bluetooth Device. |
 | cancelConnection | :white_check_mark: | :white_large_square: | Cancels a connection to the Bluetooth Device. |
 | state            | :white_check_mark: | :white_large_square: | Gets the current state of the Bluetooth Adapter. |

@@ -67,20 +67,19 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _startScan() {
     _scanSubscription = _flutterBlue
-        .startScan()
-        .timeout(new Duration(seconds: 5), onTimeout: (s) => _stopScan())
+        .startScan(timeout: const Duration(seconds: 5))
         .listen((scanResult) {
       setState(() {
         scanResults[scanResult.identifier] = scanResult;
       });
-    });
+    }, onDone: _stopScan);
+
     setState(() {
       isScanning = true;
     });
   }
 
   _stopScan() {
-    _flutterBlue.stopScan();
     _scanSubscription?.cancel();
     _scanSubscription = null;
     setState(() {
