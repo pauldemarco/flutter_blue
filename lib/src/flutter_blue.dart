@@ -7,13 +7,20 @@ part of flutter_blue;
 class FlutterBlue {
   final MethodChannel _channel = const MethodChannel('$NAMESPACE/methods');
   final EventChannel _stateChannel = const EventChannel('$NAMESPACE/state');
-  final EventChannel _scanResultChannel = const EventChannel('$NAMESPACE/scanResult');
-  final EventChannel _servicesDiscoveredChannel = const EventChannel('$NAMESPACE/servicesDiscovered');
-  final EventChannel _characteristicReadChannel = const EventChannel('$NAMESPACE/characteristicRead');
-  final EventChannel _descriptorReadChannel = const EventChannel('$NAMESPACE/descriptorRead');
-  final EventChannel _characteristicNotifiedChannel = const EventChannel('$NAMESPACE/characteristicNotified');
-  final StreamController<MethodCall> _methodStreamController = new StreamController.broadcast(); // ignore: close_sinks
-  Stream<MethodCall> get _methodStream => _methodStreamController.stream; // Used internally to dispatch methods from platform.
+  final EventChannel _scanResultChannel =
+      const EventChannel('$NAMESPACE/scanResult');
+  final EventChannel _servicesDiscoveredChannel =
+      const EventChannel('$NAMESPACE/servicesDiscovered');
+  final EventChannel _characteristicReadChannel =
+      const EventChannel('$NAMESPACE/characteristicRead');
+  final EventChannel _descriptorReadChannel =
+      const EventChannel('$NAMESPACE/descriptorRead');
+  final EventChannel _characteristicNotifiedChannel =
+      const EventChannel('$NAMESPACE/characteristicNotified');
+  final StreamController<MethodCall> _methodStreamController =
+      new StreamController.broadcast(); // ignore: close_sinks
+  Stream<MethodCall> get _methodStream => _methodStreamController
+      .stream; // Used internally to dispatch methods from platform.
 
   /// Singleton boilerplate
   FlutterBlue._() {
@@ -47,7 +54,8 @@ class FlutterBlue {
   }
 
   /// Starts a scan for Bluetooth Low Energy devices
-  Stream<ScanResult> startScan({
+  /// Timeout closes the stream after a specified [Duration]
+  Stream<ScanResult> scan({
     ScanMode scanMode = ScanMode.lowLatency,
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
@@ -57,11 +65,18 @@ class FlutterBlue {
       ..androidScanMode = scanMode.value
       ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
     StreamSubscription subscription;
-    final controller = new StreamController(onCancel: () {
-      print('onCancel');
-      _stopScan();
-      subscription.cancel();
-    });
+    StreamController controller;
+    controller = new StreamController(
+      onListen: () {
+        if(timeout != null) {
+          new Future.delayed(timeout, () => controller.close());
+        }
+      },
+      onCancel: () {
+        _stopScan();
+        subscription.cancel();
+      },
+    );
 
     await _channel.invokeMethod('startScan', settings.writeToBuffer());
 
@@ -71,12 +86,7 @@ class FlutterBlue {
           onDone: controller.close,
         );
 
-    var stream = controller.stream;
-    if(timeout != null) {
-      stream = stream.timeout(timeout, onTimeout: (s) => controller.close());
-    }
-
-    yield* stream
+    yield* controller.stream
         .map((List<int> data) => new protos.ScanResult.fromBuffer(data))
         .map((p) => new ScanResult.fromProto(p));
   }
@@ -85,23 +95,49 @@ class FlutterBlue {
   Future<Null> _stopScan() => _channel.invokeMethod('stopScan');
 
   /// Establishes a connection to the Bluetooth Device.
-  /// Upon a successful connection, this method will return a [BluetoothDevice].
-  /// When [autoConnect] is true, the connection attempt will not time out.
-  /// To explicitly cancel a connection, call the cancelConnection() method.
-  /// NOTE: iOS will never time out the connection, Android may return GATT error 133 (or others).
-  Future<BluetoothDevice> connect(DeviceIdentifier deviceId, {bool autoConnect = true}) {
-    var options = protos.ConnectOptions.create()
-      ..remoteId = deviceId.toString()
-      ..androidAutoConnect = autoConnect;
-    return _channel
-        .invokeMethod('connect', options.writeToBuffer())
-        .then((List<int> data) => new protos.BluetoothDevice.fromBuffer(data))
-        .then((d) => new BluetoothDevice.fromProto(d));
+  /// Returns a stream of [BluetoothDeviceState]
+  /// Timeout closes the stream after a specified [Duration]
+  /// To cancel connection to device, simply cancel() the stream subscription
+  Stream<BluetoothDeviceState> connect(BluetoothDevice device,
+      {Duration timeout}) async* {
+    var request = protos.ConnectRequest.create()
+      ..remoteId = device.id.toString()
+      ..androidAutoConnect = true;
+    var connected = false;
+    StreamSubscription subscription;
+    StreamController controller;
+    controller = new StreamController(
+      onListen: () {
+        if(timeout != null) {
+          new Future.delayed(timeout, () => (!connected) ? controller.close(): null);
+        }
+      },
+      onCancel: () {
+        _cancelConnection(device);
+        subscription.cancel();
+      },
+    );
+
+    await _channel.invokeMethod('connect', request.writeToBuffer());
+
+    subscription = device.onStateChanged().listen(
+        (data) {
+          if(data == BluetoothDeviceState.connected) {
+            print('connected!');
+            connected = true;
+          }
+          controller.add(data);
+        },
+          onError: controller.addError,
+          onDone: controller.close,
+        );
+
+    yield* controller.stream;
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future<Null> cancelConnection(DeviceIdentifier device) {
-    return _channel.invokeMethod('disconnect', device.toString());
+  Future<Null> _cancelConnection(BluetoothDevice device) {
+    return _channel.invokeMethod('disconnect', device.id.toString());
   }
 }
 
@@ -136,21 +172,20 @@ class DeviceIdentifier {
   int get hashCode => id.hashCode;
 
   @override
-  bool operator ==(other) => other is DeviceIdentifier && compareAsciiLowerCase(id, other.id) == 0;
+  bool operator ==(other) =>
+      other is DeviceIdentifier && compareAsciiLowerCase(id, other.id) == 0;
 }
 
 class ScanResult {
-  const ScanResult(
-      {this.name, this.identifier, this.advertisementData, this.rssi});
+  const ScanResult({this.device, this.advertisementData, this.rssi});
 
   ScanResult.fromProto(protos.ScanResult p)
-      : name = p.name,
-        identifier = new DeviceIdentifier(p.remoteId),
-        rssi = p.rssi,
-        advertisementData = new AdvertisementData.fromProto(p.advertisementData);
+      : device = new BluetoothDevice.fromProto(p.device),
+        advertisementData =
+            new AdvertisementData.fromProto(p.advertisementData),
+        rssi = p.rssi;
 
-  final String name;
-  final DeviceIdentifier identifier;
+  final BluetoothDevice device;
   final AdvertisementData advertisementData;
   final int rssi;
 }

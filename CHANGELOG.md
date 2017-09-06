@@ -1,3 +1,11 @@
+## 0.2.2
+* BREAKING CHANGES
+* `startScan` renamed to `scan`
+* `ScanResult` now returns a `BluetoothDevice`
+* `connect` now takes a `BluetoothDevice` and returns Stream<BluetoothDeviceState>
+* Added parameter `timeout` to `connect`
+* Automatic disconnect on deviceConnection.cancel()
+
 ## 0.2.1
 * BREAKING CHANGE: removed `stopScan` from API, use `scanSubscription.cancel()` instead
 * Automatically stops scan when `startScan` subscription is canceled (thanks to @brianegan)

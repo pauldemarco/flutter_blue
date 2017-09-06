@@ -23,6 +23,36 @@ public class ProtoMaker {
 
     private static final UUID CCCD_UUID = UUID.fromString("000002902-0000-1000-8000-00805f9b34fb");
 
+    static Protos.ScanResult from(BluetoothDevice device, byte[] advertisementData, int rssi) {
+        Protos.ScanResult.Builder p = Protos.ScanResult.newBuilder();
+        p.setDevice(from(device));
+        if(advertisementData != null && advertisementData.length > 0)
+            p.setAdvertisementData(AdvertisementParser.parse(advertisementData));
+        p.setRssi(rssi);
+        return p.build();
+    }
+
+    static Protos.BluetoothDevice from(BluetoothDevice device) {
+        Protos.BluetoothDevice.Builder p = Protos.BluetoothDevice.newBuilder();
+        p.setRemoteId(device.getAddress());
+        p.setName(device.getName());
+        switch(device.getType()){
+            case BluetoothDevice.DEVICE_TYPE_LE:
+                p.setType(Protos.BluetoothDevice.Type.LE);
+                break;
+            case BluetoothDevice.DEVICE_TYPE_CLASSIC:
+                p.setType(Protos.BluetoothDevice.Type.CLASSIC);
+                break;
+            case BluetoothDevice.DEVICE_TYPE_DUAL:
+                p.setType(Protos.BluetoothDevice.Type.DUAL);
+                break;
+            default:
+                p.setType(Protos.BluetoothDevice.Type.UNKNOWN);
+                break;
+        }
+        return p.build();
+    }
+
     static Protos.BluetoothService from(BluetoothDevice device, BluetoothGattService service, BluetoothGatt gatt) {
         Protos.BluetoothService.Builder p = Protos.BluetoothService.newBuilder();
         p.setRemoteId(device.getAddress());
@@ -88,7 +118,7 @@ public class ProtoMaker {
                 .build();
     }
 
-    static Protos.DeviceStateResponse from(BluetoothDevice device, int state) throws Exception {
+    static Protos.DeviceStateResponse from(BluetoothDevice device, int state) {
         Protos.DeviceStateResponse.Builder p = Protos.DeviceStateResponse.newBuilder();
         switch(state) {
             case BluetoothProfile.STATE_DISCONNECTING:
@@ -104,7 +134,7 @@ public class ProtoMaker {
                 p.setState(Protos.DeviceStateResponse.BluetoothDeviceState.DISCONNECTED);
                 break;
             default:
-                throw new Exception("device state is unknown");
+                break;
         }
         p.setRemoteId(device.getAddress());
         return p.build();

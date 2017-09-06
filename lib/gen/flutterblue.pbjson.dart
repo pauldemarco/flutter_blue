@@ -58,15 +58,14 @@ const ScanSettings$json = const {
 const ScanResult$json = const {
   '1': 'ScanResult',
   '2': const [
-    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'device', '3': 1, '4': 1, '5': 11, '6': '.BluetoothDevice', '10': 'device'},
+    const {'1': 'advertisement_data', '3': 2, '4': 1, '5': 11, '6': '.AdvertisementData', '10': 'advertisementData'},
     const {'1': 'rssi', '3': 3, '4': 1, '5': 5, '10': 'rssi'},
-    const {'1': 'advertisement_data', '3': 4, '4': 1, '5': 11, '6': '.AdvertisementData', '10': 'advertisementData'},
   ],
 };
 
-const ConnectOptions$json = const {
-  '1': 'ConnectOptions',
+const ConnectRequest$json = const {
+  '1': 'ConnectRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'android_auto_connect', '3': 2, '4': 1, '5': 8, '10': 'androidAutoConnect'},

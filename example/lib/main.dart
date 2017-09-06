@@ -35,6 +35,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   /// Device
   BluetoothDevice device;
   bool get isConnected => (device != null);
+  StreamSubscription deviceConnection;
   List<BluetoothService> services = new List();
   StreamSubscription<List<int>> valueChangedSubscription;
   BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
@@ -62,15 +63,17 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     _stateSubscription = null;
     _scanSubscription?.cancel();
     _scanSubscription = null;
+    deviceConnection?.cancel();
+    deviceConnection = null;
     super.dispose();
   }
 
   _startScan() {
     _scanSubscription = _flutterBlue
-        .startScan(timeout: const Duration(seconds: 5))
+        .scan(timeout: const Duration(seconds: 5))
         .listen((scanResult) {
       setState(() {
-        scanResults[scanResult.identifier] = scanResult;
+        scanResults[scanResult.device.id] = scanResult;
       });
     }, onDone: _stopScan);
 
@@ -87,23 +90,21 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
-  _connect(ScanResult r) async {
+  _connect(BluetoothDevice d) async {
+    device = d;
     // Connect to device
-    BluetoothDevice d = await _flutterBlue.connect(r.identifier);
-    setState(() {
-      device = d;
-    });
+    deviceConnection = _flutterBlue
+        .connect(device, timeout: const Duration(seconds: 4))
+        .listen(
+          null,
+          onDone: _disconnect,
+        );
 
-    // Discover the services
-    List<BluetoothService> s = await device.discoverServices();
-    setState(() {
-      services = s;
-    });
-
-    // Update the connection state
-    var state = await device.state;
-    setState(() {
-      deviceState = state;
+    // Update the connection state immediately
+    device.state.then((s) {
+      setState(() {
+        deviceState = s;
+      });
     });
 
     // Subscribe to connection changes
@@ -111,11 +112,19 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       setState(() {
         deviceState = s;
       });
+      if (s == BluetoothDeviceState.connected) {
+        device.discoverServices().then((s) {
+          setState(() {
+            services = s;
+          });
+        });
+      }
     });
   }
 
-  _disconnect() async {
-    await _flutterBlue.cancelConnection(device.id);
+  _disconnect() {
+    deviceConnection?.cancel();
+    deviceConnection = null;
     setState(() {
       device = null;
     });
@@ -183,10 +192,10 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   _buildScanResultTiles(BuildContext context) {
     return scanResults.values
         .map((s) => new ListTile(
-              title: new Text(s.name),
-              subtitle: new Text(s.identifier.toString()),
+              title: new Text(s.device.name),
+              subtitle: new Text(s.device.id.toString()),
               leading: new Text(s.rssi.toString()),
-              onTap: () => _connect(s),
+              onTap: () => _connect(s.device),
             ))
         .toList();
   }

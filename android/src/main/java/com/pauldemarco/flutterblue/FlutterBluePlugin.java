@@ -58,7 +58,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
     private final EventChannel characteristicNotifiedChannel;
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
-    private final Map<String, Result> mConnectionRequests = new HashMap<>();
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
 
     /**
@@ -162,9 +161,9 @@ public class FlutterBluePlugin implements MethodCallHandler {
             case "connect":
             {
                 byte[] data = call.arguments();
-                Protos.ConnectOptions options;
+                Protos.ConnectRequest options;
                 try {
-                    options = Protos.ConnectOptions.newBuilder().mergeFrom(data).build();
+                    options = Protos.ConnectRequest.newBuilder().mergeFrom(data).build();
                 } catch (InvalidProtocolBufferException e) {
                     result.error("RuntimeException", e.getMessage(), e);
                     break;
@@ -187,20 +186,10 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     }
                 }
 
-                // If the device is completely new, connect and add to list
-                if(!mGattServers.containsKey(deviceId)){
-                    BluetoothGatt gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
-                    mGattServers.put(deviceId, gattServer);
-                }
-
-                // Update the connection requests list with this Result instance
-                synchronized (mConnectionRequests) {
-                    Result r = mConnectionRequests.remove(deviceId);
-                    if(r != null) {
-                        r.error("connect_cancelled", "another connection attempt to this device has started", null);
-                    }
-                    mConnectionRequests.put(deviceId, result);
-                }
+                // New request, connect and add gattServer to Map
+                BluetoothGatt gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
+                mGattServers.put(deviceId, gattServer);
+                result.success(null);
                 break;
             }
 
@@ -210,12 +199,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 BluetoothGatt gattServer = mGattServers.remove(deviceId);
                 if(gattServer != null) {
                     gattServer.close();
-                }
-                synchronized (mConnectionRequests) {
-                    Result r = mConnectionRequests.remove(deviceId);
-                    if(r != null) {
-                        r.error("connect_cancelled", "the connect request was cancelled", null);
-                    }
                 }
                 result.success(null);
                 break;
@@ -592,15 +575,9 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
-                    Protos.ScanResult.Builder scanResult = Protos.ScanResult.newBuilder()
-                            .setRemoteId(result.getDevice().getAddress())
-                            .setName(result.getDevice().getName())
-                            .setRssi(result.getRssi());
-                    if(result.getScanRecord() != null) {
-                        scanResult.setAdvertisementData(AdvertisementParser.parse(result.getScanRecord().getBytes()));
-                    }
                     if(scanResultsSink != null) {
-                        scanResultsSink.success(scanResult.build().toByteArray());
+                        Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result.getScanRecord().getBytes(), result.getRssi());
+                        scanResultsSink.success(scanResult.toByteArray());
                     }
                 }
 
@@ -637,13 +614,8 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 @Override
                 public void onLeScan(final BluetoothDevice bluetoothDevice, int rssi,
                                      byte[] scanRecord) {
-                    Protos.ScanResult scanResult = Protos.ScanResult.newBuilder()
-                            .setRemoteId(bluetoothDevice.getAddress())
-                            .setName(bluetoothDevice.getName())
-                            .setRssi(rssi)
-                            .setAdvertisementData(AdvertisementParser.parse(scanRecord))
-                            .build();
                     if(scanResultsSink != null) {
+                        Protos.ScanResult scanResult = ProtoMaker.from(bluetoothDevice, scanRecord, rssi);
                         scanResultsSink.success(scanResult.toByteArray());
                     }
                 }
@@ -729,29 +701,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             Log.d(TAG, "onConnectionStateChange: ");
-            synchronized (mConnectionRequests) {
-                Result result = mConnectionRequests.remove(gatt.getDevice().getAddress());
-                if(result != null) {
-                    if(status == BluetoothGatt.GATT_SUCCESS && newState == BluetoothProfile.STATE_CONNECTED) {
-                        final Protos.BluetoothDevice p = Protos.BluetoothDevice.newBuilder()
-                                .setName(gatt.getDevice().getName())
-                                .setRemoteId(gatt.getDevice().getAddress())
-                                .setType(Protos.BluetoothDevice.Type.forNumber(gatt.getDevice().getType()))
-                                .build();
-                        result.success(p.toByteArray());
-                    } else if(status == BluetoothGatt.GATT_SUCCESS && newState == BluetoothProfile.STATE_DISCONNECTED) {
-                        result.error("connect_cancelled", "the device has been disconnected", null);
-                    } else {
-                        result.error("connect_error", "Error in BluetoothGattCallback, status:" + status + " newState:" + newState, null);
-                    }
-                }
-            }
-            // Main method call, for onStateChanged streams
-            try {
-                channel.invokeMethod("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            channel.invokeMethod("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
         }
 
         @Override

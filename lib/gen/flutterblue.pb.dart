@@ -166,10 +166,9 @@ class _ReadonlyScanSettings extends ScanSettings with ReadonlyMessageMixin {}
 
 class ScanResult extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ScanResult')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'name', PbFieldType.OS)
+    ..a<BluetoothDevice>(1, 'device', PbFieldType.OM, BluetoothDevice.getDefault, BluetoothDevice.create)
+    ..a<AdvertisementData>(2, 'advertisementData', PbFieldType.OM, AdvertisementData.getDefault, AdvertisementData.create)
     ..a<int>(3, 'rssi', PbFieldType.O3)
-    ..a<AdvertisementData>(4, 'advertisementData', PbFieldType.OM, AdvertisementData.getDefault, AdvertisementData.create)
     ..hasRequiredFields = false
   ;
 
@@ -189,50 +188,45 @@ class ScanResult extends GeneratedMessage {
     if (v is! ScanResult) checkItemFailed(v, 'ScanResult');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
-  void clearRemoteId() => clearField(1);
+  BluetoothDevice get device => $_get(0, 1, null);
+  set device(BluetoothDevice v) { setField(1, v); }
+  bool hasDevice() => $_has(0, 1);
+  void clearDevice() => clearField(1);
 
-  String get name => $_get(1, 2, '');
-  set name(String v) { $_setString(1, 2, v); }
-  bool hasName() => $_has(1, 2);
-  void clearName() => clearField(2);
+  AdvertisementData get advertisementData => $_get(1, 2, null);
+  set advertisementData(AdvertisementData v) { setField(2, v); }
+  bool hasAdvertisementData() => $_has(1, 2);
+  void clearAdvertisementData() => clearField(2);
 
   int get rssi => $_get(2, 3, 0);
   set rssi(int v) { $_setUnsignedInt32(2, 3, v); }
   bool hasRssi() => $_has(2, 3);
   void clearRssi() => clearField(3);
-
-  AdvertisementData get advertisementData => $_get(3, 4, null);
-  set advertisementData(AdvertisementData v) { setField(4, v); }
-  bool hasAdvertisementData() => $_has(3, 4);
-  void clearAdvertisementData() => clearField(4);
 }
 
 class _ReadonlyScanResult extends ScanResult with ReadonlyMessageMixin {}
 
-class ConnectOptions extends GeneratedMessage {
-  static final BuilderInfo _i = new BuilderInfo('ConnectOptions')
+class ConnectRequest extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('ConnectRequest')
     ..a<String>(1, 'remoteId', PbFieldType.OS)
     ..a<bool>(2, 'androidAutoConnect', PbFieldType.OB)
     ..hasRequiredFields = false
   ;
 
-  ConnectOptions() : super();
-  ConnectOptions.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  ConnectOptions.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
-  ConnectOptions clone() => new ConnectOptions()..mergeFromMessage(this);
+  ConnectRequest() : super();
+  ConnectRequest.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ConnectRequest.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ConnectRequest clone() => new ConnectRequest()..mergeFromMessage(this);
   BuilderInfo get info_ => _i;
-  static ConnectOptions create() => new ConnectOptions();
-  static PbList<ConnectOptions> createRepeated() => new PbList<ConnectOptions>();
-  static ConnectOptions getDefault() {
-    if (_defaultInstance == null) _defaultInstance = new _ReadonlyConnectOptions();
+  static ConnectRequest create() => new ConnectRequest();
+  static PbList<ConnectRequest> createRepeated() => new PbList<ConnectRequest>();
+  static ConnectRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyConnectRequest();
     return _defaultInstance;
   }
-  static ConnectOptions _defaultInstance;
-  static void $checkItem(ConnectOptions v) {
-    if (v is! ConnectOptions) checkItemFailed(v, 'ConnectOptions');
+  static ConnectRequest _defaultInstance;
+  static void $checkItem(ConnectRequest v) {
+    if (v is! ConnectRequest) checkItemFailed(v, 'ConnectRequest');
   }
 
   String get remoteId => $_get(0, 1, '');
@@ -246,7 +240,7 @@ class ConnectOptions extends GeneratedMessage {
   void clearAndroidAutoConnect() => clearField(2);
 }
 
-class _ReadonlyConnectOptions extends ConnectOptions with ReadonlyMessageMixin {}
+class _ReadonlyConnectRequest extends ConnectRequest with ReadonlyMessageMixin {}
 
 class BluetoothDevice extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothDevice')

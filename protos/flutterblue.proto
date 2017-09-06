@@ -35,13 +35,12 @@ message ScanSettings {
 }
 
 message ScanResult {
-  string remote_id = 1;  // The received peer's ID.
-  string name = 2;  // The peer's name.
+  BluetoothDevice device = 1;  // The received peer's ID.
+  AdvertisementData advertisement_data = 2;
   int32 rssi = 3;
-  AdvertisementData advertisement_data = 4;
 }
 
-message ConnectOptions {
+message ConnectRequest {
   string remote_id = 1;
   bool android_auto_connect = 2;
 }
