@@ -70,7 +70,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .startScan(timeout: const Duration(seconds: 5))
         .listen((scanResult) {
       setState(() {
-        scanResults[scanResult.identifier] = scanResult;
+        scanResults[scanResult.device.id] = scanResult;
       });
     }, onDone: _stopScan);
 
@@ -89,7 +89,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _connect(ScanResult r) async {
     // Connect to device
-    BluetoothDevice d = await _flutterBlue.connect(r.identifier);
+    BluetoothDevice d = await _flutterBlue.connect(r.device.id);
     setState(() {
       device = d;
     });
@@ -183,8 +183,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   _buildScanResultTiles(BuildContext context) {
     return scanResults.values
         .map((s) => new ListTile(
-              title: new Text(s.name),
-              subtitle: new Text(s.identifier.toString()),
+              title: new Text(s.device.name),
+              subtitle: new Text(s.device.id.toString()),
               leading: new Text(s.rssi.toString()),
               onTap: () => _connect(s),
             ))

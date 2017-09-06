@@ -592,15 +592,9 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
-                    Protos.ScanResult.Builder scanResult = Protos.ScanResult.newBuilder()
-                            .setRemoteId(result.getDevice().getAddress())
-                            .setName(result.getDevice().getName())
-                            .setRssi(result.getRssi());
-                    if(result.getScanRecord() != null) {
-                        scanResult.setAdvertisementData(AdvertisementParser.parse(result.getScanRecord().getBytes()));
-                    }
                     if(scanResultsSink != null) {
-                        scanResultsSink.success(scanResult.build().toByteArray());
+                        Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result.getScanRecord().getBytes(), result.getRssi());
+                        scanResultsSink.success(scanResult.toByteArray());
                     }
                 }
 
@@ -637,13 +631,8 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 @Override
                 public void onLeScan(final BluetoothDevice bluetoothDevice, int rssi,
                                      byte[] scanRecord) {
-                    Protos.ScanResult scanResult = Protos.ScanResult.newBuilder()
-                            .setRemoteId(bluetoothDevice.getAddress())
-                            .setName(bluetoothDevice.getName())
-                            .setRssi(rssi)
-                            .setAdvertisementData(AdvertisementParser.parse(scanRecord))
-                            .build();
                     if(scanResultsSink != null) {
+                        Protos.ScanResult scanResult = ProtoMaker.from(bluetoothDevice, scanRecord, rssi);
                         scanResultsSink.success(scanResult.toByteArray());
                     }
                 }

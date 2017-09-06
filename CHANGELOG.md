@@ -1,3 +1,6 @@
+## 0.2.2
+* BREAKING CHANGE: `ScanResult` now returns a `BluetoothDevice`
+
 ## 0.2.1
 * BREAKING CHANGE: removed `stopScan` from API, use `scanSubscription.cancel()` instead
 * Automatically stops scan when `startScan` subscription is canceled (thanks to @brianegan)

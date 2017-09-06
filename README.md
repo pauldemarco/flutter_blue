@@ -36,7 +36,7 @@ scanSubscription.cancel();
 
 ### Connect to a device
 ```dart
-BluetoothDevice device = await flutterBlue.connect(scanResult.identifier);
+BluetoothDevice device = await flutterBlue.connect(scanResult.device.id);
 ```
 
 ### Discover services

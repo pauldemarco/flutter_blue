@@ -141,16 +141,14 @@ class DeviceIdentifier {
 
 class ScanResult {
   const ScanResult(
-      {this.name, this.identifier, this.advertisementData, this.rssi});
+      {this.device, this.advertisementData, this.rssi});
 
   ScanResult.fromProto(protos.ScanResult p)
-      : name = p.name,
-        identifier = new DeviceIdentifier(p.remoteId),
-        rssi = p.rssi,
-        advertisementData = new AdvertisementData.fromProto(p.advertisementData);
+      : device = new BluetoothDevice.fromProto(p.device),
+        advertisementData = new AdvertisementData.fromProto(p.advertisementData),
+        rssi = p.rssi;
 
-  final String name;
-  final DeviceIdentifier identifier;
+  final BluetoothDevice device;
   final AdvertisementData advertisementData;
   final int rssi;
 }
