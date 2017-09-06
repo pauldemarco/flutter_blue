@@ -93,7 +93,12 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   _connect(BluetoothDevice d) async {
     device = d;
     // Connect to device
-    deviceConnection = _flutterBlue.connect(device, timeout: const Duration(seconds: 2)).listen(null, onDone: _disconnect);
+    deviceConnection = _flutterBlue
+        .connect(device, timeout: const Duration(seconds: 4))
+        .listen(
+          null,
+          onDone: _disconnect,
+        );
 
     // Update the connection state immediately
     device.state.then((s) {
@@ -107,7 +112,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       setState(() {
         deviceState = s;
       });
-      if(s == BluetoothDeviceState.connected) {
+      if (s == BluetoothDeviceState.connected) {
         device.discoverServices().then((s) {
           setState(() {
             services = s;
