@@ -47,7 +47,7 @@ class FlutterBlue {
   }
 
   /// Starts a scan for Bluetooth Low Energy devices
-  Stream<ScanResult> startScan({
+  Stream<ScanResult> scan({
     ScanMode scanMode = ScanMode.lowLatency,
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],

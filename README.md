@@ -26,7 +26,7 @@ FlutterBlue flutterBlue = FlutterBlue.instance;
 ### Scan for devices
 ```dart
 /// Start scanning
-StreamSubscription scanSubscription = flutterBlue.startScan().listen((scanResult) {
+var scanSubscription = flutterBlue.scan().listen((scanResult) {
     // do something with scan result
 });
 
@@ -36,7 +36,14 @@ scanSubscription.cancel();
 
 ### Connect to a device
 ```dart
-BluetoothDevice device = await flutterBlue.connect(scanResult.device.id);
+var deviceConnection = flutterBlue.connect(device).listen((s) {
+    if(s == BluetoothDeviceState.connected) {
+        // device is connected, do something
+    }
+});
+
+// Disconnect from device
+deviceConnection.cancel();
 ```
 
 ### Discover services
@@ -85,9 +92,8 @@ device.onValueChanged(characteristic).listen((value) {
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
-| startScan        | :white_check_mark: | :white_large_square: | Starts a scan for Bluetooth Low Energy devices. |
+| scan             | :white_check_mark: | :white_large_square: | Starts a scan for Bluetooth Low Energy devices. |
 | connect          | :white_check_mark: | :white_large_square: | Establishes a connection to the Bluetooth Device. |
-| cancelConnection | :white_check_mark: | :white_large_square: | Cancels a connection to the Bluetooth Device. |
 | state            | :white_check_mark: | :white_large_square: | Gets the current state of the Bluetooth Adapter. |
 | onStateChanged   | :white_check_mark: | :white_large_square: | Stream of state changes for the Bluetooth Adapter. |
 

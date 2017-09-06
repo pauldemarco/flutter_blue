@@ -35,7 +35,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   /// Device
   BluetoothDevice device;
   bool get isConnected => (device != null);
-  StreamSubscription connectionSubscription;
+  StreamSubscription deviceConnection;
   List<BluetoothService> services = new List();
   StreamSubscription<List<int>> valueChangedSubscription;
   BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
@@ -63,14 +63,14 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     _stateSubscription = null;
     _scanSubscription?.cancel();
     _scanSubscription = null;
-    connectionSubscription?.cancel();
-    connectionSubscription = null;
+    deviceConnection?.cancel();
+    deviceConnection = null;
     super.dispose();
   }
 
   _startScan() {
     _scanSubscription = _flutterBlue
-        .startScan(timeout: const Duration(seconds: 5))
+        .scan(timeout: const Duration(seconds: 5))
         .listen((scanResult) {
       setState(() {
         scanResults[scanResult.device.id] = scanResult;
@@ -93,7 +93,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   _connect(BluetoothDevice d) async {
     device = d;
     // Connect to device
-    connectionSubscription = _flutterBlue.connect(device).listen(null);
+    deviceConnection = _flutterBlue.connect(device).listen(null);
 
     // Update the connection state immediately
     device.state.then((s) {
@@ -118,8 +118,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _disconnect() {
-    connectionSubscription?.cancel();
-    connectionSubscription = null;
+    deviceConnection?.cancel();
+    deviceConnection = null;
     setState(() {
       device = null;
     });
