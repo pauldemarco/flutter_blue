@@ -58,7 +58,6 @@ class FlutterBlue {
       ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
     StreamSubscription subscription;
     final controller = new StreamController(onCancel: () {
-      print('onCancel');
       _stopScan();
       subscription.cancel();
     });
@@ -85,23 +84,37 @@ class FlutterBlue {
   Future<Null> _stopScan() => _channel.invokeMethod('stopScan');
 
   /// Establishes a connection to the Bluetooth Device.
-  /// Upon a successful connection, this method will return a [BluetoothDevice].
+  /// Returns a stream of [BluetoothDeviceState]
   /// When [autoConnect] is true, the connection attempt will not time out.
-  /// To explicitly cancel a connection, call the cancelConnection() method.
+  /// To cancel connection to device, simply cancel() the stream subscription
   /// NOTE: iOS will never time out the connection, Android may return GATT error 133 (or others).
-  Future<BluetoothDevice> connect(DeviceIdentifier deviceId, {bool autoConnect = true}) {
-    var options = protos.ConnectOptions.create()
-      ..remoteId = deviceId.toString()
+  Stream<BluetoothDeviceState> connect(BluetoothDevice device, {bool autoConnect = true}) async* {
+    var request = protos.ConnectRequest.create()
+      ..remoteId = device.id.toString()
       ..androidAutoConnect = autoConnect;
-    return _channel
-        .invokeMethod('connect', options.writeToBuffer())
+    StreamSubscription subscription;
+    final controller = new StreamController(onCancel: () {
+      _cancelConnection(device);
+      subscription.cancel();
+    });
+
+    await _channel
+        .invokeMethod('connect', request.writeToBuffer())
         .then((List<int> data) => new protos.BluetoothDevice.fromBuffer(data))
         .then((d) => new BluetoothDevice.fromProto(d));
+
+    subscription = device.onStateChanged().listen(
+      controller.add,
+      onError: controller.addError,
+      onDone: controller.close,
+    );
+
+    yield* controller.stream;
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future<Null> cancelConnection(DeviceIdentifier device) {
-    return _channel.invokeMethod('disconnect', device.toString());
+  Future<Null> _cancelConnection(BluetoothDevice device) {
+    return _channel.invokeMethod('disconnect', device.id.toString());
   }
 }
 

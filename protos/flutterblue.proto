@@ -40,7 +40,7 @@ message ScanResult {
   int32 rssi = 3;
 }
 
-message ConnectOptions {
+message ConnectRequest {
   string remote_id = 1;
   bool android_auto_connect = 2;
 }

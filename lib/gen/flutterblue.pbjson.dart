@@ -64,8 +64,8 @@ const ScanResult$json = const {
   ],
 };
 
-const ConnectOptions$json = const {
-  '1': 'ConnectOptions',
+const ConnectRequest$json = const {
+  '1': 'ConnectRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'android_auto_connect', '3': 2, '4': 1, '5': 8, '10': 'androidAutoConnect'},

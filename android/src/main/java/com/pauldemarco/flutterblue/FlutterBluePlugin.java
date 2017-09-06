@@ -162,9 +162,9 @@ public class FlutterBluePlugin implements MethodCallHandler {
             case "connect":
             {
                 byte[] data = call.arguments();
-                Protos.ConnectOptions options;
+                Protos.ConnectRequest options;
                 try {
-                    options = Protos.ConnectOptions.newBuilder().mergeFrom(data).build();
+                    options = Protos.ConnectRequest.newBuilder().mergeFrom(data).build();
                 } catch (InvalidProtocolBufferException e) {
                     result.error("RuntimeException", e.getMessage(), e);
                     break;

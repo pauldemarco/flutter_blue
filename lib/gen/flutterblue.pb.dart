@@ -206,27 +206,27 @@ class ScanResult extends GeneratedMessage {
 
 class _ReadonlyScanResult extends ScanResult with ReadonlyMessageMixin {}
 
-class ConnectOptions extends GeneratedMessage {
-  static final BuilderInfo _i = new BuilderInfo('ConnectOptions')
+class ConnectRequest extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('ConnectRequest')
     ..a<String>(1, 'remoteId', PbFieldType.OS)
     ..a<bool>(2, 'androidAutoConnect', PbFieldType.OB)
     ..hasRequiredFields = false
   ;
 
-  ConnectOptions() : super();
-  ConnectOptions.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  ConnectOptions.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
-  ConnectOptions clone() => new ConnectOptions()..mergeFromMessage(this);
+  ConnectRequest() : super();
+  ConnectRequest.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ConnectRequest.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ConnectRequest clone() => new ConnectRequest()..mergeFromMessage(this);
   BuilderInfo get info_ => _i;
-  static ConnectOptions create() => new ConnectOptions();
-  static PbList<ConnectOptions> createRepeated() => new PbList<ConnectOptions>();
-  static ConnectOptions getDefault() {
-    if (_defaultInstance == null) _defaultInstance = new _ReadonlyConnectOptions();
+  static ConnectRequest create() => new ConnectRequest();
+  static PbList<ConnectRequest> createRepeated() => new PbList<ConnectRequest>();
+  static ConnectRequest getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyConnectRequest();
     return _defaultInstance;
   }
-  static ConnectOptions _defaultInstance;
-  static void $checkItem(ConnectOptions v) {
-    if (v is! ConnectOptions) checkItemFailed(v, 'ConnectOptions');
+  static ConnectRequest _defaultInstance;
+  static void $checkItem(ConnectRequest v) {
+    if (v is! ConnectRequest) checkItemFailed(v, 'ConnectRequest');
   }
 
   String get remoteId => $_get(0, 1, '');
@@ -240,7 +240,7 @@ class ConnectOptions extends GeneratedMessage {
   void clearAndroidAutoConnect() => clearField(2);
 }
 
-class _ReadonlyConnectOptions extends ConnectOptions with ReadonlyMessageMixin {}
+class _ReadonlyConnectRequest extends ConnectRequest with ReadonlyMessageMixin {}
 
 class BluetoothDevice extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothDevice')
