@@ -118,7 +118,7 @@ public class ProtoMaker {
                 .build();
     }
 
-    static Protos.DeviceStateResponse from(BluetoothDevice device, int state) throws Exception {
+    static Protos.DeviceStateResponse from(BluetoothDevice device, int state) {
         Protos.DeviceStateResponse.Builder p = Protos.DeviceStateResponse.newBuilder();
         switch(state) {
             case BluetoothProfile.STATE_DISCONNECTING:
@@ -134,7 +134,7 @@ public class ProtoMaker {
                 p.setState(Protos.DeviceStateResponse.BluetoothDeviceState.DISCONNECTED);
                 break;
             default:
-                throw new Exception("device state is unknown");
+                break;
         }
         p.setRemoteId(device.getAddress());
         return p.build();

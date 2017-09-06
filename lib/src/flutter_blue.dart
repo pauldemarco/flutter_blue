@@ -98,10 +98,7 @@ class FlutterBlue {
       subscription.cancel();
     });
 
-    await _channel
-        .invokeMethod('connect', request.writeToBuffer())
-        .then((List<int> data) => new protos.BluetoothDevice.fromBuffer(data))
-        .then((d) => new BluetoothDevice.fromProto(d));
+    await _channel.invokeMethod('connect', request.writeToBuffer());
 
     subscription = device.onStateChanged().listen(
       controller.add,
