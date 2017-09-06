@@ -36,13 +36,14 @@ scanSubscription.cancel();
 
 ### Connect to a device
 ```dart
+/// Create a connection to the device
 var deviceConnection = flutterBlue.connect(device).listen((s) {
     if(s == BluetoothDeviceState.connected) {
         // device is connected, do something
     }
 });
 
-// Disconnect from device
+/// Disconnect from device
 deviceConnection.cancel();
 ```
 
