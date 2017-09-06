@@ -2,7 +2,8 @@
 * BREAKING CHANGES
 * `startScan` renamed to `scan`
 * `ScanResult` now returns a `BluetoothDevice`
-* `connect()` now takes a `BluetoothDevice` and returns Stream<BluetoothDeviceState>
+* `connect` now takes a `BluetoothDevice` and returns Stream<BluetoothDeviceState>
+* Added parameter `timeout` to `connect`
 * Automatic disconnect on deviceConnection.cancel()
 
 ## 0.2.1
