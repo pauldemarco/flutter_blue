@@ -35,7 +35,10 @@ public class ProtoMaker {
     static Protos.BluetoothDevice from(BluetoothDevice device) {
         Protos.BluetoothDevice.Builder p = Protos.BluetoothDevice.newBuilder();
         p.setRemoteId(device.getAddress());
-        p.setName(device.getName());
+        String name = device.getName();
+        if(name != null) {
+            p.setName(name);
+        }
         switch(device.getType()){
             case BluetoothDevice.DEVICE_TYPE_LE:
                 p.setType(Protos.BluetoothDevice.Type.LE);
