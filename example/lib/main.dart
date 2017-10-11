@@ -173,7 +173,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
-  _buildScanningButton(BuildContext context) {
+  _buildScanningButton() {
     if (isConnected || state != BluetoothState.on) {
       return null;
     }
@@ -189,7 +189,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildScanResultTiles(BuildContext context) {
+  _buildScanResultTiles() {
     return scanResults.values
         .map((s) => new ListTile(
               title: new Text(s.device.name),
@@ -200,7 +200,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .toList();
   }
 
-  _buildDescriptorTile(BuildContext context, BluetoothDescriptor d) {
+  _buildDescriptorTile(BluetoothDescriptor d) {
     var title = new Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,9 +240,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     );
   }
 
-  _buildCharacteristicTile(BuildContext context, BluetoothCharacteristic c) {
+  _buildCharacteristicTile(BluetoothCharacteristic c) {
     var descriptorTiles =
-        c.descriptors.map((d) => _buildDescriptorTile(context, d)).toList();
+        c.descriptors.map((d) => _buildDescriptorTile(d)).toList();
     var actions = new Row(
       children: <Widget>[
         new IconButton(
@@ -297,9 +297,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildServiceTile(BuildContext context, BluetoothService s) {
+  _buildServiceTile(BluetoothService s) {
     var characteristicsTiles = s.characteristics
-        .map((c) => _buildCharacteristicTile(context, c))
+        .map((c) => _buildCharacteristicTile(c))
         .toList();
     if (characteristicsTiles.length > 0) {
       return new ExpansionTile(
@@ -327,11 +327,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildServiceTiles(BuildContext context) {
-    return services.map((s) => _buildServiceTile(context, s)).toList();
+  _buildServiceTiles() {
+    return services.map((s) => _buildServiceTile(s)).toList();
   }
 
-  _buildActionButtons(BuildContext context) {
+  _buildActionButtons() {
     if (isConnected) {
       return <Widget>[
         new IconButton(
@@ -342,7 +342,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildAlertTile(BuildContext context) {
+  _buildAlertTile() {
     return new Container(
       color: Colors.redAccent,
       child: new ListTile(
@@ -358,7 +358,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     );
   }
 
-  _buildDeviceStateTile(BuildContext context) {
+  _buildDeviceStateTile() {
     return new ListTile(
         leading: (deviceState == BluetoothDeviceState.connected)
             ? const Icon(Icons.bluetooth_connected)
@@ -372,7 +372,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         ));
   }
 
-  _buildProgressBarTile(BuildContext context) {
+  _buildProgressBarTile() {
     return new LinearProgressIndicator();
   }
 
@@ -380,24 +380,24 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   Widget build(BuildContext context) {
     var tiles = new List();
     if (state != BluetoothState.on) {
-      tiles.add(_buildAlertTile(context));
+      tiles.add(_buildAlertTile());
     }
     if (isConnected) {
-      tiles.add(_buildDeviceStateTile(context));
-      tiles.addAll(_buildServiceTiles(context));
+      tiles.add(_buildDeviceStateTile());
+      tiles.addAll(_buildServiceTiles());
     } else {
-      tiles.addAll(_buildScanResultTiles(context));
+      tiles.addAll(_buildScanResultTiles());
     }
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
           title: const Text('FlutterBlue'),
-          actions: _buildActionButtons(context),
+          actions: _buildActionButtons(),
         ),
-        floatingActionButton: _buildScanningButton(context),
+        floatingActionButton: _buildScanningButton(),
         body: new Stack(
           children: <Widget>[
-            (isScanning) ? _buildProgressBarTile(context) : new Container(),
+            (isScanning) ? _buildProgressBarTile() : new Container(),
             new ListView(
               children: tiles,
             )
