@@ -1,3 +1,6 @@
+## 0.2.3
+* Bug fixes
+
 ## 0.2.2
 * BREAKING CHANGES
 * `startScan` renamed to `scan`
