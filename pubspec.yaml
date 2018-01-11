@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   convert: "^2.0.1"
-  protobuf: '^0.5.5'
+#  protobuf: '^0.5.5'
 
 
 dev_dependencies:
