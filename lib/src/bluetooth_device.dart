@@ -19,10 +19,7 @@ class BluetoothDevice {
 
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
-    await FlutterBlue.instance._channel
-        .invokeMethod('discoverServices', id.toString());
-
-    return await FlutterBlue.instance._servicesDiscoveredChannel
+    var future = FlutterBlue.instance._servicesDiscoveredChannel
         .receiveBroadcastStream()
         .map((List<int> data) =>
             new protos.DiscoverServicesResult.fromBuffer(data))
@@ -30,6 +27,11 @@ class BluetoothDevice {
         .map((p) => p.services)
         .map((s) => s.map((p) => new BluetoothService.fromProto(p)).toList())
         .first;
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('discoverServices', id.toString());
+
+    return await future;
   }
 
   /// Returns a list of Bluetooth GATT services offered by the remote device
