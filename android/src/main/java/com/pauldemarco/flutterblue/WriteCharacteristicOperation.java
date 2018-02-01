@@ -22,18 +22,10 @@ public class WriteCharacteristicOperation extends GattOperation {
             mResult.error("write_characteristic_error", "Could not initiate request to wrtie characteristic value.", null);
             finished();
         }
-
-        if(characteristic.getWriteType() == BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE) {
-            finished();
-        }
     }
 
     @Override
     public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-        if(characteristic.getWriteType() == BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE) {
-            return;
-        }
-
         Protos.WriteCharacteristicRequest.Builder request = Protos.WriteCharacteristicRequest.newBuilder();
         request.setRemoteId(gatt.getDevice().getAddress());
         request.setCharacteristicUuid(characteristic.getUuid().toString());
