@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.EventSink;
@@ -40,25 +41,22 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-
 /**
  * FlutterBluePlugin
  */
-public class FlutterBluePlugin implements MethodCallHandler {
+public class FlutterBluePlugin implements MethodCallHandler, GattOperation.FinishedCallback {
     private static final String TAG = "FlutterBluePlugin";
     private static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
-    static final private UUID CCCD_ID = UUID.fromString("000002902-0000-1000-8000-00805f9b34fb");
     private final Registrar registrar;
     private final MethodChannel channel;
     private final EventChannel stateChannel;
     private final EventChannel scanResultChannel;
-    private final EventChannel servicesDiscoveredChannel;
-    private final EventChannel characteristicReadChannel;
-    private final EventChannel descriptorReadChannel;
-    private final EventChannel characteristicNotifiedChannel;
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
+
+    private ConcurrentLinkedQueue<GattOperation> mQueue;
+    private GattOperation mCurrentOperation;
 
     /**
      * Plugin registration.
@@ -72,19 +70,37 @@ public class FlutterBluePlugin implements MethodCallHandler {
         this.channel = new MethodChannel(registrar.messenger(), NAMESPACE+"/methods");
         this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/state");
         this.scanResultChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/scanResult");
-        this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
-        this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
-        this.descriptorReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/descriptorRead");
-        this.characteristicNotifiedChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicNotified");
         this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
         stateChannel.setStreamHandler(stateHandler);
         scanResultChannel.setStreamHandler(scanResultsHandler);
-        servicesDiscoveredChannel.setStreamHandler(servicesDiscoveredHandler);
-        characteristicReadChannel.setStreamHandler(characteristicReadHandler);
-        descriptorReadChannel.setStreamHandler(descriptorReadHandler);
-        characteristicNotifiedChannel.setStreamHandler(characteristicNotifiedHandler);
+
+        mQueue = new ConcurrentLinkedQueue<>();
+    }
+
+    private void queueOperation(GattOperation op) {
+        mQueue.add(op);
+        driveQueue();
+    }
+
+    private void driveQueue() {
+        if (mCurrentOperation!=null) {
+            return;
+        }
+        if (mQueue.size() == 0) {
+            return;
+        }
+
+        final GattOperation op = mQueue.poll();
+
+        mCurrentOperation = op;
+        op.execute();
+    }
+
+    public void onGattOperationFinished() {
+        mCurrentOperation = null;
+        driveQueue();
     }
 
     @Override
@@ -225,11 +241,9 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     result.error("discover_services_error", "no instance of BluetoothGatt, have you connected first?", null);
                     return;
                 }
-                if(gattServer.discoverServices()) {
-                    result.success(null);
-                } else {
-                    result.error("discover_services_error", "unknown reason", null);
-                }
+
+                queueOperation(new DiscoverServicesOperation(gattServer, result, this));
+
                 break;
             }
 
@@ -275,11 +289,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     return;
                 }
 
-                if(gattServer.readCharacteristic(characteristic)) {
-                    result.success(null);
-                } else {
-                    result.error("read_characteristic_error", "unknown reason, may occur if readCharacteristic was called before last read finished.", null);
-                }
+                queueOperation(new ReadCharacteristicOperation(gattServer, characteristic, result, this));
                 break;
             }
 
@@ -306,11 +316,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     return;
                 }
 
-                if(gattServer.readDescriptor(descriptor)) {
-                    result.success(null);
-                } else {
-                    result.error("read_descriptor_error", "unknown reason, may occur if readDescriptor was called before last read finished.", null);
-                }
+                queueOperation(new ReadDescriptorOperation(gattServer, descriptor, result, this));
                 break;
             }
 
@@ -347,12 +353,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 }
 
-                if(!gattServer.writeCharacteristic(characteristic)){
-                    result.error("write_characteristic_error", "writeCharacteristic failed", null);
-                    return;
-                }
-
-                result.success(null);
+                queueOperation(new WriteCharacteristicOperation(gattServer, characteristic, result, this));
                 break;
             }
 
@@ -384,12 +385,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     result.error("write_descriptor_error", "could not set the local value for descriptor", null);
                 }
 
-                if(!gattServer.writeDescriptor(descriptor)){
-                    result.error("write_descriptor_error", "writeCharacteristic failed", null);
-                    return;
-                }
-
-                result.success(null);
+                queueOperation(new WriteDescriptorOperation(gattServer, descriptor, result, this));
                 break;
             }
 
@@ -410,51 +406,12 @@ public class FlutterBluePlugin implements MethodCallHandler {
                 try {
                     gattServer = locateGatt(request.getRemoteId());
                     characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
-                    cccDescriptor = characteristic.getDescriptor(CCCD_ID);
-                    if(cccDescriptor == null) {
-                        throw new Exception("could not locate CCCD descriptor for characteristic: " +characteristic.getUuid().toString());
-                    }
                 } catch(Exception e) {
                     result.error("set_notification_error", e.getMessage(), null);
                     return;
                 }
 
-                byte[] value = null;
-
-                if(request.getEnable()) {
-                    boolean canNotify = (characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0;
-                    boolean canIndicate = (characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_INDICATE) > 0;
-                    if(!canIndicate && !canNotify) {
-                        result.error("set_notification_error", "the characteristic cannot notify or indicate", null);
-                        return;
-                    }
-                    if(canIndicate) {
-                        value = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE;
-                    }
-                    if(canNotify) {
-                        value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
-                    }
-                } else {
-                    value = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
-                }
-
-
-                if(!cccDescriptor.setValue(value)) {
-                    result.error("set_notification_error", "error when setting the descriptor value to: " + value, null);
-                    return;
-                }
-
-                if(!gattServer.writeDescriptor(cccDescriptor)) {
-                    result.error("set_notification_error", "error when writing the descriptor", null);
-                    return;
-                }
-
-                if(!gattServer.setCharacteristicNotification(characteristic, request.getEnable())){
-                    result.error("set_notification_error", "could not set characteristic notifications to :" + request.getEnable(), null);
-                    return;
-                }
-
-                result.success(ProtoMaker.from(characteristic, gattServer).toByteArray());
+                queueOperation(new SetNotificationOperation(gattServer, characteristic, request.getEnable(), result, this));
                 break;
             }
 
@@ -645,58 +602,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
         }
     };
 
-    private EventSink servicesDiscoveredSink;
-    private final StreamHandler servicesDiscoveredHandler = new StreamHandler() {
-        @Override
-        public void onListen(Object o, EventChannel.EventSink eventSink) {
-            servicesDiscoveredSink = eventSink;
-        }
-
-        @Override
-        public void onCancel(Object o) {
-            servicesDiscoveredSink = null;
-        }
-    };
-
-    private EventSink characteristicReadSink;
-    private final StreamHandler characteristicReadHandler = new StreamHandler() {
-        @Override
-        public void onListen(Object o, EventChannel.EventSink eventSink) {
-            characteristicReadSink = eventSink;
-        }
-
-        @Override
-        public void onCancel(Object o) {
-            characteristicReadSink = null;
-        }
-    };
-
-    private EventSink descriptorReadSink;
-    private final StreamHandler descriptorReadHandler = new StreamHandler() {
-        @Override
-        public void onListen(Object o, EventChannel.EventSink eventSink) {
-            descriptorReadSink = eventSink;
-        }
-
-        @Override
-        public void onCancel(Object o) {
-            descriptorReadSink = null;
-        }
-    };
-
-    private EventSink characteristicNotifiedSink;
-    private final StreamHandler characteristicNotifiedHandler = new StreamHandler() {
-        @Override
-        public void onListen(Object o, EventChannel.EventSink eventSink) {
-            characteristicNotifiedSink = eventSink;
-        }
-
-        @Override
-        public void onCancel(Object o) {
-            characteristicNotifiedSink = null;
-        }
-    };
-
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -706,95 +611,40 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            Log.d(TAG, "onServicesDiscovered: " + gatt.getServices().size() + " sink:" + servicesDiscoveredSink);
-            if(servicesDiscoveredSink != null) {
-                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
-                p.setRemoteId(gatt.getDevice().getAddress());
-                for(BluetoothGattService s : gatt.getServices()) {
-                    p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
-                }
-                servicesDiscoveredSink.success(p.build().toByteArray());
-            }
+            if (mCurrentOperation!=null) mCurrentOperation.onServicesDiscovered(gatt, status);
+            else Log.w(TAG, "onServicesDiscovered, but no operation in progress");
         }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicRead: ");
-            if(characteristicReadSink != null) {
-                Protos.ReadCharacteristicResponse.Builder p = Protos.ReadCharacteristicResponse.newBuilder();
-                p.setRemoteId(gatt.getDevice().getAddress());
-                p.setCharacteristic(ProtoMaker.from(characteristic, gatt));
-                characteristicReadSink.success(p.build().toByteArray());
-            }
+            if (mCurrentOperation!=null) mCurrentOperation.onCharacteristicRead(gatt, characteristic, status);
+            else Log.w(TAG, "onCharacteristicRead, but no operation in progress");
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            Log.d(TAG, "onCharacteristicWrite: ");
-            Protos.WriteCharacteristicRequest.Builder request = Protos.WriteCharacteristicRequest.newBuilder();
-            request.setRemoteId(gatt.getDevice().getAddress());
-            request.setCharacteristicUuid(characteristic.getUuid().toString());
-            request.setServiceUuid(characteristic.getService().getUuid().toString());
-            Protos.WriteCharacteristicResponse.Builder p = Protos.WriteCharacteristicResponse.newBuilder();
-            p.setRequest(request);
-            p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
-            channel.invokeMethod("WriteCharacteristicResponse", p.build().toByteArray());
+            if (mCurrentOperation!=null) mCurrentOperation.onCharacteristicWrite(gatt, characteristic, status);
+            else Log.w(TAG, "onCharacteristicWrite, but no operation in progress");
         }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            Log.d(TAG, "onCharacteristicChanged: " + characteristic.getValue());
-            if(characteristicNotifiedSink != null) {
-                // Rebuild the ReadAttributeRequest and send back along with response
-                Protos.OnNotificationResponse.Builder q = Protos.OnNotificationResponse.newBuilder();
-                q.setRemoteId(gatt.getDevice().getAddress());
-                q.setCharacteristic(ProtoMaker.from(characteristic, gatt));
-                characteristicNotifiedSink.success(q.build().toByteArray());
-            }
+            Protos.OnNotificationResponse.Builder q = Protos.OnNotificationResponse.newBuilder();
+            q.setRemoteId(gatt.getDevice().getAddress());
+            q.setCharacteristic(ProtoMaker.from(characteristic, gatt));
+            channel.invokeMethod("CharacteristicChanged", q.build().toByteArray());
         }
 
         @Override
         public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            Log.d(TAG, "onDescriptorRead: ");
-            if(descriptorReadSink != null) {
-                // Rebuild the ReadAttributeRequest and send back along with response
-                Protos.ReadDescriptorRequest.Builder q = Protos.ReadDescriptorRequest.newBuilder();
-                q.setRemoteId(gatt.getDevice().getAddress());
-                q.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
-                q.setDescriptorUuid(descriptor.getUuid().toString());
-                if(descriptor.getCharacteristic().getService().getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY) {
-                    q.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
-                } else {
-                    // Reverse search to find service
-                    for(BluetoothGattService s : gatt.getServices()) {
-                        for(BluetoothGattService ss : s.getIncludedServices()) {
-                            if(ss.getUuid().equals(descriptor.getCharacteristic().getService().getUuid())){
-                                q.setServiceUuid(s.getUuid().toString());
-                                q.setSecondaryServiceUuid(ss.getUuid().toString());
-                                break;
-                            }
-                        }
-                    }
-                }
-                Protos.ReadDescriptorResponse.Builder p = Protos.ReadDescriptorResponse.newBuilder();
-                p.setRequest(q);
-                p.setValue(ByteString.copyFrom(descriptor.getValue()));
-                descriptorReadSink.success(p.build().toByteArray());
-            }
+            if (mCurrentOperation!=null) mCurrentOperation.onDescriptorRead(gatt, descriptor, status);
+            else Log.w(TAG, "onDescriptorRead, but no operation in progress");
         }
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            Log.d(TAG, "onDescriptorWrite: ");
-            Protos.WriteDescriptorRequest.Builder request = Protos.WriteDescriptorRequest.newBuilder();
-            request.setRemoteId(gatt.getDevice().getAddress());
-            request.setDescriptorUuid(descriptor.getUuid().toString());
-            request.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
-            request.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
-            Protos.WriteDescriptorResponse.Builder p = Protos.WriteDescriptorResponse.newBuilder();
-            p.setRequest(request);
-            p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
-            channel.invokeMethod("WriteDescriptorResponse", p.build().toByteArray());
+            if (mCurrentOperation!=null) mCurrentOperation.onDescriptorWrite(gatt, descriptor, status);
+            else Log.w(TAG, "onDescriptorWrite, but no operation in progress");
         }
 
         @Override
