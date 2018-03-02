@@ -8,8 +8,6 @@ dependencies:
     path: ../
   intl: '^0.15.1'
   intl_translation: '^0.15.0'
-  convert: "^2.0.1"
-  protobuf: '^0.5.5'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

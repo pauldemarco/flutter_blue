@@ -3,8 +3,11 @@
 // BSD-style license that can be found in the LICENSE file.
 
 # Generate protobuf files in Dart
-1. Get the latest linux protoc compiler from https://github.com/google/protobuf/releases/tag/v3.4.0
-2. Get the latest dart-protoc-plugin from https://github.com/dart-lang/dart-protoc-plugin
-3. Make sure protoc + protoc-gen-dart + dart bins are all in the same path
-4. Run the following command from the protos folder
+1. If upgrading, delete all proto files from /home/.pub-cache/bin
+1. Get the latest linux protoc compiler from https://github.com/google/protobuf/releases/ (protoc-X.X.X-linux-x86_64.zip)
+1. Copy /bin/protoc into /home/.pub-cache/bin/
+1. Clone the latest dart-protoc-plugin from https://github.com/dart-lang/dart-protoc-plugin
+1. Run `pub install` inside dart-protoc-plugin
+1. Run `pub global activate protoc_plugin` to get .dart files into /home/.pub-cache/bin/
+1. Run the following command from the protos folder
 ```protoc --dart_out=../lib/gen ./flutterblue.proto```

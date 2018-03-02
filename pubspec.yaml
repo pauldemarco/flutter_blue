@@ -12,13 +12,10 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  convert: "^2.0.1"
-  protobuf: '^0.5.5'
+  convert: '^2.0.1'
+  protobuf: '^0.7.1'
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-environment:
-    sdk: ">=1.8.0 <2.0.0"

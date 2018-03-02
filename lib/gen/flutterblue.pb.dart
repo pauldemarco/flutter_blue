@@ -1,8 +1,7 @@
 ///
 //  Generated code. Do not modify.
 ///
-// ignore_for_file: non_constant_identifier_names
-// ignore_for_file: library_prefixes
+// ignore_for_file: non_constant_identifier_names,library_prefixes
 library flutterblue;
 
 // ignore: UNUSED_SHOWN_NAME
@@ -16,7 +15,7 @@ export 'flutterblue.pbenum.dart';
 
 class BluetoothState extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothState')
-    ..e<BluetoothState_State>(1, 'state', PbFieldType.OE, BluetoothState_State.UNKNOWN, BluetoothState_State.valueOf)
+    ..e<BluetoothState_State>(1, 'state', PbFieldType.OE, BluetoothState_State.UNKNOWN, BluetoothState_State.valueOf, BluetoothState_State.values)
     ..hasRequiredFields = false
   ;
 
@@ -36,9 +35,9 @@ class BluetoothState extends GeneratedMessage {
     if (v is! BluetoothState) checkItemFailed(v, 'BluetoothState');
   }
 
-  BluetoothState_State get state => $_get(0, 1, null);
+  BluetoothState_State get state => $_getN(0);
   set state(BluetoothState_State v) { setField(1, v); }
-  bool hasState() => $_has(0, 1);
+  bool hasState() => $_has(0);
   void clearState() => clearField(1);
 }
 
@@ -46,7 +45,7 @@ class _ReadonlyBluetoothState extends BluetoothState with ReadonlyMessageMixin {
 
 class AdvertisementData_ServiceDataEntry extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('AdvertisementData_ServiceDataEntry')
-    ..a<String>(1, 'key', PbFieldType.OS)
+    ..aOS(1, 'key')
     ..a<List<int>>(2, 'value', PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -67,14 +66,14 @@ class AdvertisementData_ServiceDataEntry extends GeneratedMessage {
     if (v is! AdvertisementData_ServiceDataEntry) checkItemFailed(v, 'AdvertisementData_ServiceDataEntry');
   }
 
-  String get key => $_get(0, 1, '');
-  set key(String v) { $_setString(0, 1, v); }
-  bool hasKey() => $_has(0, 1);
+  String get key => $_getS(0, '');
+  set key(String v) { $_setString(0, v); }
+  bool hasKey() => $_has(0);
   void clearKey() => clearField(1);
 
-  List<int> get value => $_get(1, 2, null);
-  set value(List<int> v) { $_setBytes(1, 2, v); }
-  bool hasValue() => $_has(1, 2);
+  List<int> get value => $_getN(1);
+  set value(List<int> v) { $_setBytes(1, v); }
+  bool hasValue() => $_has(1);
   void clearValue() => clearField(2);
 }
 
@@ -82,11 +81,11 @@ class _ReadonlyAdvertisementData_ServiceDataEntry extends AdvertisementData_Serv
 
 class AdvertisementData extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('AdvertisementData')
-    ..a<String>(1, 'localName', PbFieldType.OS)
+    ..aOS(1, 'localName')
     ..a<List<int>>(2, 'manufacturerData', PbFieldType.OY)
     ..pp<AdvertisementData_ServiceDataEntry>(3, 'serviceData', PbFieldType.PM, AdvertisementData_ServiceDataEntry.$checkItem, AdvertisementData_ServiceDataEntry.create)
     ..a<int>(4, 'txPowerLevel', PbFieldType.O3)
-    ..a<bool>(5, 'connectable', PbFieldType.OB)
+    ..aOB(5, 'connectable')
     ..hasRequiredFields = false
   ;
 
@@ -106,26 +105,26 @@ class AdvertisementData extends GeneratedMessage {
     if (v is! AdvertisementData) checkItemFailed(v, 'AdvertisementData');
   }
 
-  String get localName => $_get(0, 1, '');
-  set localName(String v) { $_setString(0, 1, v); }
-  bool hasLocalName() => $_has(0, 1);
+  String get localName => $_getS(0, '');
+  set localName(String v) { $_setString(0, v); }
+  bool hasLocalName() => $_has(0);
   void clearLocalName() => clearField(1);
 
-  List<int> get manufacturerData => $_get(1, 2, null);
-  set manufacturerData(List<int> v) { $_setBytes(1, 2, v); }
-  bool hasManufacturerData() => $_has(1, 2);
+  List<int> get manufacturerData => $_getN(1);
+  set manufacturerData(List<int> v) { $_setBytes(1, v); }
+  bool hasManufacturerData() => $_has(1);
   void clearManufacturerData() => clearField(2);
 
-  List<AdvertisementData_ServiceDataEntry> get serviceData => $_get(2, 3, null);
+  List<AdvertisementData_ServiceDataEntry> get serviceData => $_getList(2);
 
-  int get txPowerLevel => $_get(3, 4, 0);
-  set txPowerLevel(int v) { $_setUnsignedInt32(3, 4, v); }
-  bool hasTxPowerLevel() => $_has(3, 4);
+  int get txPowerLevel => $_get(3, 0);
+  set txPowerLevel(int v) { $_setUnsignedInt32(3, v); }
+  bool hasTxPowerLevel() => $_has(3);
   void clearTxPowerLevel() => clearField(4);
 
-  bool get connectable => $_get(4, 5, false);
-  set connectable(bool v) { $_setBool(4, 5, v); }
-  bool hasConnectable() => $_has(4, 5);
+  bool get connectable => $_get(4, false);
+  set connectable(bool v) { $_setBool(4, v); }
+  bool hasConnectable() => $_has(4);
   void clearConnectable() => clearField(5);
 }
 
@@ -134,7 +133,7 @@ class _ReadonlyAdvertisementData extends AdvertisementData with ReadonlyMessageM
 class ScanSettings extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ScanSettings')
     ..a<int>(1, 'androidScanMode', PbFieldType.O3)
-    ..p<String>(2, 'serviceUuids', PbFieldType.PS)
+    ..pPS(2, 'serviceUuids')
     ..hasRequiredFields = false
   ;
 
@@ -154,12 +153,12 @@ class ScanSettings extends GeneratedMessage {
     if (v is! ScanSettings) checkItemFailed(v, 'ScanSettings');
   }
 
-  int get androidScanMode => $_get(0, 1, 0);
-  set androidScanMode(int v) { $_setUnsignedInt32(0, 1, v); }
-  bool hasAndroidScanMode() => $_has(0, 1);
+  int get androidScanMode => $_get(0, 0);
+  set androidScanMode(int v) { $_setUnsignedInt32(0, v); }
+  bool hasAndroidScanMode() => $_has(0);
   void clearAndroidScanMode() => clearField(1);
 
-  List<String> get serviceUuids => $_get(1, 2, null);
+  List<String> get serviceUuids => $_getList(1);
 }
 
 class _ReadonlyScanSettings extends ScanSettings with ReadonlyMessageMixin {}
@@ -188,19 +187,19 @@ class ScanResult extends GeneratedMessage {
     if (v is! ScanResult) checkItemFailed(v, 'ScanResult');
   }
 
-  BluetoothDevice get device => $_get(0, 1, null);
+  BluetoothDevice get device => $_getN(0);
   set device(BluetoothDevice v) { setField(1, v); }
-  bool hasDevice() => $_has(0, 1);
+  bool hasDevice() => $_has(0);
   void clearDevice() => clearField(1);
 
-  AdvertisementData get advertisementData => $_get(1, 2, null);
+  AdvertisementData get advertisementData => $_getN(1);
   set advertisementData(AdvertisementData v) { setField(2, v); }
-  bool hasAdvertisementData() => $_has(1, 2);
+  bool hasAdvertisementData() => $_has(1);
   void clearAdvertisementData() => clearField(2);
 
-  int get rssi => $_get(2, 3, 0);
-  set rssi(int v) { $_setUnsignedInt32(2, 3, v); }
-  bool hasRssi() => $_has(2, 3);
+  int get rssi => $_get(2, 0);
+  set rssi(int v) { $_setUnsignedInt32(2, v); }
+  bool hasRssi() => $_has(2);
   void clearRssi() => clearField(3);
 }
 
@@ -208,8 +207,8 @@ class _ReadonlyScanResult extends ScanResult with ReadonlyMessageMixin {}
 
 class ConnectRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ConnectRequest')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<bool>(2, 'androidAutoConnect', PbFieldType.OB)
+    ..aOS(1, 'remoteId')
+    ..aOB(2, 'androidAutoConnect')
     ..hasRequiredFields = false
   ;
 
@@ -229,14 +228,14 @@ class ConnectRequest extends GeneratedMessage {
     if (v is! ConnectRequest) checkItemFailed(v, 'ConnectRequest');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  bool get androidAutoConnect => $_get(1, 2, false);
-  set androidAutoConnect(bool v) { $_setBool(1, 2, v); }
-  bool hasAndroidAutoConnect() => $_has(1, 2);
+  bool get androidAutoConnect => $_get(1, false);
+  set androidAutoConnect(bool v) { $_setBool(1, v); }
+  bool hasAndroidAutoConnect() => $_has(1);
   void clearAndroidAutoConnect() => clearField(2);
 }
 
@@ -244,9 +243,9 @@ class _ReadonlyConnectRequest extends ConnectRequest with ReadonlyMessageMixin {
 
 class BluetoothDevice extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothDevice')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'name', PbFieldType.OS)
-    ..e<BluetoothDevice_Type>(3, 'type', PbFieldType.OE, BluetoothDevice_Type.UNKNOWN, BluetoothDevice_Type.valueOf)
+    ..aOS(1, 'remoteId')
+    ..aOS(2, 'name')
+    ..e<BluetoothDevice_Type>(3, 'type', PbFieldType.OE, BluetoothDevice_Type.UNKNOWN, BluetoothDevice_Type.valueOf, BluetoothDevice_Type.values)
     ..hasRequiredFields = false
   ;
 
@@ -266,19 +265,19 @@ class BluetoothDevice extends GeneratedMessage {
     if (v is! BluetoothDevice) checkItemFailed(v, 'BluetoothDevice');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  String get name => $_get(1, 2, '');
-  set name(String v) { $_setString(1, 2, v); }
-  bool hasName() => $_has(1, 2);
+  String get name => $_getS(1, '');
+  set name(String v) { $_setString(1, v); }
+  bool hasName() => $_has(1);
   void clearName() => clearField(2);
 
-  BluetoothDevice_Type get type => $_get(2, 3, null);
+  BluetoothDevice_Type get type => $_getN(2);
   set type(BluetoothDevice_Type v) { setField(3, v); }
-  bool hasType() => $_has(2, 3);
+  bool hasType() => $_has(2);
   void clearType() => clearField(3);
 }
 
@@ -286,9 +285,9 @@ class _ReadonlyBluetoothDevice extends BluetoothDevice with ReadonlyMessageMixin
 
 class BluetoothService extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothService')
-    ..a<String>(1, 'uuid', PbFieldType.OS)
-    ..a<String>(2, 'remoteId', PbFieldType.OS)
-    ..a<bool>(3, 'isPrimary', PbFieldType.OB)
+    ..aOS(1, 'uuid')
+    ..aOS(2, 'remoteId')
+    ..aOB(3, 'isPrimary')
     ..pp<BluetoothCharacteristic>(4, 'characteristics', PbFieldType.PM, BluetoothCharacteristic.$checkItem, BluetoothCharacteristic.create)
     ..pp<BluetoothService>(5, 'includedServices', PbFieldType.PM, BluetoothService.$checkItem, BluetoothService.create)
     ..hasRequiredFields = false
@@ -310,33 +309,33 @@ class BluetoothService extends GeneratedMessage {
     if (v is! BluetoothService) checkItemFailed(v, 'BluetoothService');
   }
 
-  String get uuid => $_get(0, 1, '');
-  set uuid(String v) { $_setString(0, 1, v); }
-  bool hasUuid() => $_has(0, 1);
+  String get uuid => $_getS(0, '');
+  set uuid(String v) { $_setString(0, v); }
+  bool hasUuid() => $_has(0);
   void clearUuid() => clearField(1);
 
-  String get remoteId => $_get(1, 2, '');
-  set remoteId(String v) { $_setString(1, 2, v); }
-  bool hasRemoteId() => $_has(1, 2);
+  String get remoteId => $_getS(1, '');
+  set remoteId(String v) { $_setString(1, v); }
+  bool hasRemoteId() => $_has(1);
   void clearRemoteId() => clearField(2);
 
-  bool get isPrimary => $_get(2, 3, false);
-  set isPrimary(bool v) { $_setBool(2, 3, v); }
-  bool hasIsPrimary() => $_has(2, 3);
+  bool get isPrimary => $_get(2, false);
+  set isPrimary(bool v) { $_setBool(2, v); }
+  bool hasIsPrimary() => $_has(2);
   void clearIsPrimary() => clearField(3);
 
-  List<BluetoothCharacteristic> get characteristics => $_get(3, 4, null);
+  List<BluetoothCharacteristic> get characteristics => $_getList(3);
 
-  List<BluetoothService> get includedServices => $_get(4, 5, null);
+  List<BluetoothService> get includedServices => $_getList(4);
 }
 
 class _ReadonlyBluetoothService extends BluetoothService with ReadonlyMessageMixin {}
 
 class BluetoothCharacteristic extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothCharacteristic')
-    ..a<String>(1, 'uuid', PbFieldType.OS)
-    ..a<String>(2, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(3, 'secondaryServiceUuid', PbFieldType.OS)
+    ..aOS(1, 'uuid')
+    ..aOS(2, 'serviceUuid')
+    ..aOS(3, 'secondaryServiceUuid')
     ..pp<BluetoothDescriptor>(4, 'descriptors', PbFieldType.PM, BluetoothDescriptor.$checkItem, BluetoothDescriptor.create)
     ..a<CharacteristicProperties>(5, 'properties', PbFieldType.OM, CharacteristicProperties.getDefault, CharacteristicProperties.create)
     ..a<List<int>>(6, 'value', PbFieldType.OY)
@@ -359,31 +358,31 @@ class BluetoothCharacteristic extends GeneratedMessage {
     if (v is! BluetoothCharacteristic) checkItemFailed(v, 'BluetoothCharacteristic');
   }
 
-  String get uuid => $_get(0, 1, '');
-  set uuid(String v) { $_setString(0, 1, v); }
-  bool hasUuid() => $_has(0, 1);
+  String get uuid => $_getS(0, '');
+  set uuid(String v) { $_setString(0, v); }
+  bool hasUuid() => $_has(0);
   void clearUuid() => clearField(1);
 
-  String get serviceUuid => $_get(1, 2, '');
-  set serviceUuid(String v) { $_setString(1, 2, v); }
-  bool hasServiceUuid() => $_has(1, 2);
+  String get serviceUuid => $_getS(1, '');
+  set serviceUuid(String v) { $_setString(1, v); }
+  bool hasServiceUuid() => $_has(1);
   void clearServiceUuid() => clearField(2);
 
-  String get secondaryServiceUuid => $_get(2, 3, '');
-  set secondaryServiceUuid(String v) { $_setString(2, 3, v); }
-  bool hasSecondaryServiceUuid() => $_has(2, 3);
+  String get secondaryServiceUuid => $_getS(2, '');
+  set secondaryServiceUuid(String v) { $_setString(2, v); }
+  bool hasSecondaryServiceUuid() => $_has(2);
   void clearSecondaryServiceUuid() => clearField(3);
 
-  List<BluetoothDescriptor> get descriptors => $_get(3, 4, null);
+  List<BluetoothDescriptor> get descriptors => $_getList(3);
 
-  CharacteristicProperties get properties => $_get(4, 5, null);
+  CharacteristicProperties get properties => $_getN(4);
   set properties(CharacteristicProperties v) { setField(5, v); }
-  bool hasProperties() => $_has(4, 5);
+  bool hasProperties() => $_has(4);
   void clearProperties() => clearField(5);
 
-  List<int> get value => $_get(5, 6, null);
-  set value(List<int> v) { $_setBytes(5, 6, v); }
-  bool hasValue() => $_has(5, 6);
+  List<int> get value => $_getN(5);
+  set value(List<int> v) { $_setBytes(5, v); }
+  bool hasValue() => $_has(5);
   void clearValue() => clearField(6);
 }
 
@@ -391,9 +390,9 @@ class _ReadonlyBluetoothCharacteristic extends BluetoothCharacteristic with Read
 
 class BluetoothDescriptor extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothDescriptor')
-    ..a<String>(1, 'uuid', PbFieldType.OS)
-    ..a<String>(2, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(3, 'characteristicUuid', PbFieldType.OS)
+    ..aOS(1, 'uuid')
+    ..aOS(2, 'serviceUuid')
+    ..aOS(3, 'characteristicUuid')
     ..a<List<int>>(4, 'value', PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -414,24 +413,24 @@ class BluetoothDescriptor extends GeneratedMessage {
     if (v is! BluetoothDescriptor) checkItemFailed(v, 'BluetoothDescriptor');
   }
 
-  String get uuid => $_get(0, 1, '');
-  set uuid(String v) { $_setString(0, 1, v); }
-  bool hasUuid() => $_has(0, 1);
+  String get uuid => $_getS(0, '');
+  set uuid(String v) { $_setString(0, v); }
+  bool hasUuid() => $_has(0);
   void clearUuid() => clearField(1);
 
-  String get serviceUuid => $_get(1, 2, '');
-  set serviceUuid(String v) { $_setString(1, 2, v); }
-  bool hasServiceUuid() => $_has(1, 2);
+  String get serviceUuid => $_getS(1, '');
+  set serviceUuid(String v) { $_setString(1, v); }
+  bool hasServiceUuid() => $_has(1);
   void clearServiceUuid() => clearField(2);
 
-  String get characteristicUuid => $_get(2, 3, '');
-  set characteristicUuid(String v) { $_setString(2, 3, v); }
-  bool hasCharacteristicUuid() => $_has(2, 3);
+  String get characteristicUuid => $_getS(2, '');
+  set characteristicUuid(String v) { $_setString(2, v); }
+  bool hasCharacteristicUuid() => $_has(2);
   void clearCharacteristicUuid() => clearField(3);
 
-  List<int> get value => $_get(3, 4, null);
-  set value(List<int> v) { $_setBytes(3, 4, v); }
-  bool hasValue() => $_has(3, 4);
+  List<int> get value => $_getN(3);
+  set value(List<int> v) { $_setBytes(3, v); }
+  bool hasValue() => $_has(3);
   void clearValue() => clearField(4);
 }
 
@@ -439,16 +438,16 @@ class _ReadonlyBluetoothDescriptor extends BluetoothDescriptor with ReadonlyMess
 
 class CharacteristicProperties extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('CharacteristicProperties')
-    ..a<bool>(1, 'broadcast', PbFieldType.OB)
-    ..a<bool>(2, 'read', PbFieldType.OB)
-    ..a<bool>(3, 'writeWithoutResponse', PbFieldType.OB)
-    ..a<bool>(4, 'write', PbFieldType.OB)
-    ..a<bool>(5, 'notify', PbFieldType.OB)
-    ..a<bool>(6, 'indicate', PbFieldType.OB)
-    ..a<bool>(7, 'authenticatedSignedWrites', PbFieldType.OB)
-    ..a<bool>(8, 'extendedProperties', PbFieldType.OB)
-    ..a<bool>(9, 'notifyEncryptionRequired', PbFieldType.OB)
-    ..a<bool>(10, 'indicateEncryptionRequired', PbFieldType.OB)
+    ..aOB(1, 'broadcast')
+    ..aOB(2, 'read')
+    ..aOB(3, 'writeWithoutResponse')
+    ..aOB(4, 'write')
+    ..aOB(5, 'notify')
+    ..aOB(6, 'indicate')
+    ..aOB(7, 'authenticatedSignedWrites')
+    ..aOB(8, 'extendedProperties')
+    ..aOB(9, 'notifyEncryptionRequired')
+    ..aOB(10, 'indicateEncryptionRequired')
     ..hasRequiredFields = false
   ;
 
@@ -468,54 +467,54 @@ class CharacteristicProperties extends GeneratedMessage {
     if (v is! CharacteristicProperties) checkItemFailed(v, 'CharacteristicProperties');
   }
 
-  bool get broadcast => $_get(0, 1, false);
-  set broadcast(bool v) { $_setBool(0, 1, v); }
-  bool hasBroadcast() => $_has(0, 1);
+  bool get broadcast => $_get(0, false);
+  set broadcast(bool v) { $_setBool(0, v); }
+  bool hasBroadcast() => $_has(0);
   void clearBroadcast() => clearField(1);
 
-  bool get read => $_get(1, 2, false);
-  set read(bool v) { $_setBool(1, 2, v); }
-  bool hasRead() => $_has(1, 2);
+  bool get read => $_get(1, false);
+  set read(bool v) { $_setBool(1, v); }
+  bool hasRead() => $_has(1);
   void clearRead() => clearField(2);
 
-  bool get writeWithoutResponse => $_get(2, 3, false);
-  set writeWithoutResponse(bool v) { $_setBool(2, 3, v); }
-  bool hasWriteWithoutResponse() => $_has(2, 3);
+  bool get writeWithoutResponse => $_get(2, false);
+  set writeWithoutResponse(bool v) { $_setBool(2, v); }
+  bool hasWriteWithoutResponse() => $_has(2);
   void clearWriteWithoutResponse() => clearField(3);
 
-  bool get write => $_get(3, 4, false);
-  set write(bool v) { $_setBool(3, 4, v); }
-  bool hasWrite() => $_has(3, 4);
+  bool get write => $_get(3, false);
+  set write(bool v) { $_setBool(3, v); }
+  bool hasWrite() => $_has(3);
   void clearWrite() => clearField(4);
 
-  bool get notify => $_get(4, 5, false);
-  set notify(bool v) { $_setBool(4, 5, v); }
-  bool hasNotify() => $_has(4, 5);
+  bool get notify => $_get(4, false);
+  set notify(bool v) { $_setBool(4, v); }
+  bool hasNotify() => $_has(4);
   void clearNotify() => clearField(5);
 
-  bool get indicate => $_get(5, 6, false);
-  set indicate(bool v) { $_setBool(5, 6, v); }
-  bool hasIndicate() => $_has(5, 6);
+  bool get indicate => $_get(5, false);
+  set indicate(bool v) { $_setBool(5, v); }
+  bool hasIndicate() => $_has(5);
   void clearIndicate() => clearField(6);
 
-  bool get authenticatedSignedWrites => $_get(6, 7, false);
-  set authenticatedSignedWrites(bool v) { $_setBool(6, 7, v); }
-  bool hasAuthenticatedSignedWrites() => $_has(6, 7);
+  bool get authenticatedSignedWrites => $_get(6, false);
+  set authenticatedSignedWrites(bool v) { $_setBool(6, v); }
+  bool hasAuthenticatedSignedWrites() => $_has(6);
   void clearAuthenticatedSignedWrites() => clearField(7);
 
-  bool get extendedProperties => $_get(7, 8, false);
-  set extendedProperties(bool v) { $_setBool(7, 8, v); }
-  bool hasExtendedProperties() => $_has(7, 8);
+  bool get extendedProperties => $_get(7, false);
+  set extendedProperties(bool v) { $_setBool(7, v); }
+  bool hasExtendedProperties() => $_has(7);
   void clearExtendedProperties() => clearField(8);
 
-  bool get notifyEncryptionRequired => $_get(8, 9, false);
-  set notifyEncryptionRequired(bool v) { $_setBool(8, 9, v); }
-  bool hasNotifyEncryptionRequired() => $_has(8, 9);
+  bool get notifyEncryptionRequired => $_get(8, false);
+  set notifyEncryptionRequired(bool v) { $_setBool(8, v); }
+  bool hasNotifyEncryptionRequired() => $_has(8);
   void clearNotifyEncryptionRequired() => clearField(9);
 
-  bool get indicateEncryptionRequired => $_get(9, 10, false);
-  set indicateEncryptionRequired(bool v) { $_setBool(9, 10, v); }
-  bool hasIndicateEncryptionRequired() => $_has(9, 10);
+  bool get indicateEncryptionRequired => $_get(9, false);
+  set indicateEncryptionRequired(bool v) { $_setBool(9, v); }
+  bool hasIndicateEncryptionRequired() => $_has(9);
   void clearIndicateEncryptionRequired() => clearField(10);
 }
 
@@ -523,7 +522,7 @@ class _ReadonlyCharacteristicProperties extends CharacteristicProperties with Re
 
 class DiscoverServicesResult extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DiscoverServicesResult')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..aOS(1, 'remoteId')
     ..pp<BluetoothService>(2, 'services', PbFieldType.PM, BluetoothService.$checkItem, BluetoothService.create)
     ..hasRequiredFields = false
   ;
@@ -544,22 +543,22 @@ class DiscoverServicesResult extends GeneratedMessage {
     if (v is! DiscoverServicesResult) checkItemFailed(v, 'DiscoverServicesResult');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  List<BluetoothService> get services => $_get(1, 2, null);
+  List<BluetoothService> get services => $_getList(1);
 }
 
 class _ReadonlyDiscoverServicesResult extends DiscoverServicesResult with ReadonlyMessageMixin {}
 
 class ReadCharacteristicRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ReadCharacteristicRequest')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'characteristicUuid', PbFieldType.OS)
-    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
+    ..aOS(1, 'remoteId')
+    ..aOS(2, 'characteristicUuid')
+    ..aOS(3, 'serviceUuid')
+    ..aOS(4, 'secondaryServiceUuid')
     ..hasRequiredFields = false
   ;
 
@@ -579,24 +578,24 @@ class ReadCharacteristicRequest extends GeneratedMessage {
     if (v is! ReadCharacteristicRequest) checkItemFailed(v, 'ReadCharacteristicRequest');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  String get characteristicUuid => $_get(1, 2, '');
-  set characteristicUuid(String v) { $_setString(1, 2, v); }
-  bool hasCharacteristicUuid() => $_has(1, 2);
+  String get characteristicUuid => $_getS(1, '');
+  set characteristicUuid(String v) { $_setString(1, v); }
+  bool hasCharacteristicUuid() => $_has(1);
   void clearCharacteristicUuid() => clearField(2);
 
-  String get serviceUuid => $_get(2, 3, '');
-  set serviceUuid(String v) { $_setString(2, 3, v); }
-  bool hasServiceUuid() => $_has(2, 3);
+  String get serviceUuid => $_getS(2, '');
+  set serviceUuid(String v) { $_setString(2, v); }
+  bool hasServiceUuid() => $_has(2);
   void clearServiceUuid() => clearField(3);
 
-  String get secondaryServiceUuid => $_get(3, 4, '');
-  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
-  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  String get secondaryServiceUuid => $_getS(3, '');
+  set secondaryServiceUuid(String v) { $_setString(3, v); }
+  bool hasSecondaryServiceUuid() => $_has(3);
   void clearSecondaryServiceUuid() => clearField(4);
 }
 
@@ -604,7 +603,7 @@ class _ReadonlyReadCharacteristicRequest extends ReadCharacteristicRequest with 
 
 class ReadCharacteristicResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ReadCharacteristicResponse')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..aOS(1, 'remoteId')
     ..a<BluetoothCharacteristic>(2, 'characteristic', PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
     ..hasRequiredFields = false
   ;
@@ -625,14 +624,14 @@ class ReadCharacteristicResponse extends GeneratedMessage {
     if (v is! ReadCharacteristicResponse) checkItemFailed(v, 'ReadCharacteristicResponse');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  BluetoothCharacteristic get characteristic => $_get(1, 2, null);
+  BluetoothCharacteristic get characteristic => $_getN(1);
   set characteristic(BluetoothCharacteristic v) { setField(2, v); }
-  bool hasCharacteristic() => $_has(1, 2);
+  bool hasCharacteristic() => $_has(1);
   void clearCharacteristic() => clearField(2);
 }
 
@@ -640,11 +639,11 @@ class _ReadonlyReadCharacteristicResponse extends ReadCharacteristicResponse wit
 
 class ReadDescriptorRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('ReadDescriptorRequest')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'descriptorUuid', PbFieldType.OS)
-    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
-    ..a<String>(5, 'characteristicUuid', PbFieldType.OS)
+    ..aOS(1, 'remoteId')
+    ..aOS(2, 'descriptorUuid')
+    ..aOS(3, 'serviceUuid')
+    ..aOS(4, 'secondaryServiceUuid')
+    ..aOS(5, 'characteristicUuid')
     ..hasRequiredFields = false
   ;
 
@@ -664,29 +663,29 @@ class ReadDescriptorRequest extends GeneratedMessage {
     if (v is! ReadDescriptorRequest) checkItemFailed(v, 'ReadDescriptorRequest');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  String get descriptorUuid => $_get(1, 2, '');
-  set descriptorUuid(String v) { $_setString(1, 2, v); }
-  bool hasDescriptorUuid() => $_has(1, 2);
+  String get descriptorUuid => $_getS(1, '');
+  set descriptorUuid(String v) { $_setString(1, v); }
+  bool hasDescriptorUuid() => $_has(1);
   void clearDescriptorUuid() => clearField(2);
 
-  String get serviceUuid => $_get(2, 3, '');
-  set serviceUuid(String v) { $_setString(2, 3, v); }
-  bool hasServiceUuid() => $_has(2, 3);
+  String get serviceUuid => $_getS(2, '');
+  set serviceUuid(String v) { $_setString(2, v); }
+  bool hasServiceUuid() => $_has(2);
   void clearServiceUuid() => clearField(3);
 
-  String get secondaryServiceUuid => $_get(3, 4, '');
-  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
-  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  String get secondaryServiceUuid => $_getS(3, '');
+  set secondaryServiceUuid(String v) { $_setString(3, v); }
+  bool hasSecondaryServiceUuid() => $_has(3);
   void clearSecondaryServiceUuid() => clearField(4);
 
-  String get characteristicUuid => $_get(4, 5, '');
-  set characteristicUuid(String v) { $_setString(4, 5, v); }
-  bool hasCharacteristicUuid() => $_has(4, 5);
+  String get characteristicUuid => $_getS(4, '');
+  set characteristicUuid(String v) { $_setString(4, v); }
+  bool hasCharacteristicUuid() => $_has(4);
   void clearCharacteristicUuid() => clearField(5);
 }
 
@@ -715,14 +714,14 @@ class ReadDescriptorResponse extends GeneratedMessage {
     if (v is! ReadDescriptorResponse) checkItemFailed(v, 'ReadDescriptorResponse');
   }
 
-  ReadDescriptorRequest get request => $_get(0, 1, null);
+  ReadDescriptorRequest get request => $_getN(0);
   set request(ReadDescriptorRequest v) { setField(1, v); }
-  bool hasRequest() => $_has(0, 1);
+  bool hasRequest() => $_has(0);
   void clearRequest() => clearField(1);
 
-  List<int> get value => $_get(1, 2, null);
-  set value(List<int> v) { $_setBytes(1, 2, v); }
-  bool hasValue() => $_has(1, 2);
+  List<int> get value => $_getN(1);
+  set value(List<int> v) { $_setBytes(1, v); }
+  bool hasValue() => $_has(1);
   void clearValue() => clearField(2);
 }
 
@@ -730,11 +729,11 @@ class _ReadonlyReadDescriptorResponse extends ReadDescriptorResponse with Readon
 
 class WriteCharacteristicRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('WriteCharacteristicRequest')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'characteristicUuid', PbFieldType.OS)
-    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
-    ..e<WriteCharacteristicRequest_WriteType>(5, 'writeType', PbFieldType.OE, WriteCharacteristicRequest_WriteType.WITH_RESPONSE, WriteCharacteristicRequest_WriteType.valueOf)
+    ..aOS(1, 'remoteId')
+    ..aOS(2, 'characteristicUuid')
+    ..aOS(3, 'serviceUuid')
+    ..aOS(4, 'secondaryServiceUuid')
+    ..e<WriteCharacteristicRequest_WriteType>(5, 'writeType', PbFieldType.OE, WriteCharacteristicRequest_WriteType.WITH_RESPONSE, WriteCharacteristicRequest_WriteType.valueOf, WriteCharacteristicRequest_WriteType.values)
     ..a<List<int>>(6, 'value', PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -755,34 +754,34 @@ class WriteCharacteristicRequest extends GeneratedMessage {
     if (v is! WriteCharacteristicRequest) checkItemFailed(v, 'WriteCharacteristicRequest');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  String get characteristicUuid => $_get(1, 2, '');
-  set characteristicUuid(String v) { $_setString(1, 2, v); }
-  bool hasCharacteristicUuid() => $_has(1, 2);
+  String get characteristicUuid => $_getS(1, '');
+  set characteristicUuid(String v) { $_setString(1, v); }
+  bool hasCharacteristicUuid() => $_has(1);
   void clearCharacteristicUuid() => clearField(2);
 
-  String get serviceUuid => $_get(2, 3, '');
-  set serviceUuid(String v) { $_setString(2, 3, v); }
-  bool hasServiceUuid() => $_has(2, 3);
+  String get serviceUuid => $_getS(2, '');
+  set serviceUuid(String v) { $_setString(2, v); }
+  bool hasServiceUuid() => $_has(2);
   void clearServiceUuid() => clearField(3);
 
-  String get secondaryServiceUuid => $_get(3, 4, '');
-  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
-  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  String get secondaryServiceUuid => $_getS(3, '');
+  set secondaryServiceUuid(String v) { $_setString(3, v); }
+  bool hasSecondaryServiceUuid() => $_has(3);
   void clearSecondaryServiceUuid() => clearField(4);
 
-  WriteCharacteristicRequest_WriteType get writeType => $_get(4, 5, null);
+  WriteCharacteristicRequest_WriteType get writeType => $_getN(4);
   set writeType(WriteCharacteristicRequest_WriteType v) { setField(5, v); }
-  bool hasWriteType() => $_has(4, 5);
+  bool hasWriteType() => $_has(4);
   void clearWriteType() => clearField(5);
 
-  List<int> get value => $_get(5, 6, null);
-  set value(List<int> v) { $_setBytes(5, 6, v); }
-  bool hasValue() => $_has(5, 6);
+  List<int> get value => $_getN(5);
+  set value(List<int> v) { $_setBytes(5, v); }
+  bool hasValue() => $_has(5);
   void clearValue() => clearField(6);
 }
 
@@ -791,7 +790,7 @@ class _ReadonlyWriteCharacteristicRequest extends WriteCharacteristicRequest wit
 class WriteCharacteristicResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('WriteCharacteristicResponse')
     ..a<WriteCharacteristicRequest>(1, 'request', PbFieldType.OM, WriteCharacteristicRequest.getDefault, WriteCharacteristicRequest.create)
-    ..a<bool>(2, 'success', PbFieldType.OB)
+    ..aOB(2, 'success')
     ..hasRequiredFields = false
   ;
 
@@ -811,14 +810,14 @@ class WriteCharacteristicResponse extends GeneratedMessage {
     if (v is! WriteCharacteristicResponse) checkItemFailed(v, 'WriteCharacteristicResponse');
   }
 
-  WriteCharacteristicRequest get request => $_get(0, 1, null);
+  WriteCharacteristicRequest get request => $_getN(0);
   set request(WriteCharacteristicRequest v) { setField(1, v); }
-  bool hasRequest() => $_has(0, 1);
+  bool hasRequest() => $_has(0);
   void clearRequest() => clearField(1);
 
-  bool get success => $_get(1, 2, false);
-  set success(bool v) { $_setBool(1, 2, v); }
-  bool hasSuccess() => $_has(1, 2);
+  bool get success => $_get(1, false);
+  set success(bool v) { $_setBool(1, v); }
+  bool hasSuccess() => $_has(1);
   void clearSuccess() => clearField(2);
 }
 
@@ -826,11 +825,11 @@ class _ReadonlyWriteCharacteristicResponse extends WriteCharacteristicResponse w
 
 class WriteDescriptorRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('WriteDescriptorRequest')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'descriptorUuid', PbFieldType.OS)
-    ..a<String>(3, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(4, 'secondaryServiceUuid', PbFieldType.OS)
-    ..a<String>(5, 'characteristicUuid', PbFieldType.OS)
+    ..aOS(1, 'remoteId')
+    ..aOS(2, 'descriptorUuid')
+    ..aOS(3, 'serviceUuid')
+    ..aOS(4, 'secondaryServiceUuid')
+    ..aOS(5, 'characteristicUuid')
     ..a<List<int>>(6, 'value', PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -851,34 +850,34 @@ class WriteDescriptorRequest extends GeneratedMessage {
     if (v is! WriteDescriptorRequest) checkItemFailed(v, 'WriteDescriptorRequest');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  String get descriptorUuid => $_get(1, 2, '');
-  set descriptorUuid(String v) { $_setString(1, 2, v); }
-  bool hasDescriptorUuid() => $_has(1, 2);
+  String get descriptorUuid => $_getS(1, '');
+  set descriptorUuid(String v) { $_setString(1, v); }
+  bool hasDescriptorUuid() => $_has(1);
   void clearDescriptorUuid() => clearField(2);
 
-  String get serviceUuid => $_get(2, 3, '');
-  set serviceUuid(String v) { $_setString(2, 3, v); }
-  bool hasServiceUuid() => $_has(2, 3);
+  String get serviceUuid => $_getS(2, '');
+  set serviceUuid(String v) { $_setString(2, v); }
+  bool hasServiceUuid() => $_has(2);
   void clearServiceUuid() => clearField(3);
 
-  String get secondaryServiceUuid => $_get(3, 4, '');
-  set secondaryServiceUuid(String v) { $_setString(3, 4, v); }
-  bool hasSecondaryServiceUuid() => $_has(3, 4);
+  String get secondaryServiceUuid => $_getS(3, '');
+  set secondaryServiceUuid(String v) { $_setString(3, v); }
+  bool hasSecondaryServiceUuid() => $_has(3);
   void clearSecondaryServiceUuid() => clearField(4);
 
-  String get characteristicUuid => $_get(4, 5, '');
-  set characteristicUuid(String v) { $_setString(4, 5, v); }
-  bool hasCharacteristicUuid() => $_has(4, 5);
+  String get characteristicUuid => $_getS(4, '');
+  set characteristicUuid(String v) { $_setString(4, v); }
+  bool hasCharacteristicUuid() => $_has(4);
   void clearCharacteristicUuid() => clearField(5);
 
-  List<int> get value => $_get(5, 6, null);
-  set value(List<int> v) { $_setBytes(5, 6, v); }
-  bool hasValue() => $_has(5, 6);
+  List<int> get value => $_getN(5);
+  set value(List<int> v) { $_setBytes(5, v); }
+  bool hasValue() => $_has(5);
   void clearValue() => clearField(6);
 }
 
@@ -887,7 +886,7 @@ class _ReadonlyWriteDescriptorRequest extends WriteDescriptorRequest with Readon
 class WriteDescriptorResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('WriteDescriptorResponse')
     ..a<WriteDescriptorRequest>(1, 'request', PbFieldType.OM, WriteDescriptorRequest.getDefault, WriteDescriptorRequest.create)
-    ..a<bool>(2, 'success', PbFieldType.OB)
+    ..aOB(2, 'success')
     ..hasRequiredFields = false
   ;
 
@@ -907,14 +906,14 @@ class WriteDescriptorResponse extends GeneratedMessage {
     if (v is! WriteDescriptorResponse) checkItemFailed(v, 'WriteDescriptorResponse');
   }
 
-  WriteDescriptorRequest get request => $_get(0, 1, null);
+  WriteDescriptorRequest get request => $_getN(0);
   set request(WriteDescriptorRequest v) { setField(1, v); }
-  bool hasRequest() => $_has(0, 1);
+  bool hasRequest() => $_has(0);
   void clearRequest() => clearField(1);
 
-  bool get success => $_get(1, 2, false);
-  set success(bool v) { $_setBool(1, 2, v); }
-  bool hasSuccess() => $_has(1, 2);
+  bool get success => $_get(1, false);
+  set success(bool v) { $_setBool(1, v); }
+  bool hasSuccess() => $_has(1);
   void clearSuccess() => clearField(2);
 }
 
@@ -922,11 +921,11 @@ class _ReadonlyWriteDescriptorResponse extends WriteDescriptorResponse with Read
 
 class SetNotificationRequest extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('SetNotificationRequest')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..a<String>(2, 'serviceUuid', PbFieldType.OS)
-    ..a<String>(3, 'secondaryServiceUuid', PbFieldType.OS)
-    ..a<String>(4, 'characteristicUuid', PbFieldType.OS)
-    ..a<bool>(5, 'enable', PbFieldType.OB)
+    ..aOS(1, 'remoteId')
+    ..aOS(2, 'serviceUuid')
+    ..aOS(3, 'secondaryServiceUuid')
+    ..aOS(4, 'characteristicUuid')
+    ..aOB(5, 'enable')
     ..hasRequiredFields = false
   ;
 
@@ -946,29 +945,29 @@ class SetNotificationRequest extends GeneratedMessage {
     if (v is! SetNotificationRequest) checkItemFailed(v, 'SetNotificationRequest');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  String get serviceUuid => $_get(1, 2, '');
-  set serviceUuid(String v) { $_setString(1, 2, v); }
-  bool hasServiceUuid() => $_has(1, 2);
+  String get serviceUuid => $_getS(1, '');
+  set serviceUuid(String v) { $_setString(1, v); }
+  bool hasServiceUuid() => $_has(1);
   void clearServiceUuid() => clearField(2);
 
-  String get secondaryServiceUuid => $_get(2, 3, '');
-  set secondaryServiceUuid(String v) { $_setString(2, 3, v); }
-  bool hasSecondaryServiceUuid() => $_has(2, 3);
+  String get secondaryServiceUuid => $_getS(2, '');
+  set secondaryServiceUuid(String v) { $_setString(2, v); }
+  bool hasSecondaryServiceUuid() => $_has(2);
   void clearSecondaryServiceUuid() => clearField(3);
 
-  String get characteristicUuid => $_get(3, 4, '');
-  set characteristicUuid(String v) { $_setString(3, 4, v); }
-  bool hasCharacteristicUuid() => $_has(3, 4);
+  String get characteristicUuid => $_getS(3, '');
+  set characteristicUuid(String v) { $_setString(3, v); }
+  bool hasCharacteristicUuid() => $_has(3);
   void clearCharacteristicUuid() => clearField(4);
 
-  bool get enable => $_get(4, 5, false);
-  set enable(bool v) { $_setBool(4, 5, v); }
-  bool hasEnable() => $_has(4, 5);
+  bool get enable => $_get(4, false);
+  set enable(bool v) { $_setBool(4, v); }
+  bool hasEnable() => $_has(4);
   void clearEnable() => clearField(5);
 }
 
@@ -976,7 +975,7 @@ class _ReadonlySetNotificationRequest extends SetNotificationRequest with Readon
 
 class OnNotificationResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('OnNotificationResponse')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
+    ..aOS(1, 'remoteId')
     ..a<BluetoothCharacteristic>(2, 'characteristic', PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
     ..hasRequiredFields = false
   ;
@@ -997,14 +996,14 @@ class OnNotificationResponse extends GeneratedMessage {
     if (v is! OnNotificationResponse) checkItemFailed(v, 'OnNotificationResponse');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  BluetoothCharacteristic get characteristic => $_get(1, 2, null);
+  BluetoothCharacteristic get characteristic => $_getN(1);
   set characteristic(BluetoothCharacteristic v) { setField(2, v); }
-  bool hasCharacteristic() => $_has(1, 2);
+  bool hasCharacteristic() => $_has(1);
   void clearCharacteristic() => clearField(2);
 }
 
@@ -1012,8 +1011,8 @@ class _ReadonlyOnNotificationResponse extends OnNotificationResponse with Readon
 
 class DeviceStateResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('DeviceStateResponse')
-    ..a<String>(1, 'remoteId', PbFieldType.OS)
-    ..e<DeviceStateResponse_BluetoothDeviceState>(2, 'state', PbFieldType.OE, DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, DeviceStateResponse_BluetoothDeviceState.valueOf)
+    ..aOS(1, 'remoteId')
+    ..e<DeviceStateResponse_BluetoothDeviceState>(2, 'state', PbFieldType.OE, DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, DeviceStateResponse_BluetoothDeviceState.valueOf, DeviceStateResponse_BluetoothDeviceState.values)
     ..hasRequiredFields = false
   ;
 
@@ -1033,14 +1032,14 @@ class DeviceStateResponse extends GeneratedMessage {
     if (v is! DeviceStateResponse) checkItemFailed(v, 'DeviceStateResponse');
   }
 
-  String get remoteId => $_get(0, 1, '');
-  set remoteId(String v) { $_setString(0, 1, v); }
-  bool hasRemoteId() => $_has(0, 1);
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
   void clearRemoteId() => clearField(1);
 
-  DeviceStateResponse_BluetoothDeviceState get state => $_get(1, 2, null);
+  DeviceStateResponse_BluetoothDeviceState get state => $_getN(1);
   set state(DeviceStateResponse_BluetoothDeviceState v) { setField(2, v); }
-  bool hasState() => $_has(1, 2);
+  bool hasState() => $_has(1);
   void clearState() => clearField(2);
 }
 
