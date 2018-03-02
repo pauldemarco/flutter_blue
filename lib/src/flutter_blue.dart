@@ -41,7 +41,7 @@ class FlutterBlue {
   Future<BluetoothState> get state {
     return _channel
         .invokeMethod('state')
-        .then((List<int> data) => new protos.BluetoothState.fromBuffer(data))
+        .then((buffer) => new protos.BluetoothState.fromBuffer(buffer))
         .then((s) => BluetoothState.values[s.state.value]);
   }
 
@@ -49,7 +49,7 @@ class FlutterBlue {
   Stream<BluetoothState> onStateChanged() {
     return _stateChannel
         .receiveBroadcastStream()
-        .map((List<int> data) => new protos.BluetoothState.fromBuffer(data))
+        .map((buffer) => new protos.BluetoothState.fromBuffer(buffer))
         .map((s) => BluetoothState.values[s.state.value]);
   }
 
@@ -87,7 +87,7 @@ class FlutterBlue {
         );
 
     yield* controller.stream
-        .map((List<int> data) => new protos.ScanResult.fromBuffer(data))
+        .map((buffer) => new protos.ScanResult.fromBuffer(buffer))
         .map((p) => new ScanResult.fromProto(p));
   }
 

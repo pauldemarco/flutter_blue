@@ -24,8 +24,8 @@ class BluetoothDevice {
 
     return await FlutterBlue.instance._servicesDiscoveredChannel
         .receiveBroadcastStream()
-        .map((List<int> data) =>
-            new protos.DiscoverServicesResult.fromBuffer(data))
+        .map((buffer) =>
+            new protos.DiscoverServicesResult.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
         .map((p) => p.services)
         .map((s) => s.map((p) => new BluetoothService.fromProto(p)).toList())
@@ -37,8 +37,8 @@ class BluetoothDevice {
   Future<List<BluetoothService>> get services {
     return FlutterBlue.instance._channel
         .invokeMethod('services', id.toString())
-        .then((List<int> data) =>
-            new protos.DiscoverServicesResult.fromBuffer(data).services)
+        .then((buffer) =>
+            new protos.DiscoverServicesResult.fromBuffer(buffer).services)
         .then((i) => i.map((s) => new BluetoothService.fromProto(s)).toList());
   }
 
@@ -55,8 +55,8 @@ class BluetoothDevice {
 
     return await FlutterBlue.instance._characteristicReadChannel
         .receiveBroadcastStream()
-        .map((List<int> data) =>
-            new protos.ReadCharacteristicResponse.fromBuffer(data))
+        .map((buffer) =>
+            new protos.ReadCharacteristicResponse.fromBuffer(buffer))
         .where((p) =>
             (p.remoteId == request.remoteId) &&
             (p.characteristic.uuid == request.characteristicUuid) &&
@@ -79,8 +79,8 @@ class BluetoothDevice {
 
     return await FlutterBlue.instance._descriptorReadChannel
         .receiveBroadcastStream()
-        .map((List<int> data) =>
-            new protos.ReadDescriptorResponse.fromBuffer(data))
+        .map((buffer) =>
+            new protos.ReadDescriptorResponse.fromBuffer(buffer))
         .where((p) =>
             (p.request.remoteId == request.remoteId) &&
             (p.request.descriptorUuid == request.descriptorUuid) &&
@@ -116,7 +116,7 @@ class BluetoothDevice {
     return await FlutterBlue.instance._methodStream
       .where((m) => m.method == "WriteCharacteristicResponse")
       .map((m) => m.arguments)
-      .map((List<int> data) => new protos.WriteCharacteristicResponse.fromBuffer(data))
+      .map((buffer) => new protos.WriteCharacteristicResponse.fromBuffer(buffer))
       .where((p) =>
         (p.request.remoteId == request.remoteId) &&
         (p.request.characteristicUuid == request.characteristicUuid) &&
@@ -143,7 +143,7 @@ class BluetoothDevice {
     return await FlutterBlue.instance._methodStream
         .where((m) => m.method == "WriteDescriptorResponse")
         .map((m) => m.arguments)
-        .map((List<int> data) => new protos.WriteDescriptorResponse.fromBuffer(data))
+        .map((buffer) => new protos.WriteDescriptorResponse.fromBuffer(buffer))
         .where((p) =>
         (p.request.remoteId == request.remoteId) &&
         (p.request.descriptorUuid == request.descriptorUuid) &&
@@ -165,7 +165,7 @@ class BluetoothDevice {
       ..characteristicUuid = characteristic.uuid.toString()
       ..enable = notify;
     return FlutterBlue.instance._channel.invokeMethod('setNotification', request.writeToBuffer())
-        .then((List<int> data) => new protos.BluetoothCharacteristic.fromBuffer(data))
+        .then((buffer) => new protos.BluetoothCharacteristic.fromBuffer(buffer))
         .then((p) => new BluetoothCharacteristic.fromProto(p))
         .then((c) {
           characteristic.updateDescriptors(c.descriptors);
@@ -179,7 +179,7 @@ class BluetoothDevice {
   Stream<List<int>> onValueChanged(BluetoothCharacteristic characteristic) {
     return FlutterBlue.instance._characteristicNotifiedChannel
         .receiveBroadcastStream()
-        .map((List<int> data) => new protos.OnNotificationResponse.fromBuffer(data))
+        .map((buffer) => new protos.OnNotificationResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
         .map((p) => new BluetoothCharacteristic.fromProto(p.characteristic))
         .where((c) => c.uuid == characteristic.uuid)
@@ -193,7 +193,7 @@ class BluetoothDevice {
   /// The current connection state of the device
   Future<BluetoothDeviceState> get state =>
       FlutterBlue.instance._channel.invokeMethod('deviceState', id.toString())
-          .then((List<int> data) => new protos.DeviceStateResponse.fromBuffer(data))
+          .then((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
           .then((p) => BluetoothDeviceState.values[p.state.value]);
 
   /// Notifies when the device connection state has changed
@@ -201,7 +201,7 @@ class BluetoothDevice {
     return FlutterBlue.instance._methodStream
         .where((m) => m.method == "DeviceState")
         .map((m) => m.arguments)
-        .map((List<int> data) => new protos.DeviceStateResponse.fromBuffer(data))
+        .map((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
         .map((p) => BluetoothDeviceState.values[p.state.value]);
   }
