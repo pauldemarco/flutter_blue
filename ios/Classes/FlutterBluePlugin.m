@@ -4,13 +4,8 @@
 @interface FlutterBluePlugin ()
 @property(nonatomic, retain) NSObject<FlutterPluginRegistrar> *registrar;
 @property(nonatomic, retain) FlutterMethodChannel *channel;
-@property(nonatomic, retain) FlutterEventChannel *stateChannel;
-@property(nonatomic, retain) StateStreamHandler *stateStreamHandler;
-@property(nonatomic, retain) FlutterEventChannel *scanResultChannel;
-@property(nonatomic, retain) FlutterEventChannel *servicesDiscoveredChannel;
-@property(nonatomic, retain) FlutterEventChannel *characteristicReadChannel;
-@property(nonatomic, retain) FlutterEventChannel *descriptorReadChannel;
-@property(nonatomic, retain) FlutterEventChannel *characteristicNotifiedChannel;
+@property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
+@property(nonatomic, retain) FlutterBlueStreamHandler *scanResultStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 
 @end
@@ -28,35 +23,62 @@
     FlutterEventChannel* characteristicNotifiedChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/characteristicNotified" binaryMessenger:[registrar messenger]];
     FlutterBluePlugin* instance = [[FlutterBluePlugin alloc] init];
     instance.channel = channel;
-    instance.stateChannel = stateChannel;
-    instance.scanResultChannel = scanResultChannel;
-    instance.servicesDiscoveredChannel = servicesDiscoveredChannel;
-    instance.characteristicReadChannel = characteristicReadChannel;
-    instance.descriptorReadChannel = descriptorReadChannel;
-    instance.characteristicNotifiedChannel = characteristicNotifiedChannel;
+    [registrar addMethodCallDelegate:instance channel:channel];
+    instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
     
-    StateStreamHandler* stateStreamHandler = [[StateStreamHandler alloc] init];
+    // STATE
+    FlutterBlueStreamHandler* stateStreamHandler = [[FlutterBlueStreamHandler alloc] init];
     [stateChannel setStreamHandler:stateStreamHandler];
     instance.stateStreamHandler = stateStreamHandler;
     
-    [registrar addMethodCallDelegate:instance channel:channel];
-    
-    instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
+    // SCAN RESULTS
+    FlutterBlueStreamHandler* scanResultStreamHandler = [[FlutterBlueStreamHandler alloc] init];
+    [scanResultChannel setStreamHandler:scanResultStreamHandler];
+    instance.scanResultStreamHandler = scanResultStreamHandler;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"state" isEqualToString:call.method]) {
         FlutterStandardTypedData *data = [self toFlutterData:[self fromStateToProto:self->_centralManager.state]];
         result(data);
+    } else if([@"isAvailable" isEqualToString:call.method]) {
+        if(self.centralManager.state != CBManagerStateUnsupported && self.centralManager.state != CBManagerStateUnknown) {
+            result(@(YES));
+        } else {
+            result(@(NO));
+        }
+    } else if([@"isOn" isEqualToString:call.method]) {
+        if(self.centralManager.state == CBManagerStatePoweredOn) {
+            result(@(YES));
+        } else {
+            result(@(NO));
+        }
+    } else if([@"startScan" isEqualToString:call.method]) {
+        // TODO: Request Permission?
+        FlutterStandardTypedData *data = [call arguments];
+        ProtosScanSettings *request = [[ProtosScanSettings alloc] initWithData:[data data] error:nil];
+        // TODO: Implement UUID Service filter and iOS Scan Options (#34 #35)
+        [self->_centralManager scanForPeripheralsWithServices:nil options:nil];
+        result(nil);
+    } else if([@"stopScan" isEqualToString:call.method]) {
+        [self->_centralManager stopScan];
+        result(nil);
     } else {
         result(FlutterMethodNotImplemented);
     }
 }
 
 - (void)centralManagerDidUpdateState:(nonnull CBCentralManager *)central {
-    if(self.stateStreamHandler.sink != nil) {
+    if(_stateStreamHandler.sink != nil) {
         FlutterStandardTypedData *data = [self toFlutterData:[self fromStateToProto:self->_centralManager.state]];
         self.stateStreamHandler.sink(data);
+    }
+}
+
+- (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
+    if(_scanResultStreamHandler.sink != nil) {
+        FlutterStandardTypedData *data = [self toFlutterData:[self toScanResultProto:peripheral advertisementData:advertisementData RSSI:RSSI]];
+        _scanResultStreamHandler.sink(data);
     }
 }
 
@@ -83,9 +105,34 @@
     }
 }
 
+- (ProtosScanResult*)toScanResultProto:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
+    ProtosScanResult *result = [[ProtosScanResult alloc] init];
+    [result setDevice:[self toDeviceProto:peripheral]];
+    [result setRssi:[RSSI intValue]];
+    ProtosAdvertisementData *ads = [[ProtosAdvertisementData alloc] init];
+    [ads setLocalName:advertisementData[CBAdvertisementDataLocalNameKey]];
+    [ads setManufacturerData:advertisementData[CBAdvertisementDataManufacturerDataKey]];
+    NSDictionary *serviceData = advertisementData[CBAdvertisementDataServiceDataKey];
+    for (CBUUID *uuid in serviceData) {
+        [[ads serviceData] setObject:serviceData[uuid] forKey:uuid.UUIDString];
+    }
+    [ads setTxPowerLevel:[advertisementData[CBAdvertisementDataTxPowerLevelKey] intValue]];
+    [ads setConnectable:[advertisementData[CBAdvertisementDataIsConnectable] boolValue]];
+    [result setAdvertisementData:ads];
+    return result;
+}
+
+- (ProtosBluetoothDevice*)toDeviceProto:(CBPeripheral *)peripheral {
+    ProtosBluetoothDevice *result = [[ProtosBluetoothDevice alloc] init];
+    [result setName:[peripheral name]];
+    [result setRemoteId:[[peripheral identifier] UUIDString]];
+    [result setType:ProtosBluetoothDevice_Type_Le]; // TODO: Does iOS differentiate?
+    return result;
+}
+
 @end
 
-@implementation StateStreamHandler
+@implementation FlutterBlueStreamHandler
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
     self.sink = eventSink;
