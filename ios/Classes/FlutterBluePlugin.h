@@ -3,7 +3,7 @@
 
 #define NAMESPACE @"plugins.pauldemarco.com/flutter_blue"
 
-@interface FlutterBluePlugin : NSObject<FlutterPlugin, CBCentralManagerDelegate>
+@interface FlutterBluePlugin : NSObject<FlutterPlugin, CBCentralManagerDelegate, CBPeripheralDelegate>
 @end
 
 @interface FlutterBlueStreamHandler : NSObject<FlutterStreamHandler>
