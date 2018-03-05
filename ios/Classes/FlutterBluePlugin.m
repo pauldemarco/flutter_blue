@@ -83,15 +83,7 @@
         result(nil);
     } else if([@"disconnect" isEqualToString:call.method]) {
         NSString *remoteId = [call arguments];
-        // x1800 is a common service all devices should implement (#37)
-        NSArray<CBPeripheral*> *peripherals = [_centralManager retrieveConnectedPeripheralsWithServices:@[[CBUUID UUIDWithString:@"1800"]]];
-        CBPeripheral *peripheral;
-        for(CBPeripheral *p in peripherals) {
-            if([[p.identifier UUIDString] isEqualToString:remoteId]) {
-                peripheral = p;
-                break;
-            }
-        }
+        CBPeripheral *peripheral = [self findPeripheral:remoteId];
         if(peripheral != nil) {
             [_centralManager cancelPeripheralConnection:peripheral];
         }
