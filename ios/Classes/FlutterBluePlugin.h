@@ -6,7 +6,7 @@
 @interface FlutterBluePlugin : NSObject<FlutterPlugin, CBCentralManagerDelegate>
 @end
 
-@interface StateStreamHandler : NSObject<FlutterStreamHandler>
+@interface FlutterBlueStreamHandler : NSObject<FlutterStreamHandler>
 @property FlutterEventSink sink;
 @end
 
