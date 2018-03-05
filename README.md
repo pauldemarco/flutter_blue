@@ -95,8 +95,8 @@ device.onValueChanged(characteristic).listen((value) {
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | scan             | :white_check_mark: | :white_large_square: | Starts a scan for Bluetooth Low Energy devices. |
 | connect          | :white_check_mark: | :white_large_square: | Establishes a connection to the Bluetooth Device. |
-| state            | :white_check_mark: | :white_large_square: | Gets the current state of the Bluetooth Adapter. |
-| onStateChanged   | :white_check_mark: | :white_large_square: | Stream of state changes for the Bluetooth Adapter. |
+| state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
+| onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
