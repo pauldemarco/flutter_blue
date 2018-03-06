@@ -7,6 +7,9 @@
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) FlutterBlueStreamHandler *scanResultStreamHandler;
 @property(nonatomic, retain) FlutterBlueStreamHandler *servicesDiscoveredStreamHandler;
+@property(nonatomic, retain) FlutterBlueStreamHandler *characteristicReadStreamHandler;
+@property(nonatomic, retain) FlutterBlueStreamHandler *descriptorReadStreamHandler;
+@property(nonatomic, retain) FlutterBlueStreamHandler *characteristicNotifiedStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
 @end
@@ -41,6 +44,21 @@
     FlutterBlueStreamHandler* servicesDiscoveredStreamHandler = [[FlutterBlueStreamHandler alloc] init];
     [servicesDiscoveredChannel setStreamHandler:servicesDiscoveredStreamHandler];
     instance.servicesDiscoveredStreamHandler = servicesDiscoveredStreamHandler;
+    
+    // CHARACTERISTIC READ
+    FlutterBlueStreamHandler* characteristicReadStreamHandler = [[FlutterBlueStreamHandler alloc] init];
+    [characteristicReadChannel setStreamHandler:characteristicReadStreamHandler];
+    instance.characteristicReadStreamHandler = characteristicReadStreamHandler;
+    
+    // DESCRIPTOR READ
+    FlutterBlueStreamHandler* descriptorReadStreamHandler = [[FlutterBlueStreamHandler alloc] init];
+    [descriptorReadChannel setStreamHandler:descriptorReadStreamHandler];
+    instance.descriptorReadStreamHandler = descriptorReadStreamHandler;
+    
+    // CHARACTERISTIC NOTIFIED
+    FlutterBlueStreamHandler* characteristicNotifiedStreamHandler = [[FlutterBlueStreamHandler alloc] init];
+    [characteristicNotifiedChannel setStreamHandler:characteristicNotifiedStreamHandler];
+    instance.characteristicNotifiedStreamHandler = characteristicNotifiedStreamHandler;
     
     [registrar addMethodCallDelegate:instance channel:channel];
 }
@@ -224,21 +242,21 @@
 }
 
 - (CBCharacteristic*)locateCharacteristic:(NSString*)characteristicId peripheral:(CBPeripheral*)peripheral serviceId:(NSString*)serviceId secondaryServiceId:(NSString*)secondaryServiceId {
-    CBService *primaryService = [self getAttributeFromArray:serviceId array:[peripheral services]];
+    CBService *primaryService = [self getServiceFromArray:serviceId array:[peripheral services]];
     if(primaryService == nil || [primaryService isPrimary] == false) {
         @throw [FlutterError errorWithCode:@"locateCharacteristic"
                                    message:@"service could not be located on the device"
                                    details:nil];
     }
     CBService *secondaryService;
-    if(secondaryServiceId != nil) {
-        secondaryService = [self getAttributeFromArray:secondaryServiceId array:[primaryService includedServices]];
+    if(secondaryServiceId.length) {
+        secondaryService = [self getServiceFromArray:secondaryServiceId array:[primaryService includedServices]];
         @throw [FlutterError errorWithCode:@"locateCharacteristic"
                                    message:@"secondary service could not be located on the device"
-                                   details:nil];
+                                   details:secondaryServiceId];
     }
     CBService *service = (secondaryService != nil) ? secondaryService : primaryService;
-    CBCharacteristic *characteristic = [self getAttributeFromArray:characteristicId array:[service characteristics]];
+    CBCharacteristic *characteristic = [self getCharacteristicFromArray:characteristicId array:[service characteristics]];
     if(characteristic == nil) {
         @throw [FlutterError errorWithCode:@"locateCharacteristic"
                                    message:@"characteristic could not be located on the device"
@@ -248,7 +266,7 @@
 }
 
 - (CBDescriptor*)locateDescriptor:(NSString*)descriptorId characteristic:(CBCharacteristic*)characteristic {
-    CBDescriptor *descriptor = [self getAttributeFromArray:descriptorId array:[characteristic descriptors]];
+    CBDescriptor *descriptor = [self getDescriptorFromArray:descriptorId array:[characteristic descriptors]];
     if(descriptor == nil) {
         @throw [FlutterError errorWithCode:@"locateDescriptor"
                                    message:@"descriptor could not be located on the device"
@@ -257,10 +275,40 @@
     return descriptor;
 }
 
-- (CBAttribute*)getAttributeFromArray:(NSString*)uuidString array:(NSArray<CBAttribute*>*)array {
-    for(CBAttribute *a in array) {
-        if([[a.UUID UUIDString] isEqualToString:uuidString]) {
-            return a;
+// Reverse search to find primary service
+- (CBService*)findPrimaryService:(CBService*)secondaryService peripheral:(CBPeripheral*)peripheral {
+    for(CBService *s in [peripheral services]) {
+        for(CBService *ss in [s includedServices]) {
+            if([[ss.UUID UUIDString] isEqualToString:[secondaryService.UUID UUIDString]]) {
+                return s;
+            }
+        }
+    }
+    return nil;
+}
+
+- (CBService*)getServiceFromArray:(NSString*)uuidString array:(NSArray<CBService*>*)array {
+    for(CBService *s in array) {
+        if([[s UUID] isEqual:[CBUUID UUIDWithString:uuidString]]) {
+            return s;
+        }
+    }
+    return nil;
+}
+
+- (CBCharacteristic*)getCharacteristicFromArray:(NSString*)uuidString array:(NSArray<CBCharacteristic*>*)array {
+    for(CBCharacteristic *c in array) {
+        if([[c UUID] isEqual:[CBUUID UUIDWithString:uuidString]]) {
+            return c;
+        }
+    }
+    return nil;
+}
+
+- (CBDescriptor*)getDescriptorFromArray:(NSString*)uuidString array:(NSArray<CBDescriptor*>*)array {
+    for(CBDescriptor *d in array) {
+        if([[d UUID] isEqual:[CBUUID UUIDWithString:uuidString]]) {
+            return d;
         }
     }
     return nil;
@@ -314,10 +362,100 @@
         NSLog(@"didDiscoverServices failed");
         return;
     }
+    // Loop through and discover characteristics and secondary services
+    for(CBService *s in [peripheral services]) {
+        [peripheral discoverCharacteristics:nil forService:s];
+        [peripheral discoverIncludedServices:nil forService:s];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    // Loop through and discover descriptors for characteristics
+    for(CBCharacteristic *c in [service characteristics]) {
+        [peripheral discoverDescriptorsForCharacteristic:c];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    // Send updated tree
     if(_servicesDiscoveredStreamHandler.sink != nil) {
         ProtosDiscoverServicesResult *result = [self toServicesResultProto:peripheral];
         _servicesDiscoveredStreamHandler.sink([self toFlutterData:result]);
     }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverIncludedServicesForService:(CBService *)service error:(NSError *)error {
+    // Loop through and discover characteristics for secondary services
+    for(CBService *ss in [service includedServices]) {
+        [peripheral discoverCharacteristics:nil forService:ss];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if(_characteristicReadStreamHandler.sink != nil) {
+        ProtosReadCharacteristicResponse *result = [[ProtosReadCharacteristicResponse alloc] init];
+        [result setRemoteId:[peripheral.identifier UUIDString]];
+        [result setCharacteristic:[self toCharacteristicProto:characteristic]];
+        _characteristicReadStreamHandler.sink([self toFlutterData:result]);
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    ProtosWriteCharacteristicRequest *request = [[ProtosWriteCharacteristicRequest alloc] init];
+    [request setRemoteId:[peripheral.identifier UUIDString]];
+    [request setCharacteristicUuid:[characteristic.UUID UUIDString]];
+    [request setServiceUuid:[characteristic.service.UUID UUIDString]];
+    ProtosWriteCharacteristicResponse *result = [[ProtosWriteCharacteristicResponse alloc] init];
+    [result setRequest:request];
+    [result setSuccess:(error == nil)];
+    [_channel invokeMethod:@"WriteCharacteristicResponse" arguments:[self toFlutterData:result]];
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if(_characteristicNotifiedStreamHandler.sink != nil) {
+        ProtosOnNotificationResponse *result = [[ProtosOnNotificationResponse alloc] init];
+        [result setRemoteId:[peripheral.identifier UUIDString]];
+        [result setCharacteristic:[self toCharacteristicProto:characteristic]];
+        _characteristicNotifiedStreamHandler.sink([self toFlutterData:result]);
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
+    if(_descriptorReadStreamHandler.sink != nil) {
+        ProtosReadDescriptorRequest *q = [[ProtosReadDescriptorRequest alloc] init];
+        [q setRemoteId:[peripheral.identifier UUIDString]];
+        [q setCharacteristicUuid:[descriptor.characteristic.UUID UUIDString]];
+        [q setDescriptorUuid:[descriptor.UUID UUIDString]];
+        if([descriptor.characteristic.service isPrimary]) {
+            [q setServiceUuid:[descriptor.characteristic.service.UUID UUIDString]];
+        } else {
+            [q setSecondaryServiceUuid:[descriptor.characteristic.service.UUID UUIDString]];
+            CBService *primaryService = [self findPrimaryService:[descriptor.characteristic service] peripheral:[descriptor.characteristic.service peripheral]];
+            [q setServiceUuid:[primaryService.UUID UUIDString]];
+        }
+        ProtosReadDescriptorResponse *result = [[ProtosReadDescriptorResponse alloc] init];
+        [result setRequest:q];
+        [result setValue:[descriptor value]];
+        _descriptorReadStreamHandler.sink([self toFlutterData:result]);
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
+    ProtosWriteDescriptorRequest *request = [[ProtosWriteDescriptorRequest alloc] init];
+    [request setRemoteId:[peripheral.identifier UUIDString]];
+    [request setCharacteristicUuid:[descriptor.characteristic.UUID UUIDString]];
+    [request setDescriptorUuid:[descriptor.UUID UUIDString]];
+    if([descriptor.characteristic.service isPrimary]) {
+        [request setServiceUuid:[descriptor.characteristic.service.UUID UUIDString]];
+    } else {
+        [request setSecondaryServiceUuid:[descriptor.characteristic.service.UUID UUIDString]];
+        CBService *primaryService = [self findPrimaryService:[descriptor.characteristic service] peripheral:[descriptor.characteristic.service peripheral]];
+        [request setServiceUuid:[primaryService.UUID UUIDString]];
+    }
+    ProtosWriteDescriptorResponse *result = [[ProtosWriteDescriptorResponse alloc] init];
+    [result setRequest:request];
+    [result setSuccess:(error == nil)];
+    [_channel invokeMethod:@"WriteDescriptorResponse" arguments:[self toFlutterData:result]];
 }
 
 //
@@ -448,15 +586,9 @@
         [result setServiceUuid:[characteristic.service.UUID UUIDString]];
     } else {
         // Reverse search to find service and secondary service UUID
-        for(CBService *s in [characteristic.service.peripheral services]) {
-            for(CBService *ss in [s includedServices]) {
-                if([[ss.UUID UUIDString] isEqualToString:[characteristic.service.UUID UUIDString]]) {
-                    [result setServiceUuid:[s.UUID UUIDString]];
-                    [result setSecondaryServiceUuid:[ss.UUID UUIDString]];
-                    break;
-                }
-            }
-        }
+        [result setSecondaryServiceUuid:[characteristic.service.UUID UUIDString]];
+        CBService *primaryService = [self findPrimaryService:[characteristic service] peripheral:[characteristic.service peripheral]];
+        [result setServiceUuid:[primaryService.UUID UUIDString]];
     }
     return result;
 }
