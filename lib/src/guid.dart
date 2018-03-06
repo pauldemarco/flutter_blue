@@ -47,7 +47,10 @@ class Guid {
     if(input == null){
       throw new ArgumentError("Input was null");
     }
-    if(input.length < 32){
+    if(input.length == 4) {
+      input = '0000$input-0000-1000-8000-00805F9B34FB';
+    }
+    if(input.length > 36){
       throw new FormatException("The format is invalid");
     }
     input = input.toLowerCase();
