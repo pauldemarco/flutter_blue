@@ -6,6 +6,7 @@
 @property(nonatomic, retain) FlutterMethodChannel *channel;
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) FlutterBlueStreamHandler *scanResultStreamHandler;
+@property(nonatomic, retain) FlutterBlueStreamHandler *servicesDiscoveredStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
 @end
@@ -35,6 +36,11 @@
     FlutterBlueStreamHandler* scanResultStreamHandler = [[FlutterBlueStreamHandler alloc] init];
     [scanResultChannel setStreamHandler:scanResultStreamHandler];
     instance.scanResultStreamHandler = scanResultStreamHandler;
+    
+    // SERVICES DISCOVERED
+    FlutterBlueStreamHandler* servicesDiscoveredStreamHandler = [[FlutterBlueStreamHandler alloc] init];
+    [servicesDiscoveredChannel setStreamHandler:servicesDiscoveredStreamHandler];
+    instance.servicesDiscoveredStreamHandler = servicesDiscoveredStreamHandler;
     
     [registrar addMethodCallDelegate:instance channel:channel];
 }
@@ -95,7 +101,29 @@
             result([self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]);
         } else {
             result([FlutterError errorWithCode:@"deviceState"
-                                       message:@"Peripheral not found in retrievePeripheralsWithIdentifiers"
+                                       message:@"Peripheral not found in findPeripheral"
+                                       details:nil]);
+        }
+    } else if([@"discoverServices" isEqualToString:call.method]) {
+        NSString *remoteId = [call arguments];
+        CBPeripheral *peripheral = [self findPeripheral:remoteId];
+        if(peripheral != nil) {
+            // TODO: Service list filter (#34)
+            [peripheral discoverServices:nil];
+            result(nil);
+        } else {
+            result([FlutterError errorWithCode:@"discoverServices"
+                                       message:@"Peripheral not found in findPeripheral"
+                                       details:nil]);
+        }
+    } else if([@"services" isEqualToString:call.method]) {
+        NSString *remoteId = [call arguments];
+        CBPeripheral *peripheral = [self findPeripheral:remoteId];
+        if(peripheral != nil) {
+            result([self toFlutterData:[self toServicesResultProto:peripheral]]);
+        } else {
+            result([FlutterError errorWithCode:@"services"
+                                       message:@"Peripheral not found in findPeripheral"
                                        details:nil]);
         }
     } else {
@@ -110,6 +138,7 @@
             return p;
         }
     }
+    return nil;
 }
 
 //
@@ -154,7 +183,17 @@
 //
 // CBPeripheralDelegate methods
 //
-// TODO: Implement all methods
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
+    if(error != nil) {
+        // handle error
+        NSLog(@"didDiscoverServices failed");
+        return;
+    }
+    if(_servicesDiscoveredStreamHandler.sink != nil) {
+        ProtosDiscoverServicesResult *result = [self toServicesResultProto:peripheral];
+        _servicesDiscoveredStreamHandler.sink([self toFlutterData:result]);
+    }
+}
 
 //
 // Proto Helper methods
@@ -231,6 +270,91 @@
             break;
     }
     [result setRemoteId:[[peripheral identifier] UUIDString]];
+    return result;
+}
+
+- (ProtosDiscoverServicesResult*)toServicesResultProto:(CBPeripheral *)peripheral {
+    ProtosDiscoverServicesResult *result = [[ProtosDiscoverServicesResult alloc] init];
+    [result setRemoteId:[peripheral.identifier UUIDString]];
+    NSMutableArray *servicesProtos = [NSMutableArray new];
+    for(CBService *s in [peripheral services]) {
+        [servicesProtos addObject:[self toServiceProto:peripheral service:s]];
+    }
+    [result setServicesArray:servicesProtos];
+    return result;
+}
+
+- (ProtosBluetoothService*)toServiceProto:(CBPeripheral *)peripheral service:(CBService *)service  {
+    ProtosBluetoothService *result = [[ProtosBluetoothService alloc] init];
+    [result setRemoteId:[peripheral.identifier UUIDString]];
+    [result setUuid:[service.UUID UUIDString]];
+    [result setIsPrimary:[service isPrimary]];
+    
+    // Characteristic Array
+    NSMutableArray *characteristicProtos = [NSMutableArray new];
+    for(CBCharacteristic *c in [service characteristics]) {
+        [characteristicProtos addObject:[self toCharacteristicProto:c]];
+    }
+    [result setCharacteristicsArray:characteristicProtos];
+    
+    // Included Services Array
+    NSMutableArray *includedServicesProtos = [NSMutableArray new];
+    for(CBService *s in [service includedServices]) {
+        [includedServicesProtos addObject:[self toServiceProto:peripheral service:s]];
+    }
+    [result setIncludedServicesArray:includedServicesProtos];
+    
+    return result;
+}
+
+- (ProtosBluetoothCharacteristic*)toCharacteristicProto:(CBCharacteristic *)characteristic {
+    ProtosBluetoothCharacteristic *result = [[ProtosBluetoothCharacteristic alloc] init];
+    [result setUuid:[characteristic.UUID UUIDString]];
+    [result setProperties:[self toCharacteristicPropsProto:characteristic.properties]];
+    [result setValue:[characteristic value]];
+    NSMutableArray *descriptorProtos = [NSMutableArray new];
+    for(CBDescriptor *d in [characteristic descriptors]) {
+        [descriptorProtos addObject:[self toDescriptorProto:d]];
+    }
+    [result setDescriptorsArray:descriptorProtos];
+    if([characteristic.service isPrimary]) {
+        [result setServiceUuid:[characteristic.service.UUID UUIDString]];
+    } else {
+        // Reverse search to find service and secondary service UUID
+        for(CBService *s in [characteristic.service.peripheral services]) {
+            for(CBService *ss in [s includedServices]) {
+                if([[ss.UUID UUIDString] isEqualToString:[characteristic.service.UUID UUIDString]]) {
+                    [result setServiceUuid:[s.UUID UUIDString]];
+                    [result setSecondaryServiceUuid:[ss.UUID UUIDString]];
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+- (ProtosBluetoothDescriptor*)toDescriptorProto:(CBDescriptor *)descriptor {
+    ProtosBluetoothDescriptor *result = [[ProtosBluetoothDescriptor alloc] init];
+    [result setUuid:[descriptor.UUID UUIDString]];
+    [result setCharacteristicUuid:[descriptor.characteristic.UUID UUIDString]];
+    [result setServiceUuid:[descriptor.characteristic.service.UUID UUIDString]];
+    [result setValue:[descriptor value]];
+    return result;
+}
+
+- (ProtosCharacteristicProperties*)toCharacteristicPropsProto:(CBCharacteristicProperties)props {
+    ProtosCharacteristicProperties *result = [[ProtosCharacteristicProperties alloc] init];
+    [result setBroadcast:(props & CBCharacteristicPropertyBroadcast) != 0];
+    [result setRead:(props & CBCharacteristicPropertyRead) != 0];
+    [result setWriteWithoutResponse:(props & CBCharacteristicPropertyWriteWithoutResponse) != 0];
+    [result setWrite:(props & CBCharacteristicPropertyWrite) != 0];
+    [result setNotify:(props & CBCharacteristicPropertyNotify) != 0];
+    [result setIndicate:(props & CBCharacteristicPropertyIndicate) != 0];
+    [result setAuthenticatedSignedWrites:(props & CBCharacteristicPropertyAuthenticatedSignedWrites) != 0];
+    [result setExtendedProperties:(props & CBCharacteristicPropertyExtendedProperties) != 0];
+    [result setNotifyEncryptionRequired:(props & CBCharacteristicPropertyNotifyEncryptionRequired) != 0];
+    [result setIndicateEncryptionRequired:(props & CBCharacteristicPropertyIndicateEncryptionRequired) != 0];
     return result;
 }
 
