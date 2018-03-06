@@ -89,42 +89,117 @@
         result(nil);
     } else if([@"disconnect" isEqualToString:call.method]) {
         NSString *remoteId = [call arguments];
-        CBPeripheral *peripheral = [self findPeripheral:remoteId];
-        if(peripheral != nil) {
+        @try {
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
             [_centralManager cancelPeripheralConnection:peripheral];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
         }
-        result(nil);
     } else if([@"deviceState" isEqualToString:call.method]) {
         NSString *remoteId = [call arguments];
-        CBPeripheral *peripheral = [self findPeripheral:remoteId];
-        if(peripheral != nil) {
+        @try {
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
             result([self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]);
-        } else {
-            result([FlutterError errorWithCode:@"deviceState"
-                                       message:@"Peripheral not found in findPeripheral"
-                                       details:nil]);
+        } @catch(FlutterError *e) {
+            result(e);
         }
     } else if([@"discoverServices" isEqualToString:call.method]) {
         NSString *remoteId = [call arguments];
-        CBPeripheral *peripheral = [self findPeripheral:remoteId];
-        if(peripheral != nil) {
-            // TODO: Service list filter (#34)
+        @try {
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
             [peripheral discoverServices:nil];
             result(nil);
-        } else {
-            result([FlutterError errorWithCode:@"discoverServices"
-                                       message:@"Peripheral not found in findPeripheral"
-                                       details:nil]);
+        } @catch(FlutterError *e) {
+            result(e);
         }
     } else if([@"services" isEqualToString:call.method]) {
         NSString *remoteId = [call arguments];
-        CBPeripheral *peripheral = [self findPeripheral:remoteId];
-        if(peripheral != nil) {
+        @try {
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
             result([self toFlutterData:[self toServicesResultProto:peripheral]]);
-        } else {
-            result([FlutterError errorWithCode:@"services"
-                                       message:@"Peripheral not found in findPeripheral"
-                                       details:nil]);
+        } @catch(FlutterError *e) {
+            result(e);
+        }
+    } else if([@"readCharacteristic" isEqualToString:call.method]) {
+        FlutterStandardTypedData *data = [call arguments];
+        ProtosReadCharacteristicRequest *request = [[ProtosReadCharacteristicRequest alloc] initWithData:[data data] error:nil];
+        NSString *remoteId = [request remoteId];
+        @try {
+            // Find peripheral
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
+            // Find characteristic
+            CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+            // Trigger a read
+            [peripheral readValueForCharacteristic:characteristic];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
+        }
+    } else if([@"readDescriptor" isEqualToString:call.method]) {
+        FlutterStandardTypedData *data = [call arguments];
+        ProtosReadDescriptorRequest *request = [[ProtosReadDescriptorRequest alloc] initWithData:[data data] error:nil];
+        NSString *remoteId = [request remoteId];
+        @try {
+            // Find peripheral
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
+            // Find characteristic
+            CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+            // Find descriptor
+            CBDescriptor *descriptor = [self locateDescriptor:[request descriptorUuid] characteristic:characteristic];
+            [peripheral readValueForDescriptor:descriptor];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
+        }
+    } else if([@"writeCharacteristic" isEqualToString:call.method]) {
+        FlutterStandardTypedData *data = [call arguments];
+        ProtosWriteCharacteristicRequest *request = [[ProtosWriteCharacteristicRequest alloc] initWithData:[data data] error:nil];
+        NSString *remoteId = [request remoteId];
+        @try {
+            // Find peripheral
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
+            // Find characteristic
+            CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+            // Get correct write type
+            CBCharacteristicWriteType type = ([request writeType] == ProtosWriteCharacteristicRequest_WriteType_WithoutResponse) ? CBCharacteristicWriteWithoutResponse : CBCharacteristicWriteWithResponse;
+            // Write to characteristic
+            [peripheral writeValue:[request value] forCharacteristic:characteristic type:type];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
+        }
+    } else if([@"writeDescriptor" isEqualToString:call.method]) {
+        FlutterStandardTypedData *data = [call arguments];
+        ProtosWriteDescriptorRequest *request = [[ProtosWriteDescriptorRequest alloc] initWithData:[data data] error:nil];
+        NSString *remoteId = [request remoteId];
+        @try {
+            // Find peripheral
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
+            // Find characteristic
+            CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+            // Find descriptor
+            CBDescriptor *descriptor = [self locateDescriptor:[request descriptorUuid] characteristic:characteristic];
+            // Write descriptor
+            [peripheral writeValue:[request value] forDescriptor:descriptor];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
+        }
+    } else if([@"setNotification" isEqualToString:call.method]) {
+        FlutterStandardTypedData *data = [call arguments];
+        ProtosSetNotificationRequest *request = [[ProtosSetNotificationRequest alloc] initWithData:[data data] error:nil];
+        NSString *remoteId = [request remoteId];
+        @try {
+            // Find peripheral
+            CBPeripheral *peripheral = [self findPeripheral:remoteId];
+            // Find characteristic
+            CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+            // Set notification value
+            [peripheral setNotifyValue:[request enable] forCharacteristic:characteristic];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
         }
     } else {
         result(FlutterMethodNotImplemented);
@@ -133,9 +208,59 @@
 
 - (CBPeripheral*)findPeripheral:(NSString*)remoteId {
     NSArray<CBPeripheral*> *peripherals = [_centralManager retrievePeripheralsWithIdentifiers:@[[[NSUUID alloc] initWithUUIDString:remoteId]]];
+    CBPeripheral *peripheral;
     for(CBPeripheral *p in peripherals) {
         if([[p.identifier UUIDString] isEqualToString:remoteId]) {
-            return p;
+            peripheral = p;
+            break;
+        }
+    }
+    if(peripheral == nil) {
+        @throw [FlutterError errorWithCode:@"findPeripheral"
+                                   message:@"Peripheral not found"
+                                   details:nil];
+    }
+    return peripheral;
+}
+
+- (CBCharacteristic*)locateCharacteristic:(NSString*)characteristicId peripheral:(CBPeripheral*)peripheral serviceId:(NSString*)serviceId secondaryServiceId:(NSString*)secondaryServiceId {
+    CBService *primaryService = [self getAttributeFromArray:serviceId array:[peripheral services]];
+    if(primaryService == nil || [primaryService isPrimary] == false) {
+        @throw [FlutterError errorWithCode:@"locateCharacteristic"
+                                   message:@"service could not be located on the device"
+                                   details:nil];
+    }
+    CBService *secondaryService;
+    if(secondaryServiceId != nil) {
+        secondaryService = [self getAttributeFromArray:secondaryServiceId array:[primaryService includedServices]];
+        @throw [FlutterError errorWithCode:@"locateCharacteristic"
+                                   message:@"secondary service could not be located on the device"
+                                   details:nil];
+    }
+    CBService *service = (secondaryService != nil) ? secondaryService : primaryService;
+    CBCharacteristic *characteristic = [self getAttributeFromArray:characteristicId array:[service characteristics]];
+    if(characteristic == nil) {
+        @throw [FlutterError errorWithCode:@"locateCharacteristic"
+                                   message:@"characteristic could not be located on the device"
+                                   details:nil];
+    }
+    return characteristic;
+}
+
+- (CBDescriptor*)locateDescriptor:(NSString*)descriptorId characteristic:(CBCharacteristic*)characteristic {
+    CBDescriptor *descriptor = [self getAttributeFromArray:descriptorId array:[characteristic descriptors]];
+    if(descriptor == nil) {
+        @throw [FlutterError errorWithCode:@"locateDescriptor"
+                                   message:@"descriptor could not be located on the device"
+                                   details:nil];
+    }
+    return descriptor;
+}
+
+- (CBAttribute*)getAttributeFromArray:(NSString*)uuidString array:(NSArray<CBAttribute*>*)array {
+    for(CBAttribute *a in array) {
+        if([[a.UUID UUIDString] isEqualToString:uuidString]) {
+            return a;
         }
     }
     return nil;
@@ -286,6 +411,8 @@
 
 - (ProtosBluetoothService*)toServiceProto:(CBPeripheral *)peripheral service:(CBService *)service  {
     ProtosBluetoothService *result = [[ProtosBluetoothService alloc] init];
+    NSLog(@"peripheral uuid:%@", [peripheral.identifier UUIDString]);
+    NSLog(@"service uuid:%@", [service.UUID UUIDString]);
     [result setRemoteId:[peripheral.identifier UUIDString]];
     [result setUuid:[service.UUID UUIDString]];
     [result setIsPrimary:[service isPrimary]];
