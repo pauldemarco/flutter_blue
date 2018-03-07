@@ -348,23 +348,25 @@
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
+    NSLog(@"didConnectPeripheral");
     // Register self as delegate for peripheral
-    [peripheral setDelegate:self];
+    peripheral.delegate = self;
     
     // Send connection state
     [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    // Unregister self as delegate for peripheral
-    [peripheral setDelegate:nil];
+    NSLog(@"didDisconnectPeripheral");
+    // Unregister self as delegate for peripheral, not working #42
+    peripheral.delegate = nil;
     
     // Send connection state
     [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-    
+    // TODO:?
 }
 
 //
