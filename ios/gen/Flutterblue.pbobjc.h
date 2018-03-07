@@ -636,7 +636,7 @@ typedef GPB_ENUM(ProtosSetNotificationRequest_FieldNumber) {
 typedef GPB_ENUM(ProtosSetNotificationResponse_FieldNumber) {
   ProtosSetNotificationResponse_FieldNumber_RemoteId = 1,
   ProtosSetNotificationResponse_FieldNumber_Characteristic = 2,
-  ProtosSetNotificationResponse_FieldNumber_IsNotifying = 3,
+  ProtosSetNotificationResponse_FieldNumber_Success = 3,
 };
 
 @interface ProtosSetNotificationResponse : GPBMessage
@@ -647,7 +647,7 @@ typedef GPB_ENUM(ProtosSetNotificationResponse_FieldNumber) {
 /** Test to see if @c characteristic has been set. */
 @property(nonatomic, readwrite) BOOL hasCharacteristic;
 
-@property(nonatomic, readwrite) BOOL isNotifying;
+@property(nonatomic, readwrite) BOOL success;
 
 @end
 
