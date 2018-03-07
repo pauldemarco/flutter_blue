@@ -108,16 +108,19 @@
         FlutterStandardTypedData *data = [call arguments];
         ProtosConnectRequest *request = [[ProtosConnectRequest alloc] initWithData:[data data] error:nil];
         NSString *remoteId = [request remoteId];
-        CBPeripheral *peripheral = [self.scannedPeripherals objectForKey:remoteId];
-        if(peripheral == nil) {
-            result([FlutterError errorWithCode:@"connect"
-                                       message:@"Peripheral not found in scannedPeripherals"
-                                       details:nil]);
-            return;
+        @try {
+            CBPeripheral *peripheral = [_scannedPeripherals objectForKey:remoteId];
+            if(peripheral == nil) {
+                @throw [FlutterError errorWithCode:@"connect"
+                                           message:@"Peripheral not found"
+                                           details:nil];
+            }
+            // TODO: Implement Connect options (#36)
+            [_centralManager connectPeripheral:peripheral options:nil];
+            result(nil);
+        } @catch(FlutterError *e) {
+            result(e);
         }
-        // TODO: Implement Connect options (#36)
-        [_centralManager connectPeripheral:peripheral options:nil];
-        result(nil);
     } else if([@"disconnect" isEqualToString:call.method]) {
         NSString *remoteId = [call arguments];
         @try {
