@@ -168,6 +168,7 @@ message SetNotificationRequest {
 message SetNotificationResponse {
   string remote_id = 1;
   BluetoothCharacteristic characteristic = 2;
+  bool success = 3;
 }
 
 message OnNotificationResponse {
