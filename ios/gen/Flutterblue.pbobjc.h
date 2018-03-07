@@ -631,6 +631,23 @@ typedef GPB_ENUM(ProtosSetNotificationRequest_FieldNumber) {
 
 @end
 
+#pragma mark - ProtosSetNotificationResponse
+
+typedef GPB_ENUM(ProtosSetNotificationResponse_FieldNumber) {
+  ProtosSetNotificationResponse_FieldNumber_RemoteId = 1,
+  ProtosSetNotificationResponse_FieldNumber_Characteristic = 2,
+};
+
+@interface ProtosSetNotificationResponse : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
+
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristic *characteristic;
+/** Test to see if @c characteristic has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristic;
+
+@end
+
 #pragma mark - ProtosOnNotificationResponse
 
 typedef GPB_ENUM(ProtosOnNotificationResponse_FieldNumber) {

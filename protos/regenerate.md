@@ -11,3 +11,4 @@
 1. Run `pub global activate protoc_plugin` to get .dart files into /home/.pub-cache/bin/
 1. Run the following command from the protos folder
 ```protoc --dart_out=../lib/gen ./flutterblue.proto```
+```protoc --objc_out=../ios/gen ./flutterblue.proto```

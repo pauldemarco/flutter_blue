@@ -1677,6 +1677,60 @@ typedef struct ProtosSetNotificationRequest__storage_ {
 
 @end
 
+#pragma mark - ProtosSetNotificationResponse
+
+@implementation ProtosSetNotificationResponse
+
+@dynamic remoteId;
+@dynamic hasCharacteristic, characteristic;
+
+typedef struct ProtosSetNotificationResponse__storage_ {
+  uint32_t _has_storage_[1];
+  NSString *remoteId;
+  ProtosBluetoothCharacteristic *characteristic;
+} ProtosSetNotificationResponse__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "remoteId",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosSetNotificationResponse_FieldNumber_RemoteId,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProtosSetNotificationResponse__storage_, remoteId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "characteristic",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristic),
+        .number = ProtosSetNotificationResponse_FieldNumber_Characteristic,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosSetNotificationResponse__storage_, characteristic),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosSetNotificationResponse class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosSetNotificationResponse__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 #pragma mark - ProtosOnNotificationResponse
 
 @implementation ProtosOnNotificationResponse
