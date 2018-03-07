@@ -357,11 +357,7 @@
 // CBPeripheralDelegate methods
 //
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
-    if(error != nil) {
-        // handle error
-        NSLog(@"didDiscoverServices failed");
-        return;
-    }
+    NSLog(@"didDiscoverServices");
     // Loop through and discover characteristics and secondary services
     for(CBService *s in [peripheral services]) {
         [peripheral discoverCharacteristics:nil forService:s];
@@ -370,6 +366,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    NSLog(@"didDiscoverCharacteristicsForService");
     // Loop through and discover descriptors for characteristics
     for(CBCharacteristic *c in [service characteristics]) {
         [peripheral discoverDescriptorsForCharacteristic:c];
@@ -377,6 +374,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    NSLog(@"didDiscoverDescriptorsForCharacteristic");
     // Send updated tree
     if(_servicesDiscoveredStreamHandler.sink != nil) {
         ProtosDiscoverServicesResult *result = [self toServicesResultProto:peripheral];
@@ -385,6 +383,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverIncludedServicesForService:(CBService *)service error:(NSError *)error {
+    NSLog(@"didDiscoverIncludedServicesForService");
     // Loop through and discover characteristics for secondary services
     for(CBService *ss in [service includedServices]) {
         [peripheral discoverCharacteristics:nil forService:ss];
@@ -392,6 +391,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    NSLog(@"didUpdateValueForCharacteristic");
     if(_characteristicReadStreamHandler.sink != nil) {
         ProtosReadCharacteristicResponse *result = [[ProtosReadCharacteristicResponse alloc] init];
         [result setRemoteId:[peripheral.identifier UUIDString]];
@@ -401,6 +401,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    NSLog(@"didWriteValueForCharacteristic");
     ProtosWriteCharacteristicRequest *request = [[ProtosWriteCharacteristicRequest alloc] init];
     [request setRemoteId:[peripheral.identifier UUIDString]];
     [request setCharacteristicUuid:[characteristic.UUID UUIDString]];
@@ -412,6 +413,7 @@
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    NSLog(@"didUpdateNotificationStateForCharacteristic");
     if(_characteristicNotifiedStreamHandler.sink != nil) {
         ProtosOnNotificationResponse *result = [[ProtosOnNotificationResponse alloc] init];
         [result setRemoteId:[peripheral.identifier UUIDString]];
@@ -435,7 +437,8 @@
         }
         ProtosReadDescriptorResponse *result = [[ProtosReadDescriptorResponse alloc] init];
         [result setRequest:q];
-        [result setValue:[descriptor value]];
+        int value = [descriptor.value intValue];
+        [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
         _descriptorReadStreamHandler.sink([self toFlutterData:result]);
     }
 }
@@ -577,6 +580,7 @@
     [result setUuid:[characteristic.UUID UUIDString]];
     [result setProperties:[self toCharacteristicPropsProto:characteristic.properties]];
     [result setValue:[characteristic value]];
+    NSLog(@"uuid: %@ value: %@", [characteristic.UUID UUIDString], [characteristic value]);
     NSMutableArray *descriptorProtos = [NSMutableArray new];
     for(CBDescriptor *d in [characteristic descriptors]) {
         [descriptorProtos addObject:[self toDescriptorProto:d]];
@@ -598,7 +602,8 @@
     [result setUuid:[descriptor.UUID UUIDString]];
     [result setCharacteristicUuid:[descriptor.characteristic.UUID UUIDString]];
     [result setServiceUuid:[descriptor.characteristic.service.UUID UUIDString]];
-    [result setValue:[descriptor value]];
+    int value = [descriptor.value intValue];
+    [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
     return result;
 }
 
