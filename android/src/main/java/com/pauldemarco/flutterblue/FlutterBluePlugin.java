@@ -454,7 +454,13 @@ public class FlutterBluePlugin implements MethodCallHandler {
                     return;
                 }
 
-                result.success(ProtoMaker.from(characteristic, gattServer).toByteArray());
+                result.success(null);
+
+                // SetNotificationResponse
+                Protos.SetNotificationResponse.Builder q = Protos.SetNotificationResponse.newBuilder();
+                q.setRemoteId(gattServer.getDevice().getAddress());
+                q.setCharacteristic(ProtoMaker.from(characteristic, gattServer));
+                channel.invokeMethod("SetNotificationResponse", q.build().toByteArray());
                 break;
             }
 

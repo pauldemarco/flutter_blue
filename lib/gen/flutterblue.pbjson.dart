@@ -245,6 +245,14 @@ const SetNotificationRequest$json = const {
   ],
 };
 
+const SetNotificationResponse$json = const {
+  '1': 'SetNotificationResponse',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'characteristic', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristic'},
+  ],
+};
+
 const OnNotificationResponse$json = const {
   '1': 'OnNotificationResponse',
   '2': const [
