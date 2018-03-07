@@ -93,21 +93,21 @@ device.onValueChanged(characteristic).listen((value) {
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
-| scan             | :white_check_mark: | :white_large_square: | Starts a scan for Bluetooth Low Energy devices. |
-| connect          | :white_check_mark: | :white_large_square: | Establishes a connection to the Bluetooth Device. |
-| state            | :white_check_mark: | :white_large_square: | Gets the current state of the Bluetooth Adapter. |
-| onStateChanged   | :white_check_mark: | :white_large_square: | Stream of state changes for the Bluetooth Adapter. |
+| scan             | :white_check_mark: |  :white_check_mark:  | Starts a scan for Bluetooth Low Energy devices. |
+| connect          | :white_check_mark: |  :white_check_mark:  | Establishes a connection to the Bluetooth Device. |
+| state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
+| onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
 | :-------------------------- | :------------------: | :------------------: |  :-------------------------------- |
-| discoverServices            |  :white_check_mark:  | :white_large_square: | Discovers services offered by the remote device as well as their characteristics and descriptors. |
-| services                    |  :white_check_mark:  | :white_large_square: | Gets a list of services. Requires that discoverServices() has completed. |
-| readCharacteristic          |  :white_check_mark:  | :white_large_square: | Retrieves the value of a specified characteristic.  |
-| readDescriptor              |  :white_check_mark:  | :white_large_square: | Retrieves the value of a specified descriptor.  |
-| writeCharacteristic         |  :white_check_mark:  | :white_large_square: | Writes the value of a characteristic. |
-| writeDescriptor             |  :white_check_mark:  | :white_large_square: | Writes the value of a descriptor. |
-| setNotifyValue              |  :white_check_mark:  | :white_large_square: | Sets notifications or indications on the specified characteristic. |
+| discoverServices            |  :white_check_mark:  |  :white_check_mark:  | Discovers services offered by the remote device as well as their characteristics and descriptors. |
+| services                    |  :white_check_mark:  |  :white_check_mark:  | Gets a list of services. Requires that discoverServices() has completed. |
+| readCharacteristic          |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of a specified characteristic.  |
+| readDescriptor              |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of a specified descriptor.  |
+| writeCharacteristic         |  :white_check_mark:  |  :white_check_mark:  | Writes the value of a characteristic. |
+| writeDescriptor             |  :white_check_mark:  |  :white_check_mark:  | Writes the value of a descriptor. |
+| setNotifyValue              |  :white_check_mark:  |  :white_check_mark:  | Sets notifications or indications on the specified characteristic. |
 | onValueChanged              |  :white_check_mark:  | :white_large_square: | Notifies when the characteristic's value has changed. |
-| state                       |  :white_check_mark:  | :white_large_square: | Gets the current state of the Bluetooth Device. |
-| onStateChanged              |  :white_check_mark:  | :white_large_square: | Notifies of state changes for the Bluetooth Device. |
+| state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the Bluetooth Device. |
+| onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the Bluetooth Device. |
