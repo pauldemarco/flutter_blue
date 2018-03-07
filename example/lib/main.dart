@@ -287,8 +287,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         title: new ListTile(
           title: title,
           subtitle: new Text(c.value.toString()),
-          trailing: actions,
         ),
+        trailing: actions,
         children: descriptorTiles,
       );
     } else {
