@@ -50,6 +50,8 @@ class BluetoothDevice {
       ..characteristicUuid = characteristic.uuid.toString()
       ..serviceUuid = characteristic.serviceUuid.toString();
 
+    print('remoteId: ${id.toString()} characteristicUuid: ${characteristic.uuid.toString()} serviceUuid: ${characteristic.serviceUuid.toString()}');
+
     await FlutterBlue.instance._channel
         .invokeMethod('readCharacteristic', request.writeToBuffer());
 

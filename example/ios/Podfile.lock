@@ -1,13 +1,13 @@
 PODS:
-  - !ProtoCompiler (3.4.0):
+  - "!ProtoCompiler (3.5.0)":
     - Protobuf (~> 3.0)
   - Flutter (1.0.0)
   - flutter_blue (0.0.1):
-    - !ProtoCompiler
+    - "!ProtoCompiler"
     - Flutter
     - flutter_blue/Protos (= 0.0.1)
   - flutter_blue/Protos (0.0.1):
-    - !ProtoCompiler
+    - "!ProtoCompiler"
     - Flutter
     - Protobuf
   - Protobuf (3.5.0)
@@ -18,16 +18,16 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: /Users/pauldemarco/flutter/bin/cache/artifacts/engine/ios
+    :path: "/Users/pauldemarco/flutter/bin/cache/artifacts/engine/ios"
   flutter_blue:
-    :path: /Users/pauldemarco/flutter_blue/ios
+    :path: "/Users/pauldemarco/flutter_blue/ios"
 
 SPEC CHECKSUMS:
-  !ProtoCompiler: 07d0c441bc00e7f01e84debf7c53794683fbca7c
+  "!ProtoCompiler": 3e9dc8340c8f1bbab40aa0f5acb965a4be02f849
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_blue: 6a29a637fac55c8918a01e9d2c3d381612b1357a
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
 
 PODFILE CHECKSUM: 351e02e34b831289961ec3558a535cbd2c4965d2
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.2.1
