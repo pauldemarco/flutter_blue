@@ -977,7 +977,7 @@ class SetNotificationResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('SetNotificationResponse')
     ..aOS(1, 'remoteId')
     ..a<BluetoothCharacteristic>(2, 'characteristic', PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
-    ..aOB(3, 'isNotifying')
+    ..aOB(3, 'success')
     ..hasRequiredFields = false
   ;
 
@@ -1007,10 +1007,10 @@ class SetNotificationResponse extends GeneratedMessage {
   bool hasCharacteristic() => $_has(1);
   void clearCharacteristic() => clearField(2);
 
-  bool get isNotifying => $_get(2, false);
-  set isNotifying(bool v) { $_setBool(2, v); }
-  bool hasIsNotifying() => $_has(2);
-  void clearIsNotifying() => clearField(3);
+  bool get success => $_get(2, false);
+  set success(bool v) { $_setBool(2, v); }
+  bool hasSuccess() => $_has(2);
+  void clearSuccess() => clearField(3);
 }
 
 class _ReadonlySetNotificationResponse extends SetNotificationResponse with ReadonlyMessageMixin {}
