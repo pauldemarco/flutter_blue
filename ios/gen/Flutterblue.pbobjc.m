@@ -1683,7 +1683,7 @@ typedef struct ProtosSetNotificationRequest__storage_ {
 
 @dynamic remoteId;
 @dynamic hasCharacteristic, characteristic;
-@dynamic success;
+@dynamic isNotifying;
 
 typedef struct ProtosSetNotificationResponse__storage_ {
   uint32_t _has_storage_[1];
@@ -1716,9 +1716,9 @@ typedef struct ProtosSetNotificationResponse__storage_ {
         .dataType = GPBDataTypeMessage,
       },
       {
-        .name = "success",
+        .name = "isNotifying",
         .dataTypeSpecific.className = NULL,
-        .number = ProtosSetNotificationResponse_FieldNumber_Success,
+        .number = ProtosSetNotificationResponse_FieldNumber_IsNotifying,
         .hasIndex = 2,
         .offset = 3,  // Stored in _has_storage_ to save space.
         .flags = GPBFieldOptional,
