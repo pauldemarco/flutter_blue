@@ -231,8 +231,7 @@
             CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
             // Set notification value
             [peripheral setNotifyValue:[request enable] forCharacteristic:characteristic];
-            // Move callback to channel method and call from didUpdateNotifyValue #41
-            result([self toFlutterData:[self toCharacteristicProto:characteristic]]);
+            result(nil);
         } @catch(FlutterError *e) {
             result(e);
         }
@@ -299,6 +298,15 @@
             if([[ss.UUID UUIDString] isEqualToString:[secondaryService.UUID UUIDString]]) {
                 return s;
             }
+        }
+    }
+    return nil;
+}
+
+- (CBDescriptor*)findCCCDescriptor:(CBCharacteristic*)characteristic {
+    for(CBDescriptor *d in characteristic.descriptors) {
+        if([d.UUID.UUIDString isEqualToString:@"2902"]) {
+            return d;
         }
     }
     return nil;
@@ -441,7 +449,20 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     NSLog(@"didUpdateNotificationStateForCharacteristic");
+    // Read CCC descriptor of characteristic
+    CBDescriptor *cccd = [self findCCCDescriptor:characteristic];
+    if(cccd == nil || error != nil) {
+        // Send error
+        ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
+        [response setRemoteId:[peripheral.identifier UUIDString]];
+        [response setCharacteristic:[self toCharacteristicProto:characteristic]];
+        [response setSuccess:false];
+        [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
+        return;
+    }
     
+    // Request a read
+    [peripheral readValueForDescriptor:cccd];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
@@ -462,6 +483,14 @@
         int value = [descriptor.value intValue];
         [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
         _descriptorReadStreamHandler.sink([self toFlutterData:result]);
+    }
+    // If descriptor is CCCD, send a SetNotificationResponse in case anything is awaiting
+    if([descriptor.UUID.UUIDString isEqualToString:@"2902"]){
+        ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
+        [response setRemoteId:[peripheral.identifier UUIDString]];
+        [response setCharacteristic:[self toCharacteristicProto:descriptor.characteristic]];
+        [response setSuccess:true];
+        [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
     }
 }
 
