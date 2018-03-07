@@ -973,6 +973,42 @@ class SetNotificationRequest extends GeneratedMessage {
 
 class _ReadonlySetNotificationRequest extends SetNotificationRequest with ReadonlyMessageMixin {}
 
+class SetNotificationResponse extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('SetNotificationResponse')
+    ..aOS(1, 'remoteId')
+    ..a<BluetoothCharacteristic>(2, 'characteristic', PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
+    ..hasRequiredFields = false
+  ;
+
+  SetNotificationResponse() : super();
+  SetNotificationResponse.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  SetNotificationResponse.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  SetNotificationResponse clone() => new SetNotificationResponse()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static SetNotificationResponse create() => new SetNotificationResponse();
+  static PbList<SetNotificationResponse> createRepeated() => new PbList<SetNotificationResponse>();
+  static SetNotificationResponse getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlySetNotificationResponse();
+    return _defaultInstance;
+  }
+  static SetNotificationResponse _defaultInstance;
+  static void $checkItem(SetNotificationResponse v) {
+    if (v is! SetNotificationResponse) checkItemFailed(v, 'SetNotificationResponse');
+  }
+
+  String get remoteId => $_getS(0, '');
+  set remoteId(String v) { $_setString(0, v); }
+  bool hasRemoteId() => $_has(0);
+  void clearRemoteId() => clearField(1);
+
+  BluetoothCharacteristic get characteristic => $_getN(1);
+  set characteristic(BluetoothCharacteristic v) { setField(2, v); }
+  bool hasCharacteristic() => $_has(1);
+  void clearCharacteristic() => clearField(2);
+}
+
+class _ReadonlySetNotificationResponse extends SetNotificationResponse with ReadonlyMessageMixin {}
+
 class OnNotificationResponse extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('OnNotificationResponse')
     ..aOS(1, 'remoteId')

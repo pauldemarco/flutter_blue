@@ -160,15 +160,26 @@ class BluetoothDevice {
 
   /// Sets notifications or indications for the value of a specified characteristic
   Future<bool> setNotifyValue(
-      BluetoothCharacteristic characteristic, bool notify) {
+      BluetoothCharacteristic characteristic, bool notify) async {
     var request = protos.SetNotificationRequest.create()
       ..remoteId = id.toString()
       ..serviceUuid = characteristic.serviceUuid.toString()
       ..characteristicUuid = characteristic.uuid.toString()
       ..enable = notify;
-    return FlutterBlue.instance._channel.invokeMethod('setNotification', request.writeToBuffer())
-        .then((buffer) => new protos.BluetoothCharacteristic.fromBuffer(buffer))
-        .then((p) => new BluetoothCharacteristic.fromProto(p))
+
+    await FlutterBlue.instance._channel.invokeMethod('setNotification', request.writeToBuffer());
+
+    return await FlutterBlue.instance._methodStream
+        .where((m) => m.method == "SetNotificationResponse")
+        .map((m) => m.arguments)
+        .map((buffer) =>
+    new protos.SetNotificationResponse.fromBuffer(buffer))
+        .where((p) =>
+        (p.remoteId == request.remoteId) &&
+        (p.characteristic.uuid == request.characteristicUuid) &&
+        (p.characteristic.serviceUuid == request.serviceUuid))
+        .first
+        .then((p) => new BluetoothCharacteristic.fromProto(p.characteristic))
         .then((c) {
           characteristic.updateDescriptors(c.descriptors);
           characteristic.value = c.value;
