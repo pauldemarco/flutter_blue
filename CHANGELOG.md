@@ -1,3 +1,7 @@
+## 0.3.1
+* Now allows simultaneous notifications of characteristics
+* Fixed bug on iOS that was returning `discoverServices` too early
+
 ## 0.3.0
 * iOS support added
 * Bug fixed in example causing discoverServices to be called multiple times
