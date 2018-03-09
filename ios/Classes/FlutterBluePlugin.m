@@ -22,9 +22,10 @@
 @property(nonatomic, retain) FlutterBlueStreamHandler *servicesDiscoveredStreamHandler;
 @property(nonatomic, retain) FlutterBlueStreamHandler *characteristicReadStreamHandler;
 @property(nonatomic, retain) FlutterBlueStreamHandler *descriptorReadStreamHandler;
-@property(nonatomic, retain) FlutterBlueStreamHandler *characteristicNotifiedStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
+@property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
+@property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @end
 
 @implementation FlutterBluePlugin
@@ -37,11 +38,12 @@
     FlutterEventChannel* servicesDiscoveredChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/servicesDiscovered" binaryMessenger:[registrar messenger]];
     FlutterEventChannel* characteristicReadChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/characteristicRead" binaryMessenger:[registrar messenger]];
     FlutterEventChannel* descriptorReadChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/descriptorRead" binaryMessenger:[registrar messenger]];
-    FlutterEventChannel* characteristicNotifiedChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/characteristicNotified" binaryMessenger:[registrar messenger]];
     FlutterBluePlugin* instance = [[FlutterBluePlugin alloc] init];
     instance.channel = channel;
     instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
     instance.scannedPeripherals = [NSMutableDictionary new];
+    instance.servicesThatNeedDiscovered = [NSMutableArray new];
+    instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
     
     // STATE
     FlutterBlueStreamHandler* stateStreamHandler = [[FlutterBlueStreamHandler alloc] init];
@@ -67,11 +69,6 @@
     FlutterBlueStreamHandler* descriptorReadStreamHandler = [[FlutterBlueStreamHandler alloc] init];
     [descriptorReadChannel setStreamHandler:descriptorReadStreamHandler];
     instance.descriptorReadStreamHandler = descriptorReadStreamHandler;
-    
-    // CHARACTERISTIC NOTIFIED
-    FlutterBlueStreamHandler* characteristicNotifiedStreamHandler = [[FlutterBlueStreamHandler alloc] init];
-    [characteristicNotifiedChannel setStreamHandler:characteristicNotifiedStreamHandler];
-    instance.characteristicNotifiedStreamHandler = characteristicNotifiedStreamHandler;
     
     [registrar addMethodCallDelegate:instance channel:channel];
 }
@@ -142,6 +139,9 @@
         NSString *remoteId = [call arguments];
         @try {
             CBPeripheral *peripheral = [self findPeripheral:remoteId];
+            // Clear helper arrays
+            [_servicesThatNeedDiscovered removeAllObjects];
+            [_characteristicsThatNeedDiscovered removeAllObjects ];
             [peripheral discoverServices:nil];
             result(nil);
         } @catch(FlutterError *e) {
@@ -386,16 +386,19 @@
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
     NSLog(@"didDiscoverServices");
     // Loop through and discover characteristics and secondary services
+    [_servicesThatNeedDiscovered addObjectsFromArray:peripheral.services];
     for(CBService *s in [peripheral services]) {
         NSLog(@"Found service: %@", [s.UUID UUIDString]);
         [peripheral discoverCharacteristics:nil forService:s];
-        [peripheral discoverIncludedServices:nil forService:s];
+        // [peripheral discoverIncludedServices:nil forService:s]; // Secondary services in the future (#8)
     }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
     NSLog(@"didDiscoverCharacteristicsForService");
     // Loop through and discover descriptors for characteristics
+    [_servicesThatNeedDiscovered removeObject:service];
+    [_characteristicsThatNeedDiscovered addObjectsFromArray:service.characteristics];
     for(CBCharacteristic *c in [service characteristics]) {
         [peripheral discoverDescriptorsForCharacteristic:c];
     }
@@ -403,6 +406,11 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     NSLog(@"didDiscoverDescriptorsForCharacteristic");
+    [_characteristicsThatNeedDiscovered removeObject:characteristic];
+    if(_servicesThatNeedDiscovered.count > 0 || _characteristicsThatNeedDiscovered.count > 0) {
+        // Still discovering
+        return;
+    }
     // Send updated tree
     if(_servicesDiscoveredStreamHandler.sink != nil) {
         ProtosDiscoverServicesResult *result = [self toServicesResultProto:peripheral];
@@ -427,12 +435,10 @@
         _characteristicReadStreamHandler.sink([self toFlutterData:result]);
     }
     // on iOS, this method also handle notification values
-    if(_characteristicNotifiedStreamHandler.sink != nil) {
-        ProtosOnNotificationResponse *result = [[ProtosOnNotificationResponse alloc] init];
-        [result setRemoteId:[peripheral.identifier UUIDString]];
-        [result setCharacteristic:[self toCharacteristicProto:characteristic]];
-        _characteristicNotifiedStreamHandler.sink([self toFlutterData:result]);
-    }
+    ProtosOnNotificationResponse *result = [[ProtosOnNotificationResponse alloc] init];
+    [result setRemoteId:[peripheral.identifier UUIDString]];
+    [result setCharacteristic:[self toCharacteristicProto:characteristic]];
+    [_channel invokeMethod:@"OnValueChanged" arguments:[self toFlutterData:result]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

@@ -38,7 +38,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   StreamSubscription deviceConnection;
   StreamSubscription deviceStateSubscription;
   List<BluetoothService> services = new List();
-  Map<Guid, StreamSubscription> valueChangedSubscriptions;
+  Map<Guid, StreamSubscription> valueChangedSubscriptions = {};
   BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
 
   @override

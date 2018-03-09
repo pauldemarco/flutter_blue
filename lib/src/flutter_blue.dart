@@ -15,8 +15,6 @@ class FlutterBlue {
       const EventChannel('$NAMESPACE/characteristicRead');
   final EventChannel _descriptorReadChannel =
       const EventChannel('$NAMESPACE/descriptorRead');
-  final EventChannel _characteristicNotifiedChannel =
-      const EventChannel('$NAMESPACE/characteristicNotified');
   final StreamController<MethodCall> _methodStreamController =
       new StreamController.broadcast(); // ignore: close_sinks
   Stream<MethodCall> get _methodStream => _methodStreamController

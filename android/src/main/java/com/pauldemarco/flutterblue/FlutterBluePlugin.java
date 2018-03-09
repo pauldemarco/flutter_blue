@@ -55,7 +55,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
     private final EventChannel servicesDiscoveredChannel;
     private final EventChannel characteristicReadChannel;
     private final EventChannel descriptorReadChannel;
-    private final EventChannel characteristicNotifiedChannel;
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
@@ -75,7 +74,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
         this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
         this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
         this.descriptorReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/descriptorRead");
-        this.characteristicNotifiedChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicNotified");
         this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
@@ -84,7 +82,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
         servicesDiscoveredChannel.setStreamHandler(servicesDiscoveredHandler);
         characteristicReadChannel.setStreamHandler(characteristicReadHandler);
         descriptorReadChannel.setStreamHandler(descriptorReadHandler);
-        characteristicNotifiedChannel.setStreamHandler(characteristicNotifiedHandler);
     }
 
     @Override
@@ -690,19 +687,6 @@ public class FlutterBluePlugin implements MethodCallHandler {
         }
     };
 
-    private EventSink characteristicNotifiedSink;
-    private final StreamHandler characteristicNotifiedHandler = new StreamHandler() {
-        @Override
-        public void onListen(Object o, EventChannel.EventSink eventSink) {
-            characteristicNotifiedSink = eventSink;
-        }
-
-        @Override
-        public void onCancel(Object o) {
-            characteristicNotifiedSink = null;
-        }
-    };
-
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -749,14 +733,11 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            Log.d(TAG, "onCharacteristicChanged: " + characteristic.getValue());
-            if(characteristicNotifiedSink != null) {
-                // Rebuild the ReadAttributeRequest and send back along with response
-                Protos.OnNotificationResponse.Builder q = Protos.OnNotificationResponse.newBuilder();
-                q.setRemoteId(gatt.getDevice().getAddress());
-                q.setCharacteristic(ProtoMaker.from(characteristic, gatt));
-                characteristicNotifiedSink.success(q.build().toByteArray());
-            }
+            Log.d(TAG, "onCharacteristicChanged: " + characteristic.getUuid().toString());
+            Protos.OnNotificationResponse.Builder p = Protos.OnNotificationResponse.newBuilder();
+            p.setRemoteId(gatt.getDevice().getAddress());
+            p.setCharacteristic(ProtoMaker.from(characteristic, gatt));
+            channel.invokeMethod("OnValueChanged", p.build().toByteArray());
         }
 
         @Override
