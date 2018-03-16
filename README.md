@@ -34,6 +34,8 @@ var scanSubscription = flutterBlue.scan().listen((scanResult) {
 scanSubscription.cancel();
 ```
 
+Note: make sure app already has the appropriate permissions before scanning. See https://pub.dartlang.org/packages/simple_permissions#-example-tab-  
+
 ### Connect to a device
 ```dart
 /// Create a connection to the device
