@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 void main() {
   runApp(new FlutterBlueApp());
@@ -22,6 +23,9 @@ class FlutterBlueApp extends StatefulWidget {
 
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
+
+  /// Permissions
+  bool isPermissionGranted = null;
 
   /// Scanning
   StreamSubscription _scanSubscription;
@@ -69,18 +73,43 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     super.dispose();
   }
 
-  _startScan() {
-    _scanSubscription = _flutterBlue
-        .scan(timeout: const Duration(seconds: 5))
-        .listen((scanResult) {
-      setState(() {
-        scanResults[scanResult.device.id] = scanResult;
-      });
-    }, onDone: _stopScan);
+  _updatePermissionGranted() async {
+    Permission permission = Permission.AccessFineLocation;
 
-    setState(() {
-      isScanning = true;
-    });
+
+    if (await SimplePermissions.checkPermission(permission)) {
+      setState(() {
+        isPermissionGranted = true;
+      });
+    } else {
+      if (await SimplePermissions.requestPermission(permission)) {
+        setState(() {
+          isPermissionGranted = true;
+        });
+      } else {
+        setState(() {
+          isPermissionGranted = false;
+        });
+      }
+    }
+
+    return isPermissionGranted;
+  }
+
+  _startScan() async {
+    if (await _updatePermissionGranted() == true) {
+      _scanSubscription = _flutterBlue
+          .scan(timeout: const Duration(seconds: 5))
+          .listen((scanResult) {
+        setState(() {
+          scanResults[scanResult.device.id] = scanResult;
+        });
+      }, onDone: _stopScan);
+
+      setState(() {
+        isScanning = true;
+      });
+    }
   }
 
   _stopScan() {
@@ -353,12 +382,28 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildAlertTile() {
+  _buildAlertTileBluetoothHardwareOff() {
     return new Container(
       color: Colors.redAccent,
       child: new ListTile(
         title: new Text(
           'Bluetooth is not turned on!',
+          style: Theme.of(context).primaryTextTheme.subhead,
+        ),
+        trailing: new Icon(
+          Icons.error,
+          color: Theme.of(context).primaryTextTheme.subhead.color,
+        ),
+      ),
+    );
+  }
+
+  _buildAlertTilePermissionNotGranted() {
+    return new Container(
+      color: Colors.redAccent,
+      child: new ListTile(
+        title: new Text(
+          'Bluetooth permissions are not granted yet',
           style: Theme.of(context).primaryTextTheme.subhead,
         ),
         trailing: new Icon(
@@ -390,9 +435,13 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   @override
   Widget build(BuildContext context) {
     var tiles = new List();
-    if (state != BluetoothState.on) {
-      tiles.add(_buildAlertTile());
+
+    if (isPermissionGranted == false) {
+      tiles.add(_buildAlertTilePermissionNotGranted());
+    } else if (state != BluetoothState.on) {
+      tiles.add(_buildAlertTileBluetoothHardwareOff());
     }
+
     if (isConnected) {
       tiles.add(_buildDeviceStateTile());
       tiles.addAll(_buildServiceTiles());
