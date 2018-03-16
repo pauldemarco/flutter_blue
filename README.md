@@ -111,3 +111,4 @@ device.onValueChanged(characteristic).listen((value) {
 | onValueChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies when the characteristic's value has changed. |
 | state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the Bluetooth Device. |
 | onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the Bluetooth Device. |
+| advertiseServices              |  :x:  |  :x:  | Advertises device to other devices. |
