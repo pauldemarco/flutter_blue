@@ -23,8 +23,10 @@ android {
     }
 
     defaultConfig {
+        targetSdkVersion 26
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        
+
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.pauldemarco.flutterblueexample"
     }
