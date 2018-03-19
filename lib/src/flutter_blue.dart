@@ -68,6 +68,18 @@ class FlutterBlue {
         .then((s) => BluetoothState.values[s.state.value]);
   }
 
+  /// Returns true when advertising is implemented
+  Future<bool> startAdvertising(){
+    return _channel
+        .invokeMethod('startAdvertising');
+  }
+
+  /// Returns true when advertising is implemented
+  Future<bool> stopAdvertising(){
+    return _channel
+        .invokeMethod('stopAdvertising');
+  }
+
   /// Occurs when the bluetooth state has changed
   Stream<BluetoothState> onStateChanged() {
     return _stateChannel

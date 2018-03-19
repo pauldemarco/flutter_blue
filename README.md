@@ -101,6 +101,9 @@ device.onValueChanged(characteristic).listen((value) {
 | onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
 | turnOn           | :white_check_mark: |  :white_check_mark:  | On Android turns on hardware (use onStateChanged for detecting when hardware completes transition). On iOS open settings screen so user manually enables wifi   |
 | turnOff          | :white_check_mark: |  :white_check_mark:  | On Android turns off hardware (use onStateChanged for detecting when hardware completes transition). On iOS open settings screen so user manually disables wifi |
+| startAdvertise   | :white_check_mark: |  :x:                 | Starts advertising for an unlimited amount of time |
+| stopAdvertise    | :white_check_mark: |  :x:                 | Stops advertsing |
+
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |

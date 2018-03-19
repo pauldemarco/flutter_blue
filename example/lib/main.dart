@@ -48,6 +48,8 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   Map<Guid, StreamSubscription> valueChangedSubscriptions = {};
   BluetoothDeviceState deviceState = BluetoothDeviceState.disconnected;
 
+  BuildContext _scaffoldContext;
+
   @override
   void initState() {
     super.initState();
@@ -68,6 +70,18 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         state = s;
       });
     });
+
+
+    _flutterBlue.startAdvertising()
+        .then((isAdvertisingSupported) {
+
+          Scaffold.of(_scaffoldContext)
+              .showSnackBar(new SnackBar(content: new Text(
+              isAdvertisingSupported
+                  ? "Advertising started"
+                  : "Bluetooth advertising is not supported")));
+    });
+
   }
 
   void _enableBluetooth() {
@@ -111,6 +125,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _startScan() async {
+    scanResults = new Map();
     if (await _updatePermissionGranted() == true) {
       _scanSubscription = _flutterBlue
           .scan(timeout: const Duration(seconds: 5))
@@ -245,10 +260,12 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _buildScanResultTiles() {
     return scanResults.values
-        .map((s) => new ListTile(
+        .toList()
+        ..sort((a, b) => b.rssi.compareTo(a.rssi)) // stronger signals show on top
+        ..map((s) => new ListTile(
               title: new Text(s.device.name),
               subtitle: new Text(s.device.id.toString()),
-              leading: new Text(s.rssi.toString()),
+              leading: new Text("${s.rssi} db"),
               onTap: () => _connect(s.device),
             ))
         .toList();
@@ -479,15 +496,20 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
           title: const Text('FlutterBlue'),
           actions: _buildActionButtons(),
         ),
-        floatingActionButton: _buildScanningButton(),
-        body: new Stack(
-          children: <Widget>[
-            (isScanning) ? _buildProgressBarTile() : new Container(),
-            new ListView(
-              children: tiles,
-            )
-          ],
-        ),
+          floatingActionButton: _buildScanningButton(),
+
+          body: new Builder(builder: (context) {
+            _scaffoldContext = context;
+            return
+              new Stack(
+                children: <Widget>[
+                  (isScanning) ? _buildProgressBarTile() : new Container(),
+                  new ListView(
+                    children: tiles,
+                  )
+                ],
+              );
+          })
       ),
     );
   }
