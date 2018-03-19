@@ -24,8 +24,11 @@ class FlutterBlueApp extends StatefulWidget {
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
 
+  /// Hardware availability
+  bool isHardwareAvailable;
+
   /// Permissions
-  bool isPermissionGranted = null;
+  bool isPermissionGranted;
 
   /// Scanning
   StreamSubscription _scanSubscription;
@@ -52,6 +55,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     _flutterBlue.state.then((s) {
       setState(() {
         state = s;
+      });
+    })
+    .catchError((error){
+      setState((){
+        isHardwareAvailable=false;
       });
     });
     // Subscribe to state changes
@@ -382,28 +390,23 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
+  _buildAlertTileBluetoothHardwareNotAvailable() {
+    return _buildAlert('Bluetooth hardware is not available');
+  }
+
   _buildAlertTileBluetoothHardwareOff() {
-    return new Container(
-      color: Colors.redAccent,
-      child: new ListTile(
-        title: new Text(
-          'Bluetooth is not turned on!',
-          style: Theme.of(context).primaryTextTheme.subhead,
-        ),
-        trailing: new Icon(
-          Icons.error,
-          color: Theme.of(context).primaryTextTheme.subhead.color,
-        ),
-      ),
-    );
+    return _buildAlert(      'Bluetooth is not turned on!');
   }
 
   _buildAlertTilePermissionNotGranted() {
+    return _buildAlert('Bluetooth permissions are not granted yet');
+  }
+
+  _buildAlert (String errorMessage) {
     return new Container(
       color: Colors.redAccent,
       child: new ListTile(
-        title: new Text(
-          'Bluetooth permissions are not granted yet',
+        title: new Text(errorMessage,
           style: Theme.of(context).primaryTextTheme.subhead,
         ),
         trailing: new Icon(
@@ -436,7 +439,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   Widget build(BuildContext context) {
     var tiles = new List();
 
-    if (isPermissionGranted == false) {
+    if (isHardwareAvailable == false ) {
+      tiles.add(_buildAlertTileBluetoothHardwareNotAvailable());
+    } else if (isPermissionGranted == false) {
       tiles.add(_buildAlertTilePermissionNotGranted());
     } else if (state != BluetoothState.on) {
       tiles.add(_buildAlertTileBluetoothHardwareOff());
