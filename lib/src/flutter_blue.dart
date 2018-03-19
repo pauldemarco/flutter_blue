@@ -35,6 +35,31 @@ class FlutterBlue {
   /// Checks if Bluetooth functionality is turned on
   Future<bool> get isOn => _channel.invokeMethod('isOn');
 
+  /// Turns on hardware in Android only. Opens settings in iOS
+  /// Requires bluetooth permission.
+  /// When future is computed the hardware will still be transitioning to ON state, look at [state] for the hardware's latest value
+  /// Future returns true when operation will succeed, false otherwise
+  Future<bool> turnOn() {
+
+    if (defaultTargetPlatform == TargetPlatform.android ){
+      return _channel.invokeMethod('turnOn');
+    } else {
+      return SimplePermissions.openSettings();
+    }
+  }
+
+  /// Turns off hardware in Android only. Opens settings in iOS.
+  /// Requires bluetooth permission.
+  /// When future is computed the hardware will still be transitioning to OFF state, look at [state] for the hardware's latest value
+  /// Future returns true when operation will succeed, false otherwise
+  Future<bool> turnOff() {
+    if (defaultTargetPlatform == TargetPlatform.android ){
+      return _channel.invokeMethod('turnOff');
+    } else {
+      return SimplePermissions.openSettings();
+    }
+  }
+
   /// Gets the current state of the Bluetooth module
   Future<BluetoothState> get state {
     return _channel

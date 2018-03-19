@@ -1,5 +1,6 @@
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
+use_frameworks!
 
 if ENV['FLUTTER_FRAMEWORK_DIR'] == nil
   abort('Please set FLUTTER_FRAMEWORK_DIR to the directory containing Flutter.framework')

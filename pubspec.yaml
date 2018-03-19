@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   convert: '^2.0.1'
   protobuf: '^0.7.1'
+  simple_permissions: "^0.1.0"
 
 dev_dependencies:
   flutter_test:

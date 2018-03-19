@@ -99,6 +99,8 @@ device.onValueChanged(characteristic).listen((value) {
 | connect          | :white_check_mark: |  :white_check_mark:  | Establishes a connection to the Bluetooth Device. |
 | state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
 | onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
+| turnOn           | :white_check_mark: |  :white_check_mark:  | On Android turns on hardware (use onStateChanged for detecting when hardware completes transition). On iOS open settings screen so user manually enables wifi   |
+| turnOff          | :white_check_mark: |  :white_check_mark:  | On Android turns off hardware (use onStateChanged for detecting when hardware completes transition). On iOS open settings screen so user manually disables wifi |
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |

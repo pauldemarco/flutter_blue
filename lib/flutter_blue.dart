@@ -11,6 +11,8 @@ import 'gen/flutterblue.pb.dart' as protos;
 import 'package:meta/meta.dart';
 import 'package:collection/collection.dart';
 import 'package:convert/convert.dart';
+import 'package:flutter/foundation.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 part 'src/flutter_blue.dart';
 part 'src/constants.dart';

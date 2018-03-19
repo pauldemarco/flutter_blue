@@ -70,6 +70,12 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
+  void _enableBluetooth() {
+    _flutterBlue.turnOn().then((success){
+
+    });
+  }
+
   @override
   void dispose() {
     _stateSubscription?.cancel();
@@ -391,24 +397,38 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _buildAlertTileBluetoothHardwareNotAvailable() {
-    return _buildAlert('Bluetooth hardware is not available');
+    return _buildAlert(errorTitle:'Bluetooth hardware is not available');
   }
 
   _buildAlertTileBluetoothHardwareOff() {
-    return _buildAlert(      'Bluetooth is not turned on!');
+    return _buildAlert(errorTitle:'Bluetooth is not turned on!',
+        errorSubtitle: 'Tap to enable it',
+        onTap: (){ _enableBluetooth(); });
   }
 
   _buildAlertTilePermissionNotGranted() {
-    return _buildAlert('Bluetooth permissions are not granted yet');
+    return _buildAlert(errorTitle:'Bluetooth permissions are not granted yet');
   }
 
-  _buildAlert (String errorMessage) {
+  _buildAlert({String errorTitle, String errorSubtitle, GestureTapCallback onTap}) {
+    Widget subtitleWidget;
+    if (errorSubtitle == null) {
+      subtitleWidget = null;
+    } else {
+      subtitleWidget = new Text(errorSubtitle,
+        style: Theme.of(context).primaryTextTheme.subhead,
+      );
+    }
+
     return new Container(
       color: Colors.redAccent,
       child: new ListTile(
-        title: new Text(errorMessage,
+        enabled: true,
+        onTap: onTap,
+        title: new Text(errorTitle,
           style: Theme.of(context).primaryTextTheme.subhead,
         ),
+        subtitle: subtitleWidget,
         trailing: new Icon(
           Icons.error,
           color: Theme.of(context).primaryTextTheme.subhead.color,
@@ -439,7 +459,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   Widget build(BuildContext context) {
     var tiles = new List();
 
-    if (isHardwareAvailable == false ) {
+    if (isHardwareAvailable == false) {
       tiles.add(_buildAlertTileBluetoothHardwareNotAvailable());
     } else if (isPermissionGranted == false) {
       tiles.add(_buildAlertTilePermissionNotGranted());
@@ -471,4 +491,5 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       ),
     );
   }
+
 }

@@ -1,33 +1,39 @@
 PODS:
-  - "!ProtoCompiler (3.5.0)":
+  - !ProtoCompiler (3.4.0):
     - Protobuf (~> 3.0)
   - Flutter (1.0.0)
   - flutter_blue (0.0.1):
-    - "!ProtoCompiler"
+    - !ProtoCompiler
     - Flutter
     - flutter_blue/Protos (= 0.0.1)
   - flutter_blue/Protos (0.0.1):
-    - "!ProtoCompiler"
+    - !ProtoCompiler
     - Flutter
     - Protobuf
   - Protobuf (3.5.0)
+  - simple_permissions (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `/Users/pauldemarco/flutter/bin/cache/artifacts/engine/ios`)
-  - flutter_blue (from `/Users/pauldemarco/flutter_blue/ios`)
+  - Flutter (from `/Users/fabio.dematos/bin/flutter/bin/cache/artifacts/engine/ios`)
+  - flutter_blue (from `/Users/fabio.dematos/code/android/flutter/flutter_blue/ios`)
+  - simple_permissions (from `/Users/fabio.dematos/.pub-cache/hosted/pub.dartlang.org/simple_permissions-0.1.0/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: "/Users/pauldemarco/flutter/bin/cache/artifacts/engine/ios"
+    :path: /Users/fabio.dematos/bin/flutter/bin/cache/artifacts/engine/ios
   flutter_blue:
-    :path: "/Users/pauldemarco/flutter_blue/ios"
+    :path: /Users/fabio.dematos/code/android/flutter/flutter_blue/ios
+  simple_permissions:
+    :path: /Users/fabio.dematos/.pub-cache/hosted/pub.dartlang.org/simple_permissions-0.1.0/ios
 
 SPEC CHECKSUMS:
-  "!ProtoCompiler": 3e9dc8340c8f1bbab40aa0f5acb965a4be02f849
+  !ProtoCompiler: 07d0c441bc00e7f01e84debf7c53794683fbca7c
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  flutter_blue: 6a29a637fac55c8918a01e9d2c3d381612b1357a
+  flutter_blue: 92a06a9c0c3d0ec37944cc0a2d7b8ae5a1941b37
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
+  simple_permissions: 95deb61e1b29da91d87ce58ab5297dd70cf92f75
 
-PODFILE CHECKSUM: 351e02e34b831289961ec3558a535cbd2c4965d2
+PODFILE CHECKSUM: 2104703be0d806166949aa86168349846a6c9a86
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.1
