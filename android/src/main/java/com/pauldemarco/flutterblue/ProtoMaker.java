@@ -35,8 +35,11 @@ public class ProtoMaker {
                 // Should handle exception gracefully
             } catch (BufferUnderflowException e) {
                 // Should handle exception gracefully
+<<<<<<< HEAD
             } catch (RuntimeException e) {
                 // Should handle error parsing local name
+=======
+>>>>>>> 1972fc2b3cd1231e71c1ff7b1a1383e97f8f4c27
             }
         }
         p.setRssi(rssi);
