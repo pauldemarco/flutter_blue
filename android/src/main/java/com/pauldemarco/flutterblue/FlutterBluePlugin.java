@@ -28,10 +28,14 @@ import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import android.support.v4.content.ContextCompat;
+import android.support.v4.app.ActivityCompat;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +50,11 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_ADMIN;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
 /**
@@ -65,6 +74,12 @@ public class FlutterBluePlugin implements MethodCallHandler {
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
+
+    private static final List<String> appPermissions = Arrays.asList(
+            BLUETOOTH,
+            BLUETOOTH_ADMIN,
+            ACCESS_FINE_LOCATION
+    );
 
     /**
      * Plugin registration.
@@ -141,7 +156,7 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
             case "startScan":
             {
-                // TODO: Request permission.
+                if (!hasPermissions()) requestPermissions();
                 byte[] data = call.arguments();
                 Protos.ScanSettings request;
                 try {
@@ -571,6 +586,25 @@ public class FlutterBluePlugin implements MethodCallHandler {
             startScan18(settings);
         }
     }
+
+    private boolean hasPermissions() {
+        // Before android M, an application cannot be launched if without the required permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (String perm : appPermissions) {
+                int permStatus = ContextCompat.checkSelfPermission(registrar.activity(), perm);
+                if (permStatus != PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void requestPermissions() {
+        String[] permissionArray = appPermissions.toArray(new String[]{});
+        ActivityCompat.requestPermissions(registrar.activity(), permissionArray, 0);
+    }
+
 
     private void stopScan() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
