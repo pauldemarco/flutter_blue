@@ -156,7 +156,11 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
             case "startScan":
             {
-                if (!hasPermissions()) requestPermissions();
+                if (!hasPermissions()) {
+                    result.error("NotAllowed", "Missing permissions", "noperm");
+                    requestPermissions();
+                    break;
+                }
                 byte[] data = call.arguments();
                 Protos.ScanSettings request;
                 try {
