@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -39,6 +39,7 @@ android {
     dependencies {
         // Required for local unit tests (JUnit 4 framework)
         testImplementation 'junit:junit:4.12'
+        implementation 'com.android.support:support-v4:27.1.0'
         //compile files('/home/paul/flutter/bin/cache/artifacts/engine/android-arm/flutter.jar')
     }
     sourceSets {

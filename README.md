@@ -111,3 +111,9 @@ device.onValueChanged(characteristic).listen((value) {
 | onValueChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies when the characteristic's value has changed. |
 | state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the Bluetooth Device. |
 | onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the Bluetooth Device. |
+
+
+## Troubleshooting
+### Scanning for service UUID's doesn't return any results
+Make sure the device is advertising which service UUID's it supports.  This is found in the advertisement
+packet as **UUID 16 bit complete list** or **UUID 128 bit complete list**.
