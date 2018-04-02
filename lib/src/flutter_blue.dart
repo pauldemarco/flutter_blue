@@ -90,7 +90,7 @@ class FlutterBlue {
   }
 
   /// Stops a scan for Bluetooth Low Energy devices
-  Future<Null> _stopScan() => _channel.invokeMethod('stopScan');
+  Future _stopScan() => _channel.invokeMethod('stopScan');
 
   /// Establishes a connection to the Bluetooth Device.
   /// Returns a stream of [BluetoothDeviceState]
@@ -104,7 +104,7 @@ class FlutterBlue {
     var connected = false;
     StreamSubscription subscription;
     StreamController controller;
-    controller = new StreamController(
+    controller = new StreamController<BluetoothDeviceState>(
       onListen: () {
         if(timeout != null) {
           new Future.delayed(timeout, () => (!connected) ? controller.close(): null);
@@ -134,9 +134,7 @@ class FlutterBlue {
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future<Null> _cancelConnection(BluetoothDevice device) {
-    return _channel.invokeMethod('disconnect', device.id.toString());
-  }
+  Future _cancelConnection(BluetoothDevice device) => _channel.invokeMethod('disconnect', device.id.toString());
 }
 
 /// State of the bluetooth adapter.
