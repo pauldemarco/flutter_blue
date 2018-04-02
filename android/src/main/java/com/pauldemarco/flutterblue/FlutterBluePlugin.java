@@ -4,6 +4,7 @@
 
 package com.pauldemarco.flutterblue;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -22,8 +23,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.ParcelUuid;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
@@ -43,14 +47,16 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 
 
 /**
  * FlutterBluePlugin
  */
-public class FlutterBluePlugin implements MethodCallHandler {
+public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsResultListener  {
     private static final String TAG = "FlutterBluePlugin";
     private static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
+    private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1452;
     static final private UUID CCCD_ID = UUID.fromString("000002902-0000-1000-8000-00805f9b34fb");
     private final Registrar registrar;
     private final MethodChannel channel;
@@ -63,11 +69,16 @@ public class FlutterBluePlugin implements MethodCallHandler {
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
 
+    // Pending call and result for startScan, in the case where permissions are needed
+    private MethodCall pendingCall;
+    private Result pendingResult;
+
     /**
      * Plugin registration.
      */
     public static void registerWith(Registrar registrar) {
         final FlutterBluePlugin instance = new FlutterBluePlugin(registrar);
+        registrar.addRequestPermissionsResultListener(instance);
     }
 
     FlutterBluePlugin(Registrar r){
@@ -138,17 +149,19 @@ public class FlutterBluePlugin implements MethodCallHandler {
 
             case "startScan":
             {
-                // TODO: Request permission.
-                byte[] data = call.arguments();
-                Protos.ScanSettings request;
-                try {
-                    request = Protos.ScanSettings.newBuilder().mergeFrom(data).build();
-                } catch (InvalidProtocolBufferException e) {
-                    result.error("RuntimeException", e.getMessage(), e);
+                if (ContextCompat.checkSelfPermission(registrar.activity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(
+                            registrar.activity(),
+                            new String[] {
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                            },
+                            REQUEST_COARSE_LOCATION_PERMISSIONS);
+                    pendingCall = call;
+                    pendingResult = result;
                     break;
                 }
-                startScan(request);
-                result.success(null);
+                startScan(call, result);
                 break;
             }
 
@@ -473,6 +486,23 @@ public class FlutterBluePlugin implements MethodCallHandler {
         }
     }
 
+    @Override
+    public boolean onRequestPermissionsResult(
+            int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_COARSE_LOCATION_PERMISSIONS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startScan(pendingCall, pendingResult);
+            } else {
+                pendingResult.error(
+                        "no_permissions", "flutter_blue plugin requires location permissions for scanning", null);
+                pendingResult = null;
+                pendingCall = null;
+            }
+            return true;
+        }
+        return false;
+    }
+
     private BluetoothGatt locateGatt(String remoteId) throws Exception {
         BluetoothGatt gattServer = mGattServers.get(remoteId);
         if(gattServer == null) {
@@ -556,12 +586,21 @@ public class FlutterBluePlugin implements MethodCallHandler {
         }
     };
 
-    private void startScan(Protos.ScanSettings settings) {
+    private void startScan(MethodCall call, Result result) {
+        byte[] data = call.arguments();
+        Protos.ScanSettings settings;
+        try {
+            settings = Protos.ScanSettings.newBuilder().mergeFrom(data).build();
+        } catch (InvalidProtocolBufferException e) {
+            result.error("RuntimeException", e.getMessage(), e);
+            return;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             startScan21(settings);
         } else {
             startScan18(settings);
         }
+        result.success(null);
     }
 
     private void stopScan() {
