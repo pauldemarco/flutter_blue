@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_example/widgets.dart';
 
 void main() {
   runApp(new FlutterBlueApp());
@@ -70,9 +71,11 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _startScan() {
-    _scanSubscription = _flutterBlue
-        .scan(timeout: const Duration(seconds: 5), withServices: [new Guid('0000180f-0000-1000-8000-00805f9b34fb')])
-        .listen((scanResult) {
+    _scanSubscription = _flutterBlue.scan(
+        timeout: const Duration(seconds: 5),
+        withServices: [
+          new Guid('0000180f-0000-1000-8000-00805f9b34fb')
+        ]).listen((scanResult) {
       setState(() {
         scanResults[scanResult.device.id] = scanResult;
       });
@@ -165,6 +168,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       valueChangedSubscriptions.remove(c.uuid);
     } else {
       await device.setNotifyValue(c, true);
+      // ignore: cancel_subscriptions
       final sub = device.onValueChanged(c).listen((d) {
         setState(() {
           print('onValueChanged $d');
@@ -211,135 +215,34 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .toList();
   }
 
-  Widget _buildDescriptorTile(BluetoothDescriptor d) {
-    var title = new Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text('Descriptor'),
-        new Text('0x${d.uuid.toString().toUpperCase().substring(4, 8)}',
-            style: Theme
-                .of(context)
-                .textTheme
-                .body1
-                .copyWith(color: Theme.of(context).textTheme.caption.color))
-      ],
-    );
-    return new ListTile(
-      title: new ListTile(
-        title: title,
-        subtitle: new Text(d.value.toString()),
-        trailing: new Row(
-          children: <Widget>[
-            new IconButton(
-              icon: new Icon(
-                Icons.file_download,
-                color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-              ),
-              onPressed: () => _readDescriptor(d),
-            ),
-            new IconButton(
-              icon: new Icon(
-                Icons.file_upload,
-                color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-              ),
-              onPressed: () => _writeDescriptor(d),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCharacteristicTile(BluetoothCharacteristic c) {
-    var descriptorTiles =
-        c.descriptors.map((d) => _buildDescriptorTile(d)).toList();
-    var actions = new Row(
-      children: <Widget>[
-        new IconButton(
-          icon: new Icon(
-            Icons.file_download,
-            color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-          ),
-          onPressed: () => _readCharacteristic(c),
-        ),
-        new IconButton(
-          icon: new Icon(Icons.file_upload,
-              color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
-          onPressed: () => _writeCharacteristic(c),
-        ),
-        new IconButton(
-          icon: new Icon(c.isNotifying ? Icons.sync_disabled : Icons.sync,
-              color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
-          onPressed: () => _setNotification(c),
-        )
-      ],
-    );
-
-    var title = new Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text('Characteristic'),
-        new Text('0x${c.uuid.toString().toUpperCase().substring(4, 8)}',
-            style: Theme
-                .of(context)
-                .textTheme
-                .body1
-                .copyWith(color: Theme.of(context).textTheme.caption.color))
-      ],
-    );
-
-    if (descriptorTiles.length > 0) {
-      return new ExpansionTile(
-        title: new ListTile(
-          title: title,
-          subtitle: new Text(c.value.toString()),
-        ),
-        trailing: actions,
-        children: descriptorTiles,
-      );
-    } else {
-      return new ListTile(
-        title: title,
-        subtitle: new Text(c.value.toString()),
-        trailing: actions,
-      );
-    }
-  }
-
-  Widget _buildServiceTile(BluetoothService s) {
-    var characteristicsTiles = s.characteristics
-        .map((c) => _buildCharacteristicTile(c))
-        .toList();
-    if (characteristicsTiles.length > 0) {
-      return new ExpansionTile(
-        title: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Service'),
-            new Text('0x${s.uuid.toString().toUpperCase().substring(4, 8)}',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .body1
-                    .copyWith(color: Theme.of(context).textTheme.caption.color))
-          ],
-        ),
-        children: characteristicsTiles,
-      );
-    } else {
-      return new ListTile(
-        title: const Text('Service'),
-        subtitle:
-            new Text('0x${s.uuid.toString().toUpperCase().substring(4, 8)}'),
-      );
-    }
-  }
-
   List<Widget> _buildServiceTiles() {
-    return services.map((s) => _buildServiceTile(s)).toList();
+    return services
+        .map(
+          (s) => new ServiceTile(
+                service: s,
+                characteristicTiles: s.characteristics
+                    .map(
+                      (c) => new CharacteristicTile(
+                            characteristic: c,
+                            onReadPressed: () => _readCharacteristic(c),
+                            onWritePressed: () => _writeCharacteristic(c),
+                            onNotificationPressed: () => _setNotification(c),
+                            descriptorTiles: c.descriptors
+                                .map(
+                                  (d) => new DescriptorTile(
+                                        descriptor: d,
+                                        onReadPressed: () => _readDescriptor(d),
+                                        onWritePressed: () =>
+                                            _writeDescriptor(d),
+                                      ),
+                                )
+                                .toList(),
+                          ),
+                    )
+                    .toList(),
+              ),
+        )
+        .toList();
   }
 
   _buildActionButtons() {
@@ -358,7 +261,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
       color: Colors.redAccent,
       child: new ListTile(
         title: new Text(
-          'Bluetooth is not turned on!',
+          'Bluetooth adapter is ${state.toString().substring(15)}',
           style: Theme.of(context).primaryTextTheme.subhead,
         ),
         trailing: new Icon(
