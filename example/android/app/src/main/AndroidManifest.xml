@@ -1,10 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-    package="com.pauldemarco.flutterblueexample"
-    android:versionCode="1"
-    android:versionName="0.0.1">
-
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="21" />
+    package="com.pauldemarco.flutterblueexample">
 
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application
