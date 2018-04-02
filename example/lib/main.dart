@@ -71,7 +71,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _startScan() {
     _scanSubscription = _flutterBlue
-        .scan(timeout: const Duration(seconds: 5))
+        .scan(timeout: const Duration(seconds: 5), withServices: [new Guid('0000180f-0000-1000-8000-00805f9b34fb')])
         .listen((scanResult) {
       setState(() {
         scanResults[scanResult.device.id] = scanResult;
