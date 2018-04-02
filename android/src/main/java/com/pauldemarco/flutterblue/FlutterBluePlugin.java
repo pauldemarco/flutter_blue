@@ -15,17 +15,21 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.ParcelUuid;
 import android.util.Log;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -600,8 +604,16 @@ public class FlutterBluePlugin implements MethodCallHandler {
     }
 
     @TargetApi(21)
-    private void startScan21(Protos.ScanSettings settings) {
-        mBluetoothAdapter.getBluetoothLeScanner().startScan(getScanCallback21());
+    private void startScan21(Protos.ScanSettings proto) {
+        int scanMode = proto.getAndroidScanMode();
+        List<String> serviceUuids = proto.getServiceUuidsList();
+        List<ScanFilter> filters = new ArrayList<>();
+        for(String s: serviceUuids) {
+            ScanFilter f = new ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString(s)).build();
+            filters.add(f);
+        }
+        ScanSettings settings = new ScanSettings.Builder().setScanMode(scanMode).build();
+        mBluetoothAdapter.getBluetoothLeScanner().startScan(filters, settings, getScanCallback21());
     }
 
     @TargetApi(21)
@@ -627,8 +639,13 @@ public class FlutterBluePlugin implements MethodCallHandler {
         return scanCallback18;
     }
 
-    private void startScan18(Protos.ScanSettings settings) {
-        mBluetoothAdapter.startLeScan(getScanCallback18());
+    private void startScan18(Protos.ScanSettings proto) {
+        List<String> serviceUuids = proto.getServiceUuidsList();
+        UUID[] uuids = new UUID[serviceUuids.size()];
+        for(int i = 0; i < serviceUuids.size(); i++) {
+            uuids[0] = UUID.fromString(serviceUuids.get(0));
+        }
+        mBluetoothAdapter.startLeScan(uuids, getScanCallback18());
     }
 
     private void stopScan18() {
