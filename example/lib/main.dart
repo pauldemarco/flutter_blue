@@ -211,7 +211,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .toList();
   }
 
-  _buildDescriptorTile(BluetoothDescriptor d) {
+  Widget _buildDescriptorTile(BluetoothDescriptor d) {
     var title = new Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +251,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     );
   }
 
-  _buildCharacteristicTile(BluetoothCharacteristic c) {
+  Widget _buildCharacteristicTile(BluetoothCharacteristic c) {
     var descriptorTiles =
         c.descriptors.map((d) => _buildDescriptorTile(d)).toList();
     var actions = new Row(
@@ -308,7 +308,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildServiceTile(BluetoothService s) {
+  Widget _buildServiceTile(BluetoothService s) {
     var characteristicsTiles = s.characteristics
         .map((c) => _buildCharacteristicTile(c))
         .toList();
@@ -338,7 +338,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     }
   }
 
-  _buildServiceTiles() {
+  List<Widget> _buildServiceTiles() {
     return services.map((s) => _buildServiceTile(s)).toList();
   }
 
@@ -389,7 +389,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   @override
   Widget build(BuildContext context) {
-    var tiles = new List();
+    var tiles = new List<Widget>();
     if (state != BluetoothState.on) {
       tiles.add(_buildAlertTile());
     }
