@@ -1,3 +1,10 @@
+## 0.3.2
+* Runtime permissions for Android
+* `scan` `withServices` to filter by service UUID's (Android)
+* Scan mode can be specified (Android)
+* Now targets the latest android SDK
+* Dart 2 compatibility
+
 ## 0.3.1
 * Now allows simultaneous notifications of characteristics
 * Fixed bug on iOS that was returning `discoverServices` too early
