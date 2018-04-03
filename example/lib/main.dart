@@ -196,9 +196,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _buildScanningButton() {
-    if (isConnected || state != BluetoothState.on) {
+    /*if (isConnected || state != BluetoothState.on) {
       return null;
-    }
+    }*/
     if (isScanning) {
       return new FloatingActionButton(
         child: new Icon(Icons.stop),
