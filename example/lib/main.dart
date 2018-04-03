@@ -76,6 +76,10 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         withServices: [
           new Guid('0000180F-0000-1000-8000-00805F9B34FB')
         ]).listen((scanResult) {
+      print('localName: ${scanResult.advertisementData.localName}');
+      print(
+          'manufacturerData: ${scanResult.advertisementData.manufacturerData}');
+      print('serviceData: ${scanResult.advertisementData.serviceData}');
       setState(() {
         scanResults[scanResult.device.id] = scanResult;
       });
