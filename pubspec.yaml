@@ -1,6 +1,6 @@
 name: flutter_blue
 description: Bluetooth plugin for Flutter
-version: 0.3.2
+version: 0.3.3
 author: Paul DeMarco <paulmdemarco@gmail.com>
 homepage: https://github.com/pauldemarco/flutter_blue
 

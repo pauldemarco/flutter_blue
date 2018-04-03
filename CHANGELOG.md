@@ -1,3 +1,7 @@
+## 0.3.3
+* `scan` `withServices` to filter by service UUID's (iOS)
+* Error handled when trying to scan with adapter off (Android)
+
 ## 0.3.2
 * Runtime permissions for Android
 * `scan` `withServices` to filter by service UUID's (Android)
