@@ -71,11 +71,14 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _startScan() {
-    _scanSubscription = _flutterBlue.scan(
-        timeout: const Duration(seconds: 5),
-        withServices: [
+    _scanSubscription = _flutterBlue
+        .scan(
+      timeout: const Duration(seconds: 5),
+      /*withServices: [
           new Guid('0000180F-0000-1000-8000-00805F9B34FB')
-        ]).listen((scanResult) {
+        ]*/
+    )
+        .listen((scanResult) {
       print('localName: ${scanResult.advertisementData.localName}');
       print(
           'manufacturerData: ${scanResult.advertisementData.manufacturerData}');
