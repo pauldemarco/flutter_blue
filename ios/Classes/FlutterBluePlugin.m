@@ -95,8 +95,14 @@
         // TODO: Request Permission?
         FlutterStandardTypedData *data = [call arguments];
         ProtosScanSettings *request = [[ProtosScanSettings alloc] initWithData:[data data] error:nil];
-        // TODO: Implement UUID Service filter and iOS Scan Options (#34 #35)
-        [self->_centralManager scanForPeripheralsWithServices:nil options:nil];
+        // UUID Service filter
+        NSArray *uuids = [NSArray array];
+        for (int i = 0; i < [request serviceUuidsArray_Count]; i++) {
+            NSString *u = [request.serviceUuidsArray objectAtIndex:i];
+            uuids = [uuids arrayByAddingObject:[CBUUID UUIDWithString:u]];
+        }
+        // TODO: iOS Scan Options (#35)
+        [self->_centralManager scanForPeripheralsWithServices:uuids options:nil];
         result(nil);
     } else if([@"stopScan" isEqualToString:call.method]) {
         [self->_centralManager stopScan];
