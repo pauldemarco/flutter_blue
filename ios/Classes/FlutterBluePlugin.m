@@ -492,8 +492,30 @@
         }
         ProtosReadDescriptorResponse *result = [[ProtosReadDescriptorResponse alloc] init];
         [result setRequest:q];
-        int value = [descriptor.value intValue];
-        [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
+
+        // Descriptors returning NSNumber (UInt16)
+        if ([descriptor.UUID.UUIDString isEqualToString: CBUUIDCharacteristicExtendedPropertiesString] ||
+            [descriptor.UUID.UUIDString isEqualToString: CBUUIDClientCharacteristicConfigurationString] ||
+            [descriptor.UUID.UUIDString isEqualToString: CBUUIDServerCharacteristicConfigurationString] )
+        {
+            int value = [descriptor.value unsignedShortValue];
+            [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
+        }
+
+        // Descriptors returning NSString
+        else if ([descriptor.UUID.UUIDString isEqualToString: CBUUIDCharacteristicUserDescriptionString])
+        {
+            NSData *value = [descriptor.value dataUsingEncoding: NSUTF8StringEncoding];
+            [result setValue: value];
+        }
+
+        // Descriptors returning NSData
+        else if ([descriptor.UUID.UUIDString isEqualToString: CBUUIDCharacteristicFormatString] ||
+                 [descriptor.UUID.UUIDString isEqualToString: CBUUIDCharacteristicAggregateFormatString])
+        {
+            [result setValue:descriptor.value];
+        }
+
         _descriptorReadStreamHandler.sink([self toFlutterData:result]);
     }
     // If descriptor is CCCD, send a SetNotificationResponse in case anything is awaiting
