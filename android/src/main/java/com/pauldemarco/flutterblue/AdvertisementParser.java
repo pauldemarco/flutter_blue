@@ -102,9 +102,9 @@ class AdvertisementParser {
             }
             uuid = UUID.fromString(String.format("%08x-0000-1000-8000-00805f9b34fb", uuidValue));
           } else {
-            long msb = data.getLong();
-            long lsb = data.getLong();
-            uuid = new UUID(msb, lsb);
+            long lsl = data.getLong();
+            long msl = data.getLong();
+            uuid = new UUID(msl, lsl);
             remainingDataLength = length - 16;
           }
           byte[] remainingData = new byte[remainingDataLength];
