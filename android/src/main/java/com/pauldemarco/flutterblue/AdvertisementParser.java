@@ -52,6 +52,10 @@ class AdvertisementParser {
     AdvertisementData.Builder ret = AdvertisementData.newBuilder();
     boolean seenLongLocalName = false;
     do {
+      if(data.remaining() <= 0){
+        break;
+      }
+        
       int length = data.get() & 0xFF;
       if (length == 0) {
         break;
