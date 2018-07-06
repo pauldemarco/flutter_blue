@@ -68,6 +68,7 @@ class AdvertisementParser {
         case 0x09: { // Long local name.
           if (seenLongLocalName) {
             // Prefer the long name over the short.
+            data.position(data.position() + length);
             break;
           }
           byte[] name = new byte[length];
