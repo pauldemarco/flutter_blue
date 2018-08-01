@@ -1,5 +1,6 @@
 ## 0.3.4
 * Updated to use the latest protobuf (^0.9.0+1)
+* Updated other dependencies
 
 ## 0.3.3
 * `scan` `withServices` to filter by service UUID's (iOS)
