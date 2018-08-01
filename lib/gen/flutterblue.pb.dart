@@ -2,7 +2,6 @@
 //  Generated code. Do not modify.
 ///
 // ignore_for_file: non_constant_identifier_names,library_prefixes
-library flutterblue;
 
 // ignore: UNUSED_SHOWN_NAME
 import 'dart:core' show int, bool, double, String, List, override;
@@ -118,7 +117,7 @@ class AdvertisementData extends GeneratedMessage {
   List<AdvertisementData_ServiceDataEntry> get serviceData => $_getList(2);
 
   int get txPowerLevel => $_get(3, 0);
-  set txPowerLevel(int v) { $_setUnsignedInt32(3, v); }
+  set txPowerLevel(int v) { $_setSignedInt32(3, v); }
   bool hasTxPowerLevel() => $_has(3);
   void clearTxPowerLevel() => clearField(4);
 
@@ -154,7 +153,7 @@ class ScanSettings extends GeneratedMessage {
   }
 
   int get androidScanMode => $_get(0, 0);
-  set androidScanMode(int v) { $_setUnsignedInt32(0, v); }
+  set androidScanMode(int v) { $_setSignedInt32(0, v); }
   bool hasAndroidScanMode() => $_has(0);
   void clearAndroidScanMode() => clearField(1);
 
@@ -198,7 +197,7 @@ class ScanResult extends GeneratedMessage {
   void clearAdvertisementData() => clearField(2);
 
   int get rssi => $_get(2, 0);
-  set rssi(int v) { $_setUnsignedInt32(2, v); }
+  set rssi(int v) { $_setSignedInt32(2, v); }
   bool hasRssi() => $_has(2);
   void clearRssi() => clearField(3);
 }
