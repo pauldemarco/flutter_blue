@@ -19,8 +19,7 @@ class ServiceTile extends StatelessWidget {
             const Text('Service'),
             new Text(
                 '0x${service.uuid.toString().toUpperCase().substring(4, 8)}',
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .body1
                     .copyWith(color: Theme.of(context).textTheme.caption.color))
@@ -57,6 +56,7 @@ class CharacteristicTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var actions = new Row(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         new IconButton(
           icon: new Icon(
@@ -86,8 +86,7 @@ class CharacteristicTile extends StatelessWidget {
         const Text('Characteristic'),
         new Text(
             '0x${characteristic.uuid.toString().toUpperCase().substring(4, 8)}',
-            style: Theme
-                .of(context)
+            style: Theme.of(context)
                 .textTheme
                 .body1
                 .copyWith(color: Theme.of(context).textTheme.caption.color))
@@ -131,8 +130,7 @@ class DescriptorTile extends StatelessWidget {
         const Text('Descriptor'),
         new Text(
             '0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
-            style: Theme
-                .of(context)
+            style: Theme.of(context)
                 .textTheme
                 .body1
                 .copyWith(color: Theme.of(context).textTheme.caption.color))
