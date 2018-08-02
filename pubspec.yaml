@@ -13,7 +13,9 @@ dependencies:
   flutter:
     sdk: flutter
   convert: '^2.0.2'
-  protobuf: '^0.9.0+1'
+  protobuf:
+    git:
+      url: git@github.com:dart-lang/protobuf.git
 
 dev_dependencies:
   flutter_test:
