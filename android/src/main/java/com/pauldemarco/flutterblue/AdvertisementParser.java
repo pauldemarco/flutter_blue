@@ -48,8 +48,13 @@ class AdvertisementParser {
    * @throws ArrayIndexOutOfBoundsException if the input is truncated.
    */
   static AdvertisementData parse(byte[] rawData) {
-    ByteBuffer data = ByteBuffer.wrap(rawData).asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
     AdvertisementData.Builder ret = AdvertisementData.newBuilder();
+    if (rawData.length == 0) {
+      return ret.build();
+    }
+
+    ByteBuffer data = ByteBuffer.wrap(rawData).asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
+
     boolean seenLongLocalName = false;
     do {
       int length = data.get() & 0xFF;
