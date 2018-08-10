@@ -7,6 +7,13 @@ part of flutter_blue;
 class BluetoothDescriptor {
   static final Guid CCCD = new Guid("00002902-0000-1000-8000-00805f9b34fb");
 
+  static final Guid CharacteristicExtendedProperties = new Guid("00002900-0000-1000-8000-00805f9b34fb");
+  static final Guid CharacteristicUserDescription = new Guid("00002901-0000-1000-8000-00805f9b34fb");
+  static final Guid ClientCharacteristicConfiguration = new Guid("00002902-0000-1000-8000-00805f9b34fb");
+  static final Guid ServerCharacteristicConfiguration = new Guid("00002903-0000-1000-8000-00805f9b34fb");
+  static final Guid CharacteristicPresentationFormat = new Guid("00002904-0000-1000-8000-00805f9b34fb");
+  static final Guid CharacteristicAggregateFormat = new Guid("00002905-0000-1000-8000-00805f9b34fb");
+
   final Guid uuid;
   final Guid serviceUuid; // The service that this descriptor belongs to.
   final Guid characteristicUuid; // The characteristic that this descriptor belongs to.
