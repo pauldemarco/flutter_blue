@@ -151,10 +151,11 @@ BOOL ProtosBluetoothState_State_IsValidValue(int32_t value__) {
 @implementation ProtosAdvertisementData
 
 @dynamic localName;
-@dynamic manufacturerData;
-@dynamic serviceData, serviceData_Count;
 @dynamic txPowerLevel;
 @dynamic connectable;
+@dynamic manufacturerData;
+@dynamic serviceData, serviceData_Count;
+@dynamic serviceUuidsArray, serviceUuidsArray_Count;
 
 typedef struct ProtosAdvertisementData__storage_ {
   uint32_t _has_storage_[1];
@@ -162,6 +163,7 @@ typedef struct ProtosAdvertisementData__storage_ {
   NSString *localName;
   NSData *manufacturerData;
   NSMutableDictionary *serviceData;
+  NSMutableArray *serviceUuidsArray;
 } ProtosAdvertisementData__storage_;
 
 // This method is threadsafe because it is initially called
@@ -180,10 +182,28 @@ typedef struct ProtosAdvertisementData__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "txPowerLevel",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosAdvertisementData_FieldNumber_TxPowerLevel,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, txPowerLevel),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "connectable",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosAdvertisementData_FieldNumber_Connectable,
+        .hasIndex = 2,
+        .offset = 3,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
+      {
         .name = "manufacturerData",
         .dataTypeSpecific.className = NULL,
         .number = ProtosAdvertisementData_FieldNumber_ManufacturerData,
-        .hasIndex = 1,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, manufacturerData),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBytes,
@@ -198,22 +218,13 @@ typedef struct ProtosAdvertisementData__storage_ {
         .dataType = GPBDataTypeBytes,
       },
       {
-        .name = "txPowerLevel",
+        .name = "serviceUuidsArray",
         .dataTypeSpecific.className = NULL,
-        .number = ProtosAdvertisementData_FieldNumber_TxPowerLevel,
-        .hasIndex = 2,
-        .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, txPowerLevel),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeInt32,
-      },
-      {
-        .name = "connectable",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosAdvertisementData_FieldNumber_Connectable,
-        .hasIndex = 3,
-        .offset = 4,  // Stored in _has_storage_ to save space.
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeBool,
+        .number = ProtosAdvertisementData_FieldNumber_ServiceUuidsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, serviceUuidsArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
       },
     };
     GPBDescriptor *localDescriptor =

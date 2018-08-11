@@ -81,10 +81,11 @@ class _ReadonlyAdvertisementData_ServiceDataEntry extends AdvertisementData_Serv
 class AdvertisementData extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('AdvertisementData')
     ..aOS(1, 'localName')
-    ..a<List<int>>(2, 'manufacturerData', PbFieldType.OY)
-    ..pp<AdvertisementData_ServiceDataEntry>(3, 'serviceData', PbFieldType.PM, AdvertisementData_ServiceDataEntry.$checkItem, AdvertisementData_ServiceDataEntry.create)
-    ..a<int>(4, 'txPowerLevel', PbFieldType.O3)
-    ..aOB(5, 'connectable')
+    ..a<int>(2, 'txPowerLevel', PbFieldType.O3)
+    ..aOB(3, 'connectable')
+    ..a<List<int>>(4, 'manufacturerData', PbFieldType.OY)
+    ..pp<AdvertisementData_ServiceDataEntry>(5, 'serviceData', PbFieldType.PM, AdvertisementData_ServiceDataEntry.$checkItem, AdvertisementData_ServiceDataEntry.create)
+    ..pPS(6, 'serviceUuids')
     ..hasRequiredFields = false
   ;
 
@@ -109,22 +110,24 @@ class AdvertisementData extends GeneratedMessage {
   bool hasLocalName() => $_has(0);
   void clearLocalName() => clearField(1);
 
-  List<int> get manufacturerData => $_getN(1);
-  set manufacturerData(List<int> v) { $_setBytes(1, v); }
-  bool hasManufacturerData() => $_has(1);
-  void clearManufacturerData() => clearField(2);
+  int get txPowerLevel => $_get(1, 0);
+  set txPowerLevel(int v) { $_setSignedInt32(1, v); }
+  bool hasTxPowerLevel() => $_has(1);
+  void clearTxPowerLevel() => clearField(2);
 
-  List<AdvertisementData_ServiceDataEntry> get serviceData => $_getList(2);
+  bool get connectable => $_get(2, false);
+  set connectable(bool v) { $_setBool(2, v); }
+  bool hasConnectable() => $_has(2);
+  void clearConnectable() => clearField(3);
 
-  int get txPowerLevel => $_get(3, 0);
-  set txPowerLevel(int v) { $_setSignedInt32(3, v); }
-  bool hasTxPowerLevel() => $_has(3);
-  void clearTxPowerLevel() => clearField(4);
+  List<int> get manufacturerData => $_getN(3);
+  set manufacturerData(List<int> v) { $_setBytes(3, v); }
+  bool hasManufacturerData() => $_has(3);
+  void clearManufacturerData() => clearField(4);
 
-  bool get connectable => $_get(4, false);
-  set connectable(bool v) { $_setBool(4, v); }
-  bool hasConnectable() => $_has(4);
-  void clearConnectable() => clearField(5);
+  List<AdvertisementData_ServiceDataEntry> get serviceData => $_getList(4);
+
+  List<String> get serviceUuids => $_getList(5);
 }
 
 class _ReadonlyAdvertisementData extends AdvertisementData with ReadonlyMessageMixin {}
