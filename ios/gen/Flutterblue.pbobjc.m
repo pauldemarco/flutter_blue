@@ -13,9 +13,7 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
-#import <stdatomic.h>
-
-#import "Flutterblue.pbobjc.h"
+ #import "Flutterblue.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -44,6 +42,49 @@ static GPBFileDescriptor *ProtosFlutterblueRoot_FileDescriptor(void) {
   }
   return descriptor;
 }
+
+#pragma mark - ProtosInt32Value
+
+@implementation ProtosInt32Value
+
+@dynamic value;
+
+typedef struct ProtosInt32Value__storage_ {
+  uint32_t _has_storage_[1];
+  int32_t value;
+} ProtosInt32Value__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "value",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosInt32Value_FieldNumber_Value,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProtosInt32Value__storage_, value),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt32,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosInt32Value class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosInt32Value__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
 
 #pragma mark - ProtosBluetoothState
 
@@ -103,7 +144,7 @@ void SetProtosBluetoothState_State_RawValue(ProtosBluetoothState *message, int32
 #pragma mark - Enum ProtosBluetoothState_State
 
 GPBEnumDescriptor *ProtosBluetoothState_State_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "Unknown\000Unavailable\000Unauthorized\000Turning"
@@ -123,8 +164,7 @@ GPBEnumDescriptor *ProtosBluetoothState_State_EnumDescriptor(void) {
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosBluetoothState_State_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }
@@ -151,17 +191,19 @@ BOOL ProtosBluetoothState_State_IsValidValue(int32_t value__) {
 @implementation ProtosAdvertisementData
 
 @dynamic localName;
-@dynamic manufacturerData;
-@dynamic serviceData, serviceData_Count;
-@dynamic txPowerLevel;
+@dynamic hasTxPowerLevel, txPowerLevel;
 @dynamic connectable;
+@dynamic manufacturerData, manufacturerData_Count;
+@dynamic serviceData, serviceData_Count;
+@dynamic serviceUuidsArray, serviceUuidsArray_Count;
 
 typedef struct ProtosAdvertisementData__storage_ {
   uint32_t _has_storage_[1];
-  int32_t txPowerLevel;
   NSString *localName;
-  NSData *manufacturerData;
+  ProtosInt32Value *txPowerLevel;
+  GPBInt32ObjectDictionary *manufacturerData;
   NSMutableDictionary *serviceData;
+  NSMutableArray *serviceUuidsArray;
 } ProtosAdvertisementData__storage_;
 
 // This method is threadsafe because it is initially called
@@ -180,12 +222,30 @@ typedef struct ProtosAdvertisementData__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "txPowerLevel",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosInt32Value),
+        .number = ProtosAdvertisementData_FieldNumber_TxPowerLevel,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, txPowerLevel),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
+      },
+      {
+        .name = "connectable",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosAdvertisementData_FieldNumber_Connectable,
+        .hasIndex = 2,
+        .offset = 3,  // Stored in _has_storage_ to save space.
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeBool,
+      },
+      {
         .name = "manufacturerData",
         .dataTypeSpecific.className = NULL,
         .number = ProtosAdvertisementData_FieldNumber_ManufacturerData,
-        .hasIndex = 1,
+        .hasIndex = GPBNoHasBit,
         .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, manufacturerData),
-        .flags = GPBFieldOptional,
+        .flags = GPBFieldMapKeyInt32,
         .dataType = GPBDataTypeBytes,
       },
       {
@@ -198,22 +258,13 @@ typedef struct ProtosAdvertisementData__storage_ {
         .dataType = GPBDataTypeBytes,
       },
       {
-        .name = "txPowerLevel",
+        .name = "serviceUuidsArray",
         .dataTypeSpecific.className = NULL,
-        .number = ProtosAdvertisementData_FieldNumber_TxPowerLevel,
-        .hasIndex = 2,
-        .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, txPowerLevel),
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeInt32,
-      },
-      {
-        .name = "connectable",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosAdvertisementData_FieldNumber_Connectable,
-        .hasIndex = 3,
-        .offset = 4,  // Stored in _has_storage_ to save space.
-        .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeBool,
+        .number = ProtosAdvertisementData_FieldNumber_ServiceUuidsArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(ProtosAdvertisementData__storage_, serviceUuidsArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeString,
       },
     };
     GPBDescriptor *localDescriptor =
@@ -484,7 +535,7 @@ void SetProtosBluetoothDevice_Type_RawValue(ProtosBluetoothDevice *message, int3
 #pragma mark - Enum ProtosBluetoothDevice_Type
 
 GPBEnumDescriptor *ProtosBluetoothDevice_Type_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "Unknown\000Classic\000Le\000Dual\000";
@@ -500,8 +551,7 @@ GPBEnumDescriptor *ProtosBluetoothDevice_Type_EnumDescriptor(void) {
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosBluetoothDevice_Type_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }
@@ -1360,7 +1410,7 @@ void SetProtosWriteCharacteristicRequest_WriteType_RawValue(ProtosWriteCharacter
 #pragma mark - Enum ProtosWriteCharacteristicRequest_WriteType
 
 GPBEnumDescriptor *ProtosWriteCharacteristicRequest_WriteType_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "WithResponse\000WithoutResponse\000";
@@ -1374,8 +1424,7 @@ GPBEnumDescriptor *ProtosWriteCharacteristicRequest_WriteType_EnumDescriptor(voi
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosWriteCharacteristicRequest_WriteType_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }
@@ -1869,7 +1918,7 @@ void SetProtosDeviceStateResponse_State_RawValue(ProtosDeviceStateResponse *mess
 #pragma mark - Enum ProtosDeviceStateResponse_BluetoothDeviceState
 
 GPBEnumDescriptor *ProtosDeviceStateResponse_BluetoothDeviceState_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "Disconnected\000Connecting\000Connected\000Discon"
@@ -1886,8 +1935,7 @@ GPBEnumDescriptor *ProtosDeviceStateResponse_BluetoothDeviceState_EnumDescriptor
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosDeviceStateResponse_BluetoothDeviceState_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }

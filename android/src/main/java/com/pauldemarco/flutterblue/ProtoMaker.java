@@ -4,15 +4,26 @@
 
 package com.pauldemarco.flutterblue;
 
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.le.ScanRecord;
+import android.bluetooth.le.ScanResult;
+import android.os.Build;
+import android.os.Parcel;
+import android.os.ParcelUuid;
+import android.util.Log;
+import android.util.SparseArray;
 
 import com.google.protobuf.ByteString;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -29,6 +40,56 @@ public class ProtoMaker {
         if(advertisementData != null && advertisementData.length > 0)
             p.setAdvertisementData(AdvertisementParser.parse(advertisementData));
         p.setRssi(rssi);
+        return p.build();
+    }
+
+    @TargetApi(21)
+    static Protos.ScanResult from(BluetoothDevice device, ScanResult scanResult) {
+        Protos.ScanResult.Builder p = Protos.ScanResult.newBuilder();
+        p.setDevice(from(device));
+        Protos.AdvertisementData.Builder a = Protos.AdvertisementData.newBuilder();
+        ScanRecord scanRecord = scanResult.getScanRecord();
+        if(Build.VERSION.SDK_INT >= 26) {
+            a.setConnectable(scanResult.isConnectable());
+        } else {
+            if(scanRecord != null) {
+                int flags = scanRecord.getAdvertiseFlags();
+                a.setConnectable((flags & 0x2) > 0);
+            }
+        }
+        if(scanRecord != null) {
+            String deviceName = scanRecord.getDeviceName();
+            if(deviceName != null) {
+                a.setLocalName(deviceName);
+            }
+            int txPower = scanRecord.getTxPowerLevel();
+            if(txPower != Integer.MIN_VALUE) {
+                a.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(txPower));
+            }
+            // Manufacturer Specific Data
+            SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
+            for (int i = 0; i < msd.size(); i++) {
+                int key = msd.keyAt(i);
+                byte[] value = msd.valueAt(i);
+                a.putManufacturerData(key, ByteString.copyFrom(value));
+            }
+            // Service Data
+            Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
+            for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
+                ParcelUuid key = entry.getKey();
+                byte[] value = entry.getValue();
+                a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
+            }
+            // Service UUIDs
+            List<ParcelUuid> serviceUuids = scanRecord.getServiceUuids();
+            if(serviceUuids != null) {
+                for (ParcelUuid s : serviceUuids) {
+                    a.addServiceUuids(s.getUuid().toString());
+                }
+            }
+        }
+        p.setRssi(scanResult.getRssi());
+        p.setAdvertisementData(a.build());
         return p.build();
     }
 
