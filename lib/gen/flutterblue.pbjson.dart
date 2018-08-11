@@ -28,10 +28,11 @@ const AdvertisementData$json = const {
   '1': 'AdvertisementData',
   '2': const [
     const {'1': 'local_name', '3': 1, '4': 1, '5': 9, '10': 'localName'},
-    const {'1': 'manufacturer_data', '3': 2, '4': 1, '5': 12, '10': 'manufacturerData'},
-    const {'1': 'service_data', '3': 3, '4': 3, '5': 11, '6': '.AdvertisementData.ServiceDataEntry', '10': 'serviceData'},
-    const {'1': 'tx_power_level', '3': 4, '4': 1, '5': 5, '10': 'txPowerLevel'},
-    const {'1': 'connectable', '3': 5, '4': 1, '5': 8, '10': 'connectable'},
+    const {'1': 'tx_power_level', '3': 2, '4': 1, '5': 5, '10': 'txPowerLevel'},
+    const {'1': 'connectable', '3': 3, '4': 1, '5': 8, '10': 'connectable'},
+    const {'1': 'manufacturer_data', '3': 4, '4': 1, '5': 12, '10': 'manufacturerData'},
+    const {'1': 'service_data', '3': 5, '4': 3, '5': 11, '6': '.AdvertisementData.ServiceDataEntry', '10': 'serviceData'},
+    const {'1': 'service_uuids', '3': 6, '4': 3, '5': 9, '10': 'serviceUuids'},
   ],
   '3': const [AdvertisementData_ServiceDataEntry$json],
 };

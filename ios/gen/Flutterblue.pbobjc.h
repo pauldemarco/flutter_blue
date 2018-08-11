@@ -175,15 +175,20 @@ void SetProtosBluetoothState_State_RawValue(ProtosBluetoothState *message, int32
 
 typedef GPB_ENUM(ProtosAdvertisementData_FieldNumber) {
   ProtosAdvertisementData_FieldNumber_LocalName = 1,
-  ProtosAdvertisementData_FieldNumber_ManufacturerData = 2,
-  ProtosAdvertisementData_FieldNumber_ServiceData = 3,
-  ProtosAdvertisementData_FieldNumber_TxPowerLevel = 4,
-  ProtosAdvertisementData_FieldNumber_Connectable = 5,
+  ProtosAdvertisementData_FieldNumber_TxPowerLevel = 2,
+  ProtosAdvertisementData_FieldNumber_Connectable = 3,
+  ProtosAdvertisementData_FieldNumber_ManufacturerData = 4,
+  ProtosAdvertisementData_FieldNumber_ServiceData = 5,
+  ProtosAdvertisementData_FieldNumber_ServiceUuidsArray = 6,
 };
 
 @interface ProtosAdvertisementData : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *localName;
+
+@property(nonatomic, readwrite) int32_t txPowerLevel;
+
+@property(nonatomic, readwrite) BOOL connectable;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSData *manufacturerData;
 
@@ -192,9 +197,9 @@ typedef GPB_ENUM(ProtosAdvertisementData_FieldNumber) {
 /** The number of items in @c serviceData without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger serviceData_Count;
 
-@property(nonatomic, readwrite) int32_t txPowerLevel;
-
-@property(nonatomic, readwrite) BOOL connectable;
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *serviceUuidsArray;
+/** The number of items in @c serviceUuidsArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger serviceUuidsArray_Count;
 
 @end
 
