@@ -562,14 +562,32 @@
   [result setDevice:[self toDeviceProto:peripheral]];
   [result setRssi:[RSSI intValue]];
   ProtosAdvertisementData *ads = [[ProtosAdvertisementData alloc] init];
+  [ads setConnectable:[advertisementData[CBAdvertisementDataIsConnectable] boolValue]];
   [ads setLocalName:advertisementData[CBAdvertisementDataLocalNameKey]];
-  [ads setManufacturerData:advertisementData[CBAdvertisementDataManufacturerDataKey]];
+  // Tx Power Level
+  NSNumber *txPower = advertisementData[CBAdvertisementDataTxPowerLevelKey];
+  if(txPower != nil) {
+    ProtosInt32Value *txPowerWrapper = [[ProtosInt32Value alloc] init];
+    [txPowerWrapper setValue:[txPower intValue]];
+    [ads setTxPowerLevel:txPowerWrapper];
+  }
+  // Manufacturer Specific Data
+  NSData *manufData = advertisementData[CBAdvertisementDataManufacturerDataKey];
+  if(manufData.length > 2) {
+    unsigned short manufacturerId;
+    [manufData getBytes:&manufacturerId length:2];
+    [[ads manufacturerData] setObject:[manufData subdataWithRange:NSMakeRange(2, manufData.length - 2)] forKey:manufacturerId];
+  }
+  // Service Data
   NSDictionary *serviceData = advertisementData[CBAdvertisementDataServiceDataKey];
   for (CBUUID *uuid in serviceData) {
     [[ads serviceData] setObject:serviceData[uuid] forKey:uuid.UUIDString];
   }
-  [ads setTxPowerLevel:[advertisementData[CBAdvertisementDataTxPowerLevelKey] intValue]];
-  [ads setConnectable:[advertisementData[CBAdvertisementDataIsConnectable] boolValue]];
+  // Service Uuids
+  NSArray *serviceUuids = advertisementData[CBAdvertisementDataServiceUUIDsKey];
+  for (CBUUID *uuid in serviceUuids) {
+    [[ads serviceUuidsArray] addObject:uuid.UUIDString];
+  }
   [result setAdvertisementData:ads];
   return result;
 }
