@@ -157,7 +157,7 @@ typedef GPB_ENUM(ProtosInt32Value_FieldNumber) {
 /**
  * Wrapper message for `int32`.
  *
- * The JSON representation for `Int32Value` is JSON number.
+ * Allows for nullability of fields in messages
  **/
 @interface ProtosInt32Value : GPBMessage
 
