@@ -213,11 +213,9 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
 
   _buildScanResultTiles() {
     return scanResults.values
-        .map((s) => new ListTile(
-              title: new Text(s.device.name),
-              subtitle: new Text(s.device.id.toString()),
-              leading: new Text(s.rssi.toString()),
-              onTap: () => _connect(s.device),
+        .map((r) => ScanResultTile(
+              result: r,
+              onTap: () => _connect(r.device),
             ))
         .toList();
   }
