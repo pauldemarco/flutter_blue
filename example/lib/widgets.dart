@@ -73,7 +73,7 @@ class ScanResultTile extends StatelessWidget {
     }
     List<String> res = [];
     data.forEach((id, bytes) {
-      res.add('$id: ${getNiceHexArray(bytes)}');
+      res.add('${id.toUpperCase()}: ${getNiceHexArray(bytes)}');
     });
     return res.join(', ');
   }
