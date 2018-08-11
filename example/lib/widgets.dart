@@ -25,10 +25,55 @@ class ScanResultTile extends StatelessWidget {
     }
   }
 
+  Widget _buildAdvRow(BuildContext context, String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(title, style: Theme.of(context).textTheme.caption),
+          SizedBox(
+            width: 12.0,
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: Theme.of(context)
+                  .textTheme
+                  .caption
+                  .apply(color: Colors.black),
+              softWrap: true,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getNiceManufacturerData(Map<int, List<int>> data) {
+    if (data.isEmpty) {
+      return null;
+    }
+    List<String> res = [];
+    data.forEach((id, bytes) {
+      res.add('${id.toRadixString(16).toUpperCase()}: $bytes');
+    });
+    return res.join(', ');
+  }
+
+  String getNiceServiceData(Map<String, List<int>> data) {
+    if (data.isEmpty) {
+      return null;
+    }
+    List<String> res = [];
+    data.forEach((id, bytes) {
+      res.add('$id: $bytes');
+    });
+    return res.join(', ');
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('MANU DATA: ${result.advertisementData.manufacturerData}');
-    print('TX POWER: ${result.advertisementData.txPowerLevel}');
     return ExpansionTile(
       title: _buildTitle(context),
       leading: Text(result.rssi.toString()),
@@ -36,15 +81,27 @@ class ScanResultTile extends StatelessWidget {
         child: Text('CONNECT'),
         color: Colors.black,
         textColor: Colors.white,
-        onPressed: onTap,
+        onPressed: (result.advertisementData.connectable) ? onTap : null,
       ),
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text('Complete Local Name:'),
-            Text(result.advertisementData.localName)
-          ],
-        )
+        _buildAdvRow(
+            context, 'Complete Local Name', result.advertisementData.localName),
+        _buildAdvRow(context, 'Tx Power Level',
+            '${result.advertisementData.txPowerLevel ?? 'N/A'}'),
+        _buildAdvRow(
+            context,
+            'Manufacturer Data',
+            getNiceManufacturerData(
+                    result.advertisementData.manufacturerData) ??
+                'N/A'),
+        _buildAdvRow(
+            context,
+            'Service UUIDs',
+            (result.advertisementData.serviceUuids.isNotEmpty)
+                ? result.advertisementData.serviceUuids.join(', ')
+                : 'N/A'),
+        _buildAdvRow(context, 'Service Data',
+            getNiceServiceData(result.advertisementData.serviceData) ?? 'N/A'),
       ],
     );
   }

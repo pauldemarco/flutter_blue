@@ -12,6 +12,36 @@ import 'flutterblue.pbenum.dart';
 
 export 'flutterblue.pbenum.dart';
 
+class Int32Value extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('Int32Value')
+    ..a<int>(1, 'value', PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  Int32Value() : super();
+  Int32Value.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  Int32Value.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  Int32Value clone() => new Int32Value()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static Int32Value create() => new Int32Value();
+  static PbList<Int32Value> createRepeated() => new PbList<Int32Value>();
+  static Int32Value getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyInt32Value();
+    return _defaultInstance;
+  }
+  static Int32Value _defaultInstance;
+  static void $checkItem(Int32Value v) {
+    if (v is! Int32Value) checkItemFailed(v, 'Int32Value');
+  }
+
+  int get value => $_get(0, 0);
+  set value(int v) { $_setSignedInt32(0, v); }
+  bool hasValue() => $_has(0);
+  void clearValue() => clearField(1);
+}
+
+class _ReadonlyInt32Value extends Int32Value with ReadonlyMessageMixin {}
+
 class BluetoothState extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('BluetoothState')
     ..e<BluetoothState_State>(1, 'state', PbFieldType.OE, BluetoothState_State.UNKNOWN, BluetoothState_State.valueOf, BluetoothState_State.values)
@@ -41,6 +71,42 @@ class BluetoothState extends GeneratedMessage {
 }
 
 class _ReadonlyBluetoothState extends BluetoothState with ReadonlyMessageMixin {}
+
+class AdvertisementData_ManufacturerDataEntry extends GeneratedMessage {
+  static final BuilderInfo _i = new BuilderInfo('AdvertisementData_ManufacturerDataEntry')
+    ..a<int>(1, 'key', PbFieldType.O3)
+    ..a<List<int>>(2, 'value', PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
+  AdvertisementData_ManufacturerDataEntry() : super();
+  AdvertisementData_ManufacturerDataEntry.fromBuffer(List<int> i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  AdvertisementData_ManufacturerDataEntry.fromJson(String i, [ExtensionRegistry r = ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  AdvertisementData_ManufacturerDataEntry clone() => new AdvertisementData_ManufacturerDataEntry()..mergeFromMessage(this);
+  BuilderInfo get info_ => _i;
+  static AdvertisementData_ManufacturerDataEntry create() => new AdvertisementData_ManufacturerDataEntry();
+  static PbList<AdvertisementData_ManufacturerDataEntry> createRepeated() => new PbList<AdvertisementData_ManufacturerDataEntry>();
+  static AdvertisementData_ManufacturerDataEntry getDefault() {
+    if (_defaultInstance == null) _defaultInstance = new _ReadonlyAdvertisementData_ManufacturerDataEntry();
+    return _defaultInstance;
+  }
+  static AdvertisementData_ManufacturerDataEntry _defaultInstance;
+  static void $checkItem(AdvertisementData_ManufacturerDataEntry v) {
+    if (v is! AdvertisementData_ManufacturerDataEntry) checkItemFailed(v, 'AdvertisementData_ManufacturerDataEntry');
+  }
+
+  int get key => $_get(0, 0);
+  set key(int v) { $_setSignedInt32(0, v); }
+  bool hasKey() => $_has(0);
+  void clearKey() => clearField(1);
+
+  List<int> get value => $_getN(1);
+  set value(List<int> v) { $_setBytes(1, v); }
+  bool hasValue() => $_has(1);
+  void clearValue() => clearField(2);
+}
+
+class _ReadonlyAdvertisementData_ManufacturerDataEntry extends AdvertisementData_ManufacturerDataEntry with ReadonlyMessageMixin {}
 
 class AdvertisementData_ServiceDataEntry extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('AdvertisementData_ServiceDataEntry')
@@ -81,9 +147,9 @@ class _ReadonlyAdvertisementData_ServiceDataEntry extends AdvertisementData_Serv
 class AdvertisementData extends GeneratedMessage {
   static final BuilderInfo _i = new BuilderInfo('AdvertisementData')
     ..aOS(1, 'localName')
-    ..a<int>(2, 'txPowerLevel', PbFieldType.O3)
+    ..a<Int32Value>(2, 'txPowerLevel', PbFieldType.OM, Int32Value.getDefault, Int32Value.create)
     ..aOB(3, 'connectable')
-    ..a<List<int>>(4, 'manufacturerData', PbFieldType.OY)
+    ..pp<AdvertisementData_ManufacturerDataEntry>(4, 'manufacturerData', PbFieldType.PM, AdvertisementData_ManufacturerDataEntry.$checkItem, AdvertisementData_ManufacturerDataEntry.create)
     ..pp<AdvertisementData_ServiceDataEntry>(5, 'serviceData', PbFieldType.PM, AdvertisementData_ServiceDataEntry.$checkItem, AdvertisementData_ServiceDataEntry.create)
     ..pPS(6, 'serviceUuids')
     ..hasRequiredFields = false
@@ -110,8 +176,8 @@ class AdvertisementData extends GeneratedMessage {
   bool hasLocalName() => $_has(0);
   void clearLocalName() => clearField(1);
 
-  int get txPowerLevel => $_get(1, 0);
-  set txPowerLevel(int v) { $_setSignedInt32(1, v); }
+  Int32Value get txPowerLevel => $_getN(1);
+  set txPowerLevel(Int32Value v) { setField(2, v); }
   bool hasTxPowerLevel() => $_has(1);
   void clearTxPowerLevel() => clearField(2);
 
@@ -120,10 +186,7 @@ class AdvertisementData extends GeneratedMessage {
   bool hasConnectable() => $_has(2);
   void clearConnectable() => clearField(3);
 
-  List<int> get manufacturerData => $_getN(3);
-  set manufacturerData(List<int> v) { $_setBytes(3, v); }
-  bool hasManufacturerData() => $_has(3);
-  void clearManufacturerData() => clearField(4);
+  List<AdvertisementData_ManufacturerDataEntry> get manufacturerData => $_getList(3);
 
   List<AdvertisementData_ServiceDataEntry> get serviceData => $_getList(4);
 

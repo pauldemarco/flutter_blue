@@ -84,7 +84,7 @@ class AdvertisementParser {
           break;
         }
         case 0x0A: { // Power level.
-          ret.setTxPowerLevel(data.get());
+          ret.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(data.get()));
           break;
         }
         case 0x16: // Service Data with 16 bit UUID.
@@ -114,9 +114,15 @@ class AdvertisementParser {
           break;
         }
         case 0xFF: {// Manufacturer specific data.
-          byte[] msd = new byte[length];
-          data.get(msd);
-          ret.setManufacturerData(ByteString.copyFrom(msd));
+          if(length < 2) {
+            throw new ArrayIndexOutOfBoundsException("Not enough data for Manufacturer specific data.");
+          }
+          int manufacturerId = data.getShort();
+          if((length - 2) > 0) {
+            byte[] msd = new byte[length - 2];
+            data.get(msd);
+            ret.putManufacturerData(manufacturerId, ByteString.copyFrom(msd));
+          }
           break;
         }
         default: {

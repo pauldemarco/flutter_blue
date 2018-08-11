@@ -622,7 +622,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
                     if(scanResultsSink != null) {
-                        Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result.getScanRecord().getBytes(), result.getRssi());
+                        Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result);
                         scanResultsSink.success(scanResult.toByteArray());
                     }
                 }
