@@ -66,7 +66,7 @@ class FlutterBlue {
     StreamController controller;
     controller = new StreamController(
       onListen: () {
-        if(timeout != null) {
+        if (timeout != null) {
           new Future.delayed(timeout, () => controller.close());
         }
       },
@@ -106,8 +106,9 @@ class FlutterBlue {
     StreamController controller;
     controller = new StreamController<BluetoothDeviceState>(
       onListen: () {
-        if(timeout != null) {
-          new Future.delayed(timeout, () => (!connected) ? controller.close(): null);
+        if (timeout != null) {
+          new Future.delayed(
+              timeout, () => (!connected) ? controller.close() : null);
         }
       },
       onCancel: () {
@@ -119,22 +120,23 @@ class FlutterBlue {
     await _channel.invokeMethod('connect', request.writeToBuffer());
 
     subscription = device.onStateChanged().listen(
-        (data) {
-          if(data == BluetoothDeviceState.connected) {
-            print('connected!');
-            connected = true;
-          }
-          controller.add(data);
-        },
-          onError: controller.addError,
-          onDone: controller.close,
-        );
+      (data) {
+        if (data == BluetoothDeviceState.connected) {
+          print('connected!');
+          connected = true;
+        }
+        controller.add(data);
+      },
+      onError: controller.addError,
+      onDone: controller.close,
+    );
 
     yield* controller.stream;
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future _cancelConnection(BluetoothDevice device) => _channel.invokeMethod('disconnect', device.id.toString());
+  Future _cancelConnection(BluetoothDevice device) =>
+      _channel.invokeMethod('disconnect', device.id.toString());
 }
 
 /// State of the bluetooth adapter.
@@ -188,23 +190,28 @@ class ScanResult {
 
 class AdvertisementData {
   final String localName;
-  final List<int> manufacturerData;
-  final Map<String, List<int>> serviceData;
   final int txPowerLevel;
   final bool connectable;
+  final Map<int, List<int>> manufacturerData;
+  final Map<String, List<int>> serviceData;
+  final List<String> serviceUuids;
 
   AdvertisementData(
       {this.localName,
+      this.txPowerLevel,
+      this.connectable,
       this.manufacturerData,
       this.serviceData,
-      this.txPowerLevel,
-      this.connectable});
+      this.serviceUuids});
 
   AdvertisementData.fromProto(protos.AdvertisementData p)
       : localName = p.localName,
-        manufacturerData = p.manufacturerData,
+        txPowerLevel =
+            (p.txPowerLevel.hasValue()) ? p.txPowerLevel.value : null,
+        connectable = p.connectable,
+        manufacturerData = new Map.fromIterable(p.manufacturerData,
+            key: (v) => v.key, value: (v) => v.value),
         serviceData = new Map.fromIterable(p.serviceData,
             key: (v) => v.key, value: (v) => v.value),
-        txPowerLevel = p.txPowerLevel,
-        connectable = p.connectable;
+        serviceUuids = p.serviceUuids;
 }
