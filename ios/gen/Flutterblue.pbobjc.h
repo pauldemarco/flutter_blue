@@ -33,6 +33,7 @@ CF_EXTERN_C_BEGIN
 @class ProtosBluetoothDevice;
 @class ProtosBluetoothService;
 @class ProtosCharacteristicProperties;
+@class ProtosInt32Value;
 @class ProtosReadDescriptorRequest;
 @class ProtosWriteCharacteristicRequest;
 @class ProtosWriteDescriptorRequest;
@@ -147,6 +148,24 @@ BOOL ProtosDeviceStateResponse_BluetoothDeviceState_IsValidValue(int32_t value);
 @interface ProtosFlutterblueRoot : GPBRootObject
 @end
 
+#pragma mark - ProtosInt32Value
+
+typedef GPB_ENUM(ProtosInt32Value_FieldNumber) {
+  ProtosInt32Value_FieldNumber_Value = 1,
+};
+
+/**
+ * Wrapper message for `int32`.
+ *
+ * The JSON representation for `Int32Value` is JSON number.
+ **/
+@interface ProtosInt32Value : GPBMessage
+
+/** The int32 value. */
+@property(nonatomic, readwrite) int32_t value;
+
+@end
+
 #pragma mark - ProtosBluetoothState
 
 typedef GPB_ENUM(ProtosBluetoothState_FieldNumber) {
@@ -186,11 +205,16 @@ typedef GPB_ENUM(ProtosAdvertisementData_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *localName;
 
-@property(nonatomic, readwrite) int32_t txPowerLevel;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosInt32Value *txPowerLevel;
+/** Test to see if @c txPowerLevel has been set. */
+@property(nonatomic, readwrite) BOOL hasTxPowerLevel;
 
 @property(nonatomic, readwrite) BOOL connectable;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSData *manufacturerData;
+/** Map of manufacturers to their data */
+@property(nonatomic, readwrite, strong, null_resettable) GPBInt32ObjectDictionary<NSData*> *manufacturerData;
+/** The number of items in @c manufacturerData without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger manufacturerData_Count;
 
 /** Map of service UUIDs to their data. */
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableDictionary<NSString*, NSData*> *serviceData;
