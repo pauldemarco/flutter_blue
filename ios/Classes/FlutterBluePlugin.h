@@ -9,4 +9,3 @@
 @interface FlutterBlueStreamHandler : NSObject<FlutterStreamHandler>
 @property FlutterEventSink sink;
 @end
-
