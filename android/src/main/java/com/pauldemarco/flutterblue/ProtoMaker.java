@@ -21,6 +21,7 @@ import android.util.SparseArray;
 
 import com.google.protobuf.ByteString;
 
+import java.nio.BufferUnderflowException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,17 @@ public class ProtoMaker {
     static Protos.ScanResult from(BluetoothDevice device, byte[] advertisementData, int rssi) {
         Protos.ScanResult.Builder p = Protos.ScanResult.newBuilder();
         p.setDevice(from(device));
-        if(advertisementData != null && advertisementData.length > 0)
-            p.setAdvertisementData(AdvertisementParser.parse(advertisementData));
+        if(advertisementData != null && advertisementData.length > 0) {
+            try {
+                p.setAdvertisementData(AdvertisementParser.parse(advertisementData));
+            } catch (ArrayIndexOutOfBoundsException e) {
+                // Should handle exception gracefully
+            } catch (BufferUnderflowException e) {
+                // Should handle exception gracefully
+            } catch (RuntimeException e) {
+                // Should handle error parsing local name
+            }
+        }
         p.setRssi(rssi);
         return p.build();
     }
