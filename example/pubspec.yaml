@@ -1,13 +1,16 @@
 name: flutter_blue_example
 description: Demonstrates how to use the flutter_blue plugin.
 
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
 dependencies:
   flutter:
     sdk: flutter
   flutter_blue:
     path: ../
-  intl: '^0.15.1'
-  intl_translation: '^0.15.0'
+  intl: any
+  intl_translation: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
