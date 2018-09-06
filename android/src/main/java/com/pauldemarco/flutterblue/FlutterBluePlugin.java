@@ -47,9 +47,10 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
-
+import io.flutter.view.FlutterNativeView;
 
 /**
  * FlutterBluePlugin
@@ -80,6 +81,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     public static void registerWith(Registrar registrar) {
         final FlutterBluePlugin instance = new FlutterBluePlugin(registrar);
         registrar.addRequestPermissionsResultListener(instance);
+        registrar.addViewDestroyListener(new PluginRegistry.ViewDestroyListener() {
+            @Override
+            public boolean onViewDestroy(FlutterNativeView view) {
+                instance.cleanup();
+                return false;
+            }
+        });
     }
 
     FlutterBluePlugin(Registrar r){
@@ -282,6 +290,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
                 BluetoothGatt gattServer;
                 BluetoothGattCharacteristic characteristic;
+
                 try {
                     gattServer = locateGatt(request.getRemoteId());
                     characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
@@ -582,8 +591,10 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
         @Override
         public void onCancel(Object o) {
-            sink = null;
-            registrar.activity().unregisterReceiver(mReceiver);
+            if(sink != null) {
+                sink = null;
+                registrar.activity().unregisterReceiver(mReceiver);
+            }
         }
     };
 
@@ -696,6 +707,16 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         mBluetoothAdapter.stopLeScan(getScanCallback18());
     }
 
+    private void cleanup() {
+        for (BluetoothGatt bluetoothGatt : mGattServers.values()) {
+            bluetoothGatt.close();
+            bluetoothGatt.disconnect();
+        }
+        mGattServers.clear();
+
+        stateHandler.onCancel(null);
+    }
+
     private EventSink scanResultsSink;
     private final StreamHandler scanResultsHandler = new StreamHandler() {
         @Override
@@ -751,7 +772,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            Log.d(TAG, "onConnectionStateChange: ");
+            Log.d(TAG, "onConnectionStateChange: " + status + ", newState: " + newState);
             channel.invokeMethod("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
         }
 
