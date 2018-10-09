@@ -6,8 +6,6 @@ dependencies:
     sdk: flutter
   flutter_blue:
     path: ../
-  intl: '^0.15.1'
-  intl_translation: '^0.15.0'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
