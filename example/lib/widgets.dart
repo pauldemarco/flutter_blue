@@ -210,6 +210,7 @@ class CharacteristicTile extends StatelessWidget {
         title: new ListTile(
           title: title,
           subtitle: new Text(characteristic.value.toString()),
+          contentPadding: EdgeInsets.all(0.0),
         ),
         trailing: actions,
         children: descriptorTiles,
@@ -249,27 +250,26 @@ class DescriptorTile extends StatelessWidget {
       ],
     );
     return new ListTile(
-      title: new ListTile(
-        title: title,
-        subtitle: new Text(descriptor.value.toString()),
-        trailing: new Row(
-          children: <Widget>[
-            new IconButton(
-              icon: new Icon(
-                Icons.file_download,
-                color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-              ),
-              onPressed: onReadPressed,
+      title: title,
+      subtitle: new Text(descriptor.value.toString()),
+      trailing: new Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new IconButton(
+            icon: new Icon(
+              Icons.file_download,
+              color: Theme.of(context).iconTheme.color.withOpacity(0.5),
             ),
-            new IconButton(
-              icon: new Icon(
-                Icons.file_upload,
-                color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-              ),
-              onPressed: onWritePressed,
-            )
-          ],
-        ),
+            onPressed: onReadPressed,
+          ),
+          new IconButton(
+            icon: new Icon(
+              Icons.file_upload,
+              color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+            ),
+            onPressed: onWritePressed,
+          )
+        ],
       ),
     );
   }
