@@ -1,3 +1,8 @@
+## 0.4.1
+* Fixed bug where setNotifyValue wasn't properly awaitable.
+* Various UI bug fixes to example app.
+* Removed unnecessary intl dependencies in example app.
+
 ## 0.4.0
 * **Breaking change**. Manufacturer Data is now a `Map` of manufacturer ID's.
 * Service UUID's, service data, tx power level packets fixed in advertising data.
