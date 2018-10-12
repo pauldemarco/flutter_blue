@@ -676,13 +676,23 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     }
 
     private BluetoothAdapter.LeScanCallback scanCallback18;
-
+    private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
     private BluetoothAdapter.LeScanCallback getScanCallback18() {
         if(scanCallback18 == null) {
             scanCallback18 = new BluetoothAdapter.LeScanCallback() {
                 @Override
                 public void onLeScan(final BluetoothDevice bluetoothDevice, int rssi,
                                      byte[] scanRecord) {
+                    Log.d(TAG, "scanResultsSink: " + scanResultsSink + ", discovered: "+ bluetoothDevice + ", rssi: " + rssi + ", scanRecord: " + bytesToHex(scanRecord));
                     if(scanResultsSink != null) {
                         Protos.ScanResult scanResult = ProtoMaker.from(bluetoothDevice, scanRecord, rssi);
                         scanResultsSink.success(scanResult.toByteArray());

@@ -130,7 +130,7 @@ class AdvertisementParser {
           break;
         }
       }
-    } while (true);
+    } while (data.hasRemaining());
     return ret.build();
   }
 }
