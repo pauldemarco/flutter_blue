@@ -19,10 +19,7 @@ class BluetoothDevice {
 
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
-    await FlutterBlue.instance._channel
-        .invokeMethod('discoverServices', id.toString());
-
-    return await FlutterBlue.instance._servicesDiscoveredChannel
+    var response = FlutterBlue.instance._servicesDiscoveredChannel
         .receiveBroadcastStream()
         .map((buffer) =>
             new protos.DiscoverServicesResult.fromBuffer(buffer))
@@ -30,6 +27,11 @@ class BluetoothDevice {
         .map((p) => p.services)
         .map((s) => s.map((p) => new BluetoothService.fromProto(p)).toList())
         .first;
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('discoverServices', id.toString());
+
+    return await response;
   }
 
   /// Returns a list of Bluetooth GATT services offered by the remote device
@@ -52,10 +54,7 @@ class BluetoothDevice {
 
     print('remoteId: ${id.toString()} characteristicUuid: ${characteristic.uuid.toString()} serviceUuid: ${characteristic.serviceUuid.toString()}');
 
-    await FlutterBlue.instance._channel
-        .invokeMethod('readCharacteristic', request.writeToBuffer());
-
-    return await FlutterBlue.instance._characteristicReadChannel
+    var response = FlutterBlue.instance._characteristicReadChannel
         .receiveBroadcastStream()
         .map((buffer) =>
             new protos.ReadCharacteristicResponse.fromBuffer(buffer))
@@ -66,6 +65,11 @@ class BluetoothDevice {
         .map((p) => p.characteristic.value)
         .first
         .then((d) => characteristic.value = d);
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('readCharacteristic', request.writeToBuffer());
+
+    return await response;
   }
 
   /// Retrieves the value of a specified descriptor
@@ -76,13 +80,10 @@ class BluetoothDevice {
       ..characteristicUuid = descriptor.characteristicUuid.toString()
       ..serviceUuid = descriptor.serviceUuid.toString();
 
-    await FlutterBlue.instance._channel
-        .invokeMethod('readDescriptor', request.writeToBuffer());
-
-    return await FlutterBlue.instance._descriptorReadChannel
+    var response = FlutterBlue.instance._descriptorReadChannel
         .receiveBroadcastStream()
         .map((buffer) =>
-            new protos.ReadDescriptorResponse.fromBuffer(buffer))
+    new protos.ReadDescriptorResponse.fromBuffer(buffer))
         .where((p) =>
             (p.request.remoteId == request.remoteId) &&
             (p.request.descriptorUuid == request.descriptorUuid) &&
@@ -91,6 +92,11 @@ class BluetoothDevice {
         .map((d) => d.value)
         .first
         .then((d) => descriptor.value = d);
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('readDescriptor', request.writeToBuffer());
+
+    return await response;
   }
 
   /// Writes the value of a characteristic.
