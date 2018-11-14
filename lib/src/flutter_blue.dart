@@ -37,7 +37,7 @@ class FlutterBlue {
 
   /// Checks if Bluetooth functionality is turned on
   Future<bool> get isOn async {
-    final bool isOn= await _channel.invokeMethod('isOn');
+    final bool isOn = await _channel.invokeMethod('isOn');
     return isOn;
   }
 
