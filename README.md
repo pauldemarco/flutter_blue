@@ -18,6 +18,23 @@ Once connected to a device, the BluetoothDevice object can discover services ([B
 The BluetoothDevice object is then used to directly interact with characteristics and descriptors.
 
 ## Usage
+
+To use this plugin, add `flutter_blue` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
+You may also need to increase your minSdk from flutters default.  Modify `android\app\build.gradle` and change your `minSdkVersion` to at least 19.
+```gradle
+android {
+    ...
+    defaultConfig {
+        applicationId "com.example.yourapp"
+        minSdkVersion 19
+        targetSdkVersion 27
+        ...
+    }
+    ...
+}
+```
+
 ### Obtain an instance
 ```dart
 FlutterBlue flutterBlue = FlutterBlue.instance;
