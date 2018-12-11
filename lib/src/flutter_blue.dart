@@ -96,11 +96,14 @@ class FlutterBlue {
   /// Returns a stream of [BluetoothDeviceState]
   /// Timeout closes the stream after a specified [Duration]
   /// To cancel connection to device, simply cancel() the stream subscription
-  Stream<BluetoothDeviceState> connect(BluetoothDevice device,
-      {Duration timeout}) async* {
+  Stream<BluetoothDeviceState> connect(
+    BluetoothDevice device, {
+    Duration timeout,
+    bool autoConnect = true,
+  }) async* {
     var request = protos.ConnectRequest.create()
       ..remoteId = device.id.toString()
-      ..androidAutoConnect = true;
+      ..androidAutoConnect = autoConnect;
     var connected = false;
     StreamSubscription subscription;
     StreamController controller;
