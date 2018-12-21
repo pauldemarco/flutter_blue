@@ -212,9 +212,7 @@ class AdvertisementData {
         txPowerLevel =
             (p.txPowerLevel.hasValue()) ? p.txPowerLevel.value : null,
         connectable = p.connectable,
-        manufacturerData = new Map.fromIterable(p.manufacturerData,
-            key: (v) => v.key, value: (v) => v.value),
-        serviceData = new Map.fromIterable(p.serviceData,
-            key: (v) => v.key, value: (v) => v.value),
+        manufacturerData = p.manufacturerData,
+        serviceData = p.serviceData,
         serviceUuids = p.serviceUuids;
 }

@@ -1,13 +1,14 @@
 ///
 //  Generated code. Do not modify.
+//  source: flutterblue.proto
 ///
-// ignore_for_file: non_constant_identifier_names,library_prefixes
+// ignore_for_file: non_constant_identifier_names,library_prefixes,unused_import
 
 // ignore_for_file: UNDEFINED_SHOWN_NAME,UNUSED_SHOWN_NAME
 import 'dart:core' show int, dynamic, String, List, Map;
-import 'package:protobuf/protobuf.dart';
+import 'package:protobuf/protobuf.dart' as $pb;
 
-class BluetoothState_State extends ProtobufEnum {
+class BluetoothState_State extends $pb.ProtobufEnum {
   static const BluetoothState_State UNKNOWN = const BluetoothState_State._(0, 'UNKNOWN');
   static const BluetoothState_State UNAVAILABLE = const BluetoothState_State._(1, 'UNAVAILABLE');
   static const BluetoothState_State UNAUTHORIZED = const BluetoothState_State._(2, 'UNAUTHORIZED');
@@ -26,16 +27,16 @@ class BluetoothState_State extends ProtobufEnum {
     OFF,
   ];
 
-  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
-  static BluetoothState_State valueOf(int value) => _byValue[value] as BluetoothState_State;
+  static final Map<int, BluetoothState_State> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static BluetoothState_State valueOf(int value) => _byValue[value];
   static void $checkItem(BluetoothState_State v) {
-    if (v is! BluetoothState_State) checkItemFailed(v, 'BluetoothState_State');
+    if (v is! BluetoothState_State) $pb.checkItemFailed(v, 'BluetoothState_State');
   }
 
   const BluetoothState_State._(int v, String n) : super(v, n);
 }
 
-class BluetoothDevice_Type extends ProtobufEnum {
+class BluetoothDevice_Type extends $pb.ProtobufEnum {
   static const BluetoothDevice_Type UNKNOWN = const BluetoothDevice_Type._(0, 'UNKNOWN');
   static const BluetoothDevice_Type CLASSIC = const BluetoothDevice_Type._(1, 'CLASSIC');
   static const BluetoothDevice_Type LE = const BluetoothDevice_Type._(2, 'LE');
@@ -48,16 +49,16 @@ class BluetoothDevice_Type extends ProtobufEnum {
     DUAL,
   ];
 
-  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
-  static BluetoothDevice_Type valueOf(int value) => _byValue[value] as BluetoothDevice_Type;
+  static final Map<int, BluetoothDevice_Type> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static BluetoothDevice_Type valueOf(int value) => _byValue[value];
   static void $checkItem(BluetoothDevice_Type v) {
-    if (v is! BluetoothDevice_Type) checkItemFailed(v, 'BluetoothDevice_Type');
+    if (v is! BluetoothDevice_Type) $pb.checkItemFailed(v, 'BluetoothDevice_Type');
   }
 
   const BluetoothDevice_Type._(int v, String n) : super(v, n);
 }
 
-class WriteCharacteristicRequest_WriteType extends ProtobufEnum {
+class WriteCharacteristicRequest_WriteType extends $pb.ProtobufEnum {
   static const WriteCharacteristicRequest_WriteType WITH_RESPONSE = const WriteCharacteristicRequest_WriteType._(0, 'WITH_RESPONSE');
   static const WriteCharacteristicRequest_WriteType WITHOUT_RESPONSE = const WriteCharacteristicRequest_WriteType._(1, 'WITHOUT_RESPONSE');
 
@@ -66,16 +67,16 @@ class WriteCharacteristicRequest_WriteType extends ProtobufEnum {
     WITHOUT_RESPONSE,
   ];
 
-  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
-  static WriteCharacteristicRequest_WriteType valueOf(int value) => _byValue[value] as WriteCharacteristicRequest_WriteType;
+  static final Map<int, WriteCharacteristicRequest_WriteType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static WriteCharacteristicRequest_WriteType valueOf(int value) => _byValue[value];
   static void $checkItem(WriteCharacteristicRequest_WriteType v) {
-    if (v is! WriteCharacteristicRequest_WriteType) checkItemFailed(v, 'WriteCharacteristicRequest_WriteType');
+    if (v is! WriteCharacteristicRequest_WriteType) $pb.checkItemFailed(v, 'WriteCharacteristicRequest_WriteType');
   }
 
   const WriteCharacteristicRequest_WriteType._(int v, String n) : super(v, n);
 }
 
-class DeviceStateResponse_BluetoothDeviceState extends ProtobufEnum {
+class DeviceStateResponse_BluetoothDeviceState extends $pb.ProtobufEnum {
   static const DeviceStateResponse_BluetoothDeviceState DISCONNECTED = const DeviceStateResponse_BluetoothDeviceState._(0, 'DISCONNECTED');
   static const DeviceStateResponse_BluetoothDeviceState CONNECTING = const DeviceStateResponse_BluetoothDeviceState._(1, 'CONNECTING');
   static const DeviceStateResponse_BluetoothDeviceState CONNECTED = const DeviceStateResponse_BluetoothDeviceState._(2, 'CONNECTED');
@@ -88,10 +89,10 @@ class DeviceStateResponse_BluetoothDeviceState extends ProtobufEnum {
     DISCONNECTING,
   ];
 
-  static final Map<int, dynamic> _byValue = ProtobufEnum.initByValue(values);
-  static DeviceStateResponse_BluetoothDeviceState valueOf(int value) => _byValue[value] as DeviceStateResponse_BluetoothDeviceState;
+  static final Map<int, DeviceStateResponse_BluetoothDeviceState> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static DeviceStateResponse_BluetoothDeviceState valueOf(int value) => _byValue[value];
   static void $checkItem(DeviceStateResponse_BluetoothDeviceState v) {
-    if (v is! DeviceStateResponse_BluetoothDeviceState) checkItemFailed(v, 'DeviceStateResponse_BluetoothDeviceState');
+    if (v is! DeviceStateResponse_BluetoothDeviceState) $pb.checkItemFailed(v, 'DeviceStateResponse_BluetoothDeviceState');
   }
 
   const DeviceStateResponse_BluetoothDeviceState._(int v, String n) : super(v, n);

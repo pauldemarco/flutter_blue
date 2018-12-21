@@ -4,21 +4,20 @@ version: 0.4.1
 author: Paul DeMarco <paulmdemarco@gmail.com>
 homepage: https://github.com/pauldemarco/flutter_blue
 
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  convert: '^2.1.1'
+  protobuf: '^0.10.5'
+
 flutter:
   plugin:
     androidPackage: com.pauldemarco.flutterblue
     pluginClass: FlutterBluePlugin
 
-dependencies:
-  flutter:
-    sdk: flutter
-  convert: '^2.0.2'
-  protobuf: '^0.9.1'
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-environment:
-  sdk: '>=2.0.0-dev.28.0 <3.0.0'
-  flutter: '>=0.2.4 <2.0.0'
