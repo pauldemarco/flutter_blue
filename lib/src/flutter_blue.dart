@@ -43,6 +43,9 @@ class FlutterBlue {
         .then((s) => BluetoothState.values[s.state.value]);
   }
 
+  Future disconnect(BluetoothDevice device) =>
+    _channel.invokeMethod('disconnect', device.id.toString());
+
   /// Occurs when the bluetooth state has changed
   Stream<BluetoothState> onStateChanged() {
     return _stateChannel
@@ -136,7 +139,7 @@ class FlutterBlue {
 
   /// Cancels connection to the Bluetooth Device
   Future _cancelConnection(BluetoothDevice device) =>
-      _channel.invokeMethod('disconnect', device.id.toString());
+    _channel.invokeMethod('disconnect', device.id.toString());
 }
 
 /// State of the bluetooth adapter.
