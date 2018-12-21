@@ -1,9 +1,18 @@
 name: flutter_blue_example
 description: Demonstrates how to use the flutter_blue plugin.
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
   flutter_blue:
     path: ../
 
