@@ -13,13 +13,14 @@ class BluetoothCharacteristic {
   final List<BluetoothDescriptor> descriptors;
   bool get isNotifying {
     try {
-      var cccd = descriptors.singleWhere((d) =>
-      d.uuid == BluetoothDescriptor.CCCD);
+      var cccd =
+          descriptors.singleWhere((d) => d.uuid == BluetoothDescriptor.CCCD);
       return ((cccd.value[0] & 0x01) > 0 || (cccd.value[0] & 0x02) > 0);
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
+
   List<int> value;
 
   BluetoothCharacteristic(
@@ -32,7 +33,9 @@ class BluetoothCharacteristic {
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
       : uuid = new Guid(p.uuid),
         serviceUuid = new Guid(p.serviceUuid),
-        secondaryServiceUuid = (p.secondaryServiceUuid.length > 0) ? new Guid(p.secondaryServiceUuid): null,
+        secondaryServiceUuid = (p.secondaryServiceUuid.length > 0)
+            ? new Guid(p.secondaryServiceUuid)
+            : null,
         descriptors = p.descriptors
             .map((d) => new BluetoothDescriptor.fromProto(d))
             .toList(),
@@ -40,9 +43,9 @@ class BluetoothCharacteristic {
         value = p.value;
 
   void updateDescriptors(List<BluetoothDescriptor> newDescriptors) {
-    for(var d in descriptors) {
-      for(var newD in newDescriptors){
-        if(d.uuid == newD.uuid) {
+    for (var d in descriptors) {
+      for (var newD in newDescriptors) {
+        if (d.uuid == newD.uuid) {
           d.value = newD.value;
         }
       }
