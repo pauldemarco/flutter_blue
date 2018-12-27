@@ -665,6 +665,7 @@ typedef struct ProtosBluetoothService__storage_ {
 @implementation ProtosBluetoothCharacteristic
 
 @dynamic uuid;
+@dynamic remoteId;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
 @dynamic descriptorsArray, descriptorsArray_Count;
@@ -674,6 +675,7 @@ typedef struct ProtosBluetoothService__storage_ {
 typedef struct ProtosBluetoothCharacteristic__storage_ {
   uint32_t _has_storage_[1];
   NSString *uuid;
+  NSString *remoteId;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
   NSMutableArray *descriptorsArray;
@@ -697,10 +699,19 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "remoteId",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosBluetoothCharacteristic_FieldNumber_RemoteId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, remoteId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "serviceUuid",
         .dataTypeSpecific.className = NULL,
         .number = ProtosBluetoothCharacteristic_FieldNumber_ServiceUuid,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, serviceUuid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -709,7 +720,7 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
         .name = "secondaryServiceUuid",
         .dataTypeSpecific.className = NULL,
         .number = ProtosBluetoothCharacteristic_FieldNumber_SecondaryServiceUuid,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, secondaryServiceUuid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -727,7 +738,7 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
         .name = "properties",
         .dataTypeSpecific.className = GPBStringifySymbol(ProtosCharacteristicProperties),
         .number = ProtosBluetoothCharacteristic_FieldNumber_Properties,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, properties),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeMessage,
@@ -736,7 +747,7 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
         .name = "value",
         .dataTypeSpecific.className = NULL,
         .number = ProtosBluetoothCharacteristic_FieldNumber_Value,
-        .hasIndex = 4,
+        .hasIndex = 5,
         .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, value),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBytes,
@@ -752,7 +763,7 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\002\013\000\003\024\000";
+        "\002\003\013\000\004\024\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -768,6 +779,7 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
 @implementation ProtosBluetoothDescriptor
 
 @dynamic uuid;
+@dynamic remoteId;
 @dynamic serviceUuid;
 @dynamic characteristicUuid;
 @dynamic value;
@@ -775,6 +787,7 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
 typedef struct ProtosBluetoothDescriptor__storage_ {
   uint32_t _has_storage_[1];
   NSString *uuid;
+  NSString *remoteId;
   NSString *serviceUuid;
   NSString *characteristicUuid;
   NSData *value;
@@ -796,10 +809,19 @@ typedef struct ProtosBluetoothDescriptor__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
+        .name = "remoteId",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosBluetoothDescriptor_FieldNumber_RemoteId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosBluetoothDescriptor__storage_, remoteId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
         .name = "serviceUuid",
         .dataTypeSpecific.className = NULL,
         .number = ProtosBluetoothDescriptor_FieldNumber_ServiceUuid,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(ProtosBluetoothDescriptor__storage_, serviceUuid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -808,7 +830,7 @@ typedef struct ProtosBluetoothDescriptor__storage_ {
         .name = "characteristicUuid",
         .dataTypeSpecific.className = NULL,
         .number = ProtosBluetoothDescriptor_FieldNumber_CharacteristicUuid,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(ProtosBluetoothDescriptor__storage_, characteristicUuid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
         .dataType = GPBDataTypeString,
@@ -817,7 +839,7 @@ typedef struct ProtosBluetoothDescriptor__storage_ {
         .name = "value",
         .dataTypeSpecific.className = NULL,
         .number = ProtosBluetoothDescriptor_FieldNumber_Value,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ProtosBluetoothDescriptor__storage_, value),
         .flags = GPBFieldOptional,
         .dataType = GPBDataTypeBytes,
@@ -833,7 +855,7 @@ typedef struct ProtosBluetoothDescriptor__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\002\013\000\003\022\000";
+        "\002\003\013\000\004\022\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");

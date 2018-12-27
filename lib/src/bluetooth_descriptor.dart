@@ -8,19 +8,77 @@ class BluetoothDescriptor {
   static final Guid CCCD = new Guid("00002902-0000-1000-8000-00805f9b34fb");
 
   final Guid uuid;
+  final DeviceIdentifier deviceId;
   final Guid serviceUuid; // The service that this descriptor belongs to.
   final Guid
       characteristicUuid; // The characteristic that this descriptor belongs to.
   List<int> value;
 
-  BluetoothDescriptor(
-      {@required this.uuid,
-      @required this.serviceUuid,
-      @required this.characteristicUuid});
+  BluetoothDescriptor({
+    @required this.deviceId,
+    @required this.uuid,
+    @required this.serviceUuid,
+    @required this.characteristicUuid,
+  });
 
   BluetoothDescriptor.fromProto(protos.BluetoothDescriptor p)
       : uuid = new Guid(p.uuid),
+        deviceId = new DeviceIdentifier(p.remoteId),
         serviceUuid = new Guid(p.serviceUuid),
         characteristicUuid = new Guid(p.characteristicUuid),
         value = p.value;
+
+  /// Retrieves the value of a specified descriptor
+  Future<List<int>> read() async {
+    var request = protos.ReadDescriptorRequest.create()
+      ..remoteId = deviceId.toString()
+      ..descriptorUuid = uuid.toString()
+      ..characteristicUuid = characteristicUuid.toString()
+      ..serviceUuid = serviceUuid.toString();
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('readDescriptor', request.writeToBuffer());
+
+    return await FlutterBlue.instance._descriptorReadChannel
+        .receiveBroadcastStream()
+        .map((buffer) => new protos.ReadDescriptorResponse.fromBuffer(buffer))
+        .where((p) =>
+            (p.request.remoteId == request.remoteId) &&
+            (p.request.descriptorUuid == request.descriptorUuid) &&
+            (p.request.characteristicUuid == request.characteristicUuid) &&
+            (p.request.serviceUuid == request.serviceUuid))
+        .map((d) => d.value)
+        .first
+        .then((d) => value = d);
+  }
+
+  /// Writes the value of a descriptor
+  Future<Null> write(List<int> value) async {
+    var request = protos.WriteDescriptorRequest.create()
+      ..remoteId = deviceId.toString()
+      ..descriptorUuid = uuid.toString()
+      ..characteristicUuid = characteristicUuid.toString()
+      ..serviceUuid = serviceUuid.toString()
+      ..value = value;
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('writeDescriptor', request.writeToBuffer());
+
+    return await FlutterBlue.instance._methodStream
+        .where((m) => m.method == "WriteDescriptorResponse")
+        .map((m) => m.arguments)
+        .map((buffer) => new protos.WriteDescriptorResponse.fromBuffer(buffer))
+        .where((p) =>
+            (p.request.remoteId == request.remoteId) &&
+            (p.request.descriptorUuid == request.descriptorUuid) &&
+            (p.request.characteristicUuid == request.characteristicUuid) &&
+            (p.request.serviceUuid == request.serviceUuid))
+        .first
+        .then((w) => w.success)
+        .then((success) => (!success)
+            ? throw new Exception('Failed to write the descriptor')
+            : null)
+        .then((_) => value = value)
+        .then((_) => null);
+  }
 }

@@ -141,36 +141,35 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   }
 
   _readCharacteristic(BluetoothCharacteristic c) async {
-    await device.readCharacteristic(c);
+    await c.read();
     setState(() {});
   }
 
   _writeCharacteristic(BluetoothCharacteristic c) async {
-    await device.writeCharacteristic(c, [0x12, 0x34],
-        type: CharacteristicWriteType.withResponse);
+    await c.write([0x12, 0x34], type: CharacteristicWriteType.withResponse);
     setState(() {});
   }
 
   _readDescriptor(BluetoothDescriptor d) async {
-    await device.readDescriptor(d);
+    await d.read();
     setState(() {});
   }
 
   _writeDescriptor(BluetoothDescriptor d) async {
-    await device.writeDescriptor(d, [0x12, 0x34]);
+    await d.write([0x12, 0x34]);
     setState(() {});
   }
 
   _setNotification(BluetoothCharacteristic c) async {
     if (c.isNotifying) {
-      await device.setNotifyValue(c, false);
+      await c.setNotifyValue(false);
       // Cancel subscription
       valueChangedSubscriptions[c.uuid]?.cancel();
       valueChangedSubscriptions.remove(c.uuid);
     } else {
-      await device.setNotifyValue(c, true);
+      await c.setNotifyValue(true);
       // ignore: cancel_subscriptions
-      final sub = device.onValueChanged(c).listen((d) {
+      final sub = c.onValueChanged().listen((d) {
         setState(() {
           print('onValueChanged $d');
         });
