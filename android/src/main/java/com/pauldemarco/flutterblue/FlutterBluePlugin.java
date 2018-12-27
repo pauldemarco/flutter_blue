@@ -222,7 +222,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 String deviceId = (String)call.arguments;
                 BluetoothGatt gattServer = mGattServers.remove(deviceId);
                 if(gattServer != null) {
-                    gattServer.close();
+                    gattServer.disconnect();
                 }
                 result.success(null);
                 break;
@@ -754,6 +754,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             log(LogLevel.DEBUG, "[onConnectionStateChange] status: " + status + " newState: " + newState);
+            if(newState == BluetoothProfile.STATE_DISCONNECTED) {
+                if(!mGattServers.containsKey(gatt.getDevice().getAddress())) {
+                    gatt.close();
+                }
+            }
             channel.invokeMethod("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
         }
 
