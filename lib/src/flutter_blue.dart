@@ -25,9 +25,16 @@ class FlutterBlue {
     _channel.setMethodCallHandler((MethodCall call) {
       _methodStreamController.add(call);
     });
+
+    // Send the log level to the underlying platforms.
+    setLogLevel(logLevel);
   }
   static FlutterBlue _instance = new FlutterBlue._();
   static FlutterBlue get instance => _instance;
+
+  /// Log level of the instance, default is all messages (debug).
+  LogLevel _logLevel = LogLevel.debug;
+  LogLevel get logLevel => _logLevel;
 
   /// Checks whether the device supports Bluetooth
   Future<bool> get isAvailable =>
@@ -126,7 +133,7 @@ class FlutterBlue {
     subscription = device.onStateChanged().listen(
       (data) {
         if (data == BluetoothDeviceState.connected) {
-          print('connected!');
+          _log(LogLevel.info, 'connected!');
           connected = true;
         }
         controller.add(data);
@@ -141,6 +148,32 @@ class FlutterBlue {
   /// Cancels connection to the Bluetooth Device
   Future _cancelConnection(BluetoothDevice device) =>
       _channel.invokeMethod('disconnect', device.id.toString());
+
+  /// Sets the log level of the FlutterBlue instance
+  /// Messages equal or below the log level specified are stored/forwarded,
+  /// messages above are dropped.
+  void setLogLevel(LogLevel level) async {
+    await _channel.invokeMethod('setLogLevel', level.index);
+    _logLevel = level;
+  }
+
+  void _log(LogLevel level, String message) {
+    if (level.index <= _logLevel.index) {
+      print(message);
+    }
+  }
+}
+
+/// Log levels for FlutterBlue
+enum LogLevel {
+  emergency,
+  alert,
+  critical,
+  error,
+  warning,
+  notice,
+  info,
+  debug,
 }
 
 /// State of the bluetooth adapter.
