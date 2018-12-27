@@ -100,55 +100,6 @@ class FlutterBlue {
   /// Stops a scan for Bluetooth Low Energy devices
   Future _stopScan() => _channel.invokeMethod('stopScan');
 
-  /// Establishes a connection to the Bluetooth Device.
-  /// Returns a stream of [BluetoothDeviceState]
-  /// Timeout closes the stream after a specified [Duration]
-  /// To cancel connection to device, simply cancel() the stream subscription
-  Stream<BluetoothDeviceState> connect(
-    BluetoothDevice device, {
-    Duration timeout,
-    bool autoConnect = true,
-  }) async* {
-    var request = protos.ConnectRequest.create()
-      ..remoteId = device.id.toString()
-      ..androidAutoConnect = autoConnect;
-    var connected = false;
-    StreamSubscription subscription;
-    StreamController controller;
-    controller = new StreamController<BluetoothDeviceState>(
-      onListen: () {
-        if (timeout != null) {
-          new Future.delayed(
-              timeout, () => (!connected) ? controller.close() : null);
-        }
-      },
-      onCancel: () {
-        _cancelConnection(device);
-        subscription.cancel();
-      },
-    );
-
-    await _channel.invokeMethod('connect', request.writeToBuffer());
-
-    subscription = device.onStateChanged().listen(
-      (data) {
-        if (data == BluetoothDeviceState.connected) {
-          _log(LogLevel.info, 'connected!');
-          connected = true;
-        }
-        controller.add(data);
-      },
-      onError: controller.addError,
-      onDone: controller.close,
-    );
-
-    yield* controller.stream;
-  }
-
-  /// Cancels connection to the Bluetooth Device
-  Future _cancelConnection(BluetoothDevice device) =>
-      _channel.invokeMethod('disconnect', device.id.toString());
-
   /// Sets the log level of the FlutterBlue instance
   /// Messages equal or below the log level specified are stored/forwarded,
   /// messages above are dropped.
