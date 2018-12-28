@@ -265,10 +265,6 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("get_services_error", "no instance of BluetoothGatt, have you connected first?", null);
                     return;
                 }
-                if(gattServer.getServices().isEmpty()) {
-                    result.error("get_services_error", "services are empty, have you called discoverServices() yet?", null);
-                    return;
-                }
                 Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
                 p.setRemoteId(deviceId);
                 for(BluetoothGattService s : gattServer.getServices()){
