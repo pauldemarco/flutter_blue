@@ -296,11 +296,12 @@ class BluetoothService extends $pb.GeneratedMessage {
 class BluetoothCharacteristic extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = new $pb.BuilderInfo('BluetoothCharacteristic')
     ..aOS(1, 'uuid')
-    ..aOS(2, 'serviceUuid')
-    ..aOS(3, 'secondaryServiceUuid')
-    ..pp<BluetoothDescriptor>(4, 'descriptors', $pb.PbFieldType.PM, BluetoothDescriptor.$checkItem, BluetoothDescriptor.create)
-    ..a<CharacteristicProperties>(5, 'properties', $pb.PbFieldType.OM, CharacteristicProperties.getDefault, CharacteristicProperties.create)
-    ..a<List<int>>(6, 'value', $pb.PbFieldType.OY)
+    ..aOS(2, 'remoteId')
+    ..aOS(3, 'serviceUuid')
+    ..aOS(4, 'secondaryServiceUuid')
+    ..pp<BluetoothDescriptor>(5, 'descriptors', $pb.PbFieldType.PM, BluetoothDescriptor.$checkItem, BluetoothDescriptor.create)
+    ..a<CharacteristicProperties>(6, 'properties', $pb.PbFieldType.OM, CharacteristicProperties.getDefault, CharacteristicProperties.create)
+    ..a<List<int>>(7, 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -323,35 +324,41 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   bool hasUuid() => $_has(0);
   void clearUuid() => clearField(1);
 
-  String get serviceUuid => $_getS(1, '');
-  set serviceUuid(String v) { $_setString(1, v); }
-  bool hasServiceUuid() => $_has(1);
-  void clearServiceUuid() => clearField(2);
+  String get remoteId => $_getS(1, '');
+  set remoteId(String v) { $_setString(1, v); }
+  bool hasRemoteId() => $_has(1);
+  void clearRemoteId() => clearField(2);
 
-  String get secondaryServiceUuid => $_getS(2, '');
-  set secondaryServiceUuid(String v) { $_setString(2, v); }
-  bool hasSecondaryServiceUuid() => $_has(2);
-  void clearSecondaryServiceUuid() => clearField(3);
+  String get serviceUuid => $_getS(2, '');
+  set serviceUuid(String v) { $_setString(2, v); }
+  bool hasServiceUuid() => $_has(2);
+  void clearServiceUuid() => clearField(3);
 
-  List<BluetoothDescriptor> get descriptors => $_getList(3);
+  String get secondaryServiceUuid => $_getS(3, '');
+  set secondaryServiceUuid(String v) { $_setString(3, v); }
+  bool hasSecondaryServiceUuid() => $_has(3);
+  void clearSecondaryServiceUuid() => clearField(4);
 
-  CharacteristicProperties get properties => $_getN(4);
-  set properties(CharacteristicProperties v) { setField(5, v); }
-  bool hasProperties() => $_has(4);
-  void clearProperties() => clearField(5);
+  List<BluetoothDescriptor> get descriptors => $_getList(4);
 
-  List<int> get value => $_getN(5);
-  set value(List<int> v) { $_setBytes(5, v); }
-  bool hasValue() => $_has(5);
-  void clearValue() => clearField(6);
+  CharacteristicProperties get properties => $_getN(5);
+  set properties(CharacteristicProperties v) { setField(6, v); }
+  bool hasProperties() => $_has(5);
+  void clearProperties() => clearField(6);
+
+  List<int> get value => $_getN(6);
+  set value(List<int> v) { $_setBytes(6, v); }
+  bool hasValue() => $_has(6);
+  void clearValue() => clearField(7);
 }
 
 class BluetoothDescriptor extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = new $pb.BuilderInfo('BluetoothDescriptor')
     ..aOS(1, 'uuid')
-    ..aOS(2, 'serviceUuid')
-    ..aOS(3, 'characteristicUuid')
-    ..a<List<int>>(4, 'value', $pb.PbFieldType.OY)
+    ..aOS(2, 'remoteId')
+    ..aOS(3, 'serviceUuid')
+    ..aOS(4, 'characteristicUuid')
+    ..a<List<int>>(5, 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
 
@@ -374,20 +381,25 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   bool hasUuid() => $_has(0);
   void clearUuid() => clearField(1);
 
-  String get serviceUuid => $_getS(1, '');
-  set serviceUuid(String v) { $_setString(1, v); }
-  bool hasServiceUuid() => $_has(1);
-  void clearServiceUuid() => clearField(2);
+  String get remoteId => $_getS(1, '');
+  set remoteId(String v) { $_setString(1, v); }
+  bool hasRemoteId() => $_has(1);
+  void clearRemoteId() => clearField(2);
 
-  String get characteristicUuid => $_getS(2, '');
-  set characteristicUuid(String v) { $_setString(2, v); }
-  bool hasCharacteristicUuid() => $_has(2);
-  void clearCharacteristicUuid() => clearField(3);
+  String get serviceUuid => $_getS(2, '');
+  set serviceUuid(String v) { $_setString(2, v); }
+  bool hasServiceUuid() => $_has(2);
+  void clearServiceUuid() => clearField(3);
 
-  List<int> get value => $_getN(3);
-  set value(List<int> v) { $_setBytes(3, v); }
-  bool hasValue() => $_has(3);
-  void clearValue() => clearField(4);
+  String get characteristicUuid => $_getS(3, '');
+  set characteristicUuid(String v) { $_setString(3, v); }
+  bool hasCharacteristicUuid() => $_has(3);
+  void clearCharacteristicUuid() => clearField(4);
+
+  List<int> get value => $_getN(4);
+  set value(List<int> v) { $_setBytes(4, v); }
+  bool hasValue() => $_has(4);
+  void clearValue() => clearField(5);
 }
 
 class CharacteristicProperties extends $pb.GeneratedMessage {
@@ -921,25 +933,25 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   void clearSuccess() => clearField(3);
 }
 
-class OnNotificationResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = new $pb.BuilderInfo('OnNotificationResponse')
+class OnCharacteristicChanged extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = new $pb.BuilderInfo('OnCharacteristicChanged')
     ..aOS(1, 'remoteId')
     ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
     ..hasRequiredFields = false
   ;
 
-  OnNotificationResponse() : super();
-  OnNotificationResponse.fromBuffer(List<int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  OnNotificationResponse.fromJson(String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
-  OnNotificationResponse clone() => new OnNotificationResponse()..mergeFromMessage(this);
-  OnNotificationResponse copyWith(void Function(OnNotificationResponse) updates) => super.copyWith((message) => updates(message as OnNotificationResponse));
+  OnCharacteristicChanged() : super();
+  OnCharacteristicChanged.fromBuffer(List<int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  OnCharacteristicChanged.fromJson(String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  OnCharacteristicChanged clone() => new OnCharacteristicChanged()..mergeFromMessage(this);
+  OnCharacteristicChanged copyWith(void Function(OnCharacteristicChanged) updates) => super.copyWith((message) => updates(message as OnCharacteristicChanged));
   $pb.BuilderInfo get info_ => _i;
-  static OnNotificationResponse create() => new OnNotificationResponse();
-  static $pb.PbList<OnNotificationResponse> createRepeated() => new $pb.PbList<OnNotificationResponse>();
-  static OnNotificationResponse getDefault() => _defaultInstance ??= create()..freeze();
-  static OnNotificationResponse _defaultInstance;
-  static void $checkItem(OnNotificationResponse v) {
-    if (v is! OnNotificationResponse) $pb.checkItemFailed(v, _i.qualifiedMessageName);
+  static OnCharacteristicChanged create() => new OnCharacteristicChanged();
+  static $pb.PbList<OnCharacteristicChanged> createRepeated() => new $pb.PbList<OnCharacteristicChanged>();
+  static OnCharacteristicChanged getDefault() => _defaultInstance ??= create()..freeze();
+  static OnCharacteristicChanged _defaultInstance;
+  static void $checkItem(OnCharacteristicChanged v) {
+    if (v is! OnCharacteristicChanged) $pb.checkItemFailed(v, _i.qualifiedMessageName);
   }
 
   String get remoteId => $_getS(0, '');

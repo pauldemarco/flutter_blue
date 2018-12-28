@@ -347,16 +347,19 @@ typedef GPB_ENUM(ProtosBluetoothService_FieldNumber) {
 
 typedef GPB_ENUM(ProtosBluetoothCharacteristic_FieldNumber) {
   ProtosBluetoothCharacteristic_FieldNumber_Uuid = 1,
-  ProtosBluetoothCharacteristic_FieldNumber_ServiceUuid = 2,
-  ProtosBluetoothCharacteristic_FieldNumber_SecondaryServiceUuid = 3,
-  ProtosBluetoothCharacteristic_FieldNumber_DescriptorsArray = 4,
-  ProtosBluetoothCharacteristic_FieldNumber_Properties = 5,
-  ProtosBluetoothCharacteristic_FieldNumber_Value = 6,
+  ProtosBluetoothCharacteristic_FieldNumber_RemoteId = 2,
+  ProtosBluetoothCharacteristic_FieldNumber_ServiceUuid = 3,
+  ProtosBluetoothCharacteristic_FieldNumber_SecondaryServiceUuid = 4,
+  ProtosBluetoothCharacteristic_FieldNumber_DescriptorsArray = 5,
+  ProtosBluetoothCharacteristic_FieldNumber_Properties = 6,
+  ProtosBluetoothCharacteristic_FieldNumber_Value = 7,
 };
 
 @interface ProtosBluetoothCharacteristic : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *uuid;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
 /** The service that this characteristic belongs to. */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
@@ -382,14 +385,17 @@ typedef GPB_ENUM(ProtosBluetoothCharacteristic_FieldNumber) {
 
 typedef GPB_ENUM(ProtosBluetoothDescriptor_FieldNumber) {
   ProtosBluetoothDescriptor_FieldNumber_Uuid = 1,
-  ProtosBluetoothDescriptor_FieldNumber_ServiceUuid = 2,
-  ProtosBluetoothDescriptor_FieldNumber_CharacteristicUuid = 3,
-  ProtosBluetoothDescriptor_FieldNumber_Value = 4,
+  ProtosBluetoothDescriptor_FieldNumber_RemoteId = 2,
+  ProtosBluetoothDescriptor_FieldNumber_ServiceUuid = 3,
+  ProtosBluetoothDescriptor_FieldNumber_CharacteristicUuid = 4,
+  ProtosBluetoothDescriptor_FieldNumber_Value = 5,
 };
 
 @interface ProtosBluetoothDescriptor : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *uuid;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
 /** The service that this descriptor belongs to. */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
@@ -680,14 +686,14 @@ typedef GPB_ENUM(ProtosSetNotificationResponse_FieldNumber) {
 
 @end
 
-#pragma mark - ProtosOnNotificationResponse
+#pragma mark - ProtosOnCharacteristicChanged
 
-typedef GPB_ENUM(ProtosOnNotificationResponse_FieldNumber) {
-  ProtosOnNotificationResponse_FieldNumber_RemoteId = 1,
-  ProtosOnNotificationResponse_FieldNumber_Characteristic = 2,
+typedef GPB_ENUM(ProtosOnCharacteristicChanged_FieldNumber) {
+  ProtosOnCharacteristicChanged_FieldNumber_RemoteId = 1,
+  ProtosOnCharacteristicChanged_FieldNumber_Characteristic = 2,
 };
 
-@interface ProtosOnNotificationResponse : GPBMessage
+@interface ProtosOnCharacteristicChanged : GPBMessage
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
