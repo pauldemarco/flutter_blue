@@ -42,7 +42,7 @@ class BluetoothCharacteristic {
         properties = new CharacteristicProperties.fromProto(p.properties),
         value = p.value;
 
-  void updateDescriptors(List<BluetoothDescriptor> newDescriptors) {
+  void _updateDescriptors(List<BluetoothDescriptor> newDescriptors) {
     for (var d in descriptors) {
       for (var newD in newDescriptors) {
         if (d.uuid == newD.uuid) {
