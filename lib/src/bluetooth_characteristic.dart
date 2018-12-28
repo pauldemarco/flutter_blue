@@ -21,15 +21,6 @@ class BluetoothCharacteristic {
     }
   }
 
-  List<int> value;
-
-  BluetoothCharacteristic(
-      {@required this.uuid,
-      @required this.serviceUuid,
-      this.secondaryServiceUuid,
-      @required this.descriptors,
-      @required this.properties});
-
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
       : uuid = new Guid(p.uuid),
         serviceUuid = new Guid(p.serviceUuid),
