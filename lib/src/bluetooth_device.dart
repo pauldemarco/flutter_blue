@@ -224,23 +224,6 @@ class BluetoothDevice {
     });
   }
 
-  /// Notifies when the characteristic's value has changed.
-  /// setNotification() should be run first to enable them on the peripheral
-  Stream<List<int>> onValueChanged(BluetoothCharacteristic characteristic) {
-    return FlutterBlue.instance._methodStream
-        .where((m) => m.method == "OnValueChanged")
-        .map((m) => m.arguments)
-        .map((buffer) => new protos.OnNotificationResponse.fromBuffer(buffer))
-        .where((p) => p.remoteId == id.toString())
-        .map((p) => new BluetoothCharacteristic.fromProto(p.characteristic))
-        .where((c) => c.uuid == characteristic.uuid)
-        .map((c) {
-      characteristic.updateDescriptors(c.descriptors);
-      characteristic.value = c.value;
-      return c.value;
-    });
-  }
-
   /// The current connection state of the device
   Future<BluetoothDeviceState> get state => FlutterBlue.instance._channel
       .invokeMethod('deviceState', id.toString())
