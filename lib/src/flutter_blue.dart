@@ -174,6 +174,16 @@ class ScanResult {
   final BluetoothDevice device;
   final AdvertisementData advertisementData;
   final int rssi;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScanResult &&
+          runtimeType == other.runtimeType &&
+          device == other.device;
+
+  @override
+  int get hashCode => device.hashCode;
 }
 
 class AdvertisementData {
