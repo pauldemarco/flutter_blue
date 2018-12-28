@@ -263,6 +263,16 @@ class BluetoothDevice {
   /// Indicates whether the Bluetooth Device can send a write without response
   Future<bool> get canSendWriteWithoutResponse =>
       new Future.error(new UnimplementedError());
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BluetoothDevice &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 enum BluetoothDeviceType { unknown, classic, le, dual }
