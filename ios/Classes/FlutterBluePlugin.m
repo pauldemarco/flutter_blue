@@ -462,10 +462,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     _characteristicReadStreamHandler.sink([self toFlutterData:result]);
   }
   // on iOS, this method also handle notification values
-  ProtosOnNotificationResponse *result = [[ProtosOnNotificationResponse alloc] init];
+  ProtosOnCharacteristicChanged *result = [[ProtosOnCharacteristicChanged alloc] init];
   [result setRemoteId:[peripheral.identifier UUIDString]];
   [result setCharacteristic:[self toCharacteristicProto:characteristic]];
-  [_channel invokeMethod:@"OnValueChanged" arguments:[self toFlutterData:result]];
+  [_channel invokeMethod:@"OnCharacteristicChanged" arguments:[self toFlutterData:result]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

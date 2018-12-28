@@ -6,6 +6,7 @@ part of flutter_blue;
 
 class BluetoothCharacteristic {
   final Guid uuid;
+  final DeviceIdentifier deviceId;
   final Guid serviceUuid; // The service that this characteristic belongs to.
   final Guid
       secondaryServiceUuid; // The nested service that this characteristic belongs to.
@@ -23,6 +24,7 @@ class BluetoothCharacteristic {
 
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
       : uuid = new Guid(p.uuid),
+        deviceId = new DeviceIdentifier(p.remoteId),
         serviceUuid = new Guid(p.serviceUuid),
         secondaryServiceUuid = (p.secondaryServiceUuid.length > 0)
             ? new Guid(p.secondaryServiceUuid)
@@ -31,7 +33,25 @@ class BluetoothCharacteristic {
             .map((d) => new BluetoothDescriptor.fromProto(d))
             .toList(),
         properties = new CharacteristicProperties.fromProto(p.properties),
-        value = p.value;
+        _value = BehaviorSubject(seedValue: p.value);
+
+  BehaviorSubject<List<int>> _value;
+  Stream<List<int>> get value async* {
+    yield _value.value;
+
+    yield* FlutterBlue.instance._methodStream
+        .where((m) => m.method == "OnCharacteristicChanged")
+        .map((m) => m.arguments)
+        .map((buffer) => new protos.OnCharacteristicChanged.fromBuffer(buffer))
+        .where((p) => p.remoteId == deviceId.toString())
+        .map((p) => new BluetoothCharacteristic.fromProto(p.characteristic))
+        .where((c) => c.uuid == uuid)
+        .map((c) {
+      _updateDescriptors(c.descriptors);
+      _value.add(c._value.value);
+      return c._value.value;
+    });
+  }
 
   void _updateDescriptors(List<BluetoothDescriptor> newDescriptors) {
     for (var d in descriptors) {
