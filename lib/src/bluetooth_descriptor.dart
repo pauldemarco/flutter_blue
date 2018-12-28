@@ -13,11 +13,6 @@ class BluetoothDescriptor {
       characteristicUuid; // The characteristic that this descriptor belongs to.
   List<int> value;
 
-  BluetoothDescriptor(
-      {@required this.uuid,
-      @required this.serviceUuid,
-      @required this.characteristicUuid});
-
   BluetoothDescriptor.fromProto(protos.BluetoothDescriptor p)
       : uuid = new Guid(p.uuid),
         serviceUuid = new Guid(p.serviceUuid),
