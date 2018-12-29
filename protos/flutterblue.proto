@@ -197,3 +197,7 @@ message DeviceStateResponse {
   string remote_id = 1;
   BluetoothDeviceState state = 2;
 }
+
+message ConnectedDevicesResponse {
+  repeated BluetoothDevice devices = 1;
+}

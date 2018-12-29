@@ -170,6 +170,18 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 break;
             }
 
+            case "getConnectedDevices":
+            {
+                List<BluetoothDevice> devices = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
+                Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
+                for(BluetoothDevice d : devices) {
+                    p.addDevices(ProtoMaker.from(d));
+                }
+                result.success(p.build().toByteArray());
+                log(LogLevel.EMERGENCY, "mGattServers size: " + mGattServers.size());
+                break;
+            }
+
             case "connect":
             {
                 byte[] data = call.arguments();

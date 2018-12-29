@@ -730,6 +730,20 @@ int32_t ProtosDeviceStateResponse_State_RawValue(ProtosDeviceStateResponse *mess
  **/
 void SetProtosDeviceStateResponse_State_RawValue(ProtosDeviceStateResponse *message, int32_t value);
 
+#pragma mark - ProtosConnectedDevicesResponse
+
+typedef GPB_ENUM(ProtosConnectedDevicesResponse_FieldNumber) {
+  ProtosConnectedDevicesResponse_FieldNumber_DevicesArray = 1,
+};
+
+@interface ProtosConnectedDevicesResponse : GPBMessage
+
+@property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<ProtosBluetoothDevice*> *devicesArray;
+/** The number of items in @c devicesArray without causing the array to be created. */
+@property(nonatomic, readonly) NSUInteger devicesArray_Count;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END
