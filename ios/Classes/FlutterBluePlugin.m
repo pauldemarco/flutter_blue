@@ -14,6 +14,17 @@
 }
 @end
 
+typedef NS_ENUM(NSUInteger, LogLevel) {
+  emergency = 0,
+  alert = 1,
+  critical = 2,
+  error = 3,
+  warning = 4,
+  notice = 5,
+  info = 6,
+  debug = 7
+};
+
 @interface FlutterBluePlugin ()
 @property(nonatomic, retain) NSObject<FlutterPluginRegistrar> *registrar;
 @property(nonatomic, retain) FlutterMethodChannel *channel;
@@ -26,6 +37,7 @@
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
+@property(nonatomic) LogLevel logLevel;
 @end
 
 @implementation FlutterBluePlugin
@@ -44,6 +56,7 @@
   instance.scannedPeripherals = [NSMutableDictionary new];
   instance.servicesThatNeedDiscovered = [NSMutableArray new];
   instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
+  instance.logLevel = emergency;
   
   // STATE
   FlutterBlueStreamHandler* stateStreamHandler = [[FlutterBlueStreamHandler alloc] init];
@@ -74,7 +87,11 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if ([@"state" isEqualToString:call.method]) {
+  if ([@"setLogLevel" isEqualToString:call.method]) {
+    NSNumber *logLevelIndex = [call arguments];
+    _logLevel = (LogLevel)[logLevelIndex integerValue];
+    result(nil);
+  } else if ([@"state" isEqualToString:call.method]) {
     FlutterStandardTypedData *data = [self toFlutterData:[self toBluetoothStateProto:self->_centralManager.state]];
     result(data);
   } else if([@"isAvailable" isEqualToString:call.method]) {
@@ -701,6 +718,17 @@
   [result setNotifyEncryptionRequired:(props & CBCharacteristicPropertyNotifyEncryptionRequired) != 0];
   [result setIndicateEncryptionRequired:(props & CBCharacteristicPropertyIndicateEncryptionRequired) != 0];
   return result;
+}
+
+
+- (void)log:(LogLevel)level format:(NSString *)format, ... {
+  if(level <= _logLevel) {
+    va_list args;
+    va_start(args, format);
+//    NSString* formattedMessage = [[NSString alloc] initWithFormat:format arguments:args];
+    NSLog(format, args);
+    va_end(args);
+  }
 }
 
 @end
