@@ -7,14 +7,6 @@ part of flutter_blue;
 class FlutterBlue {
   final MethodChannel _channel = const MethodChannel('$NAMESPACE/methods');
   final EventChannel _stateChannel = const EventChannel('$NAMESPACE/state');
-  final EventChannel _scanResultChannel =
-      const EventChannel('$NAMESPACE/scanResult');
-  final EventChannel _servicesDiscoveredChannel =
-      const EventChannel('$NAMESPACE/servicesDiscovered');
-  final EventChannel _characteristicReadChannel =
-      const EventChannel('$NAMESPACE/characteristicRead');
-  final EventChannel _descriptorReadChannel =
-      const EventChannel('$NAMESPACE/descriptorRead');
   final StreamController<MethodCall> _methodStreamController =
       new StreamController.broadcast(); // ignore: close_sinks
   Stream<MethodCall> get _methodStream => _methodStreamController
@@ -43,17 +35,23 @@ class FlutterBlue {
   /// Checks if Bluetooth functionality is turned on
   Future<bool> get isOn => _channel.invokeMethod('isOn').then<bool>((d) => d);
 
+  BehaviorSubject<bool> _isScanning = BehaviorSubject(seedValue: false);
+  Stream<bool> get isScanning => _isScanning.stream;
+
+  BehaviorSubject<List<ScanResult>> _scanResults =
+      BehaviorSubject(seedValue: []);
+  Stream<List<ScanResult>> get scanResults => _scanResults.stream;
+
+  PublishSubject _stopScanPill = new PublishSubject();
+
   /// Gets the current state of the Bluetooth module
-  Future<BluetoothState> get state {
-    return _channel
+  Stream<BluetoothState> get state async* {
+    yield await _channel
         .invokeMethod('state')
         .then((buffer) => new protos.BluetoothState.fromBuffer(buffer))
         .then((s) => BluetoothState.values[s.state.value]);
-  }
 
-  /// Occurs when the bluetooth state has changed
-  Stream<BluetoothState> onStateChanged() {
-    return _stateChannel
+    yield* _stateChannel
         .receiveBroadcastStream()
         .map((buffer) => new protos.BluetoothState.fromBuffer(buffer))
         .map((s) => BluetoothState.values[s.state.value]);
@@ -70,35 +68,74 @@ class FlutterBlue {
     var settings = protos.ScanSettings.create()
       ..androidScanMode = scanMode.value
       ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
-    StreamSubscription subscription;
-    StreamController controller;
-    controller = new StreamController(
-      onListen: () {
-        if (timeout != null) {
-          new Future.delayed(timeout, () => controller.close());
-        }
-      },
-      onCancel: () {
-        _stopScan();
-        subscription.cancel();
-      },
-    );
+
+    if (_isScanning.value == true) {
+      throw Exception('Another scan is already in progress.');
+    }
+
+    // Emit to isScanning
+    _isScanning.add(true);
+
+    // Clear scan results list
+    _scanResults.add(<ScanResult>[]);
 
     await _channel.invokeMethod('startScan', settings.writeToBuffer());
 
-    subscription = _scanResultChannel.receiveBroadcastStream().listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: controller.close,
-        );
+    final killStreams = <Stream>[];
+    killStreams.add(_stopScanPill);
+    if (timeout != null) {
+      killStreams.add(Observable.timer(null, timeout));
+    }
 
-    yield* controller.stream
+    yield* Observable(FlutterBlue.instance._methodStream
+            .where((m) => m.method == "ScanResult")
+            .map((m) => m.arguments))
+        .takeUntil(Observable.merge(killStreams))
+        .doOnDone(stopScan)
         .map((buffer) => new protos.ScanResult.fromBuffer(buffer))
-        .map((p) => new ScanResult.fromProto(p));
+        .map((p) {
+      final result = new ScanResult.fromProto(p);
+      final list = _scanResults.value;
+      int index = list.indexOf(result);
+      if (index != -1) {
+        list[index] = result;
+      } else {
+        list.add(result);
+      }
+      _scanResults.add(list);
+      return result;
+    });
+  }
+
+  Future startScan({
+    ScanMode scanMode = ScanMode.lowLatency,
+    List<Guid> withServices = const [],
+    List<Guid> withDevices = const [],
+    Duration timeout,
+  }) async {
+    await scan(
+            scanMode: scanMode,
+            withServices: withServices,
+            withDevices: withDevices,
+            timeout: timeout)
+        .drain();
+    return _scanResults.value;
   }
 
   /// Stops a scan for Bluetooth Low Energy devices
-  Future _stopScan() => _channel.invokeMethod('stopScan');
+  Future stopScan() async {
+    await _channel.invokeMethod('stopScan');
+    _stopScanPill.add(null);
+    _isScanning.add(false);
+  }
+
+  /// The list of connected peripherals can include those that are connected
+  /// by other apps and that will need to be connected locally using the
+  /// device.connect() method before they can be used.
+  Stream<List<BluetoothDevice>> connectedDevices({
+    List<Guid> withServices = const [],
+  }) =>
+      throw UnimplementedError();
 
   /// Sets the log level of the FlutterBlue instance
   /// Messages equal or below the log level specified are stored/forwarded,

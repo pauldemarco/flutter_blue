@@ -17,7 +17,10 @@ class ScanResultTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(result.device.name),
+          Text(
+            result.device.name,
+            overflow: TextOverflow.ellipsis,
+          ),
           Text(
             result.device.id.toString(),
             style: Theme.of(context).textTheme.caption,
@@ -31,7 +34,7 @@ class ScanResultTile extends StatelessWidget {
 
   Widget _buildAdvRow(BuildContext context, String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -127,14 +130,13 @@ class ServiceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (characteristicTiles.length > 0) {
-      return new ExpansionTile(
-        title: new Column(
+      return ExpansionTile(
+        title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text('Service'),
-            new Text(
-                '0x${service.uuid.toString().toUpperCase().substring(4, 8)}',
+            Text('Service'),
+            Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}',
                 style: Theme.of(context)
                     .textTheme
                     .body1
@@ -144,10 +146,10 @@ class ServiceTile extends StatelessWidget {
         children: characteristicTiles,
       );
     } else {
-      return new ListTile(
-        title: const Text('Service'),
-        subtitle: new Text(
-            '0x${service.uuid.toString().toUpperCase().substring(4, 8)}'),
+      return ListTile(
+        title: Text('Service'),
+        subtitle:
+            Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}'),
       );
     }
   }
@@ -171,61 +173,56 @@ class CharacteristicTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var actions = new Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        new IconButton(
-          icon: new Icon(
-            Icons.file_download,
-            color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+    return StreamBuilder<List<int>>(
+      stream: characteristic.value,
+      initialData: characteristic.lastValue,
+      builder: (c, snapshot) {
+        final value = snapshot.data;
+        return ExpansionTile(
+          title: ListTile(
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Characteristic'),
+                Text(
+                    '0x${characteristic.uuid.toString().toUpperCase().substring(4, 8)}',
+                    style: Theme.of(context).textTheme.body1.copyWith(
+                        color: Theme.of(context).textTheme.caption.color))
+              ],
+            ),
+            subtitle: Text(value.toString()),
+            contentPadding: EdgeInsets.all(0.0),
           ),
-          onPressed: onReadPressed,
-        ),
-        new IconButton(
-          icon: new Icon(Icons.file_upload,
-              color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
-          onPressed: onWritePressed,
-        ),
-        new IconButton(
-          icon: new Icon(
-              characteristic.isNotifying ? Icons.sync_disabled : Icons.sync,
-              color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
-          onPressed: onNotificationPressed,
-        )
-      ],
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.file_download,
+                  color: Theme.of(context).iconTheme.color.withOpacity(0.5),
+                ),
+                onPressed: onReadPressed,
+              ),
+              IconButton(
+                icon: Icon(Icons.file_upload,
+                    color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
+                onPressed: onWritePressed,
+              ),
+              IconButton(
+                icon: Icon(
+                    characteristic.isNotifying
+                        ? Icons.sync_disabled
+                        : Icons.sync,
+                    color: Theme.of(context).iconTheme.color.withOpacity(0.5)),
+                onPressed: onNotificationPressed,
+              )
+            ],
+          ),
+          children: descriptorTiles,
+        );
+      },
     );
-
-    var title = new Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text('Characteristic'),
-        new Text(
-            '0x${characteristic.uuid.toString().toUpperCase().substring(4, 8)}',
-            style: Theme.of(context)
-                .textTheme
-                .body1
-                .copyWith(color: Theme.of(context).textTheme.caption.color))
-      ],
-    );
-
-    if (descriptorTiles.length > 0) {
-      return new ExpansionTile(
-        title: new ListTile(
-          title: title,
-          subtitle: new Text(characteristic.value.toString()),
-          contentPadding: EdgeInsets.all(0.0),
-        ),
-        trailing: actions,
-        children: descriptorTiles,
-      );
-    } else {
-      return new ListTile(
-        title: title,
-        subtitle: new Text(characteristic.value.toString()),
-        trailing: actions,
-      );
-    }
   }
 }
 
@@ -240,40 +237,65 @@ class DescriptorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = new Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Text('Descriptor'),
-        new Text(
-            '0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
-            style: Theme.of(context)
-                .textTheme
-                .body1
-                .copyWith(color: Theme.of(context).textTheme.caption.color))
-      ],
-    );
-    return new ListTile(
-      title: title,
-      subtitle: new Text(descriptor.value.toString()),
-      trailing: new Row(
+    return ListTile(
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Descriptor'),
+          Text('0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .copyWith(color: Theme.of(context).textTheme.caption.color))
+        ],
+      ),
+      subtitle: StreamBuilder<List<int>>(
+        stream: descriptor.value,
+        initialData: descriptor.lastValue,
+        builder: (c, snapshot) => Text(snapshot.data.toString()),
+      ),
+      trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          new IconButton(
-            icon: new Icon(
+          IconButton(
+            icon: Icon(
               Icons.file_download,
               color: Theme.of(context).iconTheme.color.withOpacity(0.5),
             ),
             onPressed: onReadPressed,
           ),
-          new IconButton(
-            icon: new Icon(
+          IconButton(
+            icon: Icon(
               Icons.file_upload,
               color: Theme.of(context).iconTheme.color.withOpacity(0.5),
             ),
             onPressed: onWritePressed,
           )
         ],
+      ),
+    );
+  }
+}
+
+class AdapterStateTile extends StatelessWidget {
+  const AdapterStateTile({Key key, @required this.state}) : super(key: key);
+
+  final BluetoothState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.redAccent,
+      child: ListTile(
+        title: Text(
+          'Bluetooth adapter is ${state.toString().substring(15)}',
+          style: Theme.of(context).primaryTextTheme.subhead,
+        ),
+        trailing: Icon(
+          Icons.error,
+          color: Theme.of(context).primaryTextTheme.subhead.color,
+        ),
       ),
     );
   }
