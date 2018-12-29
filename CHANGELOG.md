@@ -1,3 +1,9 @@
+## 0.4.2
+* Set the verbosity of log messages with `setLogLevel`
+* Updated iOS and Android project files
+* `autoConnect` now configurable for Android
+* Various bug fixes
+
 ## 0.4.1
 * Fixed bug where setNotifyValue wasn't properly awaitable.
 * Various UI bug fixes to example app.
