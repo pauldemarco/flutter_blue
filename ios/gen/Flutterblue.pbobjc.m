@@ -1982,6 +1982,49 @@ BOOL ProtosDeviceStateResponse_BluetoothDeviceState_IsValidValue(int32_t value__
   }
 }
 
+#pragma mark - ProtosConnectedDevicesResponse
+
+@implementation ProtosConnectedDevicesResponse
+
+@dynamic devicesArray, devicesArray_Count;
+
+typedef struct ProtosConnectedDevicesResponse__storage_ {
+  uint32_t _has_storage_[1];
+  NSMutableArray *devicesArray;
+} ProtosConnectedDevicesResponse__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "devicesArray",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothDevice),
+        .number = ProtosConnectedDevicesResponse_FieldNumber_DevicesArray,
+        .hasIndex = GPBNoHasBit,
+        .offset = (uint32_t)offsetof(ProtosConnectedDevicesResponse__storage_, devicesArray),
+        .flags = GPBFieldRepeated,
+        .dataType = GPBDataTypeMessage,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosConnectedDevicesResponse class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosConnectedDevicesResponse__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 #pragma clang diagnostic pop
 

@@ -57,6 +57,14 @@ class FlutterBlue {
         .map((s) => BluetoothState.values[s.state.value]);
   }
 
+  Future<List<BluetoothDevice>> get connectedDevices {
+    return _channel
+        .invokeMethod('getConnectedDevices')
+        .then((buffer) => protos.ConnectedDevicesResponse.fromBuffer(buffer))
+        .then((p) => p.devices)
+        .then((p) => p.map((d) => BluetoothDevice.fromProto(d)).toList());
+  }
+
   /// Starts a scan for Bluetooth Low Energy devices
   /// Timeout closes the stream after a specified [Duration]
   Stream<ScanResult> scan({
@@ -132,10 +140,10 @@ class FlutterBlue {
   /// The list of connected peripherals can include those that are connected
   /// by other apps and that will need to be connected locally using the
   /// device.connect() method before they can be used.
-  Stream<List<BluetoothDevice>> connectedDevices({
-    List<Guid> withServices = const [],
-  }) =>
-      throw UnimplementedError();
+//  Stream<List<BluetoothDevice>> connectedDevices({
+//    List<Guid> withServices = const [],
+//  }) =>
+//      throw UnimplementedError();
 
   /// Sets the log level of the FlutterBlue instance
   /// Messages equal or below the log level specified are stored/forwarded,
