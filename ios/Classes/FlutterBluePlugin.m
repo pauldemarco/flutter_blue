@@ -425,14 +425,14 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   NSLog(@"didUpdateValueForCharacteristic %@", [peripheral.identifier UUIDString]);
   ProtosReadCharacteristicResponse *result = [[ProtosReadCharacteristicResponse alloc] init];
   [result setRemoteId:[peripheral.identifier UUIDString]];
-  [result setCharacteristic:[self toCharacteristicProto:characteristic]];
+  [result setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
   [_channel invokeMethod:@"ReadCharacteristicResponse" arguments:[self toFlutterData:result]];
   
   // on iOS, this method also handles notification values
-  ProtosOnCharacteristicChanged *result = [[ProtosOnCharacteristicChanged alloc] init];
-  [result setRemoteId:[peripheral.identifier UUIDString]];
-  [result setCharacteristic:[self toCharacteristicProto:characteristic]];
-  [_channel invokeMethod:@"OnCharacteristicChanged" arguments:[self toFlutterData:result]];
+  ProtosOnCharacteristicChanged *onChangedResult = [[ProtosOnCharacteristicChanged alloc] init];
+  [onChangedResult setRemoteId:[peripheral.identifier UUIDString]];
+  [onChangedResult setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
+  [_channel invokeMethod:@"OnCharacteristicChanged" arguments:[self toFlutterData:onChangedResult]];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
@@ -455,7 +455,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     // Send error
     ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
     [response setRemoteId:[peripheral.identifier UUIDString]];
-    [response setCharacteristic:[self toCharacteristicProto:characteristic]];
+    [response setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
     [response setSuccess:false];
     [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
     return;
@@ -487,7 +487,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   if([descriptor.UUID.UUIDString isEqualToString:@"2902"]){
     ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
     [response setRemoteId:[peripheral.identifier UUIDString]];
-    [response setCharacteristic:[self toCharacteristicProto:descriptor.characteristic]];
+    [response setCharacteristic:[self toCharacteristicProto:peripheral characteristic:descriptor.characteristic]];
     [response setSuccess:true];
     [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
   }
@@ -629,7 +629,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   // Characteristic Array
   NSMutableArray *characteristicProtos = [NSMutableArray new];
   for(CBCharacteristic *c in [service characteristics]) {
-    [characteristicProtos addObject:[self toCharacteristicProto:c]];
+    [characteristicProtos addObject:[self toCharacteristicProto:peripheral characteristic:c]];
   }
   [result setCharacteristicsArray:characteristicProtos];
   
@@ -643,15 +643,16 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   return result;
 }
 
-- (ProtosBluetoothCharacteristic*)toCharacteristicProto:(CBCharacteristic *)characteristic {
+- (ProtosBluetoothCharacteristic*)toCharacteristicProto:(CBPeripheral *)peripheral characteristic:(CBCharacteristic *)characteristic {
   ProtosBluetoothCharacteristic *result = [[ProtosBluetoothCharacteristic alloc] init];
   [result setUuid:[characteristic.UUID fullUUIDString]];
+  [result setRemoteId:[peripheral.identifier UUIDString]];
   [result setProperties:[self toCharacteristicPropsProto:characteristic.properties]];
   [result setValue:[characteristic value]];
   NSLog(@"uuid: %@ value: %@", [characteristic.UUID fullUUIDString], [characteristic value]);
   NSMutableArray *descriptorProtos = [NSMutableArray new];
   for(CBDescriptor *d in [characteristic descriptors]) {
-    [descriptorProtos addObject:[self toDescriptorProto:d]];
+    [descriptorProtos addObject:[self toDescriptorProto:peripheral descriptor:d]];
   }
   [result setDescriptorsArray:descriptorProtos];
   if([characteristic.service isPrimary]) {
@@ -665,9 +666,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   return result;
 }
 
-- (ProtosBluetoothDescriptor*)toDescriptorProto:(CBDescriptor *)descriptor {
+- (ProtosBluetoothDescriptor*)toDescriptorProto:(CBPeripheral *)peripheral descriptor:(CBDescriptor *)descriptor {
   ProtosBluetoothDescriptor *result = [[ProtosBluetoothDescriptor alloc] init];
   [result setUuid:[descriptor.UUID fullUUIDString]];
+  [result setRemoteId:[peripheral.identifier UUIDString]];
   [result setCharacteristicUuid:[descriptor.characteristic.UUID fullUUIDString]];
   [result setServiceUuid:[descriptor.characteristic.service.UUID fullUUIDString]];
   int value = [descriptor.value intValue];
