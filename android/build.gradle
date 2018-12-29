@@ -37,7 +37,6 @@ android {
         // Required for local unit tests (JUnit 4 framework)
         testImplementation 'junit:junit:4.12'
         implementation 'androidx.core:core:1.0.1'
-        //compile files('/home/paul/flutter/bin/cache/artifacts/engine/android-arm/flutter.jar')
     }
     sourceSets {
         main {
