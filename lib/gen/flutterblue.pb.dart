@@ -997,3 +997,26 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   void clearState() => clearField(2);
 }
 
+class ConnectedDevicesResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = new $pb.BuilderInfo('ConnectedDevicesResponse')
+    ..pp<BluetoothDevice>(1, 'devices', $pb.PbFieldType.PM, BluetoothDevice.$checkItem, BluetoothDevice.create)
+    ..hasRequiredFields = false
+  ;
+
+  ConnectedDevicesResponse() : super();
+  ConnectedDevicesResponse.fromBuffer(List<int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ConnectedDevicesResponse.fromJson(String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ConnectedDevicesResponse clone() => new ConnectedDevicesResponse()..mergeFromMessage(this);
+  ConnectedDevicesResponse copyWith(void Function(ConnectedDevicesResponse) updates) => super.copyWith((message) => updates(message as ConnectedDevicesResponse));
+  $pb.BuilderInfo get info_ => _i;
+  static ConnectedDevicesResponse create() => new ConnectedDevicesResponse();
+  static $pb.PbList<ConnectedDevicesResponse> createRepeated() => new $pb.PbList<ConnectedDevicesResponse>();
+  static ConnectedDevicesResponse getDefault() => _defaultInstance ??= create()..freeze();
+  static ConnectedDevicesResponse _defaultInstance;
+  static void $checkItem(ConnectedDevicesResponse v) {
+    if (v is! ConnectedDevicesResponse) $pb.checkItemFailed(v, _i.qualifiedMessageName);
+  }
+
+  List<BluetoothDevice> get devices => $_getList(0);
+}
+

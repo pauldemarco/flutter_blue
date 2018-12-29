@@ -300,3 +300,10 @@ const DeviceStateResponse_BluetoothDeviceState$json = const {
   ],
 };
 
+const ConnectedDevicesResponse$json = const {
+  '1': 'ConnectedDevicesResponse',
+  '2': const [
+    const {'1': 'devices', '3': 1, '4': 3, '5': 11, '6': '.BluetoothDevice', '10': 'devices'},
+  ],
+};
+
