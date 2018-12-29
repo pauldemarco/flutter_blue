@@ -1,4 +1,4 @@
-[![pub package](https://img.shields.io/pub/v/flutter_blue.svg)](https://pub.dartlang.org/packages/flutter_blue)
+[![pub package](https://img.shields.io/pub/v/flutter_blue.svg)](https://pub.dartlang.org/packages/flutter_blue) [![Join the chat at https://gitter.im/flutter_blue/community](https://badges.gitter.im/flutter_blue/community.svg)](https://gitter.im/flutter_blue/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 <br>
 <p align="center">
