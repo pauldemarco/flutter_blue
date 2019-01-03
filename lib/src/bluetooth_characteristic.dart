@@ -54,7 +54,9 @@ class BluetoothCharacteristic {
           .map((c) {
         // Update the characteristic with the new values
         _updateDescriptors(c.descriptors);
-        _value.add(c.lastValue);
+//        _value.add(c.lastValue);
+//        print('c.lastValue: ${c.lastValue}');
+        return c;
       });
 
   Stream<List<int>> get _onValueChangedStream =>
