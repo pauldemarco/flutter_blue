@@ -114,7 +114,21 @@ class BluetoothDevice {
         .invokeMethod('writeCharacteristic', request.writeToBuffer());
 
     if (type == CharacteristicWriteType.withoutResponse) {
-      return result;
+       return await FlutterBlue.instance._methodStream
+        .where((m) => m.method == "WriteCharacteristicResponse")
+        .map((m) => m.arguments)
+        .map((buffer) =>
+            new protos.WriteCharacteristicResponse.fromBuffer(buffer))
+        .where((p) =>
+            (p.request.remoteId == request.remoteId) &&
+            (p.request.characteristicUuid == request.characteristicUuid) &&
+            (p.request.serviceUuid == request.serviceUuid))
+        .first
+        .then((w) => w.success)
+        .then((success) => (!success)
+            ? throw new Exception('Failed to write the characteristic')
+            : null)
+        .then((_) => null);
     }
 
     return await FlutterBlue.instance._methodStream
