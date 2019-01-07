@@ -21,20 +21,6 @@ The BluetoothDevice object is then used to directly interact with characteristic
 
 To use this plugin, add `flutter_blue` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-You may also need to increase your minSdk from flutters default.  Modify `android\app\build.gradle` and change your `minSdkVersion` to at least 19.
-```gradle
-android {
-    ...
-    defaultConfig {
-        applicationId "com.example.yourapp"
-        minSdkVersion 19
-        targetSdkVersion 27
-        ...
-    }
-    ...
-}
-```
-
 ### Obtain an instance
 ```dart
 FlutterBlue flutterBlue = FlutterBlue.instance;
@@ -134,3 +120,19 @@ device.onValueChanged(characteristic).listen((value) {
 ### Scanning for service UUID's doesn't return any results
 Make sure the device is advertising which service UUID's it supports.  This is found in the advertisement
 packet as **UUID 16 bit complete list** or **UUID 128 bit complete list**.
+
+### On build you recieve an error that Flutter Blue's minSdk version is higher than yours
+
+Modify `android\app\build.gradle` and change your `minSdkVersion` to at least 19.
+```gradle
+android {
+    ...
+    defaultConfig {
+        applicationId "com.example.yourapp"
+        minSdkVersion 19
+        targetSdkVersion 27
+        ...
+    }
+    ...
+}
+```
