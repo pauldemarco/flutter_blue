@@ -24,11 +24,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.google.protobuf'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 19
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -36,7 +36,7 @@ android {
     dependencies {
         // Required for local unit tests (JUnit 4 framework)
         testImplementation 'junit:junit:4.12'
-        implementation 'com.android.support:support-compat:27.1.1'
+        implementation 'androidx.core:core:1.0.1'
         //compile files('/home/paul/flutter/bin/cache/artifacts/engine/android-arm/flutter.jar')
     }
     sourceSets {
