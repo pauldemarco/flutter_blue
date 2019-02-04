@@ -84,15 +84,22 @@ class FlutterBlue {
     // Emit to isScanning
     _isScanning.add(true);
 
-    // Clear scan results list
-    _scanResults.add(<ScanResult>[]);
-
-    await _channel.invokeMethod('startScan', settings.writeToBuffer());
-
     final killStreams = <Stream>[];
     killStreams.add(_stopScanPill);
     if (timeout != null) {
       killStreams.add(Observable.timer(null, timeout));
+    }
+
+    // Clear scan results list
+    _scanResults.add(<ScanResult>[]);
+
+    try {
+      await _channel.invokeMethod('startScan', settings.writeToBuffer());
+    } catch(e) {
+      print('Error starting scan.');
+      _stopScanPill.add(null);
+      _isScanning.add(false);
+      throw e;
     }
 
     yield* Observable(FlutterBlue.instance._methodStream
