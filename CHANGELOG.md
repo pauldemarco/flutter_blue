@@ -1,3 +1,7 @@
+## 0.4.2+1
+* Upgrade Android Gradle plugin to 3.3.0
+* Refresh iOS build files
+
 ## 0.4.2
 * Set the verbosity of log messages with `setLogLevel`
 * Updated iOS and Android project files
