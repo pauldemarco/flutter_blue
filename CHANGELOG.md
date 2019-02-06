@@ -1,3 +1,25 @@
+## 0.5.0
+* **Breaking change**. Migrate from the deprecated original Android Support
+  Library to AndroidX. This shouldn't result in any functional changes, but it
+  requires any Android apps using this plugin to [also
+  migrate](https://developer.android.com/jetpack/androidx/migrate) if they're
+  using the original support library.
+
+## 0.4.2+1
+* Upgrade Android Gradle plugin to 3.3.0
+* Refresh iOS build files
+
+## 0.4.2
+* Set the verbosity of log messages with `setLogLevel`
+* Updated iOS and Android project files
+* `autoConnect` now configurable for Android
+* Various bug fixes
+
+## 0.4.1
+* Fixed bug where setNotifyValue wasn't properly awaitable.
+* Various UI bug fixes to example app.
+* Removed unnecessary intl dependencies in example app.
+
 ## 0.4.0
 * **Breaking change**. Manufacturer Data is now a `Map` of manufacturer ID's.
 * Service UUID's, service data, tx power level packets fixed in advertising data.

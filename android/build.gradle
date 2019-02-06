@@ -8,8 +8,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.6'
+        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.7'
     }
 }
 
@@ -28,10 +28,7 @@ android {
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -39,7 +36,7 @@ android {
     dependencies {
         // Required for local unit tests (JUnit 4 framework)
         testImplementation 'junit:junit:4.12'
-        implementation 'androidx.appcompat:appcompat:1.0.0'
+        implementation 'androidx.core:core:1.0.1'
     }
     sourceSets {
         main {
