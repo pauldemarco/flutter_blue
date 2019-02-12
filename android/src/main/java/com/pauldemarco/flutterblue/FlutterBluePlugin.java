@@ -84,21 +84,23 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     }
 
     FlutterBluePlugin(Registrar r){
-        this.registrar = r;
-        this.channel = new MethodChannel(registrar.messenger(), NAMESPACE+"/methods");
-        this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/state");
-        this.scanResultChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/scanResult");
-        this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
-        this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
-        this.descriptorReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/descriptorRead");
-        this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
-        this.mBluetoothAdapter = mBluetoothManager.getAdapter();
-        channel.setMethodCallHandler(this);
-        stateChannel.setStreamHandler(stateHandler);
-        scanResultChannel.setStreamHandler(scanResultsHandler);
-        servicesDiscoveredChannel.setStreamHandler(servicesDiscoveredHandler);
-        characteristicReadChannel.setStreamHandler(characteristicReadHandler);
-        descriptorReadChannel.setStreamHandler(descriptorReadHandler);
+	if (r.activity() != null) {
+        	this.registrar = r;
+        	this.channel = new MethodChannel(registrar.messenger(), NAMESPACE+"/methods");
+        	this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/state");
+        	this.scanResultChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/scanResult");
+        	this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
+        	this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
+        	this.descriptorReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/descriptorRead");
+        	this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
+        	this.mBluetoothAdapter = mBluetoothManager.getAdapter();
+        	channel.setMethodCallHandler(this);
+        	stateChannel.setStreamHandler(stateHandler);
+        	scanResultChannel.setStreamHandler(scanResultsHandler);
+        	servicesDiscoveredChannel.setStreamHandler(servicesDiscoveredHandler);
+        	characteristicReadChannel.setStreamHandler(characteristicReadHandler);
+        	descriptorReadChannel.setStreamHandler(descriptorReadHandler);
+	}
     }
 
     @Override
