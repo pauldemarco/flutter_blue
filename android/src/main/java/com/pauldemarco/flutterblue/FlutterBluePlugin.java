@@ -91,7 +91,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         this.servicesDiscoveredChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/servicesDiscovered");
         this.characteristicReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/characteristicRead");
         this.descriptorReadChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/descriptorRead");
-        this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
+        this.mBluetoothManager = (BluetoothManager) r.context().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
         stateChannel.setStreamHandler(stateHandler);
@@ -116,7 +116,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 result.success(null);
                 break;
             }
-
+            
+            case "setUniqueId":
+            {
+                result.success(null);
+                break;
+            }
+            
             case "state":
             {
                 Protos.BluetoothState.Builder p = Protos.BluetoothState.newBuilder();
@@ -159,8 +165,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "startScan":
             {
-                if (ContextCompat.checkSelfPermission(registrar.activity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
+                boolean hasPermssions = (ContextCompat.checkSelfPermission(registrar.context(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);          
+
+                if (registrar.activity() == null && !hasPermssions) {
+                    result.error("scan_error","bluetooth is not enabled",hasPermssions);
+                    break;
+                }
+
+                if (!hasPermssions) {
                     ActivityCompat.requestPermissions(
                             registrar.activity(),
                             new String[] {
@@ -579,13 +591,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         public void onListen(Object o, EventChannel.EventSink eventSink) {
             sink = eventSink;
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            registrar.activity().registerReceiver(mReceiver, filter);
+            registrar.context().registerReceiver(mReceiver, filter);
         }
 
         @Override
         public void onCancel(Object o) {
             sink = null;
-            registrar.activity().unregisterReceiver(mReceiver);
+            registrar.context().unregisterReceiver(mReceiver);
         }
     };
 
