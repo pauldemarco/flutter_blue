@@ -70,6 +70,10 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
+    
+    public static boolean isMarshmallow() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
 
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
@@ -211,7 +215,12 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
 
                 // New request, connect and add gattServer to Map
-                BluetoothGatt gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
+                if(isMarshmallow()) {
+                    BluetoothGatt gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
+                } else {
+                    BluetoothGatt gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
+                }
+                
                 mGattServers.put(deviceId, gattServer);
                 result.success(null);
                 break;
