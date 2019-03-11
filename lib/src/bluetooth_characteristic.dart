@@ -4,8 +4,48 @@
 
 part of flutter_blue;
 
-class BluetoothCharacteristic {
+class BluetoothCharacteristicIdentifier {
   final Guid uuid;
+  final int instanceId;
+  final int _hashCode;
+
+  BluetoothCharacteristicIdentifier(Guid uuid, int instanceId)
+      : uuid = uuid,
+        instanceId = instanceId,
+        _hashCode = _calcHashCode(uuid, instanceId);
+
+  factory BluetoothCharacteristicIdentifier.fromProto(
+          protos.BluetoothCharacteristicIdentifier p) =>
+      BluetoothCharacteristicIdentifier(Guid(p.uuid), p.instanceId);
+
+
+  @override
+  String toString() {
+    return """"[UUID "$uuid", InstanceId "$instanceId"]""";
+  }
+
+  protos.BluetoothCharacteristicIdentifier get toProto {
+    return protos.BluetoothCharacteristicIdentifier.create()
+      ..uuid = this.uuid.toString()
+      ..instanceId = this.instanceId
+    ;
+  }
+
+  static int _calcHashCode(Guid uuid, int instanceId) {
+    final bytes = List.from(uuid._bytes)..add(instanceId);
+    const equality = const ListEquality<int>();
+    return equality.hash(bytes);
+  }
+
+  int get hashCode => _hashCode;
+
+  operator ==(other) =>
+      other is BluetoothCharacteristicIdentifier &&
+      this.hashCode == other.hashCode;
+}
+
+class BluetoothCharacteristic {
+  final BluetoothCharacteristicIdentifier id;
   final Guid serviceUuid; // The service that this characteristic belongs to.
   final Guid
       secondaryServiceUuid; // The nested service that this characteristic belongs to.
@@ -24,14 +64,14 @@ class BluetoothCharacteristic {
   List<int> value;
 
   BluetoothCharacteristic(
-      {@required this.uuid,
+      {@required this.id,
       @required this.serviceUuid,
       this.secondaryServiceUuid,
       @required this.descriptors,
       @required this.properties});
 
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
-      : uuid = new Guid(p.uuid),
+      : id = BluetoothCharacteristicIdentifier.fromProto(p.identifier),
         serviceUuid = new Guid(p.serviceUuid),
         secondaryServiceUuid = (p.secondaryServiceUuid.length > 0)
             ? new Guid(p.secondaryServiceUuid)
