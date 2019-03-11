@@ -29,6 +29,7 @@ CF_EXTERN_C_BEGIN
 
 @class ProtosAdvertisementData;
 @class ProtosBluetoothCharacteristic;
+@class ProtosBluetoothCharacteristicIdentifier;
 @class ProtosBluetoothDescriptor;
 @class ProtosBluetoothDevice;
 @class ProtosBluetoothService;
@@ -343,10 +344,26 @@ typedef GPB_ENUM(ProtosBluetoothService_FieldNumber) {
 
 @end
 
+#pragma mark - ProtosBluetoothCharacteristicIdentifier
+
+typedef GPB_ENUM(ProtosBluetoothCharacteristicIdentifier_FieldNumber) {
+  ProtosBluetoothCharacteristicIdentifier_FieldNumber_Uuid = 1,
+  ProtosBluetoothCharacteristicIdentifier_FieldNumber_InstanceId = 2,
+};
+
+@interface ProtosBluetoothCharacteristicIdentifier : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *uuid;
+
+/** https://developer.android.com/reference/android/bluetooth/BluetoothGattCharacteristic#getInstanceId() on Android, and pseudo `properties` on iOS */
+@property(nonatomic, readwrite) int32_t instanceId;
+
+@end
+
 #pragma mark - ProtosBluetoothCharacteristic
 
 typedef GPB_ENUM(ProtosBluetoothCharacteristic_FieldNumber) {
-  ProtosBluetoothCharacteristic_FieldNumber_Uuid = 1,
+  ProtosBluetoothCharacteristic_FieldNumber_Identifier = 1,
   ProtosBluetoothCharacteristic_FieldNumber_ServiceUuid = 2,
   ProtosBluetoothCharacteristic_FieldNumber_SecondaryServiceUuid = 3,
   ProtosBluetoothCharacteristic_FieldNumber_DescriptorsArray = 4,
@@ -356,7 +373,9 @@ typedef GPB_ENUM(ProtosBluetoothCharacteristic_FieldNumber) {
 
 @interface ProtosBluetoothCharacteristic : GPBMessage
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *uuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *identifier;
+/** Test to see if @c identifier has been set. */
+@property(nonatomic, readwrite) BOOL hasIdentifier;
 
 /** The service that this characteristic belongs to. */
 @property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
@@ -383,7 +402,7 @@ typedef GPB_ENUM(ProtosBluetoothCharacteristic_FieldNumber) {
 typedef GPB_ENUM(ProtosBluetoothDescriptor_FieldNumber) {
   ProtosBluetoothDescriptor_FieldNumber_Uuid = 1,
   ProtosBluetoothDescriptor_FieldNumber_ServiceUuid = 2,
-  ProtosBluetoothDescriptor_FieldNumber_CharacteristicUuid = 3,
+  ProtosBluetoothDescriptor_FieldNumber_CharacteristicId = 3,
   ProtosBluetoothDescriptor_FieldNumber_Value = 4,
 };
 
@@ -395,7 +414,9 @@ typedef GPB_ENUM(ProtosBluetoothDescriptor_FieldNumber) {
 @property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
 
 /** The characteristic that this descriptor belongs to. */
-@property(nonatomic, readwrite, copy, null_resettable) NSString *characteristicUuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *characteristicId;
+/** Test to see if @c characteristicId has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristicId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSData *value;
 
@@ -461,7 +482,7 @@ typedef GPB_ENUM(ProtosDiscoverServicesResult_FieldNumber) {
 
 typedef GPB_ENUM(ProtosReadCharacteristicRequest_FieldNumber) {
   ProtosReadCharacteristicRequest_FieldNumber_RemoteId = 1,
-  ProtosReadCharacteristicRequest_FieldNumber_CharacteristicUuid = 2,
+  ProtosReadCharacteristicRequest_FieldNumber_CharacteristicId = 2,
   ProtosReadCharacteristicRequest_FieldNumber_ServiceUuid = 3,
   ProtosReadCharacteristicRequest_FieldNumber_SecondaryServiceUuid = 4,
 };
@@ -470,7 +491,9 @@ typedef GPB_ENUM(ProtosReadCharacteristicRequest_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *characteristicUuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *characteristicId;
+/** Test to see if @c characteristicId has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristicId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
 
@@ -502,7 +525,7 @@ typedef GPB_ENUM(ProtosReadDescriptorRequest_FieldNumber) {
   ProtosReadDescriptorRequest_FieldNumber_DescriptorUuid = 2,
   ProtosReadDescriptorRequest_FieldNumber_ServiceUuid = 3,
   ProtosReadDescriptorRequest_FieldNumber_SecondaryServiceUuid = 4,
-  ProtosReadDescriptorRequest_FieldNumber_CharacteristicUuid = 5,
+  ProtosReadDescriptorRequest_FieldNumber_CharacteristicId = 5,
 };
 
 @interface ProtosReadDescriptorRequest : GPBMessage
@@ -515,7 +538,9 @@ typedef GPB_ENUM(ProtosReadDescriptorRequest_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *secondaryServiceUuid;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *characteristicUuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *characteristicId;
+/** Test to see if @c characteristicId has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristicId;
 
 @end
 
@@ -540,7 +565,7 @@ typedef GPB_ENUM(ProtosReadDescriptorResponse_FieldNumber) {
 
 typedef GPB_ENUM(ProtosWriteCharacteristicRequest_FieldNumber) {
   ProtosWriteCharacteristicRequest_FieldNumber_RemoteId = 1,
-  ProtosWriteCharacteristicRequest_FieldNumber_CharacteristicUuid = 2,
+  ProtosWriteCharacteristicRequest_FieldNumber_CharacteristicId = 2,
   ProtosWriteCharacteristicRequest_FieldNumber_ServiceUuid = 3,
   ProtosWriteCharacteristicRequest_FieldNumber_SecondaryServiceUuid = 4,
   ProtosWriteCharacteristicRequest_FieldNumber_WriteType = 5,
@@ -551,7 +576,9 @@ typedef GPB_ENUM(ProtosWriteCharacteristicRequest_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *characteristicUuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *characteristicId;
+/** Test to see if @c characteristicId has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristicId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
 
@@ -599,7 +626,7 @@ typedef GPB_ENUM(ProtosWriteDescriptorRequest_FieldNumber) {
   ProtosWriteDescriptorRequest_FieldNumber_DescriptorUuid = 2,
   ProtosWriteDescriptorRequest_FieldNumber_ServiceUuid = 3,
   ProtosWriteDescriptorRequest_FieldNumber_SecondaryServiceUuid = 4,
-  ProtosWriteDescriptorRequest_FieldNumber_CharacteristicUuid = 5,
+  ProtosWriteDescriptorRequest_FieldNumber_CharacteristicId = 5,
   ProtosWriteDescriptorRequest_FieldNumber_Value = 6,
 };
 
@@ -613,7 +640,9 @@ typedef GPB_ENUM(ProtosWriteDescriptorRequest_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *secondaryServiceUuid;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *characteristicUuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *characteristicId;
+/** Test to see if @c characteristicId has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristicId;
 
 @property(nonatomic, readwrite, copy, null_resettable) NSData *value;
 
@@ -642,7 +671,7 @@ typedef GPB_ENUM(ProtosSetNotificationRequest_FieldNumber) {
   ProtosSetNotificationRequest_FieldNumber_RemoteId = 1,
   ProtosSetNotificationRequest_FieldNumber_ServiceUuid = 2,
   ProtosSetNotificationRequest_FieldNumber_SecondaryServiceUuid = 3,
-  ProtosSetNotificationRequest_FieldNumber_CharacteristicUuid = 4,
+  ProtosSetNotificationRequest_FieldNumber_CharacteristicId = 4,
   ProtosSetNotificationRequest_FieldNumber_Enable = 5,
 };
 
@@ -654,7 +683,9 @@ typedef GPB_ENUM(ProtosSetNotificationRequest_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *secondaryServiceUuid;
 
-@property(nonatomic, readwrite, copy, null_resettable) NSString *characteristicUuid;
+@property(nonatomic, readwrite, strong, null_resettable) ProtosBluetoothCharacteristicIdentifier *characteristicId;
+/** Test to see if @c characteristicId has been set. */
+@property(nonatomic, readwrite) BOOL hasCharacteristicId;
 
 @property(nonatomic, readwrite) BOOL enable;
 

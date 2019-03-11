@@ -29,9 +29,6 @@ class BluetoothState_State extends $pb.ProtobufEnum {
 
   static final Map<int, BluetoothState_State> _byValue = $pb.ProtobufEnum.initByValue(values);
   static BluetoothState_State valueOf(int value) => _byValue[value];
-  static void $checkItem(BluetoothState_State v) {
-    if (v is! BluetoothState_State) $pb.checkItemFailed(v, 'BluetoothState_State');
-  }
 
   const BluetoothState_State._(int v, String n) : super(v, n);
 }
@@ -51,9 +48,6 @@ class BluetoothDevice_Type extends $pb.ProtobufEnum {
 
   static final Map<int, BluetoothDevice_Type> _byValue = $pb.ProtobufEnum.initByValue(values);
   static BluetoothDevice_Type valueOf(int value) => _byValue[value];
-  static void $checkItem(BluetoothDevice_Type v) {
-    if (v is! BluetoothDevice_Type) $pb.checkItemFailed(v, 'BluetoothDevice_Type');
-  }
 
   const BluetoothDevice_Type._(int v, String n) : super(v, n);
 }
@@ -69,9 +63,6 @@ class WriteCharacteristicRequest_WriteType extends $pb.ProtobufEnum {
 
   static final Map<int, WriteCharacteristicRequest_WriteType> _byValue = $pb.ProtobufEnum.initByValue(values);
   static WriteCharacteristicRequest_WriteType valueOf(int value) => _byValue[value];
-  static void $checkItem(WriteCharacteristicRequest_WriteType v) {
-    if (v is! WriteCharacteristicRequest_WriteType) $pb.checkItemFailed(v, 'WriteCharacteristicRequest_WriteType');
-  }
 
   const WriteCharacteristicRequest_WriteType._(int v, String n) : super(v, n);
 }
@@ -91,9 +82,6 @@ class DeviceStateResponse_BluetoothDeviceState extends $pb.ProtobufEnum {
 
   static final Map<int, DeviceStateResponse_BluetoothDeviceState> _byValue = $pb.ProtobufEnum.initByValue(values);
   static DeviceStateResponse_BluetoothDeviceState valueOf(int value) => _byValue[value];
-  static void $checkItem(DeviceStateResponse_BluetoothDeviceState v) {
-    if (v is! DeviceStateResponse_BluetoothDeviceState) $pb.checkItemFailed(v, 'DeviceStateResponse_BluetoothDeviceState');
-  }
 
   const DeviceStateResponse_BluetoothDeviceState._(int v, String n) : super(v, n);
 }

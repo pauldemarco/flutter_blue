@@ -119,10 +119,18 @@ const BluetoothService$json = const {
   ],
 };
 
+const BluetoothCharacteristicIdentifier$json = const {
+  '1': 'BluetoothCharacteristicIdentifier',
+  '2': const [
+    const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'instance_id', '3': 2, '4': 1, '5': 5, '10': 'instanceId'},
+  ],
+};
+
 const BluetoothCharacteristic$json = const {
   '1': 'BluetoothCharacteristic',
   '2': const [
-    const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
+    const {'1': 'identifier', '3': 1, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'identifier'},
     const {'1': 'serviceUuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondaryServiceUuid', '3': 3, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
     const {'1': 'descriptors', '3': 4, '4': 3, '5': 11, '6': '.BluetoothDescriptor', '10': 'descriptors'},
@@ -136,7 +144,7 @@ const BluetoothDescriptor$json = const {
   '2': const [
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
     const {'1': 'serviceUuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'characteristicUuid', '3': 3, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'characteristic_id', '3': 3, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'characteristicId'},
     const {'1': 'value', '3': 4, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -169,7 +177,7 @@ const ReadCharacteristicRequest$json = const {
   '1': 'ReadCharacteristicRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic_uuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'characteristic_id', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'characteristicId'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
   ],
@@ -190,7 +198,7 @@ const ReadDescriptorRequest$json = const {
     const {'1': 'descriptor_uuid', '3': 2, '4': 1, '5': 9, '10': 'descriptorUuid'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'characteristic_uuid', '3': 5, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'characteristic_id', '3': 5, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'characteristicId'},
   ],
 };
 
@@ -206,7 +214,7 @@ const WriteCharacteristicRequest$json = const {
   '1': 'WriteCharacteristicRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic_uuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'characteristic_id', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'characteristicId'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
     const {'1': 'write_type', '3': 5, '4': 1, '5': 14, '6': '.WriteCharacteristicRequest.WriteType', '10': 'writeType'},
@@ -238,7 +246,7 @@ const WriteDescriptorRequest$json = const {
     const {'1': 'descriptor_uuid', '3': 2, '4': 1, '5': 9, '10': 'descriptorUuid'},
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'characteristic_uuid', '3': 5, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'characteristic_id', '3': 5, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'characteristicId'},
     const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -257,7 +265,7 @@ const SetNotificationRequest$json = const {
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'service_uuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
     const {'1': 'secondary_service_uuid', '3': 3, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'characteristic_uuid', '3': 4, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {'1': 'characteristic_id', '3': 4, '4': 1, '5': 11, '6': '.BluetoothCharacteristicIdentifier', '10': 'characteristicId'},
     const {'1': 'enable', '3': 5, '4': 1, '5': 8, '10': 'enable'},
   ],
 };
