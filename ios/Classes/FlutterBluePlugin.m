@@ -363,6 +363,7 @@ ProtosBluetoothCharacteristicIdentifier* getCharacteristicId(CBCharacteristic* c
         if(hash == [characteristicId instanceId]) {
             return c;
         }
+        NSLog(@"locate the same UUID %@ but different instanceId/Hash %d, skipping", uuidString, characteristicId.instanceId);
     }
   }
   return nil;
