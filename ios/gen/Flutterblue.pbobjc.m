@@ -13,9 +13,7 @@
  #import "GPBProtocolBuffers_RuntimeSupport.h"
 #endif
 
-#import <stdatomic.h>
-
-#import "Flutterblue.pbobjc.h"
+ #import "Flutterblue.pbobjc.h"
 // @@protoc_insertion_point(imports)
 
 #pragma clang diagnostic push
@@ -146,7 +144,7 @@ void SetProtosBluetoothState_State_RawValue(ProtosBluetoothState *message, int32
 #pragma mark - Enum ProtosBluetoothState_State
 
 GPBEnumDescriptor *ProtosBluetoothState_State_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "Unknown\000Unavailable\000Unauthorized\000Turning"
@@ -166,8 +164,7 @@ GPBEnumDescriptor *ProtosBluetoothState_State_EnumDescriptor(void) {
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosBluetoothState_State_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }
@@ -538,7 +535,7 @@ void SetProtosBluetoothDevice_Type_RawValue(ProtosBluetoothDevice *message, int3
 #pragma mark - Enum ProtosBluetoothDevice_Type
 
 GPBEnumDescriptor *ProtosBluetoothDevice_Type_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "Unknown\000Classic\000Le\000Dual\000";
@@ -554,8 +551,7 @@ GPBEnumDescriptor *ProtosBluetoothDevice_Type_EnumDescriptor(void) {
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosBluetoothDevice_Type_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }
@@ -660,11 +656,65 @@ typedef struct ProtosBluetoothService__storage_ {
 
 @end
 
+#pragma mark - ProtosBluetoothCharacteristicIdentifier
+
+@implementation ProtosBluetoothCharacteristicIdentifier
+
+@dynamic uuid;
+@dynamic instanceId;
+
+typedef struct ProtosBluetoothCharacteristicIdentifier__storage_ {
+  uint32_t _has_storage_[1];
+  int32_t instanceId;
+  NSString *uuid;
+} ProtosBluetoothCharacteristicIdentifier__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "uuid",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosBluetoothCharacteristicIdentifier_FieldNumber_Uuid,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristicIdentifier__storage_, uuid),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "instanceId",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosBluetoothCharacteristicIdentifier_FieldNumber_InstanceId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristicIdentifier__storage_, instanceId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt32,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosBluetoothCharacteristicIdentifier class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosBluetoothCharacteristicIdentifier__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 #pragma mark - ProtosBluetoothCharacteristic
 
 @implementation ProtosBluetoothCharacteristic
 
-@dynamic uuid;
+@dynamic hasIdentifier, identifier;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
 @dynamic descriptorsArray, descriptorsArray_Count;
@@ -673,7 +723,7 @@ typedef struct ProtosBluetoothService__storage_ {
 
 typedef struct ProtosBluetoothCharacteristic__storage_ {
   uint32_t _has_storage_[1];
-  NSString *uuid;
+  ProtosBluetoothCharacteristicIdentifier *identifier;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
   NSMutableArray *descriptorsArray;
@@ -688,13 +738,13 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
   if (!descriptor) {
     static GPBMessageFieldDescription fields[] = {
       {
-        .name = "uuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosBluetoothCharacteristic_FieldNumber_Uuid,
+        .name = "identifier",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosBluetoothCharacteristic_FieldNumber_Identifier,
         .hasIndex = 0,
-        .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, uuid),
+        .offset = (uint32_t)offsetof(ProtosBluetoothCharacteristic__storage_, identifier),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "serviceUuid",
@@ -769,14 +819,14 @@ typedef struct ProtosBluetoothCharacteristic__storage_ {
 
 @dynamic uuid;
 @dynamic serviceUuid;
-@dynamic characteristicUuid;
+@dynamic hasCharacteristicId, characteristicId;
 @dynamic value;
 
 typedef struct ProtosBluetoothDescriptor__storage_ {
   uint32_t _has_storage_[1];
   NSString *uuid;
   NSString *serviceUuid;
-  NSString *characteristicUuid;
+  ProtosBluetoothCharacteristicIdentifier *characteristicId;
   NSData *value;
 } ProtosBluetoothDescriptor__storage_;
 
@@ -805,13 +855,13 @@ typedef struct ProtosBluetoothDescriptor__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "characteristicUuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosBluetoothDescriptor_FieldNumber_CharacteristicUuid,
+        .name = "characteristicId",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosBluetoothDescriptor_FieldNumber_CharacteristicId,
         .hasIndex = 2,
-        .offset = (uint32_t)offsetof(ProtosBluetoothDescriptor__storage_, characteristicUuid),
-        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom),
-        .dataType = GPBDataTypeString,
+        .offset = (uint32_t)offsetof(ProtosBluetoothDescriptor__storage_, characteristicId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "value",
@@ -833,7 +883,7 @@ typedef struct ProtosBluetoothDescriptor__storage_ {
                                          flags:GPBDescriptorInitializationFlag_None];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\002\013\000\003\022\000";
+        "\001\002\013\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     NSAssert(descriptor == nil, @"Startup recursed!");
@@ -1035,14 +1085,14 @@ typedef struct ProtosDiscoverServicesResult__storage_ {
 @implementation ProtosReadCharacteristicRequest
 
 @dynamic remoteId;
-@dynamic characteristicUuid;
+@dynamic hasCharacteristicId, characteristicId;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
 
 typedef struct ProtosReadCharacteristicRequest__storage_ {
   uint32_t _has_storage_[1];
   NSString *remoteId;
-  NSString *characteristicUuid;
+  ProtosBluetoothCharacteristicIdentifier *characteristicId;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
 } ProtosReadCharacteristicRequest__storage_;
@@ -1063,13 +1113,13 @@ typedef struct ProtosReadCharacteristicRequest__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "characteristicUuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosReadCharacteristicRequest_FieldNumber_CharacteristicUuid,
+        .name = "characteristicId",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosReadCharacteristicRequest_FieldNumber_CharacteristicId,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(ProtosReadCharacteristicRequest__storage_, characteristicUuid),
+        .offset = (uint32_t)offsetof(ProtosReadCharacteristicRequest__storage_, characteristicId),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "serviceUuid",
@@ -1168,7 +1218,7 @@ typedef struct ProtosReadCharacteristicResponse__storage_ {
 @dynamic descriptorUuid;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
-@dynamic characteristicUuid;
+@dynamic hasCharacteristicId, characteristicId;
 
 typedef struct ProtosReadDescriptorRequest__storage_ {
   uint32_t _has_storage_[1];
@@ -1176,7 +1226,7 @@ typedef struct ProtosReadDescriptorRequest__storage_ {
   NSString *descriptorUuid;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
-  NSString *characteristicUuid;
+  ProtosBluetoothCharacteristicIdentifier *characteristicId;
 } ProtosReadDescriptorRequest__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1222,13 +1272,13 @@ typedef struct ProtosReadDescriptorRequest__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "characteristicUuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosReadDescriptorRequest_FieldNumber_CharacteristicUuid,
+        .name = "characteristicId",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosReadDescriptorRequest_FieldNumber_CharacteristicId,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(ProtosReadDescriptorRequest__storage_, characteristicUuid),
+        .offset = (uint32_t)offsetof(ProtosReadDescriptorRequest__storage_, characteristicId),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeMessage,
       },
     };
     GPBDescriptor *localDescriptor =
@@ -1306,7 +1356,7 @@ typedef struct ProtosReadDescriptorResponse__storage_ {
 @implementation ProtosWriteCharacteristicRequest
 
 @dynamic remoteId;
-@dynamic characteristicUuid;
+@dynamic hasCharacteristicId, characteristicId;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
 @dynamic writeType;
@@ -1316,7 +1366,7 @@ typedef struct ProtosWriteCharacteristicRequest__storage_ {
   uint32_t _has_storage_[1];
   ProtosWriteCharacteristicRequest_WriteType writeType;
   NSString *remoteId;
-  NSString *characteristicUuid;
+  ProtosBluetoothCharacteristicIdentifier *characteristicId;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
   NSData *value;
@@ -1338,13 +1388,13 @@ typedef struct ProtosWriteCharacteristicRequest__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "characteristicUuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosWriteCharacteristicRequest_FieldNumber_CharacteristicUuid,
+        .name = "characteristicId",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosWriteCharacteristicRequest_FieldNumber_CharacteristicId,
         .hasIndex = 1,
-        .offset = (uint32_t)offsetof(ProtosWriteCharacteristicRequest__storage_, characteristicUuid),
+        .offset = (uint32_t)offsetof(ProtosWriteCharacteristicRequest__storage_, characteristicId),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "serviceUuid",
@@ -1414,7 +1464,7 @@ void SetProtosWriteCharacteristicRequest_WriteType_RawValue(ProtosWriteCharacter
 #pragma mark - Enum ProtosWriteCharacteristicRequest_WriteType
 
 GPBEnumDescriptor *ProtosWriteCharacteristicRequest_WriteType_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "WithResponse\000WithoutResponse\000";
@@ -1428,8 +1478,7 @@ GPBEnumDescriptor *ProtosWriteCharacteristicRequest_WriteType_EnumDescriptor(voi
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosWriteCharacteristicRequest_WriteType_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }
@@ -1507,7 +1556,7 @@ typedef struct ProtosWriteCharacteristicResponse__storage_ {
 @dynamic descriptorUuid;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
-@dynamic characteristicUuid;
+@dynamic hasCharacteristicId, characteristicId;
 @dynamic value;
 
 typedef struct ProtosWriteDescriptorRequest__storage_ {
@@ -1516,7 +1565,7 @@ typedef struct ProtosWriteDescriptorRequest__storage_ {
   NSString *descriptorUuid;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
-  NSString *characteristicUuid;
+  ProtosBluetoothCharacteristicIdentifier *characteristicId;
   NSData *value;
 } ProtosWriteDescriptorRequest__storage_;
 
@@ -1563,13 +1612,13 @@ typedef struct ProtosWriteDescriptorRequest__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "characteristicUuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosWriteDescriptorRequest_FieldNumber_CharacteristicUuid,
+        .name = "characteristicId",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosWriteDescriptorRequest_FieldNumber_CharacteristicId,
         .hasIndex = 4,
-        .offset = (uint32_t)offsetof(ProtosWriteDescriptorRequest__storage_, characteristicUuid),
+        .offset = (uint32_t)offsetof(ProtosWriteDescriptorRequest__storage_, characteristicId),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "value",
@@ -1657,7 +1706,7 @@ typedef struct ProtosWriteDescriptorResponse__storage_ {
 @dynamic remoteId;
 @dynamic serviceUuid;
 @dynamic secondaryServiceUuid;
-@dynamic characteristicUuid;
+@dynamic hasCharacteristicId, characteristicId;
 @dynamic enable;
 
 typedef struct ProtosSetNotificationRequest__storage_ {
@@ -1665,7 +1714,7 @@ typedef struct ProtosSetNotificationRequest__storage_ {
   NSString *remoteId;
   NSString *serviceUuid;
   NSString *secondaryServiceUuid;
-  NSString *characteristicUuid;
+  ProtosBluetoothCharacteristicIdentifier *characteristicId;
 } ProtosSetNotificationRequest__storage_;
 
 // This method is threadsafe because it is initially called
@@ -1702,13 +1751,13 @@ typedef struct ProtosSetNotificationRequest__storage_ {
         .dataType = GPBDataTypeString,
       },
       {
-        .name = "characteristicUuid",
-        .dataTypeSpecific.className = NULL,
-        .number = ProtosSetNotificationRequest_FieldNumber_CharacteristicUuid,
+        .name = "characteristicId",
+        .dataTypeSpecific.className = GPBStringifySymbol(ProtosBluetoothCharacteristicIdentifier),
+        .number = ProtosSetNotificationRequest_FieldNumber_CharacteristicId,
         .hasIndex = 3,
-        .offset = (uint32_t)offsetof(ProtosSetNotificationRequest__storage_, characteristicUuid),
+        .offset = (uint32_t)offsetof(ProtosSetNotificationRequest__storage_, characteristicId),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeString,
+        .dataType = GPBDataTypeMessage,
       },
       {
         .name = "enable",
@@ -1923,7 +1972,7 @@ void SetProtosDeviceStateResponse_State_RawValue(ProtosDeviceStateResponse *mess
 #pragma mark - Enum ProtosDeviceStateResponse_BluetoothDeviceState
 
 GPBEnumDescriptor *ProtosDeviceStateResponse_BluetoothDeviceState_EnumDescriptor(void) {
-  static _Atomic(GPBEnumDescriptor*) descriptor = nil;
+  static GPBEnumDescriptor *descriptor = NULL;
   if (!descriptor) {
     static const char *valueNames =
         "Disconnected\000Connecting\000Connected\000Discon"
@@ -1940,8 +1989,7 @@ GPBEnumDescriptor *ProtosDeviceStateResponse_BluetoothDeviceState_EnumDescriptor
                                            values:values
                                             count:(uint32_t)(sizeof(values) / sizeof(int32_t))
                                      enumVerifier:ProtosDeviceStateResponse_BluetoothDeviceState_IsValidValue];
-    GPBEnumDescriptor *expected = nil;
-    if (!atomic_compare_exchange_strong(&descriptor, &expected, worker)) {
+    if (!OSAtomicCompareAndSwapPtrBarrier(nil, worker, (void * volatile *)&descriptor)) {
       [worker release];
     }
   }

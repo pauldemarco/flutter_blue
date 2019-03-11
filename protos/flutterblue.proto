@@ -75,8 +75,13 @@ message BluetoothService {
   repeated BluetoothService included_services = 5; // A list of included services that have been discovered in this service.
 }
 
-message BluetoothCharacteristic {
+message BluetoothCharacteristicIdentifier {
   string uuid = 1;
+  int32 instance_id = 2; // https://developer.android.com/reference/android/bluetooth/BluetoothGattCharacteristic#getInstanceId() on Android, and pseudo `properties` on iOS
+}
+
+message BluetoothCharacteristic {
+  BluetoothCharacteristicIdentifier identifier = 1;
   string serviceUuid = 2; // The service that this characteristic belongs to.
   string secondaryServiceUuid = 3; // The secondary service if nested
   repeated BluetoothDescriptor descriptors = 4; // A list of descriptors that have been discovered in this characteristic.
@@ -87,7 +92,7 @@ message BluetoothCharacteristic {
 message BluetoothDescriptor {
   string uuid = 1;
   string serviceUuid = 2; // The service that this descriptor belongs to.
-  string characteristicUuid = 3; // The characteristic that this descriptor belongs to.
+  BluetoothCharacteristicIdentifier characteristic_id = 3; // The characteristic that this descriptor belongs to.
   bytes value = 4;
 }
 
@@ -111,7 +116,7 @@ message DiscoverServicesResult {
 
 message ReadCharacteristicRequest {
   string remote_id = 1;
-  string characteristic_uuid = 2;
+  BluetoothCharacteristicIdentifier characteristic_id =  2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
 }
@@ -126,7 +131,7 @@ message ReadDescriptorRequest {
   string descriptor_uuid = 2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
-  string characteristic_uuid = 5;
+  BluetoothCharacteristicIdentifier characteristic_id = 5;
 }
 
 message ReadDescriptorResponse {
@@ -140,7 +145,7 @@ message WriteCharacteristicRequest {
     WITHOUT_RESPONSE = 1;
   }
   string remote_id = 1;
-  string characteristic_uuid = 2;
+  BluetoothCharacteristicIdentifier characteristic_id = 2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
   WriteType write_type = 5;
@@ -157,7 +162,7 @@ message WriteDescriptorRequest {
   string descriptor_uuid = 2;
   string service_uuid = 3;
   string secondary_service_uuid = 4;
-  string characteristic_uuid = 5;
+  BluetoothCharacteristicIdentifier characteristic_id = 5;
   bytes value = 6;
 }
 
@@ -170,7 +175,7 @@ message SetNotificationRequest {
   string remote_id = 1;
   string service_uuid = 2;
   string secondary_service_uuid = 3;
-  string characteristic_uuid = 4;
+  BluetoothCharacteristicIdentifier characteristic_id = 4;
   bool enable = 5;
 }
 

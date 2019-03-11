@@ -133,7 +133,7 @@ public class ProtoMaker {
 
     static Protos.BluetoothCharacteristic from(BluetoothGattCharacteristic characteristic, BluetoothGatt gatt) {
         Protos.BluetoothCharacteristic.Builder p = Protos.BluetoothCharacteristic.newBuilder();
-        p.setUuid(characteristic.getUuid().toString());
+        p.setIdentifier(ProtoMaker.from(characteristic));
         p.setProperties(from(characteristic.getProperties()));
         if(characteristic.getValue() != null)
             p.setValue(ByteString.copyFrom(characteristic.getValue()));
@@ -157,10 +157,17 @@ public class ProtoMaker {
         return p.build();
     }
 
+    static Protos.BluetoothCharacteristicIdentifier from(BluetoothGattCharacteristic characteristic) {
+        return Protos.BluetoothCharacteristicIdentifier.newBuilder()
+                .setUuid(characteristic.getUuid().toString())
+                .setInstanceId(characteristic.getInstanceId())
+                .build();
+    }
+
     static Protos.BluetoothDescriptor from(BluetoothGattDescriptor descriptor) {
         Protos.BluetoothDescriptor.Builder p = Protos.BluetoothDescriptor.newBuilder();
         p.setUuid(descriptor.getUuid().toString());
-        p.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
+        p.setCharacteristicId(ProtoMaker.from(descriptor.getCharacteristic()));
         p.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
         if(descriptor.getValue() != null)
             p.setValue(ByteString.copyFrom(descriptor.getValue()));

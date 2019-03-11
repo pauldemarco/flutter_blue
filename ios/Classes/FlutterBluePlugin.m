@@ -29,6 +29,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   debug = 7
 };
 
+ProtosBluetoothCharacteristicIdentifier* getCharacteristicId(CBCharacteristic* characteristic) {
+    ProtosBluetoothCharacteristicIdentifier* id = [[ProtosBluetoothCharacteristicIdentifier alloc] init];
+    [id setUuid:[characteristic.UUID fullUUIDString]];
+    [id setInstanceId:(int32_t)characteristic.hash];
+    return id;
+}
+
 @interface FlutterBluePlugin ()
 @property(nonatomic, retain) NSObject<FlutterPluginRegistrar> *registrar;
 @property(nonatomic, retain) FlutterMethodChannel *channel;
@@ -190,7 +197,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Find peripheral
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       // Find characteristic
-      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicId] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
       // Trigger a read
       [peripheral readValueForCharacteristic:characteristic];
       result(nil);
@@ -205,7 +212,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Find peripheral
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       // Find characteristic
-      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicId] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
       // Find descriptor
       CBDescriptor *descriptor = [self locateDescriptor:[request descriptorUuid] characteristic:characteristic];
       [peripheral readValueForDescriptor:descriptor];
@@ -221,7 +228,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Find peripheral
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       // Find characteristic
-      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicId] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
       // Get correct write type
       CBCharacteristicWriteType type = ([request writeType] == ProtosWriteCharacteristicRequest_WriteType_WithoutResponse) ? CBCharacteristicWriteWithoutResponse : CBCharacteristicWriteWithResponse;
       // Write to characteristic
@@ -238,7 +245,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Find peripheral
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       // Find characteristic
-      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicId] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
       // Find descriptor
       CBDescriptor *descriptor = [self locateDescriptor:[request descriptorUuid] characteristic:characteristic];
       // Write descriptor
@@ -255,7 +262,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Find peripheral
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       // Find characteristic
-      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
+      CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicId] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
       // Set notification value
       [peripheral setNotifyValue:[request enable] forCharacteristic:characteristic];
       result(nil);
@@ -284,7 +291,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   return peripheral;
 }
 
-- (CBCharacteristic*)locateCharacteristic:(NSString*)characteristicId peripheral:(CBPeripheral*)peripheral serviceId:(NSString*)serviceId secondaryServiceId:(NSString*)secondaryServiceId {
+- (CBCharacteristic*)locateCharacteristic:(ProtosBluetoothCharacteristicIdentifier*)characteristicId peripheral:(CBPeripheral*)peripheral serviceId:(NSString*)serviceId secondaryServiceId:(NSString*)secondaryServiceId {
   CBService *primaryService = [self getServiceFromArray:serviceId array:[peripheral services]];
   if(primaryService == nil || [primaryService isPrimary] == false) {
     @throw [FlutterError errorWithCode:@"locateCharacteristic"
@@ -348,10 +355,15 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   return nil;
 }
 
-- (CBCharacteristic*)getCharacteristicFromArray:(NSString*)uuidString array:(NSArray<CBCharacteristic*>*)array {
+- (CBCharacteristic*)getCharacteristicFromArray:(ProtosBluetoothCharacteristicIdentifier*)characteristicId array:(NSArray<CBCharacteristic*>*)array {
   for(CBCharacteristic *c in array) {
+    NSString* uuidString = characteristicId.uuid;
     if([[c UUID] isEqual:[CBUUID UUIDWithString:uuidString]]) {
-      return c;
+        int32_t hash = (int32_t)c.hash;
+        if(hash == [characteristicId instanceId]) {
+            return c;
+        }
+        NSLog(@"locate the same UUID %@ but different instanceId/Hash %d, skipping", uuidString, characteristicId.instanceId);
     }
   }
   return nil;
@@ -472,7 +484,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   NSLog(@"didWriteValueForCharacteristic");
   ProtosWriteCharacteristicRequest *request = [[ProtosWriteCharacteristicRequest alloc] init];
   [request setRemoteId:[peripheral.identifier UUIDString]];
-  [request setCharacteristicUuid:[characteristic.UUID fullUUIDString]];
+  [request setCharacteristicId:getCharacteristicId(characteristic)];
   [request setServiceUuid:[characteristic.service.UUID fullUUIDString]];
   ProtosWriteCharacteristicResponse *result = [[ProtosWriteCharacteristicResponse alloc] init];
   [result setRequest:request];
@@ -502,7 +514,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   if(_descriptorReadStreamHandler.sink != nil) {
     ProtosReadDescriptorRequest *q = [[ProtosReadDescriptorRequest alloc] init];
     [q setRemoteId:[peripheral.identifier UUIDString]];
-    [q setCharacteristicUuid:[descriptor.characteristic.UUID fullUUIDString]];
+    [q setCharacteristicId:getCharacteristicId(descriptor.characteristic)];
     [q setDescriptorUuid:[descriptor.UUID fullUUIDString]];
     if([descriptor.characteristic.service isPrimary]) {
       [q setServiceUuid:[descriptor.characteristic.service.UUID fullUUIDString]];
@@ -530,7 +542,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
   ProtosWriteDescriptorRequest *request = [[ProtosWriteDescriptorRequest alloc] init];
   [request setRemoteId:[peripheral.identifier UUIDString]];
-  [request setCharacteristicUuid:[descriptor.characteristic.UUID fullUUIDString]];
+  [request setCharacteristicId:getCharacteristicId(descriptor.characteristic)];
   [request setDescriptorUuid:[descriptor.UUID fullUUIDString]];
   if([descriptor.characteristic.service isPrimary]) {
     [request setServiceUuid:[descriptor.characteristic.service.UUID fullUUIDString]];
@@ -679,7 +691,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 
 - (ProtosBluetoothCharacteristic*)toCharacteristicProto:(CBCharacteristic *)characteristic {
   ProtosBluetoothCharacteristic *result = [[ProtosBluetoothCharacteristic alloc] init];
-  [result setUuid:[characteristic.UUID fullUUIDString]];
+  [result setIdentifier:getCharacteristicId(characteristic)];
   [result setProperties:[self toCharacteristicPropsProto:characteristic.properties]];
   [result setValue:[characteristic value]];
   NSLog(@"uuid: %@ value: %@", [characteristic.UUID fullUUIDString], [characteristic value]);
@@ -702,7 +714,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 - (ProtosBluetoothDescriptor*)toDescriptorProto:(CBDescriptor *)descriptor {
   ProtosBluetoothDescriptor *result = [[ProtosBluetoothDescriptor alloc] init];
   [result setUuid:[descriptor.UUID fullUUIDString]];
-  [result setCharacteristicUuid:[descriptor.characteristic.UUID fullUUIDString]];
+  [result setCharacteristicId:getCharacteristicId(descriptor.characteristic)];
   [result setServiceUuid:[descriptor.characteristic.service.UUID fullUUIDString]];
   int value = [descriptor.value intValue];
   [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
