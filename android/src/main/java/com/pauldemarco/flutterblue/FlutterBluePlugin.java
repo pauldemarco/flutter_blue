@@ -293,7 +293,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 BluetoothGattCharacteristic characteristic;
                 try {
                     gattServer = locateGatt(request.getRemoteId());
-                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicId());
                 } catch(Exception e) {
                     result.error("read_characteristic_error", e.getMessage(), null);
                     return;
@@ -323,7 +323,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 BluetoothGattDescriptor descriptor;
                 try {
                     gattServer = locateGatt(request.getRemoteId());
-                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicId());
                     descriptor = locateDescriptor(characteristic, request.getDescriptorUuid());
                 } catch(Exception e) {
                     result.error("read_descriptor_error", e.getMessage(), null);
@@ -353,7 +353,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 BluetoothGattCharacteristic characteristic;
                 try {
                     gattServer = locateGatt(request.getRemoteId());
-                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicId());
                 } catch(Exception e) {
                     result.error("write_characteristic_error", e.getMessage(), null);
                     return;
@@ -396,7 +396,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 BluetoothGattDescriptor descriptor;
                 try {
                     gattServer = locateGatt(request.getRemoteId());
-                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicId());
                     descriptor = locateDescriptor(characteristic, request.getDescriptorUuid());
                 } catch(Exception e) {
                     result.error("write_descriptor_error", e.getMessage(), null);
@@ -433,7 +433,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 BluetoothGattDescriptor cccDescriptor;
                 try {
                     gattServer = locateGatt(request.getRemoteId());
-                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicId());
                     cccDescriptor = characteristic.getDescriptor(CCCD_ID);
                     if(cccDescriptor == null) {
                         throw new Exception("could not locate CCCD descriptor for characteristic: " +characteristic.getUuid().toString());
@@ -514,7 +514,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         return gattServer;
     }
 
-    private BluetoothGattCharacteristic locateCharacteristic(BluetoothGatt gattServer, String serviceId, String secondaryServiceId, String characteristicId) throws Exception {
+    private BluetoothGattCharacteristic locateCharacteristic(BluetoothGatt gattServer, String serviceId, String secondaryServiceId, Protos.BluetoothCharacteristicIdentifier characteristicId) throws Exception {
         BluetoothGattService primaryService = gattServer.getService(UUID.fromString(serviceId));
         if(primaryService == null) {
             throw new Exception("service (" + serviceId + ") could not be located on the device");
@@ -531,11 +531,27 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             }
         }
         BluetoothGattService service = (secondaryService != null) ? secondaryService : primaryService;
-        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(characteristicId));
-        if(characteristic == null) {
-            throw new Exception("characteristic (" + characteristicId + ") could not be located in the service ("+service.getUuid().toString()+")");
+        // cannot use
+        /*
+        characteristic = service.getCharacteristic(UUID.fromString(characteristicId.getUuid()), characteristicId.getInstanceId());
+         */
+        // https://android.googlesource.com/platform/frameworks/base/+/android-9.0.0_r6/core/java/android/bluetooth/BluetoothGattService.java#253
+        for (BluetoothGattCharacteristic c : service.getCharacteristics()) {
+            if (characteristicId.getUuid().equals(c.getUuid())) {
+                if(characteristicId.getInstanceId() == c.getInstanceId()) {
+                    return c;
+                }
+                log(LogLevel.DEBUG, "getting characteristic with same UUID "
+                        + characteristicId.getUuid()
+                        + ", but different instanceId "
+                        + characteristicId.getInstanceId()
+                        +" and "
+                        + c.getInstanceId()
+                        + ", skip and continue looking"
+                );
+            }
         }
-        return characteristic;
+        throw new Exception("characteristic (" + characteristicId + ") could not be located in the service ("+service.getUuid().toString()+")");
     }
 
     private BluetoothGattDescriptor locateDescriptor(BluetoothGattCharacteristic characteristic, String descriptorId) throws Exception {
@@ -786,7 +802,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             log(LogLevel.DEBUG, "[onCharacteristicWrite] uuid: " + characteristic.getUuid().toString() + " status: " + status);
             Protos.WriteCharacteristicRequest.Builder request = Protos.WriteCharacteristicRequest.newBuilder();
             request.setRemoteId(gatt.getDevice().getAddress());
-            request.setCharacteristicUuid(characteristic.getUuid().toString());
+            request.setCharacteristicId(ProtoMaker.from(characteristic));
             request.setServiceUuid(characteristic.getService().getUuid().toString());
             Protos.WriteCharacteristicResponse.Builder p = Protos.WriteCharacteristicResponse.newBuilder();
             p.setRequest(request);
@@ -810,7 +826,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 // Rebuild the ReadAttributeRequest and send back along with response
                 Protos.ReadDescriptorRequest.Builder q = Protos.ReadDescriptorRequest.newBuilder();
                 q.setRemoteId(gatt.getDevice().getAddress());
-                q.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
+                q.setCharacteristicId(ProtoMaker.from(descriptor.getCharacteristic()));
                 q.setDescriptorUuid(descriptor.getUuid().toString());
                 if(descriptor.getCharacteristic().getService().getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY) {
                     q.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
@@ -840,7 +856,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             Protos.WriteDescriptorRequest.Builder request = Protos.WriteDescriptorRequest.newBuilder();
             request.setRemoteId(gatt.getDevice().getAddress());
             request.setDescriptorUuid(descriptor.getUuid().toString());
-            request.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
+            request.setCharacteristicId(ProtoMaker.from(descriptor.getCharacteristic()));
             request.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
             Protos.WriteDescriptorResponse.Builder p = Protos.WriteDescriptorResponse.newBuilder();
             p.setRequest(request);
