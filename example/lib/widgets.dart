@@ -201,7 +201,7 @@ class CharacteristicTile extends StatelessWidget {
       children: <Widget>[
         const Text('Characteristic'),
         new Text(
-            '0x${characteristic.uuid.toString().toUpperCase().substring(4, 8)}',
+            '0x${characteristic.id.uuid.toString().toUpperCase().substring(4, 8)}',
             style: Theme.of(context)
                 .textTheme
                 .body1

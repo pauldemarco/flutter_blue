@@ -32,7 +32,7 @@ class BluetoothCharacteristicIdentifier {
   }
 
   static int _calcHashCode(Guid uuid, int instanceId) {
-    final bytes = List.from(uuid._bytes)..add(instanceId);
+    final List<int> bytes = List.from(uuid._bytes)..add(instanceId);
     const equality = const ListEquality<int>();
     return equality.hash(bytes);
   }
