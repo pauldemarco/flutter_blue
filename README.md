@@ -1,8 +1,8 @@
-[![pub package](https://img.shields.io/pub/v/flutter_blue.svg)](https://pub.dartlang.org/packages/flutter_blue)
+[![pub package](https://img.shields.io/pub/v/bluetooth.svg)](https://pub.dartlang.org/packages/bluetooth)
 
 <br>
 <p align="center">
-<img alt="FlutterBlue" src="https://github.com/pauldemarco/flutter_blue/blob/master/site/flutterblue.png?raw=true" />
+<img alt="FlutterBlue" src="https://github.com/pauldemarco/bluetooth/blob/master/site/flutterblue.png?raw=true" />
 </p>
 <br><br>
 

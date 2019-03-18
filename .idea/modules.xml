@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/flutter_blue.iml" filepath="$PROJECT_DIR$/.idea/flutter_blue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/bluetooth.iml" filepath="$PROJECT_DIR$/.idea/bluetooth.iml" />
     </modules>
   </component>
 </project>

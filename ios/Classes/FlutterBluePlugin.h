@@ -5,7 +5,7 @@
 #import <Flutter/Flutter.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-#define NAMESPACE @"plugins.pauldemarco.com/flutter_blue"
+#define NAMESPACE @"plugins.pauldemarco.com/bluetooth"
 
 @interface FlutterBluePlugin : NSObject<FlutterPlugin, CBCentralManagerDelegate, CBPeripheralDelegate>
 @end

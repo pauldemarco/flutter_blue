@@ -1,6 +1,6 @@
-# flutter_blue_example
+# bluetooth_example
 
-Demonstrates how to use the flutter_blue plugin.
+Demonstrates how to use the bluetooth plugin.
 
 ## Getting Started
 

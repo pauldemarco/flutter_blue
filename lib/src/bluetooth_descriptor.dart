@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-part of flutter_blue;
+part of bluetooth;
 
 class BluetoothDescriptor {
   static final Uuid CCCD = Uuid.fromString("00002902-0000-1000-8000-00805f9b34fb");

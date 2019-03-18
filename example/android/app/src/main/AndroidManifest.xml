@@ -14,7 +14,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="flutter_blue_example"
+        android:label="bluetooth_example"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

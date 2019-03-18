@@ -16,8 +16,8 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="flutter_blue.dart" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/src/flutter_blue.dart">
+      <file leaf-file-name="bluetooth.dart" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/bluetooth.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1800">
               <caret line="102" selection-start-line="102" selection-end-line="102" />
@@ -103,12 +103,12 @@
       <list>
         <option value="$PROJECT_DIR$/android/.gitignore" />
         <option value="$PROJECT_DIR$/android/build.gradle" />
-        <option value="$PROJECT_DIR$/android/flutter_blue_android.iml" />
-        <option value="$PROJECT_DIR$/flutter_blue.iml" />
+        <option value="$PROJECT_DIR$/android/bluetooth_android.iml" />
+        <option value="$PROJECT_DIR$/bluetooth.iml" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/example/.gitignore" />
-        <option value="$PROJECT_DIR$/example/flutter_blue_example.iml" />
-        <option value="$PROJECT_DIR$/example/android/flutter_blue_example_android.iml" />
+        <option value="$PROJECT_DIR$/example/bluetooth_example.iml" />
+        <option value="$PROJECT_DIR$/example/android/bluetooth_example_android.iml" />
         <option value="$PROJECT_DIR$/example/android/build.gradle" />
         <option value="$PROJECT_DIR$/example/android/settings.gradle" />
         <option value="$PROJECT_DIR$/example/android/app/build.gradle" />
@@ -119,14 +119,14 @@
         <option value="$PROJECT_DIR$/lib/src/guid.dart" />
         <option value="$PROJECT_DIR$/example/pubspec.yaml" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
-        <option value="$PROJECT_DIR$/lib/flutter_blue.dart" />
+        <option value="$PROJECT_DIR$/lib/bluetooth.dart" />
         <option value="$PROJECT_DIR$/lib/src/bluetooth_service.dart" />
         <option value="$PROJECT_DIR$/protos/regenerate.md" />
         <option value="$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/ProtoMaker.java" />
         <option value="$PROJECT_DIR$/ios/Classes/FlutterBluePlugin.m" />
         <option value="$PROJECT_DIR$/protos/flutterblue.proto" />
         <option value="$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/FlutterBluePlugin.java" />
-        <option value="$PROJECT_DIR$/lib/src/flutter_blue.dart" />
+        <option value="$PROJECT_DIR$/lib/src/bluetooth.dart" />
         <option value="$PROJECT_DIR$/lib/src/bluetooth_device.dart" />
         <option value="$PROJECT_DIR$/example/lib/main.dart" />
         <option value="$PROJECT_DIR$/README.md" />
@@ -154,57 +154,57 @@
         <subPane>
           <expand>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="android" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="flutterblue" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="example" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="example" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="ios" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="ios" type="462c0819:PsiDirectoryNode" />
               <item name="gen" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="flutter_blue" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flutter_blue" type="462c0819:PsiDirectoryNode" />
+              <item name="bluetooth" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bluetooth" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -554,7 +554,7 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/android/flutter_blue_example_android.iml">
+    <entry file="file://$PROJECT_DIR$/example/android/bluetooth_example_android.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="486">
           <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
@@ -726,7 +726,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/flutter_blue.dart">
+    <entry file="file://$PROJECT_DIR$/lib/bluetooth.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
@@ -886,7 +886,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/src/flutter_blue.dart">
+    <entry file="file://$PROJECT_DIR$/lib/src/bluetooth.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1800">
           <caret line="102" selection-start-line="102" selection-end-line="102" />

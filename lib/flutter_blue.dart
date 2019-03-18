@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library flutter_blue;
+library bluetooth;
 
 import 'dart:async';
 
@@ -18,4 +18,4 @@ part 'src/bluetooth_descriptor.dart';
 part 'src/bluetooth_device.dart';
 part 'src/bluetooth_service.dart';
 part 'src/constants.dart';
-part 'src/flutter_blue.dart';
+part 'src/bluetooth.dart';
