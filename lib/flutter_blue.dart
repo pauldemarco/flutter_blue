@@ -7,7 +7,7 @@ library flutter_blue;
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:convert/convert.dart';
+import 'package:uuid_enhanced/uuid.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
@@ -19,4 +19,3 @@ part 'src/bluetooth_device.dart';
 part 'src/bluetooth_service.dart';
 part 'src/constants.dart';
 part 'src/flutter_blue.dart';
-part 'src/guid.dart';

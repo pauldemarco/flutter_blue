@@ -5,18 +5,18 @@
 part of flutter_blue;
 
 class BluetoothCharacteristicIdentifier {
-  final Guid uuid;
+  final Uuid uuid;
   final int instanceId;
   final int _hashCode;
 
-  BluetoothCharacteristicIdentifier(Guid uuid, int instanceId)
+  BluetoothCharacteristicIdentifier(Uuid uuid, int instanceId)
       : uuid = uuid,
         instanceId = instanceId,
         _hashCode = _calcHashCode(uuid, instanceId);
 
   factory BluetoothCharacteristicIdentifier.fromProto(
           protos.BluetoothCharacteristicIdentifier p) =>
-      BluetoothCharacteristicIdentifier(Guid(p.uuid), p.instanceId);
+      BluetoothCharacteristicIdentifier(Uuid.fromString(p.uuid), p.instanceId);
 
 
   @override
@@ -31,8 +31,8 @@ class BluetoothCharacteristicIdentifier {
     ;
   }
 
-  static int _calcHashCode(Guid uuid, int instanceId) {
-    final List<int> bytes = List.from(uuid._bytes)..add(instanceId);
+  static int _calcHashCode(Uuid uuid, int instanceId) {
+    final List<int> bytes = List.from(uuid.toList())..add(instanceId);
     const equality = const ListEquality<int>();
     return equality.hash(bytes);
   }
@@ -46,8 +46,8 @@ class BluetoothCharacteristicIdentifier {
 
 class BluetoothCharacteristic {
   final BluetoothCharacteristicIdentifier id;
-  final Guid serviceUuid; // The service that this characteristic belongs to.
-  final Guid
+  final Uuid serviceUuid; // The service that this characteristic belongs to.
+  final Uuid
       secondaryServiceUuid; // The nested service that this characteristic belongs to.
   final CharacteristicProperties properties;
   final List<BluetoothDescriptor> descriptors;
@@ -72,9 +72,9 @@ class BluetoothCharacteristic {
 
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
       : id = BluetoothCharacteristicIdentifier.fromProto(p.identifier),
-        serviceUuid = new Guid(p.serviceUuid),
+        serviceUuid = Uuid.fromString(p.serviceUuid),
         secondaryServiceUuid = (p.secondaryServiceUuid.length > 0)
-            ? new Guid(p.secondaryServiceUuid)
+            ? Uuid.fromString(p.secondaryServiceUuid)
             : null,
         descriptors = p.descriptors
             .map((d) => new BluetoothDescriptor.fromProto(d))

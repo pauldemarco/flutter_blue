@@ -63,8 +63,8 @@ class FlutterBlue {
   /// Timeout closes the stream after a specified [Duration]
   Stream<ScanResult> scan({
     ScanMode scanMode = ScanMode.lowLatency,
-    List<Guid> withServices = const [],
-    List<Guid> withDevices = const [],
+    List<Uuid> withServices = const [],
+    List<Uuid> withDevices = const [],
     Duration timeout,
   }) async* {
     var settings = protos.ScanSettings.create()

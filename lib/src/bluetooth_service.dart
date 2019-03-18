@@ -5,7 +5,7 @@
 part of flutter_blue;
 
 class BluetoothService {
-  final Guid uuid;
+  final Uuid uuid;
   final DeviceIdentifier deviceId;
   final bool isPrimary;
   final List<BluetoothCharacteristic> characteristics;
@@ -19,7 +19,7 @@ class BluetoothService {
       @required this.includedServices});
 
   BluetoothService.fromProto(protos.BluetoothService p)
-      : uuid = new Guid(p.uuid),
+      : uuid = Uuid.fromString(p.uuid),
         deviceId = new DeviceIdentifier(p.remoteId),
         isPrimary = p.isPrimary,
         characteristics = p.characteristics

@@ -75,7 +75,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
         .scan(
       timeout: const Duration(seconds: 5),
       /*withServices: [
-          new Guid('0000180F-0000-1000-8000-00805F9B34FB')
+          Uuid.fromString('0000180F-0000-1000-8000-00805F9B34FB')
         ]*/
     )
         .listen((scanResult) {

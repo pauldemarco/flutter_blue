@@ -19,5 +19,7 @@ flutter:
     pluginClass: FlutterBluePlugin
 
 dev_dependencies:
+  perfectionist: ^2.0.0
+  uuid_enhanced: ^3.0.2
   flutter_test:
     sdk: flutter
