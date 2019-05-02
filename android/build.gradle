@@ -5,11 +5,12 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.7'
+        classpath 'com.android.tools.build:gradle:3.4.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
     }
 }
 
@@ -52,7 +53,7 @@ protobuf {
     // Configure the protoc executable
     protoc {
         // Download from repositories
-        artifact = 'com.google.protobuf:protoc:3.6.1'
+        artifact = 'com.google.protobuf:protoc:3.7.1'
     }
     plugins {
         javalite {
@@ -62,6 +63,9 @@ protobuf {
     }
     generateProtoTasks {
         all().each { task ->
+            task.builtins {
+                remove java
+            }
             task.plugins {
                 javalite { }
             }
