@@ -278,6 +278,41 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 break;
             }
 
+            case "requestMtu": {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    result.error(
+                            "RuntimeException",
+                            "This method is only available on API level "
+                                    + Build.VERSION_CODES.LOLLIPOP
+                                    + " or higher",
+                            null
+                    );
+                    return;
+                }
+
+                Integer size = call.argument("size");
+                String remoteId = call.argument("remoteId");
+                if (size == null) {
+                    result.error(
+                            "ValueError",
+                            "\"size\" cannot be null!",
+                            null
+                    );
+                    return;
+                }
+
+                BluetoothGatt gattServer;
+                try {
+                    gattServer = locateGatt(remoteId);
+                } catch (Exception e) {
+                    result.error("read_characteristic_error", e.getMessage(), null);
+                    return;
+                }
+
+                result.success(gattServer.requestMtu(size));
+                break;
+            }
+
             case "readCharacteristic":
             {
                 byte[] data = call.arguments();

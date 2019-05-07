@@ -43,6 +43,13 @@ class BluetoothDevice {
         .then((i) => i.map((s) => new BluetoothService.fromProto(s)).toList());
   }
 
+  Future<bool> requestMtu(int size) async {
+    return await FlutterBlue.instance._channel.invokeMethod("requestMtu", {
+      "size": size,
+      "remoteId": id.toString(),
+    });
+  }
+
   /// Retrieves the value of a specified characteristic
   Future<List<int>> readCharacteristic(
       BluetoothCharacteristic characteristic) async {
