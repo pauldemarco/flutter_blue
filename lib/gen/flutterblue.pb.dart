@@ -26,6 +26,7 @@ class Int32Value extends $pb.GeneratedMessage {
   Int32Value copyWith(void Function(Int32Value) updates) => super.copyWith((message) => updates(message as Int32Value));
   $pb.BuilderInfo get info_ => _i;
   static Int32Value create() => new Int32Value();
+  Int32Value createEmptyInstance() => create();
   static $pb.PbList<Int32Value> createRepeated() => new $pb.PbList<Int32Value>();
   static Int32Value getDefault() => _defaultInstance ??= create()..freeze();
   static Int32Value _defaultInstance;
@@ -52,6 +53,7 @@ class BluetoothState extends $pb.GeneratedMessage {
   BluetoothState copyWith(void Function(BluetoothState) updates) => super.copyWith((message) => updates(message as BluetoothState));
   $pb.BuilderInfo get info_ => _i;
   static BluetoothState create() => new BluetoothState();
+  BluetoothState createEmptyInstance() => create();
   static $pb.PbList<BluetoothState> createRepeated() => new $pb.PbList<BluetoothState>();
   static BluetoothState getDefault() => _defaultInstance ??= create()..freeze();
   static BluetoothState _defaultInstance;
@@ -70,8 +72,8 @@ class AdvertisementData extends $pb.GeneratedMessage {
     ..aOS(1, 'localName')
     ..a<Int32Value>(2, 'txPowerLevel', $pb.PbFieldType.OM, Int32Value.getDefault, Int32Value.create)
     ..aOB(3, 'connectable')
-    ..m<int, List<int>>(4, 'manufacturerData', $pb.PbFieldType.O3, $pb.PbFieldType.OY)
-    ..m<String, List<int>>(5, 'serviceData', $pb.PbFieldType.OS, $pb.PbFieldType.OY)
+    ..m<int, List<int>>(4, 'manufacturerData', 'AdvertisementData.ManufacturerDataEntry',$pb.PbFieldType.O3, $pb.PbFieldType.OY, null, null, null )
+    ..m<String, List<int>>(5, 'serviceData', 'AdvertisementData.ServiceDataEntry',$pb.PbFieldType.OS, $pb.PbFieldType.OY, null, null, null )
     ..pPS(6, 'serviceUuids')
     ..hasRequiredFields = false
   ;
@@ -83,6 +85,7 @@ class AdvertisementData extends $pb.GeneratedMessage {
   AdvertisementData copyWith(void Function(AdvertisementData) updates) => super.copyWith((message) => updates(message as AdvertisementData));
   $pb.BuilderInfo get info_ => _i;
   static AdvertisementData create() => new AdvertisementData();
+  AdvertisementData createEmptyInstance() => create();
   static $pb.PbList<AdvertisementData> createRepeated() => new $pb.PbList<AdvertisementData>();
   static AdvertisementData getDefault() => _defaultInstance ??= create()..freeze();
   static AdvertisementData _defaultInstance;
@@ -126,6 +129,7 @@ class ScanSettings extends $pb.GeneratedMessage {
   ScanSettings copyWith(void Function(ScanSettings) updates) => super.copyWith((message) => updates(message as ScanSettings));
   $pb.BuilderInfo get info_ => _i;
   static ScanSettings create() => new ScanSettings();
+  ScanSettings createEmptyInstance() => create();
   static $pb.PbList<ScanSettings> createRepeated() => new $pb.PbList<ScanSettings>();
   static ScanSettings getDefault() => _defaultInstance ??= create()..freeze();
   static ScanSettings _defaultInstance;
@@ -156,6 +160,7 @@ class ScanResult extends $pb.GeneratedMessage {
   ScanResult copyWith(void Function(ScanResult) updates) => super.copyWith((message) => updates(message as ScanResult));
   $pb.BuilderInfo get info_ => _i;
   static ScanResult create() => new ScanResult();
+  ScanResult createEmptyInstance() => create();
   static $pb.PbList<ScanResult> createRepeated() => new $pb.PbList<ScanResult>();
   static ScanResult getDefault() => _defaultInstance ??= create()..freeze();
   static ScanResult _defaultInstance;
@@ -193,6 +198,7 @@ class ConnectRequest extends $pb.GeneratedMessage {
   ConnectRequest copyWith(void Function(ConnectRequest) updates) => super.copyWith((message) => updates(message as ConnectRequest));
   $pb.BuilderInfo get info_ => _i;
   static ConnectRequest create() => new ConnectRequest();
+  ConnectRequest createEmptyInstance() => create();
   static $pb.PbList<ConnectRequest> createRepeated() => new $pb.PbList<ConnectRequest>();
   static ConnectRequest getDefault() => _defaultInstance ??= create()..freeze();
   static ConnectRequest _defaultInstance;
@@ -226,6 +232,7 @@ class BluetoothDevice extends $pb.GeneratedMessage {
   BluetoothDevice copyWith(void Function(BluetoothDevice) updates) => super.copyWith((message) => updates(message as BluetoothDevice));
   $pb.BuilderInfo get info_ => _i;
   static BluetoothDevice create() => new BluetoothDevice();
+  BluetoothDevice createEmptyInstance() => create();
   static $pb.PbList<BluetoothDevice> createRepeated() => new $pb.PbList<BluetoothDevice>();
   static BluetoothDevice getDefault() => _defaultInstance ??= create()..freeze();
   static BluetoothDevice _defaultInstance;
@@ -266,6 +273,7 @@ class BluetoothService extends $pb.GeneratedMessage {
   BluetoothService copyWith(void Function(BluetoothService) updates) => super.copyWith((message) => updates(message as BluetoothService));
   $pb.BuilderInfo get info_ => _i;
   static BluetoothService create() => new BluetoothService();
+  BluetoothService createEmptyInstance() => create();
   static $pb.PbList<BluetoothService> createRepeated() => new $pb.PbList<BluetoothService>();
   static BluetoothService getDefault() => _defaultInstance ??= create()..freeze();
   static BluetoothService _defaultInstance;
@@ -312,6 +320,7 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   BluetoothCharacteristic copyWith(void Function(BluetoothCharacteristic) updates) => super.copyWith((message) => updates(message as BluetoothCharacteristic));
   $pb.BuilderInfo get info_ => _i;
   static BluetoothCharacteristic create() => new BluetoothCharacteristic();
+  BluetoothCharacteristic createEmptyInstance() => create();
   static $pb.PbList<BluetoothCharacteristic> createRepeated() => new $pb.PbList<BluetoothCharacteristic>();
   static BluetoothCharacteristic getDefault() => _defaultInstance ??= create()..freeze();
   static BluetoothCharacteristic _defaultInstance;
@@ -369,6 +378,7 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   BluetoothDescriptor copyWith(void Function(BluetoothDescriptor) updates) => super.copyWith((message) => updates(message as BluetoothDescriptor));
   $pb.BuilderInfo get info_ => _i;
   static BluetoothDescriptor create() => new BluetoothDescriptor();
+  BluetoothDescriptor createEmptyInstance() => create();
   static $pb.PbList<BluetoothDescriptor> createRepeated() => new $pb.PbList<BluetoothDescriptor>();
   static BluetoothDescriptor getDefault() => _defaultInstance ??= create()..freeze();
   static BluetoothDescriptor _defaultInstance;
@@ -424,6 +434,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   CharacteristicProperties copyWith(void Function(CharacteristicProperties) updates) => super.copyWith((message) => updates(message as CharacteristicProperties));
   $pb.BuilderInfo get info_ => _i;
   static CharacteristicProperties create() => new CharacteristicProperties();
+  CharacteristicProperties createEmptyInstance() => create();
   static $pb.PbList<CharacteristicProperties> createRepeated() => new $pb.PbList<CharacteristicProperties>();
   static CharacteristicProperties getDefault() => _defaultInstance ??= create()..freeze();
   static CharacteristicProperties _defaultInstance;
@@ -496,6 +507,7 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
   DiscoverServicesResult copyWith(void Function(DiscoverServicesResult) updates) => super.copyWith((message) => updates(message as DiscoverServicesResult));
   $pb.BuilderInfo get info_ => _i;
   static DiscoverServicesResult create() => new DiscoverServicesResult();
+  DiscoverServicesResult createEmptyInstance() => create();
   static $pb.PbList<DiscoverServicesResult> createRepeated() => new $pb.PbList<DiscoverServicesResult>();
   static DiscoverServicesResult getDefault() => _defaultInstance ??= create()..freeze();
   static DiscoverServicesResult _defaultInstance;
@@ -527,6 +539,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   ReadCharacteristicRequest copyWith(void Function(ReadCharacteristicRequest) updates) => super.copyWith((message) => updates(message as ReadCharacteristicRequest));
   $pb.BuilderInfo get info_ => _i;
   static ReadCharacteristicRequest create() => new ReadCharacteristicRequest();
+  ReadCharacteristicRequest createEmptyInstance() => create();
   static $pb.PbList<ReadCharacteristicRequest> createRepeated() => new $pb.PbList<ReadCharacteristicRequest>();
   static ReadCharacteristicRequest getDefault() => _defaultInstance ??= create()..freeze();
   static ReadCharacteristicRequest _defaultInstance;
@@ -569,6 +582,7 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
   ReadCharacteristicResponse copyWith(void Function(ReadCharacteristicResponse) updates) => super.copyWith((message) => updates(message as ReadCharacteristicResponse));
   $pb.BuilderInfo get info_ => _i;
   static ReadCharacteristicResponse create() => new ReadCharacteristicResponse();
+  ReadCharacteristicResponse createEmptyInstance() => create();
   static $pb.PbList<ReadCharacteristicResponse> createRepeated() => new $pb.PbList<ReadCharacteristicResponse>();
   static ReadCharacteristicResponse getDefault() => _defaultInstance ??= create()..freeze();
   static ReadCharacteristicResponse _defaultInstance;
@@ -604,6 +618,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   ReadDescriptorRequest copyWith(void Function(ReadDescriptorRequest) updates) => super.copyWith((message) => updates(message as ReadDescriptorRequest));
   $pb.BuilderInfo get info_ => _i;
   static ReadDescriptorRequest create() => new ReadDescriptorRequest();
+  ReadDescriptorRequest createEmptyInstance() => create();
   static $pb.PbList<ReadDescriptorRequest> createRepeated() => new $pb.PbList<ReadDescriptorRequest>();
   static ReadDescriptorRequest getDefault() => _defaultInstance ??= create()..freeze();
   static ReadDescriptorRequest _defaultInstance;
@@ -651,6 +666,7 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
   ReadDescriptorResponse copyWith(void Function(ReadDescriptorResponse) updates) => super.copyWith((message) => updates(message as ReadDescriptorResponse));
   $pb.BuilderInfo get info_ => _i;
   static ReadDescriptorResponse create() => new ReadDescriptorResponse();
+  ReadDescriptorResponse createEmptyInstance() => create();
   static $pb.PbList<ReadDescriptorResponse> createRepeated() => new $pb.PbList<ReadDescriptorResponse>();
   static ReadDescriptorResponse getDefault() => _defaultInstance ??= create()..freeze();
   static ReadDescriptorResponse _defaultInstance;
@@ -687,6 +703,7 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   WriteCharacteristicRequest copyWith(void Function(WriteCharacteristicRequest) updates) => super.copyWith((message) => updates(message as WriteCharacteristicRequest));
   $pb.BuilderInfo get info_ => _i;
   static WriteCharacteristicRequest create() => new WriteCharacteristicRequest();
+  WriteCharacteristicRequest createEmptyInstance() => create();
   static $pb.PbList<WriteCharacteristicRequest> createRepeated() => new $pb.PbList<WriteCharacteristicRequest>();
   static WriteCharacteristicRequest getDefault() => _defaultInstance ??= create()..freeze();
   static WriteCharacteristicRequest _defaultInstance;
@@ -739,6 +756,7 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
   WriteCharacteristicResponse copyWith(void Function(WriteCharacteristicResponse) updates) => super.copyWith((message) => updates(message as WriteCharacteristicResponse));
   $pb.BuilderInfo get info_ => _i;
   static WriteCharacteristicResponse create() => new WriteCharacteristicResponse();
+  WriteCharacteristicResponse createEmptyInstance() => create();
   static $pb.PbList<WriteCharacteristicResponse> createRepeated() => new $pb.PbList<WriteCharacteristicResponse>();
   static WriteCharacteristicResponse getDefault() => _defaultInstance ??= create()..freeze();
   static WriteCharacteristicResponse _defaultInstance;
@@ -775,6 +793,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   WriteDescriptorRequest copyWith(void Function(WriteDescriptorRequest) updates) => super.copyWith((message) => updates(message as WriteDescriptorRequest));
   $pb.BuilderInfo get info_ => _i;
   static WriteDescriptorRequest create() => new WriteDescriptorRequest();
+  WriteDescriptorRequest createEmptyInstance() => create();
   static $pb.PbList<WriteDescriptorRequest> createRepeated() => new $pb.PbList<WriteDescriptorRequest>();
   static WriteDescriptorRequest getDefault() => _defaultInstance ??= create()..freeze();
   static WriteDescriptorRequest _defaultInstance;
@@ -827,6 +846,7 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
   WriteDescriptorResponse copyWith(void Function(WriteDescriptorResponse) updates) => super.copyWith((message) => updates(message as WriteDescriptorResponse));
   $pb.BuilderInfo get info_ => _i;
   static WriteDescriptorResponse create() => new WriteDescriptorResponse();
+  WriteDescriptorResponse createEmptyInstance() => create();
   static $pb.PbList<WriteDescriptorResponse> createRepeated() => new $pb.PbList<WriteDescriptorResponse>();
   static WriteDescriptorResponse getDefault() => _defaultInstance ??= create()..freeze();
   static WriteDescriptorResponse _defaultInstance;
@@ -862,6 +882,7 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   SetNotificationRequest copyWith(void Function(SetNotificationRequest) updates) => super.copyWith((message) => updates(message as SetNotificationRequest));
   $pb.BuilderInfo get info_ => _i;
   static SetNotificationRequest create() => new SetNotificationRequest();
+  SetNotificationRequest createEmptyInstance() => create();
   static $pb.PbList<SetNotificationRequest> createRepeated() => new $pb.PbList<SetNotificationRequest>();
   static SetNotificationRequest getDefault() => _defaultInstance ??= create()..freeze();
   static SetNotificationRequest _defaultInstance;
@@ -910,6 +931,7 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   SetNotificationResponse copyWith(void Function(SetNotificationResponse) updates) => super.copyWith((message) => updates(message as SetNotificationResponse));
   $pb.BuilderInfo get info_ => _i;
   static SetNotificationResponse create() => new SetNotificationResponse();
+  SetNotificationResponse createEmptyInstance() => create();
   static $pb.PbList<SetNotificationResponse> createRepeated() => new $pb.PbList<SetNotificationResponse>();
   static SetNotificationResponse getDefault() => _defaultInstance ??= create()..freeze();
   static SetNotificationResponse _defaultInstance;
@@ -947,6 +969,7 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
   OnCharacteristicChanged copyWith(void Function(OnCharacteristicChanged) updates) => super.copyWith((message) => updates(message as OnCharacteristicChanged));
   $pb.BuilderInfo get info_ => _i;
   static OnCharacteristicChanged create() => new OnCharacteristicChanged();
+  OnCharacteristicChanged createEmptyInstance() => create();
   static $pb.PbList<OnCharacteristicChanged> createRepeated() => new $pb.PbList<OnCharacteristicChanged>();
   static OnCharacteristicChanged getDefault() => _defaultInstance ??= create()..freeze();
   static OnCharacteristicChanged _defaultInstance;
@@ -979,6 +1002,7 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   DeviceStateResponse copyWith(void Function(DeviceStateResponse) updates) => super.copyWith((message) => updates(message as DeviceStateResponse));
   $pb.BuilderInfo get info_ => _i;
   static DeviceStateResponse create() => new DeviceStateResponse();
+  DeviceStateResponse createEmptyInstance() => create();
   static $pb.PbList<DeviceStateResponse> createRepeated() => new $pb.PbList<DeviceStateResponse>();
   static DeviceStateResponse getDefault() => _defaultInstance ??= create()..freeze();
   static DeviceStateResponse _defaultInstance;
@@ -1010,6 +1034,7 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
   ConnectedDevicesResponse copyWith(void Function(ConnectedDevicesResponse) updates) => super.copyWith((message) => updates(message as ConnectedDevicesResponse));
   $pb.BuilderInfo get info_ => _i;
   static ConnectedDevicesResponse create() => new ConnectedDevicesResponse();
+  ConnectedDevicesResponse createEmptyInstance() => create();
   static $pb.PbList<ConnectedDevicesResponse> createRepeated() => new $pb.PbList<ConnectedDevicesResponse>();
   static ConnectedDevicesResponse getDefault() => _defaultInstance ??= create()..freeze();
   static ConnectedDevicesResponse _defaultInstance;
