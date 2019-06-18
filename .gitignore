@@ -6,3 +6,7 @@
 pubspec.lock
 
 build/
+
+.atom/
+.idea/
+.vscode/
