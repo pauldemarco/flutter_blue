@@ -22,7 +22,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.7'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
     }
 }
 
@@ -49,7 +49,7 @@ android {
     dependencies {
         // Required for local unit tests (JUnit 4 framework)
         testImplementation 'junit:junit:4.12'
-        implementation 'androidx.core:core:1.0.1'
+        implementation 'androidx.core:core:1.0.2'
     }
     sourceSets {
         main {
@@ -64,7 +64,7 @@ protobuf {
     // Configure the protoc executable
     protoc {
         // Download from repositories
-        artifact = 'com.google.protobuf:protoc:3.6.1'
+        artifact = 'com.google.protobuf:protoc:3.7.0'
     }
     plugins {
         javalite {
