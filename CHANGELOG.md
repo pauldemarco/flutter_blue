@@ -1,3 +1,11 @@
+## 0.5.1
+* **Breaking change**. API refactoring with RxDart (see example)
+* Log a more detailed warning at build time about the previous AndroidX migration.
+* Ensure that all channel calls to the Dart side from the Java side are done on the UI thread.
+  This change allows Transactions to work with upcoming Engine restrictions, which require
+  channel calls be made on the UI thread. Note this is an Android only change,
+  the iOS implementation was not impacted.
+
 ## 0.5.0
 * **Breaking change**. Migrate from the deprecated original Android Support
   Library to AndroidX. This shouldn't result in any functional changes, but it
