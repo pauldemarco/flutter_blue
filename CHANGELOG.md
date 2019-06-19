@@ -1,4 +1,4 @@
-## 0.5.1
+## 0.6.0
 * **Breaking change**. API refactoring with RxDart (see example)
 * Log a more detailed warning at build time about the previous AndroidX migration.
 * Ensure that all channel calls to the Dart side from the Java side are done on the UI thread.
