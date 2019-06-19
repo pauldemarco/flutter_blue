@@ -1,3 +1,6 @@
+## 0.6.0+1
+* Documentation updates
+
 ## 0.6.0
 * **Breaking change**. API refactoring with RxDart (see example)
 * Log a more detailed warning at build time about the previous AndroidX migration.
