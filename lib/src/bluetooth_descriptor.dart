@@ -22,7 +22,7 @@ class BluetoothDescriptor {
         deviceId = new DeviceIdentifier(p.remoteId),
         serviceUuid = new Guid(p.serviceUuid),
         characteristicUuid = new Guid(p.characteristicUuid),
-        _value = BehaviorSubject(seedValue: p.value);
+        _value = BehaviorSubject.seeded(p.value);
 
   /// Retrieves the value of a specified descriptor
   Future<List<int>> read() async {

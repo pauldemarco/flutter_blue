@@ -35,11 +35,10 @@ class FlutterBlue {
   /// Checks if Bluetooth functionality is turned on
   Future<bool> get isOn => _channel.invokeMethod('isOn').then<bool>((d) => d);
 
-  BehaviorSubject<bool> _isScanning = BehaviorSubject(seedValue: false);
+  BehaviorSubject<bool> _isScanning = BehaviorSubject.seeded(false);
   Stream<bool> get isScanning => _isScanning.stream;
 
-  BehaviorSubject<List<ScanResult>> _scanResults =
-      BehaviorSubject(seedValue: []);
+  BehaviorSubject<List<ScanResult>> _scanResults = BehaviorSubject.seeded([]);
   Stream<List<ScanResult>> get scanResults => _scanResults.stream;
 
   PublishSubject _stopScanPill = new PublishSubject();
@@ -95,7 +94,7 @@ class FlutterBlue {
 
     try {
       await _channel.invokeMethod('startScan', settings.writeToBuffer());
-    } catch(e) {
+    } catch (e) {
       print('Error starting scan.');
       _stopScanPill.add(null);
       _isScanning.add(false);

@@ -40,7 +40,7 @@ class BluetoothCharacteristic {
             .map((d) => new BluetoothDescriptor.fromProto(d))
             .toList(),
         properties = new CharacteristicProperties.fromProto(p.properties),
-        _value = BehaviorSubject(seedValue: p.value);
+        _value = BehaviorSubject.seeded(p.value);
 
   Stream<BluetoothCharacteristic> get _onCharacteristicChangedStream =>
       FlutterBlue.instance._methodStream
