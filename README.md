@@ -87,10 +87,10 @@ for(BluetoothDescriptor d in descriptors) {
 await d.write([0x12, 0x34])
 ```
 
-### Set notifications
+### Set notifications and listen to changes
 ```dart
 await characteristic.setNotifyValue(true);
-characteristic.onValueChanged().listen((value) {
+characteristic.value.listen((value) {
     // do something with new value
 });
 ```
@@ -119,7 +119,7 @@ characteristic.onValueChanged().listen((value) {
 | read                        |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of the characteristic.  |
 | write                       |  :white_check_mark:  |  :white_check_mark:  | Writes the value of the characteristic. |
 | setNotifyValue              |  :white_check_mark:  |  :white_check_mark:  | Sets notifications or indications on the characteristic. |
-| onValueChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies when the characteristic's value has changed. |
+| value                       |  :white_check_mark:  |  :white_check_mark:  | Stream of characteristic's value when changed. |
 
 ### BluetoothDescriptor API
 |                             |       Android        |         iOS          |             Description            |

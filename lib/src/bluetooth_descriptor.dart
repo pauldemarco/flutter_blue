@@ -5,7 +5,7 @@
 part of flutter_blue;
 
 class BluetoothDescriptor {
-  static final Guid CCCD = new Guid("00002902-0000-1000-8000-00805f9b34fb");
+  static final Guid cccd = new Guid("00002902-0000-1000-8000-00805f9b34fb");
 
   final Guid uuid;
   final DeviceIdentifier deviceId;
@@ -22,7 +22,7 @@ class BluetoothDescriptor {
         deviceId = new DeviceIdentifier(p.remoteId),
         serviceUuid = new Guid(p.serviceUuid),
         characteristicUuid = new Guid(p.characteristicUuid),
-        _value = BehaviorSubject(seedValue: p.value);
+        _value = BehaviorSubject.seeded(p.value);
 
   /// Retrieves the value of a specified descriptor
   Future<List<int>> read() async {
