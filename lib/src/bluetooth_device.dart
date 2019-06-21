@@ -18,28 +18,47 @@ class BluetoothDevice {
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;
 
   /// Establishes a connection to the Bluetooth Device.
+//  Future<void> connect({
+//    Duration timeout,
+//    bool autoConnect = true,
+//  }) async {
+//    var request = protos.ConnectRequest.create()
+//      ..remoteId = id.toString()
+//      ..androidAutoConnect = autoConnect;
+//
+//    Timer timer;
+//    if (timeout != null) {
+//      timer = Timer(timeout, () {
+//        disconnect();
+//        throw TimeoutException('Failed to connect in time.', timeout);
+//      });
+//    }
+//
+//    await FlutterBlue.instance._channel
+//        .invokeMethod('connect', request.writeToBuffer());
+//
+//    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+//
+//    timer?.cancel();
+//
+//    return;
+//  }
   Future<void> connect({
     Duration timeout,
     bool autoConnect = true,
   }) async {
-    var request = protos.ConnectRequest.create()
-      ..remoteId = id.toString()
-      ..androidAutoConnect = autoConnect;
+    await Future(() async {
+      var request = protos.ConnectRequest.create()
+        ..remoteId = id.toString()
+        ..androidAutoConnect = autoConnect;
+      await FlutterBlue.instance._channel
+          .invokeMethod('connect', request.writeToBuffer());
 
-    Timer timer;
-    if (timeout != null) {
-      timer = Timer(timeout, () {
-        disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
-      });
-    }
-
-    await FlutterBlue.instance._channel
-        .invokeMethod('connect', request.writeToBuffer());
-
-    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
-
-    timer?.cancel();
+      await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+    }).timeout(timeout, onTimeout: () {
+      disconnect();
+      throw TimeoutException('Failed to connect in time.', timeout);
+    });
 
     return;
   }
