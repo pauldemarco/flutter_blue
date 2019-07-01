@@ -77,18 +77,20 @@ message BluetoothService {
 
 message BluetoothCharacteristic {
   string uuid = 1;
-  string serviceUuid = 2; // The service that this characteristic belongs to.
-  string secondaryServiceUuid = 3; // The secondary service if nested
-  repeated BluetoothDescriptor descriptors = 4; // A list of descriptors that have been discovered in this characteristic.
-  CharacteristicProperties properties = 5; // The properties of the characteristic.
-  bytes value = 6;
+  string remote_id = 2;
+  string serviceUuid = 3; // The service that this characteristic belongs to.
+  string secondaryServiceUuid = 4; // The secondary service if nested
+  repeated BluetoothDescriptor descriptors = 5; // A list of descriptors that have been discovered in this characteristic.
+  CharacteristicProperties properties = 6; // The properties of the characteristic.
+  bytes value = 7;
 }
 
 message BluetoothDescriptor {
   string uuid = 1;
-  string serviceUuid = 2; // The service that this descriptor belongs to.
-  string characteristicUuid = 3; // The characteristic that this descriptor belongs to.
-  bytes value = 4;
+  string remote_id = 2;
+  string serviceUuid = 3; // The service that this descriptor belongs to.
+  string characteristicUuid = 4; // The characteristic that this descriptor belongs to.
+  bytes value = 5;
 }
 
 message CharacteristicProperties {
@@ -180,7 +182,7 @@ message SetNotificationResponse {
   bool success = 3;
 }
 
-message OnNotificationResponse {
+message OnCharacteristicChanged {
   string remote_id = 1;
   BluetoothCharacteristic characteristic = 2;
 }
@@ -194,4 +196,8 @@ message DeviceStateResponse {
   }
   string remote_id = 1;
   BluetoothDeviceState state = 2;
+}
+
+message ConnectedDevicesResponse {
+  repeated BluetoothDevice devices = 1;
 }

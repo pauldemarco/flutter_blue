@@ -123,7 +123,7 @@ public class ProtoMaker {
         p.setUuid(service.getUuid().toString());
         p.setIsPrimary(service.getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY);
         for(BluetoothGattCharacteristic c : service.getCharacteristics()) {
-            p.addCharacteristics(from(c, gatt));
+            p.addCharacteristics(from(device, c, gatt));
         }
         for(BluetoothGattService s : service.getIncludedServices()) {
             p.addIncludedServices(from(device, s, gatt));
@@ -131,14 +131,15 @@ public class ProtoMaker {
         return p.build();
     }
 
-    static Protos.BluetoothCharacteristic from(BluetoothGattCharacteristic characteristic, BluetoothGatt gatt) {
+    static Protos.BluetoothCharacteristic from(BluetoothDevice device, BluetoothGattCharacteristic characteristic, BluetoothGatt gatt) {
         Protos.BluetoothCharacteristic.Builder p = Protos.BluetoothCharacteristic.newBuilder();
+        p.setRemoteId(device.getAddress());
         p.setUuid(characteristic.getUuid().toString());
         p.setProperties(from(characteristic.getProperties()));
         if(characteristic.getValue() != null)
             p.setValue(ByteString.copyFrom(characteristic.getValue()));
         for(BluetoothGattDescriptor d : characteristic.getDescriptors()) {
-            p.addDescriptors(from(d));
+            p.addDescriptors(from(device, d));
         }
         if(characteristic.getService().getType() == BluetoothGattService.SERVICE_TYPE_PRIMARY) {
             p.setServiceUuid(characteristic.getService().getUuid().toString());
@@ -157,8 +158,9 @@ public class ProtoMaker {
         return p.build();
     }
 
-    static Protos.BluetoothDescriptor from(BluetoothGattDescriptor descriptor) {
+    static Protos.BluetoothDescriptor from(BluetoothDevice device, BluetoothGattDescriptor descriptor) {
         Protos.BluetoothDescriptor.Builder p = Protos.BluetoothDescriptor.newBuilder();
+        p.setRemoteId(device.getAddress());
         p.setUuid(descriptor.getUuid().toString());
         p.setCharacteristicUuid(descriptor.getCharacteristic().getUuid().toString());
         p.setServiceUuid(descriptor.getCharacteristic().getService().getUuid().toString());
