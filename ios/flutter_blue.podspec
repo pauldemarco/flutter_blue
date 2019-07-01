@@ -19,6 +19,7 @@ A new flutter plugin project.
   s.framework = 'CoreBluetooth'
 
   protoc = ENV['PWD'] + '/Pods/!ProtoCompiler/protoc'
+  #protoc = "#{PODS_ROOT}/!ProtoCompiler/protoc"
   objc_out = 'gen'
   proto_in = '../protos'
   s.prepare_command = <<-CMD
