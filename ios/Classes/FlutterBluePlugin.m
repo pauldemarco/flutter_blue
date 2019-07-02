@@ -565,7 +565,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   }
   // Manufacturer Specific Data
   NSData *manufData = advertisementData[CBAdvertisementDataManufacturerDataKey];
-  if(manufData.length > 2) {
+  if(manufData.length >= 2) {
     unsigned short manufacturerId;
     [manufData getBytes:&manufacturerId length:2];
     [[ads manufacturerData] setObject:[manufData subdataWithRange:NSMakeRange(2, manufData.length - 2)] forKey:manufacturerId];
