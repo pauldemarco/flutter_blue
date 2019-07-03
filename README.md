@@ -10,6 +10,14 @@
 
 FlutterBlue is a bluetooth plugin for [Flutter](http://www.flutter.io), a new mobile SDK to help developers build modern apps for iOS and Android.
 
+## Alpha version
+
+This library is actively developed alongside production apps, and the API will evolve as we continue our way to version 1.0.
+
+**Please be fully prepared to deal with breaking changes.**
+
+Having trouble adapting to the latest API?   I'd love to hear your use-case, please contact me.
+
 ## Cross-Platform Bluetooth LE
 FlutterBlue aims to offer the most from both platforms (iOS and Android).
 
@@ -28,6 +36,8 @@ FlutterBlue flutterBlue = FlutterBlue.instance;
 /// Start scanning
 var scanSubscription = flutterBlue.scan().listen((scanResult) {
     // do something with scan result
+    device = scanResult.device;
+    print('${device.name} found! rssi: ${scanResult.rssi}');
 });
 
 /// Stop scanning
@@ -36,15 +46,11 @@ scanSubscription.cancel();
 
 ### Connect to a device
 ```dart
-/// Create a connection to the device
-var deviceConnection = flutterBlue.connect(device).listen((s) {
-    if(s == BluetoothDeviceState.connected) {
-        // device is connected, do something
-    }
-});
+/// Connect to the device
+await device.connect();
 
 /// Disconnect from device
-deviceConnection.cancel();
+device.disconnect();
 ```
 
 ### Discover services
@@ -60,12 +66,12 @@ services.forEach((service) {
 // Reads all characteristics
 var characteristics = service.characteristics;
 for(BluetoothCharacteristic c in characteristics) {
-    List<int> value = await device.readCharacteristic(c);
+    List<int> value = await c.read();
     print(value);
 }
 
 // Writes to a characteristic
-await device.writeCharacteristic(c, [0x12, 0x34])
+await c.write([0x12, 0x34])
 ```
 
 ### Read and write descriptors
@@ -73,18 +79,18 @@ await device.writeCharacteristic(c, [0x12, 0x34])
 // Reads all descriptors
 var descriptors = characteristic.descriptors;
 for(BluetoothDescriptor d in descriptors) {
-    List<int> value = await device.readDescriptor(d);
+    List<int> value = await d.read();
     print(value);
 }
 
 // Writes to a descriptor
-await device.writeDescriptor(d, [0x12, 0x34])
+await d.write([0x12, 0x34])
 ```
 
-### Set notifications
+### Set notifications and listen to changes
 ```dart
-await device.setNotifyValue(characteristic, true);
-device.onValueChanged(characteristic).listen((value) {
+await characteristic.setNotifyValue(true);
+characteristic.value.listen((value) {
     // do something with new value
 });
 ```
@@ -94,24 +100,32 @@ device.onValueChanged(characteristic).listen((value) {
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | scan             | :white_check_mark: |  :white_check_mark:  | Starts a scan for Bluetooth Low Energy devices. |
-| connect          | :white_check_mark: |  :white_check_mark:  | Establishes a connection to the Bluetooth Device. |
 | state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
 | onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
 | :-------------------------- | :------------------: | :------------------: |  :-------------------------------- |
+| connect                     |  :white_check_mark:  |  :white_check_mark:  | Establishes a connection to the device. |
+| disconnect                  |  :white_check_mark:  |  :white_check_mark:  | Cancels an active or pending connection to the device. |
 | discoverServices            |  :white_check_mark:  |  :white_check_mark:  | Discovers services offered by the remote device as well as their characteristics and descriptors. |
 | services                    |  :white_check_mark:  |  :white_check_mark:  | Gets a list of services. Requires that discoverServices() has completed. |
-| readCharacteristic          |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of a specified characteristic.  |
-| readDescriptor              |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of a specified descriptor.  |
-| writeCharacteristic         |  :white_check_mark:  |  :white_check_mark:  | Writes the value of a characteristic. |
-| writeDescriptor             |  :white_check_mark:  |  :white_check_mark:  | Writes the value of a descriptor. |
-| setNotifyValue              |  :white_check_mark:  |  :white_check_mark:  | Sets notifications or indications on the specified characteristic. |
-| onValueChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies when the characteristic's value has changed. |
-| state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the Bluetooth Device. |
-| onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the Bluetooth Device. |
+| state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the device. |
+| onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the device. |
 
+### BluetoothCharacteristic API
+|                             |       Android        |         iOS          |             Description            |
+| :-------------------------- | :------------------: | :------------------: |  :-------------------------------- |
+| read                        |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of the characteristic.  |
+| write                       |  :white_check_mark:  |  :white_check_mark:  | Writes the value of the characteristic. |
+| setNotifyValue              |  :white_check_mark:  |  :white_check_mark:  | Sets notifications or indications on the characteristic. |
+| value                       |  :white_check_mark:  |  :white_check_mark:  | Stream of characteristic's value when changed. |
+
+### BluetoothDescriptor API
+|                             |       Android        |         iOS          |             Description            |
+| :-------------------------- | :------------------: | :------------------: |  :-------------------------------- |
+| read                        |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of the descriptor.  |
+| write                       |  :white_check_mark:  |  :white_check_mark:  | Writes the value of the descriptor. |
 
 ## Troubleshooting
 ### Scanning for service UUID's doesn't return any results
