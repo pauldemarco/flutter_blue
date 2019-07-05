@@ -1,11 +1,13 @@
 name: bluetooth
 description: Bluetooth plugin for Flutter
 version: 0.0.2
-author: Paul DeMarco <paulmdemarco@gmail.com>
-homepage: https://github.com/pauldemarco/bluetooth
+author:
+  - Paul DeMarco <paulmdemarco@gmail.com>
+  - TruongSinh Tran-Nguyen <i@truongsinh.pro>
+homepage: https://github.com/truongsinh/flutter_bluetooth
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -19,7 +21,7 @@ flutter:
     pluginClass: FlutterBluePlugin
 
 dev_dependencies:
-  perfectionist: ^2.0.0
+  pedantic: ^1.7.0
   uuid_enhanced: ^3.0.2
   flutter_test:
     sdk: flutter
