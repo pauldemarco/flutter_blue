@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:bluetooth/bluetooth.dart';
-import 'package:bluetooth_example/widgets.dart';
+import './widgets.dart';
 
 void main() {
   runApp(new FlutterBlueApp());
