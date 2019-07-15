@@ -214,7 +214,12 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
 
                 // New request, connect and add gattServer to Map
-                BluetoothGatt gattServer = device.connectGatt(activity, options.getAndroidAutoConnect(), mGattCallback);
+                BluetoothGatt gattServer;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    gattServer = device.connectGatt(activity, options.getAndroidAutoConnect(), mGattCallback, BluetoothDevice.TRANSPORT_LE);
+                } else {
+                    gattServer = device.connectGatt(activity, options.getAndroidAutoConnect(), mGattCallback);
+                }
                 mGattServers.put(deviceId, gattServer);
                 result.success(null);
                 break;
