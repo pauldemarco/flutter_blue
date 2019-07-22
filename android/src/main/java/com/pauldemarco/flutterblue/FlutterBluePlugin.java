@@ -476,10 +476,21 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     return;
                 }
 
+                /*
+                 * According to the source code below Android 7.0.0 the BluetoothGatt.writeDescriptor() function used
+                 * writeType of the parent BluetoothCharacteristic which caused operation failure (for instance when
+                 * setting Client Characteristic Config). With WRITE_TYPE_DEFAULT problem did not occurred.
+                 * Compare:
+                 * https://android.googlesource.com/platform/frameworks/base/+/android-6.0.1_r74/core/java/android/bluetooth/BluetoothGatt.java#1039
+                 * https://android.googlesource.com/platform/frameworks/base/+/android-7.0.0_r1/core/java/android/bluetooth/BluetoothGatt.java#947
+                 */
+                final int originalWriteType = characteristic.getWriteType();
+                characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 if(!gattServer.writeDescriptor(cccDescriptor)) {
                     result.error("set_notification_error", "error when writing the descriptor", null);
                     return;
                 }
+                characteristic.setWriteType(originalWriteType);
 
                 result.success(null);
                 break;
