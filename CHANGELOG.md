@@ -1,3 +1,7 @@
+## 0.6.0+2
+
+* Add minimum SDK version of 18 for the plugin.
+
 ## 0.6.0+1
 * Documentation updates
 
