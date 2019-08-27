@@ -106,6 +106,7 @@ class FlutterBlue {
             .map((m) => m.arguments))
         .takeUntil(Observable.merge(killStreams))
         .doOnDone(stopScan)
+        .doOnCancel(stopScan)
         .map((buffer) => new protos.ScanResult.fromBuffer(buffer))
         .map((p) {
       final result = new ScanResult.fromProto(p);
