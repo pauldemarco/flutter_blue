@@ -1,3 +1,7 @@
+## 0.6.0+4
+
+* Fix duplicate characteristic notifications when connection lost.
+
 ## 0.6.0+3
 
 * Fix duplicate characteristic notifications when reconnecting.
