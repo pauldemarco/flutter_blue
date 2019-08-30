@@ -11,13 +11,6 @@ class BluetoothService {
   final List<BluetoothCharacteristic> characteristics;
   final List<BluetoothService> includedServices;
 
-  BluetoothService(
-      {@required this.uuid,
-      @required this.deviceId,
-      @required this.isPrimary,
-      @required this.characteristics,
-      @required this.includedServices});
-
   BluetoothService.fromProto(protos.BluetoothService p)
       : uuid = new Guid(p.uuid),
         deviceId = new DeviceIdentifier(p.remoteId),

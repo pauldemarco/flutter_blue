@@ -1,17 +1,20 @@
 name: flutter_blue
-description: Bluetooth plugin for Flutter
-version: 0.5.0
+description:
+  Flutter plugin for connecting and communicating with Bluetooth Low Energy devices,
+  on Android and iOS
+version: 0.6.0+4
 author: Paul DeMarco <paulmdemarco@gmail.com>
 homepage: https://github.com/pauldemarco/flutter_blue
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  convert: '^2.1.1'
-  protobuf: '^0.10.5'
+  convert: "^2.1.1"
+  protobuf: "^0.13.12"
+  rxdart: "^0.22.0"
 
 flutter:
   plugin:
