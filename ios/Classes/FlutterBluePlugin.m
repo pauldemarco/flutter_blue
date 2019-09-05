@@ -595,7 +595,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 
 - (ProtosBluetoothDevice*)toDeviceProto:(CBPeripheral *)peripheral {
   ProtosBluetoothDevice *result = [[ProtosBluetoothDevice alloc] init];
-  [peripheral readRSSI];
+   if(peripheral.state == CBPeripheralStateConnected){
+        [peripheral readRSSI];
+   }
   [result setName:[peripheral name]];
   [result setRemoteId:[[peripheral identifier] UUIDString]];
   [result setType:ProtosBluetoothDevice_Type_Le]; // TODO: Does iOS differentiate?
