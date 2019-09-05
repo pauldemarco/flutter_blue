@@ -46,6 +46,7 @@ class BluetoothDevice {
     await state.firstWhere((s) => s == BluetoothDeviceState.connected);
 
     timer?.cancel();
+    
 
     return;
   }
