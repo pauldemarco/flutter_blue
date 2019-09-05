@@ -33,6 +33,7 @@ import android.util.Log;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,7 +188,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "connect":
             {
-                byte[] data = call.arguments();
+                List  args= call.arguments();
+                byte[] data = (byte[]) args.get(0);
+                boolean isBond= (boolean) args.get(1);
                 Protos.ConnectRequest options;
                 try {
                     options = Protos.ConnectRequest.newBuilder().mergeFrom(data).build();
@@ -223,17 +226,21 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     gattServer = device.connectGatt(activity, options.getAndroidAutoConnect(), mGattCallback);
                 }
                 mGattServers.put(deviceId, gattServer);
+                if (isBond) device.createBond();
                 result.success(null);
                 break;
             }
 
             case "disconnect":
             {
-                String deviceId = (String)call.arguments;
+                List  args= call.arguments();
+                String deviceId = (String)args.get(0);
+                boolean isRemoveBond = (boolean)args.get(1);
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
                 int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                 BluetoothGatt gattServer = mGattServers.remove(deviceId);
                 if(gattServer != null) {
+                    if (isRemoveBond) removeBond(device);
                     gattServer.disconnect();
                     if(state == BluetoothProfile.STATE_DISCONNECTED) {
                         gattServer.close();
@@ -499,7 +506,6 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             }
         }
     }
-
     @Override
     public boolean onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
@@ -515,6 +521,15 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             return true;
         }
         return false;
+    }
+
+    private void removeBond(BluetoothDevice device) {
+        try {
+            Method m = device.getClass().getMethod("removeBond",null);
+            m.invoke(device, null);
+        } catch (Exception e) {
+            Log.e("removebond", e.getMessage());
+        }
     }
 
     private BluetoothGatt locateGatt(String remoteId) throws Exception {

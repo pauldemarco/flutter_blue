@@ -21,6 +21,7 @@ class BluetoothDevice {
   Future<void> connect({
     Duration timeout,
     bool autoConnect = true,
+    bool isBond=false,
   }) async {
     var request = protos.ConnectRequest.create()
       ..remoteId = id.toString()
@@ -34,8 +35,13 @@ class BluetoothDevice {
       });
     }
 
-    await FlutterBlue.instance._channel
-        .invokeMethod('connect', request.writeToBuffer());
+    if(Platform.isAndroid){
+      await FlutterBlue.instance._channel
+          .invokeMethod('connect', [request.writeToBuffer(),isBond]);
+    }else{
+      await FlutterBlue.instance._channel
+          .invokeMethod('connect', request.writeToBuffer());
+    }
 
     await state.firstWhere((s) => s == BluetoothDeviceState.connected);
 
@@ -45,8 +51,13 @@ class BluetoothDevice {
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future disconnect() =>
-      FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
+  Future disconnect({bool isRemoveBond = false}) {
+    if(Platform.isAndroid){
+      return FlutterBlue.instance._channel.invokeMethod('disconnect', [id.toString(),isRemoveBond]);
+    }else{
+      return FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
+    }
+  }
 
   BehaviorSubject<List<BluetoothService>> _services =
       BehaviorSubject.seeded([]);
