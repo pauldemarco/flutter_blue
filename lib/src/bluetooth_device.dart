@@ -47,7 +47,6 @@ class BluetoothDevice {
 
     timer?.cancel();
     
-
     return;
   }
 
