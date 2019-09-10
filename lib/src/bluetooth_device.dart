@@ -22,6 +22,7 @@ class BluetoothDevice {
     Duration timeout,
     bool autoConnect = true,
   }) async {
+    Completer res = Completer();
     var request = protos.ConnectRequest.create()
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
@@ -30,18 +31,18 @@ class BluetoothDevice {
     if (timeout != null) {
       timer = Timer(timeout, () {
         disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
+        res.completeError(TimeoutException('Failed to connect in time.', timeout));
       });
     }
 
-    await FlutterBlue.instance._channel
-        .invokeMethod('connect', request.writeToBuffer());
-
-    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
-
-    timer?.cancel();
-
-    return;
+    FlutterBlue.instance._channel
+        .invokeMethod('connect', request.writeToBuffer()).then((f) {
+          return state.firstWhere((s) => s == BluetoothDeviceState.connected);
+        }).then((_) {
+          timer?.cancel();
+          res.complete();
+        });
+    return res.future;
   }
 
   /// Cancels connection to the Bluetooth Device
