@@ -1,8 +1,9 @@
 ///
 //  Generated code. Do not modify.
 //  source: flutterblue.proto
-///
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name
+//
+// @dart = 2.3
+// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
 const Int32Value$json = const {
   '1': 'Int32Value',
@@ -304,6 +305,22 @@ const ConnectedDevicesResponse$json = const {
   '1': 'ConnectedDevicesResponse',
   '2': const [
     const {'1': 'devices', '3': 1, '4': 3, '5': 11, '6': '.BluetoothDevice', '10': 'devices'},
+  ],
+};
+
+const MtuSizeRequest$json = const {
+  '1': 'MtuSizeRequest',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'mtu', '3': 2, '4': 1, '5': 5, '10': 'mtu'},
+  ],
+};
+
+const MtuSizeResponse$json = const {
+  '1': 'MtuSizeResponse',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'mtu', '3': 2, '4': 1, '5': 5, '10': 'mtu'},
   ],
 };
 

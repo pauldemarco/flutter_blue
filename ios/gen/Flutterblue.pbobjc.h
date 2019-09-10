@@ -744,6 +744,36 @@ typedef GPB_ENUM(ProtosConnectedDevicesResponse_FieldNumber) {
 
 @end
 
+#pragma mark - ProtosMtuSizeRequest
+
+typedef GPB_ENUM(ProtosMtuSizeRequest_FieldNumber) {
+  ProtosMtuSizeRequest_FieldNumber_RemoteId = 1,
+  ProtosMtuSizeRequest_FieldNumber_Mtu = 2,
+};
+
+@interface ProtosMtuSizeRequest : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
+
+@property(nonatomic, readwrite) int32_t mtu;
+
+@end
+
+#pragma mark - ProtosMtuSizeResponse
+
+typedef GPB_ENUM(ProtosMtuSizeResponse_FieldNumber) {
+  ProtosMtuSizeResponse_FieldNumber_RemoteId = 1,
+  ProtosMtuSizeResponse_FieldNumber_Mtu = 2,
+};
+
+@interface ProtosMtuSizeResponse : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
+
+@property(nonatomic, readwrite) int32_t mtu;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END

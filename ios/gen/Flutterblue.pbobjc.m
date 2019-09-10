@@ -2025,6 +2025,114 @@ typedef struct ProtosConnectedDevicesResponse__storage_ {
 
 @end
 
+#pragma mark - ProtosMtuSizeRequest
+
+@implementation ProtosMtuSizeRequest
+
+@dynamic remoteId;
+@dynamic mtu;
+
+typedef struct ProtosMtuSizeRequest__storage_ {
+  uint32_t _has_storage_[1];
+  int32_t mtu;
+  NSString *remoteId;
+} ProtosMtuSizeRequest__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "remoteId",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosMtuSizeRequest_FieldNumber_RemoteId,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProtosMtuSizeRequest__storage_, remoteId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "mtu",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosMtuSizeRequest_FieldNumber_Mtu,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosMtuSizeRequest__storage_, mtu),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt32,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosMtuSizeRequest class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosMtuSizeRequest__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
+#pragma mark - ProtosMtuSizeResponse
+
+@implementation ProtosMtuSizeResponse
+
+@dynamic remoteId;
+@dynamic mtu;
+
+typedef struct ProtosMtuSizeResponse__storage_ {
+  uint32_t _has_storage_[1];
+  int32_t mtu;
+  NSString *remoteId;
+} ProtosMtuSizeResponse__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "remoteId",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosMtuSizeResponse_FieldNumber_RemoteId,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProtosMtuSizeResponse__storage_, remoteId),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeString,
+      },
+      {
+        .name = "mtu",
+        .dataTypeSpecific.className = NULL,
+        .number = ProtosMtuSizeResponse_FieldNumber_Mtu,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosMtuSizeResponse__storage_, mtu),
+        .flags = GPBFieldOptional,
+        .dataType = GPBDataTypeInt32,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosMtuSizeResponse class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosMtuSizeResponse__storage_)
+                                         flags:GPBDescriptorInitializationFlag_None];
+    NSAssert(descriptor == nil, @"Startup recursed!");
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 
 #pragma clang diagnostic pop
 
