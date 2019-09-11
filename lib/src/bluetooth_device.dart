@@ -41,6 +41,9 @@ class BluetoothDevice {
         }).then((_) {
           timer?.cancel();
           res.complete();
+        }).catchError((err) {
+          timer?.cancel();
+          res.completeError(err);
         });
     return res.future;
   }
