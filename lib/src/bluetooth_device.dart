@@ -43,6 +43,7 @@ class BluetoothDevice {
           res.complete();
         }).catchError((err) {
           timer?.cancel();
+          disconnect();
           res.completeError(err);
         });
     return res.future;
