@@ -1,4 +1,4 @@
-## 0.6.1
+## 0.6.2
 * Add `mtu` and `requestMtu` to BluetoothDevice
 
 ## 0.6.0+4
