@@ -245,9 +245,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       int32_t mtu;
       if (@available(iOS 9.0, *)) {
+        // Which type should we use? (issue #365)
         mtu = (int32_t)[peripheral maximumWriteValueLengthForType:CBCharacteristicWriteWithoutResponse];
       } else {
-        // Fallback to minimum on earlier versions (issue #364).
+        // Fallback to minimum on earlier versions. (issue #364)
         mtu = 20;
       }
       result([self toFlutterData:[self toMtuSizeResponseProto:peripheral mtu:mtu]]);
