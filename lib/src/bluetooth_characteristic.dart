@@ -14,7 +14,7 @@ class BluetoothCharacteristic {
   bool get isNotifying {
     try {
       var cccd =
-          descriptors.singleWhere((d) => d.uuid == BluetoothDescriptor.CCCD);
+          descriptors.singleWhere((d) => d.uuid == BluetoothDescriptor.cccd);
       return ((cccd.lastValue[0] & 0x01) > 0 || (cccd.lastValue[0] & 0x02) > 0);
     } catch (e) {
       return false;
@@ -40,7 +40,7 @@ class BluetoothCharacteristic {
             .map((d) => new BluetoothDescriptor.fromProto(d))
             .toList(),
         properties = new CharacteristicProperties.fromProto(p.properties),
-        _value = BehaviorSubject(seedValue: p.value);
+        _value = BehaviorSubject.seeded(p.value);
 
   Stream<BluetoothCharacteristic> get _onCharacteristicChangedStream =>
       FlutterBlue.instance._methodStream

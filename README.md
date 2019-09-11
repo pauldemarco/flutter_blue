@@ -87,12 +87,18 @@ for(BluetoothDescriptor d in descriptors) {
 await d.write([0x12, 0x34])
 ```
 
-### Set notifications
+### Set notifications and listen to changes
 ```dart
 await characteristic.setNotifyValue(true);
-characteristic.onValueChanged().listen((value) {
+characteristic.value.listen((value) {
     // do something with new value
 });
+```
+
+### Read the MTU and request larger size
+```dart
+final mtu = await device.mtu.first;
+await device.requestMtu(512);
 ```
 
 ## Reference
@@ -100,18 +106,15 @@ characteristic.onValueChanged().listen((value) {
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | scan             | :white_check_mark: |  :white_check_mark:  | Starts a scan for Bluetooth Low Energy devices. |
-| state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
-| onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
-
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
 | :-------------------------- | :------------------: | :------------------: |  :-------------------------------- |
-| connect                     |  :white_check_mark:  |  :white_check_mark:  | Establishes a connection to the device. |
 | disconnect                  |  :white_check_mark:  |  :white_check_mark:  | Cancels an active or pending connection to the device. |
 | discoverServices            |  :white_check_mark:  |  :white_check_mark:  | Discovers services offered by the remote device as well as their characteristics and descriptors. |
 | services                    |  :white_check_mark:  |  :white_check_mark:  | Gets a list of services. Requires that discoverServices() has completed. |
-| state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the device. |
-| onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the device. |
+| state                       |  :white_check_mark:  |  :white_check_mark:  | Stream of state changes for the Bluetooth Device. |
+| mtu                         |  :white_check_mark:  |  :white_check_mark:  | Stream of mtu size changes. |
+| requestMtu                  |  :white_check_mark:  |  :white_check_mark:  | Request to change the MTU for the device. |
 
 ### BluetoothCharacteristic API
 |                             |       Android        |         iOS          |             Description            |
@@ -119,7 +122,7 @@ characteristic.onValueChanged().listen((value) {
 | read                        |  :white_check_mark:  |  :white_check_mark:  | Retrieves the value of the characteristic.  |
 | write                       |  :white_check_mark:  |  :white_check_mark:  | Writes the value of the characteristic. |
 | setNotifyValue              |  :white_check_mark:  |  :white_check_mark:  | Sets notifications or indications on the characteristic. |
-| onValueChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies when the characteristic's value has changed. |
+| value                       |  :white_check_mark:  |  :white_check_mark:  | Stream of characteristic's value when changed. |
 
 ### BluetoothDescriptor API
 |                             |       Android        |         iOS          |             Description            |

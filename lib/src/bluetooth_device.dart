@@ -14,8 +14,7 @@ class BluetoothDevice {
         name = p.name,
         type = BluetoothDeviceType.values[p.type.value];
 
-  BehaviorSubject<bool> _isDiscoveringServices =
-      BehaviorSubject(seedValue: false);
+  BehaviorSubject<bool> _isDiscoveringServices = BehaviorSubject.seeded(false);
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;
 
   /// Establishes a connection to the Bluetooth Device.
@@ -50,7 +49,7 @@ class BluetoothDevice {
       FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
 
   BehaviorSubject<List<BluetoothService>> _services =
-      BehaviorSubject(seedValue: []);
+      BehaviorSubject.seeded([]);
 
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
@@ -100,6 +99,32 @@ class BluetoothDevice {
         .map((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
         .map((p) => BluetoothDeviceState.values[p.state.value]);
+  }
+
+  /// The MTU size in bytes
+  Stream<int> get mtu async* {
+    yield await FlutterBlue.instance._channel
+        .invokeMethod('mtu', id.toString())
+        .then((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
+        .then((p) => p.mtu);
+
+    yield* FlutterBlue.instance._methodStream
+        .where((m) => m.method == "MtuSize")
+        .map((m) => m.arguments)
+        .map((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => p.mtu);
+  }
+
+  /// Request to change the MTU Size
+  /// Throws error if request did not complete successfully
+  Future<void> requestMtu(int desiredMtu) async {
+    var request = protos.MtuSizeRequest.create()
+      ..remoteId = id.toString()
+      ..mtu = desiredMtu;
+
+    return FlutterBlue.instance._channel
+        .invokeMethod('requestMtu', request.writeToBuffer());
   }
 
   /// Indicates whether the Bluetooth Device can send a write without response

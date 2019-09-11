@@ -200,4 +200,17 @@ message DeviceStateResponse {
 
 message ConnectedDevicesResponse {
   repeated BluetoothDevice devices = 1;
+<<<<<<< HEAD
+=======
+}
+
+message MtuSizeRequest {
+  string remote_id = 1;
+  int32 mtu = 2;
+}
+
+message MtuSizeResponse {
+  string remote_id = 1;
+  int32 mtu = 2;
+>>>>>>> b43127bedca75d2fdfa30948f319a7204966a51d
 }
