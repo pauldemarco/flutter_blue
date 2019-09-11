@@ -118,8 +118,8 @@ await device.requestMtu(512);
 | discoverServices            |  :white_check_mark:  |  :white_check_mark:  | Discovers services offered by the remote device as well as their characteristics and descriptors. |
 | services                    |  :white_check_mark:  |  :white_check_mark:  | Gets a list of services. Requires that discoverServices() has completed. |
 | state                       |  :white_check_mark:  |  :white_check_mark:  | Stream of state changes for the Bluetooth Device. |
-| mtu                         |  :white_check_mark:  |                      | Stream of mtu size changes. |
-| requestMtu                  |  :white_check_mark:  |                      | Request to change the MTU for the device. |
+| mtu                         |  :white_check_mark:  |  :white_check_mark:  | Stream of mtu size changes. |
+| requestMtu                  |  :white_check_mark:  |  :white_check_mark:  | Request to change the MTU for the device. |
 
 ### BluetoothCharacteristic API
 |                             |       Android        |         iOS          |             Description            |
