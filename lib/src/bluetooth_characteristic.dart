@@ -106,7 +106,7 @@ class BluetoothCharacteristic {
   /// guaranteed and will return immediately with success.
   /// [CharacteristicWriteType.withResponse]: the method will return after the
   /// write operation has either passed or failed.
-  Future<Null> write(List<int> value, {bool withoutResponse = false}) async {
+  Future<Null> write(List<int> value, {bool withoutResponse = false, bool returnValueIfWithoutResponse = false}) async {
     final type = withoutResponse
         ? CharacteristicWriteType.withoutResponse
         : CharacteristicWriteType.withResponse;
@@ -123,7 +123,9 @@ class BluetoothCharacteristic {
         .invokeMethod('writeCharacteristic', request.writeToBuffer());
 
     if (type == CharacteristicWriteType.withoutResponse) {
-      _value.add(value);
+      if (returnValueIfWithoutResponse) {
+        _value.add(value);
+      }
       return result;
     }
 
