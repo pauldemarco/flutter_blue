@@ -69,6 +69,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
 
+    private OtaHelper otaHelper;
+
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
     private Result pendingResult;
@@ -489,6 +491,44 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
 
                 result.success(null);
+                break;
+            }
+
+            case "updateFirmware":
+            {
+                String deviceId = call.argument("deviceId");
+                String firmwarePath = call.argument("path");
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+                Context context = registrar.context();
+                if(otaHelper == null){
+                    otaHelper = new OtaHelper();
+                }
+                boolean res = otaHelper.flash(device, firmwarePath, context);
+                if(res){
+                    result.success("success");
+                } else {
+                    result.error("error", "", "error");
+                }
+                break;
+            }
+
+            case "getFlashingState":
+            {
+                if(otaHelper != null) {
+                    result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
+                } else {
+                    result.error("Device is not flashing", null, null);
+                }
+                break;
+            }
+
+            case "getFlashingProgress":
+            {
+                if(otaHelper != null){
+                    result.success(otaHelper.progress);
+                } else {
+                    result.error("Error", null, 0);
+                }
                 break;
             }
 

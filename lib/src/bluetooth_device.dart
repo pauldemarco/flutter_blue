@@ -44,6 +44,15 @@ class BluetoothDevice {
     return;
   }
 
+  Future<int> getFlashingProgress() =>
+      FlutterBlue.instance._channel.invokeMethod("getFlashingProgress");
+
+  Future<String> getFlashingState() =>
+      FlutterBlue.instance._channel.invokeMethod("getFlashingState");
+
+  Future updateFirmware(String firmwarePath) =>
+      FlutterBlue.instance._channel.invokeMethod("updateFirmware", {"deviceId":id.toString(), "path":firmwarePath});
+
   /// Cancels connection to the Bluetooth Device
   Future disconnect() =>
       FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
@@ -106,7 +115,7 @@ class BluetoothDevice {
       new Future.error(new UnimplementedError());
 
   @override
-  bool operator ==(Object other) =>
+  bool operator == (Object other) =>
       identical(this, other) ||
       other is BluetoothDevice &&
           runtimeType == other.runtimeType &&

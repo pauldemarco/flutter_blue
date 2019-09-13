@@ -85,4 +85,5 @@ protobuf {
 
 dependencies {
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    implementation 'io.runtime.mcumgr:mcumgr-ble:0.8.0'
 }
