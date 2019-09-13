@@ -232,6 +232,7 @@ typedef GPB_ENUM(ProtosAdvertisementData_FieldNumber) {
 typedef GPB_ENUM(ProtosScanSettings_FieldNumber) {
   ProtosScanSettings_FieldNumber_AndroidScanMode = 1,
   ProtosScanSettings_FieldNumber_ServiceUuidsArray = 2,
+  ProtosScanSettings_FieldNumber_EnableIOSScanOptionAllowDuplicates = 3,
 };
 
 @interface ProtosScanSettings : GPBMessage
@@ -241,6 +242,8 @@ typedef GPB_ENUM(ProtosScanSettings_FieldNumber) {
 @property(nonatomic, readwrite, strong, null_resettable) NSMutableArray<NSString*> *serviceUuidsArray;
 /** The number of items in @c serviceUuidsArray without causing the array to be created. */
 @property(nonatomic, readonly) NSUInteger serviceUuidsArray_Count;
+
+@property(nonatomic, readwrite) bool enableIOSScanOptionAllowDuplicates;
 
 @end
 
