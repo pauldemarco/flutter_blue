@@ -2084,7 +2084,7 @@ typedef struct ProtosConnectedDevicesResponse__storage_ {
 
 typedef struct ProtosMtuSizeRequest__storage_ {
   uint32_t _has_storage_[1];
-  int32_t mtu;
+  uint32_t mtu;
   NSString *remoteId;
 } ProtosMtuSizeRequest__storage_;
 
@@ -2110,7 +2110,7 @@ typedef struct ProtosMtuSizeRequest__storage_ {
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(ProtosMtuSizeRequest__storage_, mtu),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeInt32,
+        .dataType = GPBDataTypeUInt32,
       },
     };
     GPBDescriptor *localDescriptor =
@@ -2140,7 +2140,7 @@ typedef struct ProtosMtuSizeRequest__storage_ {
 
 typedef struct ProtosMtuSizeResponse__storage_ {
   uint32_t _has_storage_[1];
-  int32_t mtu;
+  uint32_t mtu;
   NSString *remoteId;
 } ProtosMtuSizeResponse__storage_;
 
@@ -2166,7 +2166,7 @@ typedef struct ProtosMtuSizeResponse__storage_ {
         .hasIndex = 1,
         .offset = (uint32_t)offsetof(ProtosMtuSizeResponse__storage_, mtu),
         .flags = GPBFieldOptional,
-        .dataType = GPBDataTypeInt32,
+        .dataType = GPBDataTypeUInt32,
       },
     };
     GPBDescriptor *localDescriptor =
