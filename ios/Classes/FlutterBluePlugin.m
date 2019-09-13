@@ -239,6 +239,24 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     } @catch(FlutterError *e) {
       result(e);
     }
+  } else if([@"mtu" isEqualToString:call.method]) {
+    NSString *remoteId = [call arguments];
+    @try {
+      CBPeripheral *peripheral = [self findPeripheral:remoteId];
+      int32_t mtu;
+      if (@available(iOS 9.0, *)) {
+        // Which type should we use? (issue #365)
+        mtu = (int32_t)[peripheral maximumWriteValueLengthForType:CBCharacteristicWriteWithoutResponse];
+      } else {
+        // Fallback to minimum on earlier versions. (issue #364)
+        mtu = 20;
+      }
+      result([self toFlutterData:[self toMtuSizeResponseProto:peripheral mtu:mtu]]);
+    } @catch(FlutterError *e) {
+      result(e);
+    }
+  } else if([@"requestMtu" isEqualToString:call.method]) {
+    result([FlutterError errorWithCode:@"requestMtu" message:@"iOS does not allow mtu requests to the peripheral" details:NULL]);
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -704,6 +722,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [result setExtendedProperties:(props & CBCharacteristicPropertyExtendedProperties) != 0];
   [result setNotifyEncryptionRequired:(props & CBCharacteristicPropertyNotifyEncryptionRequired) != 0];
   [result setIndicateEncryptionRequired:(props & CBCharacteristicPropertyIndicateEncryptionRequired) != 0];
+  return result;
+}
+
+- (ProtosMtuSizeResponse*)toMtuSizeResponseProto:(CBPeripheral *)peripheral mtu:(int32_t)mtu {
+  ProtosMtuSizeResponse *result = [[ProtosMtuSizeResponse alloc] init];
+  [result setRemoteId:[[peripheral identifier] UUIDString]];
+  [result setMtu:mtu];
   return result;
 }
 

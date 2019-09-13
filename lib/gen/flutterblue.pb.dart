@@ -1,10 +1,11 @@
 ///
 //  Generated code. Do not modify.
 //  source: flutterblue.proto
-///
-// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name
+//
+// @dart = 2.3
+// ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
 
-import 'dart:core' as $core show bool, Deprecated, double, int, List, Map, override, pragma, String;
+import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
@@ -13,7 +14,7 @@ import 'flutterblue.pbenum.dart';
 export 'flutterblue.pbenum.dart';
 
 class Int32Value extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Int32Value')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Int32Value', createEmptyInstance: create)
     ..a<$core.int>(1, 'value', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
@@ -39,8 +40,8 @@ class Int32Value extends $pb.GeneratedMessage {
 }
 
 class BluetoothState extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothState')
-    ..e<BluetoothState_State>(1, 'state', $pb.PbFieldType.OE, BluetoothState_State.UNKNOWN, BluetoothState_State.valueOf, BluetoothState_State.values)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothState', createEmptyInstance: create)
+    ..e<BluetoothState_State>(1, 'state', $pb.PbFieldType.OE, defaultOrMaker: BluetoothState_State.UNKNOWN, valueOf: BluetoothState_State.valueOf, enumValues: BluetoothState_State.values)
     ..hasRequiredFields = false
   ;
 
@@ -65,12 +66,12 @@ class BluetoothState extends $pb.GeneratedMessage {
 }
 
 class AdvertisementData extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('AdvertisementData')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('AdvertisementData', createEmptyInstance: create)
     ..aOS(1, 'localName')
-    ..a<Int32Value>(2, 'txPowerLevel', $pb.PbFieldType.OM, Int32Value.getDefault, Int32Value.create)
+    ..a<Int32Value>(2, 'txPowerLevel', $pb.PbFieldType.OM, defaultOrMaker: Int32Value.getDefault, subBuilder: Int32Value.create)
     ..aOB(3, 'connectable')
-    ..m<$core.int, $core.List<$core.int>>(4, 'manufacturerData', 'AdvertisementData.ManufacturerDataEntry',$pb.PbFieldType.O3, $pb.PbFieldType.OY, null, null, null )
-    ..m<$core.String, $core.List<$core.int>>(5, 'serviceData', 'AdvertisementData.ServiceDataEntry',$pb.PbFieldType.OS, $pb.PbFieldType.OY, null, null, null )
+    ..m<$core.int, $core.List<$core.int>>(4, 'manufacturerData', entryClassName: 'AdvertisementData.ManufacturerDataEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OY)
+    ..m<$core.String, $core.List<$core.int>>(5, 'serviceData', entryClassName: 'AdvertisementData.ServiceDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OY)
     ..pPS(6, 'serviceUuids')
     ..hasRequiredFields = false
   ;
@@ -112,7 +113,7 @@ class AdvertisementData extends $pb.GeneratedMessage {
 }
 
 class ScanSettings extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ScanSettings')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ScanSettings', createEmptyInstance: create)
     ..a<$core.int>(1, 'androidScanMode', $pb.PbFieldType.O3)
     ..pPS(2, 'serviceUuids')
     ..hasRequiredFields = false
@@ -141,9 +142,9 @@ class ScanSettings extends $pb.GeneratedMessage {
 }
 
 class ScanResult extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ScanResult')
-    ..a<BluetoothDevice>(1, 'device', $pb.PbFieldType.OM, BluetoothDevice.getDefault, BluetoothDevice.create)
-    ..a<AdvertisementData>(2, 'advertisementData', $pb.PbFieldType.OM, AdvertisementData.getDefault, AdvertisementData.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ScanResult', createEmptyInstance: create)
+    ..a<BluetoothDevice>(1, 'device', $pb.PbFieldType.OM, defaultOrMaker: BluetoothDevice.getDefault, subBuilder: BluetoothDevice.create)
+    ..a<AdvertisementData>(2, 'advertisementData', $pb.PbFieldType.OM, defaultOrMaker: AdvertisementData.getDefault, subBuilder: AdvertisementData.create)
     ..a<$core.int>(3, 'rssi', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
@@ -179,7 +180,7 @@ class ScanResult extends $pb.GeneratedMessage {
 }
 
 class ConnectRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ConnectRequest')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ConnectRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOB(2, 'androidAutoConnect')
     ..hasRequiredFields = false
@@ -211,10 +212,10 @@ class ConnectRequest extends $pb.GeneratedMessage {
 }
 
 class BluetoothDevice extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothDevice')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothDevice', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOS(2, 'name')
-    ..e<BluetoothDevice_Type>(3, 'type', $pb.PbFieldType.OE, BluetoothDevice_Type.UNKNOWN, BluetoothDevice_Type.valueOf, BluetoothDevice_Type.values)
+    ..e<BluetoothDevice_Type>(3, 'type', $pb.PbFieldType.OE, defaultOrMaker: BluetoothDevice_Type.UNKNOWN, valueOf: BluetoothDevice_Type.valueOf, enumValues: BluetoothDevice_Type.values)
     ..hasRequiredFields = false
   ;
 
@@ -249,12 +250,12 @@ class BluetoothDevice extends $pb.GeneratedMessage {
 }
 
 class BluetoothService extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothService')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothService', createEmptyInstance: create)
     ..aOS(1, 'uuid')
     ..aOS(2, 'remoteId')
     ..aOB(3, 'isPrimary')
-    ..pc<BluetoothCharacteristic>(4, 'characteristics', $pb.PbFieldType.PM,BluetoothCharacteristic.create)
-    ..pc<BluetoothService>(5, 'includedServices', $pb.PbFieldType.PM,BluetoothService.create)
+    ..pc<BluetoothCharacteristic>(4, 'characteristics', $pb.PbFieldType.PM, subBuilder: BluetoothCharacteristic.create)
+    ..pc<BluetoothService>(5, 'includedServices', $pb.PbFieldType.PM, subBuilder: BluetoothService.create)
     ..hasRequiredFields = false
   ;
 
@@ -293,13 +294,13 @@ class BluetoothService extends $pb.GeneratedMessage {
 }
 
 class BluetoothCharacteristic extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothCharacteristic')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothCharacteristic', createEmptyInstance: create)
     ..aOS(1, 'uuid')
     ..aOS(2, 'remoteId')
-    ..aOS(3, 'serviceUuid')
-    ..aOS(4, 'secondaryServiceUuid')
-    ..pc<BluetoothDescriptor>(5, 'descriptors', $pb.PbFieldType.PM,BluetoothDescriptor.create)
-    ..a<CharacteristicProperties>(6, 'properties', $pb.PbFieldType.OM, CharacteristicProperties.getDefault, CharacteristicProperties.create)
+    ..aOS(3, 'serviceUuid', protoName: 'serviceUuid')
+    ..aOS(4, 'secondaryServiceUuid', protoName: 'secondaryServiceUuid')
+    ..pc<BluetoothDescriptor>(5, 'descriptors', $pb.PbFieldType.PM, subBuilder: BluetoothDescriptor.create)
+    ..a<CharacteristicProperties>(6, 'properties', $pb.PbFieldType.OM, defaultOrMaker: CharacteristicProperties.getDefault, subBuilder: CharacteristicProperties.create)
     ..a<$core.List<$core.int>>(7, 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -352,11 +353,11 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
 }
 
 class BluetoothDescriptor extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothDescriptor')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('BluetoothDescriptor', createEmptyInstance: create)
     ..aOS(1, 'uuid')
     ..aOS(2, 'remoteId')
-    ..aOS(3, 'serviceUuid')
-    ..aOS(4, 'characteristicUuid')
+    ..aOS(3, 'serviceUuid', protoName: 'serviceUuid')
+    ..aOS(4, 'characteristicUuid', protoName: 'characteristicUuid')
     ..a<$core.List<$core.int>>(5, 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -402,7 +403,7 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
 }
 
 class CharacteristicProperties extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('CharacteristicProperties')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('CharacteristicProperties', createEmptyInstance: create)
     ..aOB(1, 'broadcast')
     ..aOB(2, 'read')
     ..aOB(3, 'writeWithoutResponse')
@@ -482,9 +483,9 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
 }
 
 class DiscoverServicesResult extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DiscoverServicesResult')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DiscoverServicesResult', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..pc<BluetoothService>(2, 'services', $pb.PbFieldType.PM,BluetoothService.create)
+    ..pc<BluetoothService>(2, 'services', $pb.PbFieldType.PM, subBuilder: BluetoothService.create)
     ..hasRequiredFields = false
   ;
 
@@ -511,7 +512,7 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
 }
 
 class ReadCharacteristicRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadCharacteristicRequest')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadCharacteristicRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOS(2, 'characteristicUuid')
     ..aOS(3, 'serviceUuid')
@@ -555,9 +556,9 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
 }
 
 class ReadCharacteristicResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadCharacteristicResponse')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadCharacteristicResponse', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
+    ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, defaultOrMaker: BluetoothCharacteristic.getDefault, subBuilder: BluetoothCharacteristic.create)
     ..hasRequiredFields = false
   ;
 
@@ -587,7 +588,7 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
 }
 
 class ReadDescriptorRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadDescriptorRequest')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadDescriptorRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOS(2, 'descriptorUuid')
     ..aOS(3, 'serviceUuid')
@@ -637,8 +638,8 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
 }
 
 class ReadDescriptorResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadDescriptorResponse')
-    ..a<ReadDescriptorRequest>(1, 'request', $pb.PbFieldType.OM, ReadDescriptorRequest.getDefault, ReadDescriptorRequest.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ReadDescriptorResponse', createEmptyInstance: create)
+    ..a<ReadDescriptorRequest>(1, 'request', $pb.PbFieldType.OM, defaultOrMaker: ReadDescriptorRequest.getDefault, subBuilder: ReadDescriptorRequest.create)
     ..a<$core.List<$core.int>>(2, 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -669,12 +670,12 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
 }
 
 class WriteCharacteristicRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteCharacteristicRequest')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteCharacteristicRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOS(2, 'characteristicUuid')
     ..aOS(3, 'serviceUuid')
     ..aOS(4, 'secondaryServiceUuid')
-    ..e<WriteCharacteristicRequest_WriteType>(5, 'writeType', $pb.PbFieldType.OE, WriteCharacteristicRequest_WriteType.WITH_RESPONSE, WriteCharacteristicRequest_WriteType.valueOf, WriteCharacteristicRequest_WriteType.values)
+    ..e<WriteCharacteristicRequest_WriteType>(5, 'writeType', $pb.PbFieldType.OE, defaultOrMaker: WriteCharacteristicRequest_WriteType.WITH_RESPONSE, valueOf: WriteCharacteristicRequest_WriteType.valueOf, enumValues: WriteCharacteristicRequest_WriteType.values)
     ..a<$core.List<$core.int>>(6, 'value', $pb.PbFieldType.OY)
     ..hasRequiredFields = false
   ;
@@ -725,8 +726,8 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
 }
 
 class WriteCharacteristicResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteCharacteristicResponse')
-    ..a<WriteCharacteristicRequest>(1, 'request', $pb.PbFieldType.OM, WriteCharacteristicRequest.getDefault, WriteCharacteristicRequest.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteCharacteristicResponse', createEmptyInstance: create)
+    ..a<WriteCharacteristicRequest>(1, 'request', $pb.PbFieldType.OM, defaultOrMaker: WriteCharacteristicRequest.getDefault, subBuilder: WriteCharacteristicRequest.create)
     ..aOB(2, 'success')
     ..hasRequiredFields = false
   ;
@@ -757,7 +758,7 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
 }
 
 class WriteDescriptorRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteDescriptorRequest')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteDescriptorRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOS(2, 'descriptorUuid')
     ..aOS(3, 'serviceUuid')
@@ -813,8 +814,8 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
 }
 
 class WriteDescriptorResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteDescriptorResponse')
-    ..a<WriteDescriptorRequest>(1, 'request', $pb.PbFieldType.OM, WriteDescriptorRequest.getDefault, WriteDescriptorRequest.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('WriteDescriptorResponse', createEmptyInstance: create)
+    ..a<WriteDescriptorRequest>(1, 'request', $pb.PbFieldType.OM, defaultOrMaker: WriteDescriptorRequest.getDefault, subBuilder: WriteDescriptorRequest.create)
     ..aOB(2, 'success')
     ..hasRequiredFields = false
   ;
@@ -845,7 +846,7 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
 }
 
 class SetNotificationRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SetNotificationRequest')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SetNotificationRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
     ..aOS(2, 'serviceUuid')
     ..aOS(3, 'secondaryServiceUuid')
@@ -895,9 +896,9 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
 }
 
 class SetNotificationResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SetNotificationResponse')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('SetNotificationResponse', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
+    ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, defaultOrMaker: BluetoothCharacteristic.getDefault, subBuilder: BluetoothCharacteristic.create)
     ..aOB(3, 'success')
     ..hasRequiredFields = false
   ;
@@ -933,9 +934,9 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
 }
 
 class OnCharacteristicChanged extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('OnCharacteristicChanged')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('OnCharacteristicChanged', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, BluetoothCharacteristic.getDefault, BluetoothCharacteristic.create)
+    ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM, defaultOrMaker: BluetoothCharacteristic.getDefault, subBuilder: BluetoothCharacteristic.create)
     ..hasRequiredFields = false
   ;
 
@@ -965,9 +966,9 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
 }
 
 class DeviceStateResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DeviceStateResponse')
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('DeviceStateResponse', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..e<DeviceStateResponse_BluetoothDeviceState>(2, 'state', $pb.PbFieldType.OE, DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, DeviceStateResponse_BluetoothDeviceState.valueOf, DeviceStateResponse_BluetoothDeviceState.values)
+    ..e<DeviceStateResponse_BluetoothDeviceState>(2, 'state', $pb.PbFieldType.OE, defaultOrMaker: DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, valueOf: DeviceStateResponse_BluetoothDeviceState.valueOf, enumValues: DeviceStateResponse_BluetoothDeviceState.values)
     ..hasRequiredFields = false
   ;
 
@@ -997,8 +998,8 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
 }
 
 class ConnectedDevicesResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ConnectedDevicesResponse')
-    ..pc<BluetoothDevice>(1, 'devices', $pb.PbFieldType.PM,BluetoothDevice.create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ConnectedDevicesResponse', createEmptyInstance: create)
+    ..pc<BluetoothDevice>(1, 'devices', $pb.PbFieldType.PM, subBuilder: BluetoothDevice.create)
     ..hasRequiredFields = false
   ;
 
@@ -1017,5 +1018,69 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
   static ConnectedDevicesResponse _defaultInstance;
 
   $core.List<BluetoothDevice> get devices => $_getList(0);
+}
+
+class MtuSizeRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('MtuSizeRequest', createEmptyInstance: create)
+    ..aOS(1, 'remoteId')
+    ..a<$core.int>(2, 'mtu', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  MtuSizeRequest._() : super();
+  factory MtuSizeRequest() => create();
+  factory MtuSizeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MtuSizeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  MtuSizeRequest clone() => MtuSizeRequest()..mergeFromMessage(this);
+  MtuSizeRequest copyWith(void Function(MtuSizeRequest) updates) => super.copyWith((message) => updates(message as MtuSizeRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MtuSizeRequest create() => MtuSizeRequest._();
+  MtuSizeRequest createEmptyInstance() => create();
+  static $pb.PbList<MtuSizeRequest> createRepeated() => $pb.PbList<MtuSizeRequest>();
+  static MtuSizeRequest getDefault() => _defaultInstance ??= create()..freeze();
+  static MtuSizeRequest _defaultInstance;
+
+  $core.String get remoteId => $_getS(0, '');
+  set remoteId($core.String v) { $_setString(0, v); }
+  $core.bool hasRemoteId() => $_has(0);
+  void clearRemoteId() => clearField(1);
+
+  $core.int get mtu => $_get(1, 0);
+  set mtu($core.int v) { $_setSignedInt32(1, v); }
+  $core.bool hasMtu() => $_has(1);
+  void clearMtu() => clearField(2);
+}
+
+class MtuSizeResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('MtuSizeResponse', createEmptyInstance: create)
+    ..aOS(1, 'remoteId')
+    ..a<$core.int>(2, 'mtu', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  MtuSizeResponse._() : super();
+  factory MtuSizeResponse() => create();
+  factory MtuSizeResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MtuSizeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  MtuSizeResponse clone() => MtuSizeResponse()..mergeFromMessage(this);
+  MtuSizeResponse copyWith(void Function(MtuSizeResponse) updates) => super.copyWith((message) => updates(message as MtuSizeResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static MtuSizeResponse create() => MtuSizeResponse._();
+  MtuSizeResponse createEmptyInstance() => create();
+  static $pb.PbList<MtuSizeResponse> createRepeated() => $pb.PbList<MtuSizeResponse>();
+  static MtuSizeResponse getDefault() => _defaultInstance ??= create()..freeze();
+  static MtuSizeResponse _defaultInstance;
+
+  $core.String get remoteId => $_getS(0, '');
+  set remoteId($core.String v) { $_setString(0, v); }
+  $core.bool hasRemoteId() => $_has(0);
+  void clearRemoteId() => clearField(1);
+
+  $core.int get mtu => $_get(1, 0);
+  set mtu($core.int v) { $_setSignedInt32(1, v); }
+  $core.bool hasMtu() => $_has(1);
+  void clearMtu() => clearField(2);
 }
 

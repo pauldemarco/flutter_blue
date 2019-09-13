@@ -1,12 +1,10 @@
-## 0.6.0+3
+## 0.6.2
+* Add `mtu` and `requestMtu` to BluetoothDevice
 
+## 0.6.0+4
+* Fix duplicate characteristic notifications when connection lost.
 * Fix duplicate characteristic notifications when reconnecting.
-
-## 0.6.0+2
-
 * Add minimum SDK version of 18 for the plugin.
-
-## 0.6.0+1
 * Documentation updates
 
 ## 0.6.0

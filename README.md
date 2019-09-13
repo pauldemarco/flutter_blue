@@ -95,13 +95,20 @@ characteristic.value.listen((value) {
 });
 ```
 
+### Read the MTU and request larger size
+```dart
+final mtu = await device.mtu.first;
+await device.requestMtu(512);
+```
+
 ## Reference
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | scan             | :white_check_mark: |  :white_check_mark:  | Starts a scan for Bluetooth Low Energy devices. |
-| state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
-| onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
+| state            | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
+| isAvailable      | :white_check_mark: |  :white_check_mark:  | Checks whether the device supports Bluetooth. |
+| isOn             | :white_check_mark: |  :white_check_mark:  | Checks if Bluetooth functionality is turned on. |
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
@@ -110,8 +117,9 @@ characteristic.value.listen((value) {
 | disconnect                  |  :white_check_mark:  |  :white_check_mark:  | Cancels an active or pending connection to the device. |
 | discoverServices            |  :white_check_mark:  |  :white_check_mark:  | Discovers services offered by the remote device as well as their characteristics and descriptors. |
 | services                    |  :white_check_mark:  |  :white_check_mark:  | Gets a list of services. Requires that discoverServices() has completed. |
-| state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the device. |
-| onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the device. |
+| state                       |  :white_check_mark:  |  :white_check_mark:  | Stream of state changes for the Bluetooth Device. |
+| mtu                         |  :white_check_mark:  |  :white_check_mark:  | Stream of mtu size changes. |
+| requestMtu                  |  :white_check_mark:  |  :white_check_mark:  | Request to change the MTU for the device. |
 
 ### BluetoothCharacteristic API
 |                             |       Android        |         iOS          |             Description            |
