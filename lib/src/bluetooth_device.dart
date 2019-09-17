@@ -50,8 +50,8 @@ class BluetoothDevice {
   Future<String> getFlashingState() =>
       FlutterBlue.instance._channel.invokeMethod("getFlashingState");
 
-  Future updateFirmware(String firmwarePath) =>
-      FlutterBlue.instance._channel.invokeMethod("updateFirmware", {"deviceId":id.toString(), "path":firmwarePath});
+  Future updateFirmware(Uint8List firmware) =>
+      FlutterBlue.instance._channel.invokeMethod("updateFirmware", {"deviceId":id.toString(), "firmware": firmware});
 
   Future<bool> stopFlashing() =>
       FlutterBlue.instance._channel.invokeMethod("stopFlashing");

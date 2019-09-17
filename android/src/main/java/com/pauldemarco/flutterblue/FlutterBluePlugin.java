@@ -499,13 +499,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             case "stopFlashing":
             {
                 boolean wasStopped = false;
-                if(otaHelper != null){
-                    if(otaHelper.dfuManager != null){
-                        if(otaHelper.dfuManager.isInProgress()){
-                            otaHelper.dfuManager.cancel();
-                            wasStopped = true;
-                        }
-                    }
+                if(otaHelper != null) {
+                    wasStopped = otaHelper.stopFlashing();
                 }
                 result.success(wasStopped);
             }
@@ -513,16 +508,16 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             case "updateFirmware":
             {
                 String deviceId = call.argument("deviceId");
-                String firmwarePath = call.argument("path");
+                byte[] firmware = call.argument("firmware");
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
                 Context context = registrar.context();
                 if(otaHelper == null){
                     otaHelper = new OtaHelper();
                 }
                 try {
-                    otaHelper.flash(device, firmwarePath, context);
+                    otaHelper.flash(device, firmware, context);
                 } catch (Exception e){
-                    result.error("Error occurred while flashing", e.toString(), null);
+                    result.error("Error occurred while flashing: ", e.toString(), null);
                 }
                 result.success("success");
             }

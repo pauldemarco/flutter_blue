@@ -2,12 +2,6 @@ package com.pauldemarco.flutterblue;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import io.runtime.mcumgr.McuMgrTransport;
 import io.runtime.mcumgr.ble.McuMgrBleTransport;
 import io.runtime.mcumgr.dfu.FirmwareUpgradeCallback;
@@ -20,33 +14,31 @@ public class OtaHelper implements FirmwareUpgradeCallback {
     FirmwareUpgradeManager dfuManager;
     int progress = 0;
 
-    boolean flash(BluetoothDevice device, String firmwarePath, Context context) {
+    void flash(BluetoothDevice device, byte[] firmware, Context context) {
 
+        stopFlashing();
         progress = 0;
+
         McuMgrTransport transport = new McuMgrBleTransport(context, device);
         dfuManager = new FirmwareUpgradeManager(transport, null);
 
-        File file = new File(firmwarePath);
-        int size = (int) file.length();
-        byte[] bytes = new byte[size];
-        try {
-            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-            buf.read(bytes, 0, bytes.length);
-            buf.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         dfuManager.setMode(FirmwareUpgradeManager.Mode.TEST_AND_CONFIRM);
         dfuManager.setFirmwareUpgradeCallback(this);
-        boolean result = false;
 
         try {
-            dfuManager.start(bytes);
-            result = true;
-        } catch (Exception ignored) {
+            dfuManager.start(firmware);
+        } catch (Exception ignored) {}
+    }
+
+    boolean stopFlashing(){
+        boolean wasStopped = false;
+        if(dfuManager != null) {
+            if (dfuManager.isInProgress()) {
+                dfuManager.cancel();
+                wasStopped = true;
+            }
         }
-        return result;
+        return wasStopped;
     }
 
     @Override
