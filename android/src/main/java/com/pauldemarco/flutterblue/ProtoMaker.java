@@ -14,14 +14,11 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.os.Build;
-import android.os.Parcel;
 import android.os.ParcelUuid;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.protobuf.ByteString;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -68,17 +65,21 @@ public class ProtoMaker {
             }
             // Manufacturer Specific Data
             SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
-            for (int i = 0; i < msd.size(); i++) {
-                int key = msd.keyAt(i);
-                byte[] value = msd.valueAt(i);
-                a.putManufacturerData(key, ByteString.copyFrom(value));
+            if (msd != null) {
+                for (int i = 0; i < msd.size(); i++) {
+                    int key = msd.keyAt(i);
+                    byte[] value = msd.valueAt(i);
+                    a.putManufacturerData(key, ByteString.copyFrom(value));
+                }
             }
             // Service Data
             Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
-            for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
-                ParcelUuid key = entry.getKey();
-                byte[] value = entry.getValue();
-                a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
+            if (serviceData != null) {
+                for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
+                    ParcelUuid key = entry.getKey();
+                    byte[] value = entry.getValue();
+                    a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
+                }
             }
             // Service UUIDs
             List<ParcelUuid> serviceUuids = scanRecord.getServiceUuids();
