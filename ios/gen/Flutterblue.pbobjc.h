@@ -755,7 +755,7 @@ typedef GPB_ENUM(ProtosMtuSizeRequest_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
-@property(nonatomic, readwrite) int32_t mtu;
+@property(nonatomic, readwrite) uint32_t mtu;
 
 @end
 
@@ -770,7 +770,7 @@ typedef GPB_ENUM(ProtosMtuSizeResponse_FieldNumber) {
 
 @property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
-@property(nonatomic, readwrite) int32_t mtu;
+@property(nonatomic, readwrite) uint32_t mtu;
 
 @end
 

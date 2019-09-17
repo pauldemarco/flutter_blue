@@ -312,7 +312,7 @@ const MtuSizeRequest$json = const {
   '1': 'MtuSizeRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'mtu', '3': 2, '4': 1, '5': 5, '10': 'mtu'},
+    const {'1': 'mtu', '3': 2, '4': 1, '5': 13, '10': 'mtu'},
   ],
 };
 
@@ -320,7 +320,7 @@ const MtuSizeResponse$json = const {
   '1': 'MtuSizeResponse',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'mtu', '3': 2, '4': 1, '5': 5, '10': 'mtu'},
+    const {'1': 'mtu', '3': 2, '4': 1, '5': 13, '10': 'mtu'},
   ],
 };
 

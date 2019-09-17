@@ -1023,7 +1023,7 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
 class MtuSizeRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('MtuSizeRequest', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..a<$core.int>(2, 'mtu', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, 'mtu', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -1047,7 +1047,7 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
   void clearRemoteId() => clearField(1);
 
   $core.int get mtu => $_get(1, 0);
-  set mtu($core.int v) { $_setSignedInt32(1, v); }
+  set mtu($core.int v) { $_setUnsignedInt32(1, v); }
   $core.bool hasMtu() => $_has(1);
   void clearMtu() => clearField(2);
 }
@@ -1055,7 +1055,7 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
 class MtuSizeResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('MtuSizeResponse', createEmptyInstance: create)
     ..aOS(1, 'remoteId')
-    ..a<$core.int>(2, 'mtu', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, 'mtu', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -1079,7 +1079,7 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
   void clearRemoteId() => clearField(1);
 
   $core.int get mtu => $_get(1, 0);
-  set mtu($core.int v) { $_setSignedInt32(1, v); }
+  set mtu($core.int v) { $_setUnsignedInt32(1, v); }
   $core.bool hasMtu() => $_has(1);
   void clearMtu() => clearField(2);
 }
