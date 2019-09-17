@@ -498,13 +498,16 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "stopFlashing":
             {
+                boolean wasStopped = false;
                 if(otaHelper != null){
                     if(otaHelper.dfuManager != null){
                         if(otaHelper.dfuManager.isInProgress()){
                             otaHelper.dfuManager.cancel();
+                            wasStopped = true;
                         }
                     }
                 }
+                result.success(wasStopped);
             }
 
             case "updateFirmware":
