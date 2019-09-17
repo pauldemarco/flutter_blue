@@ -496,6 +496,17 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 break;
             }
 
+            case "stopFlashing":
+            {
+                if(otaHelper != null){
+                    if(otaHelper.dfuManager != null){
+                        if(otaHelper.dfuManager.isInProgress()){
+                            otaHelper.dfuManager.cancel();
+                        }
+                    }
+                }
+            }
+
             case "updateFirmware":
             {
                 String deviceId = call.argument("deviceId");
@@ -505,11 +516,31 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 if(otaHelper == null){
                     otaHelper = new OtaHelper();
                 }
-                boolean res = otaHelper.flash(device, firmwarePath, context);
-                if(res){
-                    result.success("success");
+                try {
+                    otaHelper.flash(device, firmwarePath, context);
+                } catch (Exception e){
+                    result.error("Error occurred while flashing", e.toString(), null);
+                }
+                result.success("success");
+            }
+
+            case "getFlashingState":
+            {
+                if(otaHelper != null) {
+                    result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
                 } else {
-                    result.error("error", "", "error");
+                    result.error("Device is not flashing", null, null);
+                }
+                break;
+            }
+
+            case "getFlashingProgress":
+            {
+                if(otaHelper != null){
+                    Log.d("PLUGIN", "ta.progress == " + otaHelper.progress);
+                    result.success(otaHelper.progress);
+                } else {
+                    result.error("Error", null, 0);
                 }
             }
 
@@ -526,25 +557,6 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("mtu", "no instance of BluetoothGatt, have you connected first?", null);
                 }
                 break;
-            }
-
-            case "getFlashingState":
-            {
-                if(otaHelper != null) {
-                    result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
-                } else {
-                    result.error("Device is not flashing", null, null);
-                }
-                break;
-            }
-
-            case "getFlashingProgress":
-            {
-                if(otaHelper != null){
-                    result.success(otaHelper.progress);
-                } else {
-                    result.error("Error", null, 0);
-                }
             }
 
             case "requestMtu":

@@ -2,9 +2,6 @@ package com.pauldemarco.flutterblue;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.util.Log;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -13,26 +10,17 @@ import java.io.IOException;
 
 import io.runtime.mcumgr.McuMgrTransport;
 import io.runtime.mcumgr.ble.McuMgrBleTransport;
+import io.runtime.mcumgr.dfu.FirmwareUpgradeCallback;
+import io.runtime.mcumgr.dfu.FirmwareUpgradeController;
 import io.runtime.mcumgr.dfu.FirmwareUpgradeManager;
 import io.runtime.mcumgr.exception.McuMgrException;
-import io.runtime.mcumgr.managers.ImageManager;
 
-public class OtaHelper  implements ImageManager.ImageUploadCallback {
+public class OtaHelper implements FirmwareUpgradeCallback {
 
     FirmwareUpgradeManager dfuManager;
     int progress = 0;
 
-    public static byte[] hexStringToByteArray(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i+1), 16));
-        }
-        return data;
-    }
-
-    boolean flash(BluetoothDevice device, String firmwarePath, Context context){
+    boolean flash(BluetoothDevice device, String firmwarePath, Context context) {
 
         progress = 0;
         McuMgrTransport transport = new McuMgrBleTransport(context, device);
@@ -50,33 +38,45 @@ public class OtaHelper  implements ImageManager.ImageUploadCallback {
         }
 
         dfuManager.setMode(FirmwareUpgradeManager.Mode.TEST_AND_CONFIRM);
+        dfuManager.setFirmwareUpgradeCallback(this);
         boolean result = false;
 
         try {
             dfuManager.start(bytes);
             result = true;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return result;
     }
 
     @Override
-    public void onProgressChanged(int bytesSent, int imageSize, long timestamp) {
-        Log.d("PLUGIN", "Flashing progress: " + bytesSent * 100.f / imageSize);
-        progress = (int) (bytesSent * 100.f / imageSize);
-    }
-
-    @Override
-    public void onUploadFailed(@NotNull McuMgrException error) {
+    public void onUpgradeStarted(FirmwareUpgradeController controller) {
 
     }
 
     @Override
-    public void onUploadCanceled() {
+    public void onStateChanged(FirmwareUpgradeManager.State prevState, FirmwareUpgradeManager.State newState) {
 
     }
 
     @Override
-    public void onUploadFinished() {
+    public void onUpgradeCompleted() {
         progress = 100;
+    }
+
+    @Override
+    public void onUpgradeFailed(FirmwareUpgradeManager.State state, McuMgrException error) {
+
+    }
+
+    @Override
+    public void onUpgradeCanceled(FirmwareUpgradeManager.State state) {
+
+    }
+
+    @Override
+    public void onUploadProgressChanged(final int bytesSent, final int imageSize, final long timestamp) {
+        // Convert to percent
+        progress = ((int) (bytesSent * 100.f / imageSize));
     }
 }
