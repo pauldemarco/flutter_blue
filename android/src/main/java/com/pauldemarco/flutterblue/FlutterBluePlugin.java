@@ -13,7 +13,6 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -525,7 +524,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             case "getFlashingState":
             {
                 if(otaHelper != null) {
-                    result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
+                    if(otaHelper.errorString == null){
+                        result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
+                    } else {
+                        result.success("Error: " + otaHelper.errorString);
+                    }
                 } else {
                     result.error("Device is not flashing", null, null);
                 }

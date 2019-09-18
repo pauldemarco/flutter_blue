@@ -13,6 +13,7 @@ public class OtaHelper implements FirmwareUpgradeCallback {
 
     FirmwareUpgradeManager dfuManager;
     int progress = 0;
+    String errorString;
 
     void flash(BluetoothDevice device, byte[] firmware, Context context) {
 
@@ -31,6 +32,7 @@ public class OtaHelper implements FirmwareUpgradeCallback {
     }
 
     boolean stopFlashing(){
+        errorString = null;
         boolean wasStopped = false;
         if(dfuManager != null) {
             if (dfuManager.isInProgress()) {
@@ -58,7 +60,8 @@ public class OtaHelper implements FirmwareUpgradeCallback {
 
     @Override
     public void onUpgradeFailed(FirmwareUpgradeManager.State state, McuMgrException error) {
-
+        errorString = error.toString();
+        stopFlashing();
     }
 
     @Override
@@ -68,7 +71,7 @@ public class OtaHelper implements FirmwareUpgradeCallback {
 
     @Override
     public void onUploadProgressChanged(final int bytesSent, final int imageSize, final long timestamp) {
-        // Convert to percent
+        // Converting to percent
         progress = ((int) (bytesSent * 100.f / imageSize));
     }
 }
