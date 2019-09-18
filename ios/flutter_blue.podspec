@@ -18,7 +18,15 @@ A new flutter plugin project.
   s.dependency '!ProtoCompiler'
   s.framework = 'CoreBluetooth'
 
-  protoc = ENV['PWD'] + '/Pods/!ProtoCompiler/protoc'
+  # try with 'ios'
+  if File.exist?(ENV['PWD'] + '/ios/Pods/!ProtoCompiler/protoc')
+    protoc =  ENV['PWD'] + '/ios/Pods/!ProtoCompiler/protoc'
+  end
+  # try without 'ios'
+  if File.exist?(ENV['PWD'] + '/Pods/!ProtoCompiler/protoc')
+    protoc =  ENV['PWD'] + '/Pods/!ProtoCompiler/protoc'
+  end
+
   objc_out = 'gen'
   proto_in = '../protos'
   s.prepare_command = <<-CMD
