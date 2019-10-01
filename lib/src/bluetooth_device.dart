@@ -8,6 +8,8 @@ class BluetoothDevice {
   final DeviceIdentifier id;
   final String name;
   final BluetoothDeviceType type;
+  final EventChannel _flashingStateChannel = const EventChannel('$NAMESPACE/firmware-state');
+  final EventChannel _flashingProgressChannel = const EventChannel('$NAMESPACE/firmware-progress');
 
   BluetoothDevice.fromProto(protos.BluetoothDevice p)
       : id = new DeviceIdentifier(p.remoteId),
@@ -47,8 +49,23 @@ class BluetoothDevice {
   Future<int> getFlashingProgress() =>
       FlutterBlue.instance._channel.invokeMethod("getFlashingProgress");
 
+  Stream<int> get flashingProgress async* {
+    yield* _flashingProgressChannel
+        .receiveBroadcastStream()
+        .map((progress) => progress as int);
+  }
+
   Future<String> getFlashingState() =>
       FlutterBlue.instance._channel.invokeMethod("getFlashingState");
+
+  Stream<String> get flashingState async* {
+    yield* _flashingStateChannel
+        .receiveBroadcastStream()
+        .map((s) => s as String);
+  }
+
+  Future<bool> reset() =>
+      FlutterBlue.instance._channel.invokeMethod("reset", {"deviceId":id.toString()});
 
   Future updateFirmware(Uint8List firmware) =>
       FlutterBlue.instance._channel.invokeMethod("updateFirmware", {"deviceId":id.toString(), "firmware": firmware});
