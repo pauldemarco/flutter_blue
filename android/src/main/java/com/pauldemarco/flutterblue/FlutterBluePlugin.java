@@ -64,6 +64,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private final Activity activity;
     private final MethodChannel channel;
     private final EventChannel stateChannel;
+    private final EventChannel firmwareStateChannel;
+    private final EventChannel firmwareProgressChannel;
     private final BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothDeviceCache> mDevices = new HashMap<>();
@@ -86,11 +88,16 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     FlutterBluePlugin(Registrar r){
         this.registrar = r;
         this.activity = r.activity();
+        this.otaHelper = new OtaHelper();
         this.channel = new MethodChannel(registrar.messenger(), NAMESPACE+"/methods");
         this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/state");
+        this.firmwareProgressChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/firmware-progress");
+        this.firmwareStateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/firmware-state");
         this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
+        firmwareProgressChannel.setStreamHandler(otaHelper.firmwareProgressHandler);
+        firmwareStateChannel.setStreamHandler(otaHelper.firmwareStateHandler);
         stateChannel.setStreamHandler(stateHandler);
     }
 
@@ -495,6 +502,21 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 break;
             }
 
+            case "reset": {
+                if(otaHelper == null){
+                    otaHelper = new OtaHelper();
+                }
+                Context context = registrar.context();
+                String deviceId = call.argument("deviceId");
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+                try{
+                    otaHelper.reset(context, device);
+                    result.success(true);
+                } catch (Exception e){
+                    result.success(false);
+                }
+            }
+
             case "stopFlashing":
             {
                 boolean wasStopped = false;
@@ -525,9 +547,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             {
                 if(otaHelper != null) {
                     if(otaHelper.errorString == null){
-                        result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
+                        try {
+                            result.success("Device flashing state is: " + otaHelper.dfuManager.getState().toString());
+                        } catch (Exception ignored){}
                     } else {
+                        try {
                         result.success("Error: " + otaHelper.errorString);
+                        } catch (Exception ignored){}
                     }
                 } else {
                     result.error("Device is not flashing", null, null);

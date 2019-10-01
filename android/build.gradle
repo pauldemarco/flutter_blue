@@ -86,4 +86,6 @@ protobuf {
 dependencies {
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
     implementation 'io.runtime.mcumgr:mcumgr-ble:0.8.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
 }
