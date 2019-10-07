@@ -95,7 +95,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       uuids = [uuids arrayByAddingObject:[CBUUID UUIDWithString:u]];
     }
     // TODO: iOS Scan Options (#35)
-    [self->_centralManager scanForPeripheralsWithServices:uuids options:nil];
+    [self->_centralManager scanForPeripheralsWithServices:uuids options:@{CBCentralManagerScanOptionAllowDuplicatesKey : @YES}];
     result(nil);
   } else if([@"stopScan" isEqualToString:call.method]) {
     [self->_centralManager stopScan];
