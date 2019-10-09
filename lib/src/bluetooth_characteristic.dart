@@ -27,6 +27,10 @@ class BluetoothCharacteristic {
         _onValueChangedStream,
       ]);
 
+  Stream<List<int>> get changedValue => Observable.merge([
+        _onValueChangedStream,
+      ]);
+
   List<int> get lastValue => _value.value;
 
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
