@@ -645,7 +645,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
             }
         }
-        writeHandler.sendEmptyMessageDelayed(0, 2);
+        writeHandler.removeCallbacksAndMessages(null);
+        writeHandler.sendEmptyMessageDelayed(0, 5);
     }
 
     private void writeCharacteristic(BluetoothGatt gattServer, BluetoothGattCharacteristic characteristic, byte[] data) throws Exception {
