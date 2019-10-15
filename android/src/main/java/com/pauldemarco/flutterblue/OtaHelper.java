@@ -163,7 +163,7 @@ public class OtaHelper implements FirmwareUpgradeCallback {
 
     @Override
     public void onUpgradeCompleted() {
-        stateSubject.onNext("Upgrade had benn finished");
+        stateSubject.onNext("Upgrade completed");
         progress = 100;
     }
 
