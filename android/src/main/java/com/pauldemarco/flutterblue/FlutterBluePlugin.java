@@ -28,6 +28,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
 import android.os.ParcelUuid;
 import android.util.Log;
 
@@ -36,8 +40,10 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
@@ -76,6 +82,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private MethodCall pendingCall;
     private Result pendingResult;
 
+
+    private Handler mHandler;
+    private Handler writeHandler;
+    private HandlerThread writeThread;
+
     /**
      * Plugin registration.
      */
@@ -94,10 +105,47 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
         stateChannel.setStreamHandler(stateHandler);
+
+        mHandler = new Handler(Looper.getMainLooper());
+        writeThread = new HandlerThread("t_write_bluetooth_data");
+        writeThread.start();
+        writeHandler = new Handler(writeThread.getLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                final WriteData data = writeDatas.poll();
+                if (data != null) {
+                    try {
+                        writeCharacteristic(data.gattServer, data.characteristic, data.data);
+                        int size = writeDatas.size();
+                        log(LogLevel.DEBUG, "Remain " + size + " pkgs");
+                        if (size == 0) {
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    data.result.success(null);
+                                }
+                            });
+                        }
+                    } catch (final Exception e) {
+                        e.printStackTrace();
+                        writeDatas.clear();
+                        mHandler.removeCallbacksAndMessages(null);
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                data.result.error("write data error", e.getMessage(), e);
+                            }
+                        });
+                    }
+
+                }
+            }
+        };
     }
 
     @Override
-    public void onMethodCall(MethodCall call, Result result) {
+    public void onMethodCall(MethodCall call, final Result result) {
         if(mBluetoothAdapter == null && !"isAvailable".equals(call.method)) {
             result.error("bluetooth_unavailable", "the device does not have bluetooth", null);
             return;
@@ -213,10 +261,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 if(mDevices.containsKey(deviceId) && !isConnected) {
                     if(mDevices.get(deviceId).gatt.connect()){
                         result.success(null);
-                    } else {
-                        result.error("reconnect_error", "error when reconnecting to device", null);
+                        return;
                     }
-                    return;
                 }
 
                 // New request, connect and add gattServer to Map
@@ -356,43 +402,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "writeCharacteristic":
             {
-                byte[] data = call.arguments();
-                Protos.WriteCharacteristicRequest request;
-                try {
-                    request = Protos.WriteCharacteristicRequest.newBuilder().mergeFrom(data).build();
-                } catch (InvalidProtocolBufferException e) {
-                    result.error("RuntimeException", e.getMessage(), e);
-                    break;
-                }
-
-                BluetoothGatt gattServer;
-                BluetoothGattCharacteristic characteristic;
-                try {
-                    gattServer = locateGatt(request.getRemoteId());
-                    characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
-                } catch(Exception e) {
-                    result.error("write_characteristic_error", e.getMessage(), null);
-                    return;
-                }
-
-                // Set characteristic to new value
-                if(!characteristic.setValue(request.getValue().toByteArray())){
-                    result.error("write_characteristic_error", "could not set the local value of characteristic", null);
-                }
-
-                // Apply the correct write type
-                if(request.getWriteType() == Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE) {
-                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
-                } else {
-                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-                }
-
-                if(!gattServer.writeCharacteristic(characteristic)){
-                    result.error("write_characteristic_error", "writeCharacteristic failed", null);
-                    return;
-                }
-
-                result.success(null);
+                final byte[] data = call.arguments();
+                writeAnyLongCharacteristic(data, result);
                 break;
             }
 
@@ -549,6 +560,100 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 break;
             }
         }
+    }
+
+    private class WriteData {
+        BluetoothGatt gattServer;
+        BluetoothGattCharacteristic characteristic;
+        byte[] data;
+        Result result;
+    }
+
+    private Queue<WriteData> writeDatas = new LinkedList<>();
+
+    private void writeAnyLongCharacteristic(byte[] data, final Result result) {
+        Protos.WriteCharacteristicRequest request;
+        try {
+            request = Protos.WriteCharacteristicRequest.newBuilder().mergeFrom(data).build();
+        } catch (final InvalidProtocolBufferException e) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    result.error("RuntimeException", e.getMessage(), e);
+                }
+            });
+            return;
+        }
+
+        BluetoothGatt gattServer;
+        BluetoothGattCharacteristic characteristic;
+        try {
+            gattServer = locateGatt(request.getRemoteId());
+            characteristic = locateCharacteristic(gattServer, request.getServiceUuid(), request.getSecondaryServiceUuid(), request.getCharacteristicUuid());
+        } catch (final Exception e) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    result.error("write_characteristic_error", e.getMessage(), null);
+                }
+            });
+            return;
+        }
+
+        byte[] value = request.getValue().toByteArray();
+        // Apply the correct write type
+        Protos.WriteCharacteristicRequest.WriteType writeType = request.getWriteType();
+        if (writeType == Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE) {
+            characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+        } else {
+            characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+        }
+        log(LogLevel.DEBUG, "write Characteristic " + value.length + " bytes");
+        if (value.length <= 20) {
+            WriteData writeData = new WriteData();
+            writeData.gattServer = gattServer;
+            writeData.characteristic = characteristic;
+            writeData.data = value;
+            writeData.result = result;
+            writeDatas.offer(writeData);
+        } else {
+            int pkgCount;
+            int count = 20;
+            if (value.length % count == 0) {
+                pkgCount = value.length / count;
+            } else {
+                pkgCount = Math.round(value.length / count + 1);
+            }
+
+            if (pkgCount > 0) {
+                log(LogLevel.DEBUG, "write pkg count:" + pkgCount);
+                for (int i = 0; i < pkgCount; i++) {
+                    byte[] dataPkg;
+                    int j;
+                    if (pkgCount == 1 || i == pkgCount - 1) {
+                        j = value.length % count == 0 ? count : value.length % count;
+                        System.arraycopy(value, i * count, dataPkg = new byte[j], 0, j);
+                    } else {
+                        System.arraycopy(value, i * count, dataPkg = new byte[count], 0, count);
+                    }
+                    WriteData writeData = new WriteData();
+                    writeData.gattServer = gattServer;
+                    writeData.characteristic = characteristic;
+                    writeData.data = dataPkg;
+                    writeData.result = result;
+                    writeDatas.offer(writeData);
+                }
+            }
+        }
+        writeHandler.sendEmptyMessageDelayed(0, 2);
+    }
+
+    private void writeCharacteristic(BluetoothGatt gattServer, BluetoothGattCharacteristic characteristic, byte[] data) throws Exception {
+        // Set characteristic to new value
+        if (!characteristic.setValue(data)) {
+            throw new Exception("setValue error");
+        }
+        gattServer.writeCharacteristic(characteristic);
     }
 
     @Override
@@ -786,6 +891,17 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 if(!mDevices.containsKey(gatt.getDevice().getAddress())) {
                     gatt.close();
                 }
+                writeHandler.removeCallbacksAndMessages(null);
+                final WriteData data = writeDatas.poll();
+                if (data != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            data.result.error("device disconnect", null, null);
+                            writeDatas.clear();
+                        }
+                    });
+                }
             }
             invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
         }
@@ -812,7 +928,6 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            log(LogLevel.DEBUG, "[onCharacteristicWrite] uuid: " + characteristic.getUuid().toString() + " status: " + status);
             Protos.WriteCharacteristicRequest.Builder request = Protos.WriteCharacteristicRequest.newBuilder();
             request.setRemoteId(gatt.getDevice().getAddress());
             request.setCharacteristicUuid(characteristic.getUuid().toString());
@@ -821,6 +936,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             p.setRequest(request);
             p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
             invokeMethodUIThread("WriteCharacteristicResponse", p.build().toByteArray());
+            writeHandler.sendEmptyMessageDelayed(0, 2);
         }
 
         @Override
