@@ -100,7 +100,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber  numberWithBool:option], CBCentralManagerScanOptionAllowDuplicatesKey, nil];
 
     // TODO: iOS Scan Options (#35)
-    [self->_centralManager scanForPeripheralsWithServices:uuids options:nil];
+    [self->_centralManager scanForPeripheralsWithServices:uuids options:options];
     result(nil);
   } else if([@"stopScan" isEqualToString:call.method]) {
     [self->_centralManager stopScan];
