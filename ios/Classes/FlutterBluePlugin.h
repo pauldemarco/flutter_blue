@@ -4,6 +4,7 @@
 
 #import <Flutter/Flutter.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "gen/Flutterblue.pbobjc.h"
 
 #define NAMESPACE @"plugins.pauldemarco.com/flutter_blue"
 
