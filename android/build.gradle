@@ -11,7 +11,7 @@ gradle.buildFinished { buildResult ->
     }
 }
 
-group 'com.pauldemarco.flutterblue'
+group 'com.pauldemarco.flutter_blue'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -22,7 +22,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }

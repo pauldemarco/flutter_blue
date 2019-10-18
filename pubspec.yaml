@@ -16,11 +16,11 @@ dependencies:
   protobuf: "^0.14.1"
   rxdart: "^0.22.0"
 
-flutter:
-  plugin:
-    androidPackage: com.pauldemarco.flutterblue
-    pluginClass: FlutterBluePlugin
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter:
+  plugin:
+    androidPackage: com.pauldemarco.flutter_blue
+    pluginClass: FlutterBluePlugin
