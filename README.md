@@ -33,23 +33,26 @@ FlutterBlue flutterBlue = FlutterBlue.instance;
 
 ### Scan for devices
 ```dart
-/// Start scanning
-var scanSubscription = flutterBlue.scan().listen((scanResult) {
+// Start scanning
+flutterBlue.startScan(timeout: Duration(seconds: 4));
+
+// Listen to scan results
+var subscription = flutterBlue.scanResults.listen((scanResult) {
     // do something with scan result
     device = scanResult.device;
     print('${device.name} found! rssi: ${scanResult.rssi}');
 });
 
-/// Stop scanning
-scanSubscription.cancel();
+// Stop scanning
+flutterBlue.stopScan();
 ```
 
 ### Connect to a device
 ```dart
-/// Connect to the device
+// Connect to the device
 await device.connect();
 
-/// Disconnect from device
+// Disconnect from device
 device.disconnect();
 ```
 
