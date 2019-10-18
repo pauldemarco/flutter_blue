@@ -7,7 +7,7 @@ task:
   pub_cache:
     folder: ~/.pub-cache
   setup_script:
-    - flutter channel stable
+    - flutter channel dev
     - flutter upgrade
   build_script: 
     - flutter pub get
@@ -25,7 +25,7 @@ task:
     folder: ~/.pub-cache
   setup_script:
     - pod repo update
-    - flutter channel stable
+    - flutter channel dev
     - flutter upgrade
   create_simulator_script:
     - xcrun simctl list
