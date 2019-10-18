@@ -10,7 +10,9 @@ task:
     - flutter channel stable
     - flutter upgrade
   build_script: 
-    - cd example
+    - flutter pub get
+    - cd example    
+    - flutter pub get
     - flutter build apk
   test_script: flutter test
 
@@ -29,6 +31,8 @@ task:
     - xcrun simctl list
     - xcrun simctl create Flutter-iPhone com.apple.CoreSimulator.SimDeviceType.iPhone-X com.apple.CoreSimulator.SimRuntime.iOS-12-2 | xargs xcrun simctl boot
   build_script: 
+    - flutter pub get
     - cd example
+    - flutter pub get
     - flutter build ios --no-codesign
   test_script: flutter test
