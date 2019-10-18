@@ -18,7 +18,6 @@ buildscript {
     repositories {
         google()
         jcenter()
-        mavenLocal()
     }
 
     dependencies {
@@ -31,7 +30,6 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        mavenLocal()
     }
 }
 
@@ -47,11 +45,6 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
-    }
-    dependencies {
-        // Required for local unit tests (JUnit 4 framework)
-        testImplementation 'junit:junit:4.12'
-        implementation 'androidx.core:core:1.0.2'
     }
     sourceSets {
         main {
