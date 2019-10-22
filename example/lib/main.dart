@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -155,6 +156,16 @@ class DeviceScreen extends StatelessWidget {
 
   final BluetoothDevice device;
 
+  List<int> _getRandomBytes() {
+    final math = Random();
+    return [
+      math.nextInt(255),
+      math.nextInt(255),
+      math.nextInt(255),
+      math.nextInt(255)
+    ];
+  }
+
   List<Widget> _buildServiceTiles(List<BluetoothService> services) {
     return services
         .map(
@@ -165,7 +176,7 @@ class DeviceScreen extends StatelessWidget {
                   (c) => CharacteristicTile(
                     characteristic: c,
                     onReadPressed: () => c.read(),
-                    onWritePressed: () => c.write([13, 24]),
+                    onWritePressed: () => c.write(_getRandomBytes()),
                     onNotificationPressed: () =>
                         c.setNotifyValue(!c.isNotifying),
                     descriptorTiles: c.descriptors
@@ -173,7 +184,7 @@ class DeviceScreen extends StatelessWidget {
                           (d) => DescriptorTile(
                             descriptor: d,
                             onReadPressed: () => d.read(),
-                            onWritePressed: () => d.write([11, 12]),
+                            onWritePressed: () => d.write(_getRandomBytes()),
                           ),
                         )
                         .toList(),

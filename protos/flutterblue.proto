@@ -4,7 +4,7 @@
 
 syntax = "proto3";
 
-option java_package = "com.pauldemarco.flutterblue";
+option java_package = "com.pauldemarco.flutter_blue";
 option java_outer_classname = "Protos";
 option objc_class_prefix = "Protos";
 
@@ -204,10 +204,10 @@ message ConnectedDevicesResponse {
 
 message MtuSizeRequest {
   string remote_id = 1;
-  int32 mtu = 2;
+  uint32 mtu = 2;
 }
 
 message MtuSizeResponse {
   string remote_id = 1;
-  int32 mtu = 2;
+  uint32 mtu = 2;
 }

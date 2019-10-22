@@ -11,18 +11,17 @@ gradle.buildFinished { buildResult ->
     }
 }
 
-group 'com.pauldemarco.flutterblue'
+group 'com.pauldemarco.flutter_blue'
 version '1.0-SNAPSHOT'
 
 buildscript {
     repositories {
         google()
         jcenter()
-        mavenLocal()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }
@@ -31,7 +30,6 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        mavenLocal()
     }
 }
 
@@ -47,11 +45,6 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
-    }
-    dependencies {
-        // Required for local unit tests (JUnit 4 framework)
-        testImplementation 'junit:junit:4.12'
-        implementation 'androidx.core:core:1.0.2'
     }
     sourceSets {
         main {
