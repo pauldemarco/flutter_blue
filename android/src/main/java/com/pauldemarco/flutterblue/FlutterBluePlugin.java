@@ -49,6 +49,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 
@@ -56,10 +57,11 @@ import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 /**
  * FlutterBluePlugin
  */
-public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsResultListener  {
+public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsResultListener, PluginRegistry.ActivityResultListener {
     private static final String TAG = "FlutterBluePlugin";
     private static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
     private static final int REQUEST_COARSE_LOCATION_PERMISSIONS = 1452;
+    private static final int REQUEST_ENABLE_BT = 1452;
     static final private UUID CCCD_ID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     private final Registrar registrar;
     private final Activity activity;
@@ -80,6 +82,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     public static void registerWith(Registrar registrar) {
         final FlutterBluePlugin instance = new FlutterBluePlugin(registrar);
         registrar.addRequestPermissionsResultListener(instance);
+        registrar.addActivityResultListener(instance);
     }
 
     FlutterBluePlugin(Registrar r){
@@ -650,6 +653,17 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     };
 
     private void startScan(MethodCall call, Result result) {
+        if (!mBluetoothAdapter.isEnabled()) {
+            pendingCall = call;
+            pendingResult = result;
+            activity.startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
+        } else {
+            startScanInternal(call, result);
+        }
+
+    }
+
+    private void startScanInternal(MethodCall call, Result result) {
         byte[] data = call.arguments();
         Protos.ScanSettings settings;
         try {
@@ -663,6 +677,16 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         } catch (Exception e) {
             result.error("startScan", e.getMessage(), e);
         }
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                startScanInternal(pendingCall, pendingResult);
+            }
+        }
+        return false;
     }
 
     private void stopScan() {
