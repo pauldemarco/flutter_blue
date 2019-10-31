@@ -1,5 +1,5 @@
-def PLUGIN = "flutter_blue";
-def ANDROIDX_WARNING = "flutterPluginsAndroidXWarning";
+def PLUGIN = "flutter_blue"
+def ANDROIDX_WARNING = "flutterPluginsAndroidXWarning"
 gradle.buildFinished { buildResult ->
     if (buildResult.failure && !rootProject.ext.has(ANDROIDX_WARNING)) {
         println '         *********************************************************'
@@ -7,7 +7,7 @@ gradle.buildFinished { buildResult ->
         println '         See https://goo.gl/CP92wY for more information on the problem and how to fix it.'
         println '         This warning prints for all Android build failures. The real root cause of the error may be unrelated.'
         println '         *********************************************************'
-        rootProject.ext.set(ANDROIDX_WARNING, true);
+        rootProject.ext.set(ANDROIDX_WARNING, true)
     }
 }
 
@@ -21,7 +21,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.1'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }
@@ -78,4 +78,5 @@ protobuf {
 
 dependencies {
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    implementation "androidx.core:core:1.1.0"
 }
