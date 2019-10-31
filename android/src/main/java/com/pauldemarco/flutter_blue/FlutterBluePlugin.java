@@ -87,7 +87,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         this.activity = r.activity();
         this.channel = new MethodChannel(registrar.messenger(), NAMESPACE + "/methods");
         this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE + "/state");
-        this.mBluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
+        this.mBluetoothManager = (BluetoothManager) r.activeContext().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
         stateChannel.setStreamHandler(stateHandler);
