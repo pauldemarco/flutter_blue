@@ -46,6 +46,9 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    dependencies {
+        implementation 'androidx.core:core:1.1.0'
+    }
     sourceSets {
         main {
             proto {
