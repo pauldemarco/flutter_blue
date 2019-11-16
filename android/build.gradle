@@ -77,5 +77,6 @@ protobuf {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-core-ui:1.0.0-alpha1'
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
 }
