@@ -56,6 +56,7 @@ class FlutterBlue {
         .map((s) => BluetoothState.values[s.state.value]);
   }
 
+  /// Retrieve a list of connected devices
   Future<List<BluetoothDevice>> get connectedDevices {
     return _channel
         .invokeMethod('getConnectedDevices')

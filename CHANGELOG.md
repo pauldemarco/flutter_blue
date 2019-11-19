@@ -1,16 +1,18 @@
+## 0.6.3+1
+* Fix compilation issue with iOS
+* Bump protobuf version to 1.0.0
+
+## 0.6.3
+* Update project files for Android and iOS
+* Remove dependency on protoc for iOS
+
+## 0.6.2
+* Add `mtu` and `requestMtu` to BluetoothDevice
+
 ## 0.6.0+4
-
 * Fix duplicate characteristic notifications when connection lost.
-
-## 0.6.0+3
-
 * Fix duplicate characteristic notifications when reconnecting.
-
-## 0.6.0+2
-
 * Add minimum SDK version of 18 for the plugin.
-
-## 0.6.0+1
 * Documentation updates
 
 ## 0.6.0
