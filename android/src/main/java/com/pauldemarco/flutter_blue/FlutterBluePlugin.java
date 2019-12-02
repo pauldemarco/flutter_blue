@@ -4,16 +4,15 @@
 
 package com.pauldemarco.flutter_blue;
 
-import android.app.Activity;
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -31,6 +30,9 @@ import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -40,8 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
@@ -71,6 +71,8 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
     private Result pendingResult;
+    private ArrayList<String> macDeviceScanned = new ArrayList<>();
+    private boolean allowDuplicate = false;
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
@@ -679,6 +681,10 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
+                    if (!allowDuplicate && result != null && result.getDevice() != null && result.getDevice().getAddress() != null) {
+                        if (macDeviceScanned.contains(result.getDevice().getAddress())) return;
+                        macDeviceScanned.add(result.getDevice().getAddress());
+                    }
                     Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result);
                     invokeMethodUIThread("ScanResult", scanResult.toByteArray());
                 }
@@ -728,6 +734,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 @Override
                 public void onLeScan(final BluetoothDevice bluetoothDevice, int rssi,
                                      byte[] scanRecord) {
+                    if (!allowDuplicate && bluetoothDevice != null && bluetoothDevice.getAddress() != null) {
+                        if (macDeviceScanned.contains(bluetoothDevice.getAddress())) return;
+                        macDeviceScanned.add(bluetoothDevice.getAddress());
+                    }
+
                     Protos.ScanResult scanResult = ProtoMaker.from(bluetoothDevice, scanRecord, rssi);
                     invokeMethodUIThread("ScanResult", scanResult.toByteArray());
                 }
