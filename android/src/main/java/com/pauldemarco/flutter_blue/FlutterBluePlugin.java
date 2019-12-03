@@ -72,7 +72,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private MethodCall pendingCall;
     private Result pendingResult;
     private ArrayList<String> macDeviceScanned = new ArrayList<>();
-    private boolean allowDuplicate = false;
+    private boolean allowDuplicates = false;
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
@@ -652,6 +652,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         Protos.ScanSettings settings;
         try {
             settings = Protos.ScanSettings.newBuilder().mergeFrom(data).build();
+            allowDuplicates = settings.getAllowDuplicates();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 startScan21(settings);
             } else {
@@ -734,7 +735,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 @Override
                 public void onLeScan(final BluetoothDevice bluetoothDevice, int rssi,
                                      byte[] scanRecord) {
-                    if (!allowDuplicate && bluetoothDevice != null && bluetoothDevice.getAddress() != null) {
+                    if (!allowDuplicates && bluetoothDevice != null && bluetoothDevice.getAddress() != null) {
                         if (macDeviceScanned.contains(bluetoothDevice.getAddress())) return;
                         macDeviceScanned.add(bluetoothDevice.getAddress());
                     }
