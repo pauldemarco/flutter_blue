@@ -43,27 +43,20 @@ class Guid {
     return bytes;
   }
 
-  static List<int> _fromString(input) {
-    var bytes = new List<int>.filled(16, 0);
+  static List<int> _fromString(String input) {
     if (input == null) {
       throw new ArgumentError("Input was null");
     }
-    if (input.length < 32) {
-      throw new FormatException("The format is invalid");
-    }
-    input = input.toLowerCase();
 
-    final RegExp regex = new RegExp('[0-9a-f]{2}');
-    Iterable<Match> matches = regex.allMatches(input);
-    if (matches.length != 16) {
+    input = input.replaceAll('-', '');
+    input = input.replaceAll('{', '');
+    input = input.replaceAll('}', '');
+    final bytes = hex.decode(input);
+
+    if (bytes.length != 16) {
       throw new FormatException("The format is invalid");
     }
-    int i = 0;
-    for (Match match in matches) {
-      var hexString = input.substring(match.start, match.end);
-      bytes[i] = hex.decode(hexString)[0];
-      i++;
-    }
+
     return bytes;
   }
 
