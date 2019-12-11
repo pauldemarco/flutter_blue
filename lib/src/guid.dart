@@ -18,29 +18,21 @@ class Guid {
 
   Guid.empty() : this._internal(new List.filled(16, 0));
 
-  static List<int> _fromMacString(input) {
-    var bytes = new List<int>.filled(16, 0);
-
+  static List<int> _fromMacString(String input) {
     if (input == null) {
       throw new ArgumentError("Input was null");
     }
-    input = input.toLowerCase();
 
-    final RegExp regex = new RegExp('[0-9a-f]{2}');
-    Iterable<Match> matches = regex.allMatches(input);
+    input = input.replaceAll(':', '');
+    input = input.replaceAll('{', '');
+    input = input.replaceAll('}', '');
+    final bytes = hex.decode(input);
 
-    if (matches.length != 6) {
+    if (bytes.length != 6) {
       throw new FormatException("The format is invalid: " + input);
     }
 
-    int i = 0;
-    for (Match match in matches) {
-      var hexString = input.substring(match.start, match.end);
-      bytes[i] = hex.decode(hexString)[0];
-      i++;
-    }
-
-    return bytes;
+    return bytes + List<int>.filled(10, 0);
   }
 
   static List<int> _fromString(String input) {
