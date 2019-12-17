@@ -682,7 +682,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
                     super.onScanResult(callbackType, result);
-                    if (!allowDuplicate && result != null && result.getDevice() != null && result.getDevice().getAddress() != null) {
+                    if (!allowDuplicates && result != null && result.getDevice() != null && result.getDevice().getAddress() != null) {
                         if (macDeviceScanned.contains(result.getDevice().getAddress())) return;
                         macDeviceScanned.add(result.getDevice().getAddress());
                     }
