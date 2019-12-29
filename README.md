@@ -40,7 +40,7 @@ flutterBlue.startScan(timeout: Duration(seconds: 4));
 // Listen to scan results
 var subscription = flutterBlue.scanResults.listen((scanResult) {
     // do something with scan result
-    device = scanResult.device;
+    device = scanResult[0].device;
     print('${device.name} found! rssi: ${scanResult.rssi}');
 });
 
