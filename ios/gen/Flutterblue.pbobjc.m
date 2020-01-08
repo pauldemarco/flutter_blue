@@ -298,11 +298,13 @@ typedef struct ProtosAdvertisementData__storage_ {
 
 @dynamic androidScanMode;
 @dynamic serviceUuidsArray, serviceUuidsArray_Count;
+@dynamic enableIOSScanOptionAllowDuplicates;
 
 typedef struct ProtosScanSettings__storage_ {
   uint32_t _has_storage_[1];
   int32_t androidScanMode;
   NSMutableArray *serviceUuidsArray;
+  bool enableIOSScanOptionAllowDuplicates;
 } ProtosScanSettings__storage_;
 
 // This method is threadsafe because it is initially called
@@ -329,6 +331,15 @@ typedef struct ProtosScanSettings__storage_ {
         .flags = GPBFieldRepeated,
         .dataType = GPBDataTypeString,
       },
+      {
+            .name = "enableIOSScanOptionAllowDuplicates",
+            .dataTypeSpecific.className = NULL,
+            .number = ProtosScanSettings_FieldNumber_EnableIOSScanOptionAllowDuplicates,
+            .hasIndex = 0,
+            .offset = (bool)offsetof(ProtosScanSettings__storage_, enableIOSScanOptionAllowDuplicates),
+            .flags = GPBFieldOptional,
+            .dataType = GPBDataTypeBool,
+    }
     };
     GPBDescriptor *localDescriptor =
         [GPBDescriptor allocDescriptorForClass:[ProtosScanSettings class]

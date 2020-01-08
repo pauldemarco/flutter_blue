@@ -72,10 +72,12 @@ class FlutterBlue {
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
     Duration timeout,
+    bool enableIOSScanOptionAllowDuplicates,
   }) async* {
     var settings = protos.ScanSettings.create()
       ..androidScanMode = scanMode.value
-      ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
+      ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList())
+      ..enableIOSScanOptionAllowDuplicates = enableIOSScanOptionAllowDuplicates;
 
     if (_isScanning.value == true) {
       throw Exception('Another scan is already in progress.');
@@ -125,12 +127,14 @@ class FlutterBlue {
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
     Duration timeout,
+    bool enableIOSScanOptionAllowDuplicates,
   }) async {
     await scan(
             scanMode: scanMode,
             withServices: withServices,
             withDevices: withDevices,
-            timeout: timeout)
+            timeout: timeout,
+            enableIOSScanOptionAllowDuplicates: enableIOSScanOptionAllowDuplicates)
         .drain();
     return _scanResults.value;
   }
