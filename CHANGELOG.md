@@ -1,3 +1,11 @@
+## 0.6.3+1
+* Fix compilation issue with iOS
+* Bump protobuf version to 1.0.0
+
+## 0.6.3
+* Update project files for Android and iOS
+* Remove dependency on protoc for iOS
+
 ## 0.6.2
 * Add `mtu` and `requestMtu` to BluetoothDevice
 
