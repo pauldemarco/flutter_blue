@@ -28,6 +28,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   info = 6,
   debug = 7
 };
+typedef void(^SendDataCallback) (BOOL isSendSuss);
 
 @interface FlutterBluePlugin ()
 @property(nonatomic, retain) NSObject<FlutterPluginRegistrar> *registrar;
@@ -38,6 +39,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
+@property(nonatomic, assign) NSInteger sendDataSussCount; // 发送数据是否成功
+@property(nonatomic, assign) NSInteger sendDataTotalCount; // 发送数据总次数
+@property(nonatomic, copy) SendDataCallback sendDataCallbcak;
 @end
 
 @implementation FlutterBluePlugin
@@ -201,9 +205,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       CBCharacteristic *characteristic = [self locateCharacteristic:[request characteristicUuid] peripheral:peripheral serviceId:[request serviceUuid] secondaryServiceId:[request secondaryServiceUuid]];
       // Get correct write type
       CBCharacteristicWriteType type = ([request writeType] == ProtosWriteCharacteristicRequest_WriteType_WithoutResponse) ? CBCharacteristicWriteWithoutResponse : CBCharacteristicWriteWithResponse;
-      // Write to characteristic
-      [peripheral writeValue:[request value] forCharacteristic:characteristic type:type];
-      result(nil);
+        
+      [self wirteDatoToDevice:peripheral writeValue:[NSData dataWithData:[request value]] forCharacteristic:characteristic type:type result:result];
+        
     } @catch(FlutterError *e) {
       result(e);
     }
@@ -253,6 +257,40 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   } else {
     result(FlutterMethodNotImplemented);
   }
+}
+
+- (void)wirteDatoToDevice:(CBPeripheral *)peripheral writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic type:(CBCharacteristicWriteType)type result:(FlutterResult)result {
+    NSData *sendData = data;
+    NSInteger datacount= 200;
+    NSInteger number = data.length/datacount;
+    if (number > 0) {
+        self.sendDataSussCount = 0;
+        self.sendDataTotalCount = number;
+          for(NSInteger i = 0; i < number + 1; i++) {
+              if (i == number) {
+                  [self delaySendDataToDevice:peripheral writeValue:sendData forCharacteristic:characteristic type:type];
+              } else {
+                  NSData *tempData = [sendData subdataWithRange:NSMakeRange(0, datacount)];
+                  [self delaySendDataToDevice:peripheral writeValue:tempData forCharacteristic:characteristic type:type];
+                  sendData = [sendData subdataWithRange:NSMakeRange(datacount, sendData.length-datacount)];
+              }
+          }
+         self.sendDataCallbcak = ^(BOOL isSendSuss) {
+            if (self.sendDataSussCount == self.sendDataTotalCount) {
+                result(nil);
+            }
+         };
+      } else {
+          [self delaySendDataToDevice:peripheral writeValue:sendData forCharacteristic:characteristic type:type];
+          result(nil);
+      }
+    
+}
+
+- (void)delaySendDataToDevice:(CBPeripheral *)peripheral writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic type:(CBCharacteristicWriteType)type {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.002f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+    });
 }
 
 - (CBPeripheral*)findPeripheral:(NSString*)remoteId {
@@ -382,6 +420,11 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
+    
+    if (self.stateStreamHandler.sink != nil) {
+        self.stateStreamHandler.sink(@"bluetooth_connected");
+    }
+    
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -391,6 +434,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
+    
+    if (self.stateStreamHandler.sink != nil) {
+        self.stateStreamHandler.sink(@"bluetooth_disconnected");
+    }
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -460,7 +507,11 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    self.sendDataSussCount++;
   NSLog(@"didWriteValueForCharacteristic");
+  if (self.sendDataCallbcak) {
+      self.sendDataCallbcak(YES);
+  }
   ProtosWriteCharacteristicRequest *request = [[ProtosWriteCharacteristicRequest alloc] init];
   [request setRemoteId:[peripheral.identifier UUIDString]];
   [request setCharacteristicUuid:[characteristic.UUID fullUUIDString]];
