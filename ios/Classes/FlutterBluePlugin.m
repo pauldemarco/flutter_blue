@@ -106,7 +106,14 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
     result(nil);
   } else if([@"getConnectedDevices" isEqualToString:call.method]) {
     // Cannot pass blank UUID list for security reasons. Assume all devices have the Generic Access service 0x1800
-    NSArray *periphs = [self->_centralManager retrieveConnectedPeripheralsWithServices:@[[CBUUID UUIDWithString:@"1800"]]];
+    // Get current connected device Peripheral
+      __block NSMutableArray *connectArray = [NSMutableArray array];
+      NSArray *periphs = self.scannedPeripherals.allValues;
+      [periphs enumerateObjectsUsingBlock:^(CBPeripheral * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+          if (obj.state == CBPeripheralStateConnected) {
+              [connectArray addObject:obj];
+          }
+      }];
     NSLog(@"getConnectedDevices periphs size: %d", [periphs count]);
     result([self toFlutterData:[self toConnectedDeviceResponseProto:periphs]]);
   } else if([@"connect" isEqualToString:call.method]) {
