@@ -34,6 +34,7 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
 @property(nonatomic, retain) NSObject<FlutterPluginRegistrar> *registrar;
 @property(nonatomic, retain) FlutterMethodChannel *channel;
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
+@property(nonatomic, retain) FlutterBlueStreamHandler *blueStateStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
@@ -62,6 +63,11 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
   FlutterBlueStreamHandler* stateStreamHandler = [[FlutterBlueStreamHandler alloc] init];
   [stateChannel setStreamHandler:stateStreamHandler];
   instance.stateStreamHandler = stateStreamHandler;
+  
+  FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"cn.com.nicedream/bluetooth_monitoring" binaryMessenger:[registrar messenger]];
+  FlutterBlueStreamHandler* blueStateStreamHandler = [[FlutterBlueStreamHandler alloc] init];
+  [eventChannel setStreamHandler:blueStateStreamHandler];
+  instance.blueStateStreamHandler = blueStateStreamHandler;
   
   [registrar addMethodCallDelegate:instance channel:channel];
 }
@@ -114,8 +120,8 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
               [connectArray addObject:obj];
           }
       }];
-    NSLog(@"getConnectedDevices periphs size: %d", [periphs count]);
-    result([self toFlutterData:[self toConnectedDeviceResponseProto:periphs]]);
+    NSLog(@"getConnectedDevices periphs size: %d", [connectArray count]);
+    result([self toFlutterData:[self toConnectedDeviceResponseProto:connectArray]]);
   } else if([@"connect" isEqualToString:call.method]) {
     FlutterStandardTypedData *data = [call arguments];
     ProtosConnectRequest *request = [[ProtosConnectRequest alloc] initWithData:[data data] error:nil];
@@ -284,11 +290,13 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
           }
          self.sendDataCallbcak = ^(BOOL isSendSuss) {
             if (self.sendDataSussCount == self.sendDataTotalCount) {
+                NSLog(@"flutterBlue -- 所有数据发送成功");
                 result(nil);
             }
          };
       } else {
           [self delaySendDataToDevice:peripheral writeValue:sendData forCharacteristic:characteristic type:type];
+          NSLog(@"flutterBlue -- 所有数据发送成功");
           result(nil);
       }
     
@@ -428,8 +436,8 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
     
-    if (self.stateStreamHandler.sink != nil) {
-        self.stateStreamHandler.sink(@"bluetooth_connected");
+    if (self.blueStateStreamHandler.sink != nil) {
+        self.blueStateStreamHandler.sink(@"bluetooth_connected");
     }
     
 }
@@ -442,8 +450,8 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
     
-    if (self.stateStreamHandler.sink != nil) {
-        self.stateStreamHandler.sink(@"bluetooth_disconnected");
+    if (self.blueStateStreamHandler.sink != nil) {
+        self.blueStateStreamHandler.sink(@"bluetooth_disconnected");
     }
 }
 
