@@ -44,7 +44,7 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
 @property(nonatomic, assign) NSInteger sendDataTotalCount; // 发送数据总次数
 @property(nonatomic, copy) SendDataCallback sendDataCallbcak;
 @end
-
+FlutterEventSink myFlutterEventSink;
 @implementation FlutterBluePlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
@@ -436,8 +436,8 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
     
-    if (self.blueStateStreamHandler.sink != nil) {
-        self.blueStateStreamHandler.sink(@"bluetooth_connected");
+    if (myFlutterEventSink != nil) {
+        myFlutterEventSink(@"bluetooth_connected");
     }
     
 }
@@ -450,8 +450,8 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
     
-    if (self.blueStateStreamHandler.sink != nil) {
-        self.blueStateStreamHandler.sink(@"bluetooth_disconnected");
+    if (myFlutterEventSink != nil) {
+        myFlutterEventSink(@"bluetooth_disconnected");
     }
 }
 
@@ -825,11 +825,13 @@ typedef void(^SendDataCallback) (BOOL isSendSuss);
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)eventSink {
   self.sink = eventSink;
+  myFlutterEventSink = eventSink;
   return nil;
 }
 
 - (FlutterError*)onCancelWithArguments:(id)arguments {
   self.sink = nil;
+  myFlutterEventSink = nil;
   return nil;
 }
 
