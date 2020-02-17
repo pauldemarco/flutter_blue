@@ -308,6 +308,8 @@ const ConnectedDevicesResponse$json = const {
   ],
 };
 
+<<<<<<< HEAD
+=======
 const MtuSizeRequest$json = const {
   '1': 'MtuSizeRequest',
   '2': const [
@@ -324,3 +326,4 @@ const MtuSizeResponse$json = const {
   ],
 };
 
+>>>>>>> b43127bedca75d2fdfa30948f319a7204966a51d
