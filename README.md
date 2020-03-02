@@ -1,4 +1,5 @@
 [![pub package](https://img.shields.io/pub/v/flutter_blue.svg)](https://pub.dartlang.org/packages/flutter_blue)
+[![Chat](https://img.shields.io/discord/634853295160033301.svg?style=flat-square&colorB=758ED3)](https://discord.gg/Yk5Efra)
 
 <br>
 <p align="center">
@@ -33,23 +34,26 @@ FlutterBlue flutterBlue = FlutterBlue.instance;
 
 ### Scan for devices
 ```dart
-/// Start scanning
-var scanSubscription = flutterBlue.scan().listen((scanResult) {
+// Start scanning
+flutterBlue.startScan(timeout: Duration(seconds: 4));
+
+// Listen to scan results
+var subscription = flutterBlue.scanResults.listen((scanResult) {
     // do something with scan result
     device = scanResult.device;
     print('${device.name} found! rssi: ${scanResult.rssi}');
 });
 
-/// Stop scanning
-scanSubscription.cancel();
+// Stop scanning
+flutterBlue.stopScan();
 ```
 
 ### Connect to a device
 ```dart
-/// Connect to the device
+// Connect to the device
 await device.connect();
 
-/// Disconnect from device
+// Disconnect from device
 device.disconnect();
 ```
 
@@ -95,13 +99,21 @@ characteristic.value.listen((value) {
 });
 ```
 
+### Read the MTU and request larger size
+```dart
+final mtu = await device.mtu.first;
+await device.requestMtu(512);
+```
+Note that iOS will not allow that you request the MTU size, but will always try to negotiate the highest possible MTU (iOS supports up to MTU size 185)
+
 ## Reference
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | scan             | :white_check_mark: |  :white_check_mark:  | Starts a scan for Bluetooth Low Energy devices. |
-| state            | :white_check_mark: |  :white_check_mark:  | Gets the current state of the Bluetooth Adapter. |
-| onStateChanged   | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
+| state            | :white_check_mark: |  :white_check_mark:  | Stream of state changes for the Bluetooth Adapter. |
+| isAvailable      | :white_check_mark: |  :white_check_mark:  | Checks whether the device supports Bluetooth. |
+| isOn             | :white_check_mark: |  :white_check_mark:  | Checks if Bluetooth functionality is turned on. |
 
 ### BluetoothDevice API
 |                             |       Android        |         iOS          |             Description            |
@@ -110,8 +122,9 @@ characteristic.value.listen((value) {
 | disconnect                  |  :white_check_mark:  |  :white_check_mark:  | Cancels an active or pending connection to the device. |
 | discoverServices            |  :white_check_mark:  |  :white_check_mark:  | Discovers services offered by the remote device as well as their characteristics and descriptors. |
 | services                    |  :white_check_mark:  |  :white_check_mark:  | Gets a list of services. Requires that discoverServices() has completed. |
-| state                       |  :white_check_mark:  |  :white_check_mark:  | Gets the current state of the device. |
-| onStateChanged              |  :white_check_mark:  |  :white_check_mark:  | Notifies of state changes for the device. |
+| state                       |  :white_check_mark:  |  :white_check_mark:  | Stream of state changes for the Bluetooth Device. |
+| mtu                         |  :white_check_mark:  |  :white_check_mark:  | Stream of mtu size changes. |
+| requestMtu                  |  :white_check_mark:  |                      | Request to change the MTU for the device. |
 
 ### BluetoothCharacteristic API
 |                             |       Android        |         iOS          |             Description            |
