@@ -1,3 +1,6 @@
+## 0.6.4
+* Removes minSdk declaration from AndroidManifest.xml
+
 ## 0.6.3+1
 * Fix compilation issue with iOS
 * Bump protobuf version to 1.0.0
