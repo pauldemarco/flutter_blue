@@ -540,6 +540,10 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     int mtu = request.getMtu();
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if(gatt.requestMtu(mtu)) {
+                            BluetoothDeviceCache cache = mDevices.get(request.getRemoteId());
+                            if (cache != null) {
+                                cache.mtu = mtu;
+                            }
                             result.success(null);
                         } else {
                             result.error("requestMtu", "gatt.requestMtu returned false", null);
@@ -609,7 +613,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
         }
         log(LogLevel.DEBUG, "write Characteristic " + value.length + " bytes");
-        if (value.length <= 20) {
+        BluetoothDeviceCache cache = mDevices.get(request.getRemoteId());
+        int mtu = 20;
+        if (cache != null) {
+            mtu = cache.mtu;
+        }
+        log(LogLevel.DEBUG, "mtu is " + mtu);
+        int count = mtu - 3;
+        if (value.length <= count) {
             WriteData writeData = new WriteData();
             writeData.gattServer = gattServer;
             writeData.characteristic = characteristic;
@@ -618,7 +629,6 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             writeDatas.offer(writeData);
         } else {
             int pkgCount;
-            int count = 20;
             if (value.length % count == 0) {
                 pkgCount = value.length / count;
             } else {
