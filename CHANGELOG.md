@@ -1,5 +1,6 @@
 ## 0.6.4
 * migrate to targetSdkVersion 29 => ACCESS_FINE_LOCATION (fix for: Android X ScanResult empty list #486)
+* Removes minSdk declaration from AndroidManifest.xml (fix for: Remove minSdk declaration from AndroidManifest.xml #507)
 
 ## 0.6.3+1
 * Fix compilation issue with iOS
