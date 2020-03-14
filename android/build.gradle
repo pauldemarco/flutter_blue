@@ -21,10 +21,8 @@ buildscript {
     }
 
     dependencies {
-        def core_version = "1.1.0"
-        implementation "androidx.core:core:$core_version"
         classpath 'com.android.tools.build:gradle:3.5.2'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.12'
     }
 }
 
@@ -61,7 +59,7 @@ protobuf {
     // Configure the protoc executable
     protoc {
         // Download from repositories
-        artifact = 'com.google.protobuf:protoc:3.9.1'
+        artifact = 'com.google.protobuf:protoc:3.11.4'
     }
     plugins {
         javalite {
