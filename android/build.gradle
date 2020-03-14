@@ -21,7 +21,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        def core_version = "1.1.0"
+        implementation "androidx.core:core:$core_version"
+        classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
     }
 }
