@@ -274,7 +274,8 @@ FlutterEventSink myFlutterEventSink;
 
 - (void)wirteDatoToDevice:(CBPeripheral *)peripheral writeValue:(NSData *)data forCharacteristic:(CBCharacteristic *)characteristic type:(CBCharacteristicWriteType)type result:(FlutterResult)result {
     NSData *sendData = data;
-    NSInteger datacount= 200;
+    uint32_t mtu = [self getMtu:peripheral];
+    NSInteger datacount = mtu - 3;
     NSInteger number = data.length/datacount;
     if (number > 0) {
         self.sendDataSussCount = 0;
