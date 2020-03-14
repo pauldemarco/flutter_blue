@@ -1,7 +1,8 @@
 ## 0.6.4
-* ios example: Fixed Issue with Bluetooth Permissions on iOS 13.3 (fix for: Fixed Issue with Bluetooth Permissions on iOS 13.3 #485)
-* migrate to targetSdkVersion 29 => ACCESS_FINE_LOCATION (fix for: Android X ScanResult empty list #486)
-* Removes minSdk declaration from AndroidManifest.xml (fix for: Remove minSdk declaration from AndroidManifest.xml #507)
+* Readme code fix (fix from: Readme code fix #466)
+* ios example: Fixed Issue with Bluetooth Permissions on iOS 13.3 (fix from: Fixed Issue with Bluetooth Permissions on iOS 13.3 #485)
+* migrate to targetSdkVersion 29 => ACCESS_FINE_LOCATION (fix from: Android X ScanResult empty list #486)
+* Removes minSdk declaration from AndroidManifest.xml (fix from: Remove minSdk declaration from AndroidManifest.xml #507)
 
 ## 0.6.3+1
 * Fix compilation issue with iOS
