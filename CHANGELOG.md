@@ -1,4 +1,5 @@
 ## 0.6.4
+* Enables background usage (fix from: Enables background usage of flutter-blue #210)
 * Readme code fix (fix from: Readme code fix #466)
 * ios example: Fixed Issue with Bluetooth Permissions on iOS 13.3 (fix from: Fixed Issue with Bluetooth Permissions on iOS 13.3 #485)
 * migrate to targetSdkVersion 29 => ACCESS_FINE_LOCATION (fix from: Android X ScanResult empty list #486)

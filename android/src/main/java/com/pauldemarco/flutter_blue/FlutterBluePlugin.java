@@ -83,7 +83,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         this.activity = r.activity();
         this.channel = new MethodChannel(registrar.messenger(), NAMESPACE+"/methods");
         this.stateChannel = new EventChannel(registrar.messenger(), NAMESPACE+"/state");
-        this.mBluetoothManager = (BluetoothManager) r.activity().getSystemService(Context.BLUETOOTH_SERVICE);
+        this.mBluetoothManager = (BluetoothManager) r.context().getSystemService(Context.BLUETOOTH_SERVICE);
         this.mBluetoothAdapter = mBluetoothManager.getAdapter();
         channel.setMethodCallHandler(this);
         stateChannel.setStreamHandler(stateHandler);
@@ -101,6 +101,12 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             {
                 int logLevelIndex = (int)call.arguments;
                 logLevel = LogLevel.values()[logLevelIndex];
+                result.success(null);
+                break;
+            }
+
+            case "setUniqueId":
+            {
                 result.success(null);
                 break;
             }
@@ -147,8 +153,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "startScan":
             {
-                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
+                boolean hasPermissions = (ContextCompat.checkSelfPermission(registrar.context(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+
+                if (activity == null && !hasPermissions) {
+                    result.error("scan_error","location permission is not granted", hasPermissions);
+                    break;
+                }
+
+                if (!hasPermissions) {
                     ActivityCompat.requestPermissions(
                             activity,
                             new String[] {
@@ -547,7 +559,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     @Override
     public boolean onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_COARSE_LOCATION_PERMISSIONS) {
+        if (requestCode == REQUEST_FINE_LOCATION_PERMISSIONS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startScan(pendingCall, pendingResult);
             } else {
@@ -635,13 +647,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         public void onListen(Object o, EventChannel.EventSink eventSink) {
             sink = eventSink;
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            activity.registerReceiver(mReceiver, filter);
+            registrar.context().registerReceiver(mReceiver, filter);
         }
 
         @Override
         public void onCancel(Object o) {
             sink = null;
-            activity.unregisterReceiver(mReceiver);
+            registrar.context().unregisterReceiver(mReceiver);
         }
     };
 
@@ -893,6 +905,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
     private void invokeMethodUIThread(final String name, final byte[] byteArray)
     {
+        if (activity == null) {
+            return;
+        }
         activity.runOnUiThread(
                 new Runnable() {
                     @Override
