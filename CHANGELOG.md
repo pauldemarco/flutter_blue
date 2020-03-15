@@ -1,3 +1,6 @@
+## 0.7.1
+* Fixed issue with background plugin registration (fix from: Fixed issue with background plugin registration #421)
+
 ## 0.7.0
 * Improve build system (fix from: Improve build system #428)
 
