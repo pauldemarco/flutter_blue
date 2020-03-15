@@ -1,3 +1,6 @@
+## 0.7.0
+* Improve build system (fix from: Improve build system #428)
+
 ## 0.6.4
 * Enables background usage (fix from: Enables background usage of flutter-blue #210)
 * Readme code fix (fix from: Readme code fix #466)
