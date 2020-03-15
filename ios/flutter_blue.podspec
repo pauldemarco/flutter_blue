@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_blue'
-  s.version          = '0.6.4'
+  s.version          = '0.7.1'
   s.source           = { :git => 'https://github.com/pauldemarco/flutter_blue.git', :tag => "v#{s.version}" }
   s.summary          = 'Bluetooth Low Energy plugin for Flutter.'
   s.description      = <<-DESC
