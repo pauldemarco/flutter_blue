@@ -1,3 +1,16 @@
+## 0.7.1
+* Fixed issue with background plugin registration (fix from: Fixed issue with background plugin registration #421)
+
+## 0.7.0
+* Improve build system (fix from: Improve build system #428)
+
+## 0.6.4
+* Enables background usage (fix from: Enables background usage of flutter-blue #210)
+* Readme code fix (fix from: Readme code fix #466)
+* ios example: Fixed Issue with Bluetooth Permissions on iOS 13.3 (fix from: Fixed Issue with Bluetooth Permissions on iOS 13.3 #485)
+* migrate to targetSdkVersion 29 => ACCESS_FINE_LOCATION (fix from: Android X ScanResult empty list #486)
+* Removes minSdk declaration from AndroidManifest.xml (fix from: Remove minSdk declaration from AndroidManifest.xml #507)
+
 ## 0.6.3+1
 * Fix compilation issue with iOS
 * Bump protobuf version to 1.0.0
