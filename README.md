@@ -38,10 +38,11 @@ FlutterBlue flutterBlue = FlutterBlue.instance;
 flutterBlue.startScan(timeout: Duration(seconds: 4));
 
 // Listen to scan results
-var subscription = flutterBlue.scanResults.listen((scanResult) {
-    // do something with scan result
-    device = scanResult.device;
-    print('${device.name} found! rssi: ${scanResult.rssi}');
+var subscription = flutterBlue.scanResults.listen((results) {
+    // do something with scan results
+    for (ScanResult r in results) {
+        print('${r.device.name} found! rssi: ${r.rssi}');
+    }
 });
 
 // Stop scanning
@@ -104,7 +105,7 @@ characteristic.value.listen((value) {
 final mtu = await device.mtu.first;
 await device.requestMtu(512);
 ```
-Note that iOS will not allow that you request the MTU size, but will always try to negotiate the highest possible MTU (iOS supports up to MTU size 185)
+Note that iOS will not allow requests of MTU size, and will always try to negotiate the highest possible MTU (iOS supports up to MTU size 185)
 
 ## Reference
 ### FlutterBlue API

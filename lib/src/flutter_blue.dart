@@ -16,6 +16,7 @@ class FlutterBlue {
   FlutterBlue._() {
     _channel.setMethodCallHandler((MethodCall call) {
       _methodStreamController.add(call);
+      return;
     });
 
     // Send the log level to the underlying platforms.
@@ -102,7 +103,9 @@ class FlutterBlue {
       throw e;
     }
 
-    yield* FlutterBlue.instance._methodStream.where((m) => m.method == "ScanResult").map((m) => m.arguments)
+    yield* FlutterBlue.instance._methodStream
+        .where((m) => m.method == "ScanResult")
+        .map((m) => m.arguments)
         .takeUntil(Rx.merge(killStreams))
         .doOnDone(stopScan)
         .map((buffer) => new protos.ScanResult.fromBuffer(buffer))

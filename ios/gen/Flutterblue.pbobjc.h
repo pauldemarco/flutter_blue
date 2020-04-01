@@ -8,7 +8,7 @@
 #endif
 
 #if GPB_USE_PROTOBUF_FRAMEWORK_IMPORTS
- #import <Protobuf/GPBProtocolBuffers.h>
+ #import <protobuf/GPBProtocolBuffers.h>
 #else
  #import "GPBProtocolBuffers.h"
 #endif
