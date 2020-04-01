@@ -172,6 +172,11 @@ class BluetoothCharacteristic {
       return (c.isNotifying == notify);
     });
   }
+
+  @override
+  String toString() {
+    return 'BluetoothCharacteristic{uuid: $uuid, deviceId: $deviceId, serviceUuid: $serviceUuid, secondaryServiceUuid: $secondaryServiceUuid, properties: $properties, descriptors: $descriptors, value: ${_value?.value}';
+  }
 }
 
 enum CharacteristicWriteType { withResponse, withoutResponse }
@@ -212,4 +217,9 @@ class CharacteristicProperties {
         extendedProperties = p.extendedProperties,
         notifyEncryptionRequired = p.notifyEncryptionRequired,
         indicateEncryptionRequired = p.indicateEncryptionRequired;
+
+  @override
+  String toString() {
+    return 'CharacteristicProperties{broadcast: $broadcast, read: $read, writeWithoutResponse: $writeWithoutResponse, write: $write, notify: $notify, indicate: $indicate, authenticatedSignedWrites: $authenticatedSignedWrites, extendedProperties: $extendedProperties, notifyEncryptionRequired: $notifyEncryptionRequired, indicateEncryptionRequired: $indicateEncryptionRequired}';
+  }
 }

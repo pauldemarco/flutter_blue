@@ -81,4 +81,9 @@ class BluetoothDescriptor {
         .then((_) => _value.add(value))
         .then((_) => null);
   }
+
+  @override
+  String toString() {
+    return 'BluetoothDescriptor{uuid: $uuid, deviceId: $deviceId, serviceUuid: $serviceUuid, characteristicUuid: $characteristicUuid, value: ${_value?.value}}';
+  }
 }

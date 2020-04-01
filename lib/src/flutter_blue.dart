@@ -237,6 +237,11 @@ class ScanResult {
 
   @override
   int get hashCode => device.hashCode;
+
+  @override
+  String toString() {
+    return 'ScanResult{device: $device, advertisementData: $advertisementData, rssi: $rssi}';
+  }
 }
 
 class AdvertisementData {
@@ -263,4 +268,9 @@ class AdvertisementData {
         manufacturerData = p.manufacturerData,
         serviceData = p.serviceData,
         serviceUuids = p.serviceUuids;
+
+  @override
+  String toString() {
+    return 'AdvertisementData{localName: $localName, txPowerLevel: $txPowerLevel, connectable: $connectable, manufacturerData: $manufacturerData, serviceData: $serviceData, serviceUuids: $serviceUuids}';
+  }
 }

@@ -21,4 +21,9 @@ class BluetoothService {
         includedServices = p.includedServices
             .map((s) => new BluetoothService.fromProto(s))
             .toList();
+
+  @override
+  String toString() {
+    return 'BluetoothService{uuid: $uuid, deviceId: $deviceId, isPrimary: $isPrimary, characteristics: $characteristics, includedServices: $includedServices}';
+  }
 }
