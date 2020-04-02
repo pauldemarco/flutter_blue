@@ -54,8 +54,6 @@ class BluetoothCharacteristic {
           .map((c) {
         // Update the characteristic with the new values
         _updateDescriptors(c.descriptors);
-//        _value.add(c.lastValue);
-//        print('c.lastValue: ${c.lastValue}');
         return c;
       });
 
@@ -123,7 +121,6 @@ class BluetoothCharacteristic {
         .invokeMethod('writeCharacteristic', request.writeToBuffer());
 
     if (type == CharacteristicWriteType.withoutResponse) {
-      _value.add(value);
       return result;
     }
 
@@ -141,7 +138,6 @@ class BluetoothCharacteristic {
         .then((success) => (!success)
             ? throw new Exception('Failed to write the characteristic')
             : null)
-        .then((_) => _value.add(value))
         .then((_) => null);
   }
 
@@ -168,7 +164,6 @@ class BluetoothCharacteristic {
         .then((p) => new BluetoothCharacteristic.fromProto(p.characteristic))
         .then((c) {
       _updateDescriptors(c.descriptors);
-      _value.add(c.lastValue);
       return (c.isNotifying == notify);
     });
   }
