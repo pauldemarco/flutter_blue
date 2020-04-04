@@ -1,3 +1,8 @@
+## 0.7.1
+* Fix incorrect value notification when write is performed.
+* Add `toString` to each bluetooth class.
+* Various other bug fixes.
+
 ## 0.7.0
 * Support v2 android embedding.
 * Various bug and documentation fixes.
