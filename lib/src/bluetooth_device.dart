@@ -140,6 +140,11 @@ class BluetoothDevice {
 
   @override
   int get hashCode => id.hashCode;
+
+  @override
+  String toString() {
+    return 'BluetoothDevice{id: $id, name: $name, type: $type, isDiscoveringServices: ${_isDiscoveringServices?.value}, _services: ${_services?.value}';
+  }
 }
 
 enum BluetoothDeviceType { unknown, classic, le, dual }

@@ -1,6 +1,6 @@
 name: flutter_blue_example
 description: Demonstrates how to use the flutter_blue plugin.
-publish_to: 'none'
+publish_to: "none"
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -12,9 +12,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_blue:
     path: ../
+  e2e: ^0.2.1
+  flutter_driver:
+    sdk: flutter
 
 flutter:
   uses-material-design: true
