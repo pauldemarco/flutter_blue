@@ -61,13 +61,14 @@ import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 
 
 /** FlutterBluePlugin */
-public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, RequestPermissionsResultListener  {
+public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, RequestPermissionsResultListener,PluginRegistry.ActivityResultListener  {
     private static final String TAG = "FlutterBluePlugin";
     private static FlutterBluePlugin instance;
     private Object initializationLock = new Object();
     private Context context;
     private MethodChannel channel;
     private static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
+    private static final int REQUEST_ENABLE_BT = 1452;
 
     private EventChannel stateChannel;
     private BluetoothManager mBluetoothManager;
@@ -158,9 +159,11 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             if (registrar != null) {
                 // V1 embedding setup for activity listeners.
                 registrar.addRequestPermissionsResultListener(this);
+                registrar.addActivityResultListener(instance);
             } else {
                 // V2 embedding setup for activity listeners.
                 activityBinding.addRequestPermissionsResultListener(this);
+                activityBinding.addActivityResultListener(instance);
             }
         }
     }
@@ -737,6 +740,17 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     };
 
     private void startScan(MethodCall call, Result result) {
+        if (!mBluetoothAdapter.isEnabled()) {
+            pendingCall = call;
+            pendingResult = result;
+            activity.startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
+        } else {
+            startScanInternal(call, result);
+        }
+
+    }
+
+    private void startScanInternal(MethodCall call, Result result) {
         byte[] data = call.arguments();
         Protos.ScanSettings settings;
         try {
@@ -1003,6 +1017,23 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             this.gatt = gatt;
             mtu = 20;
         }
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                startScanInternal(pendingCall, pendingResult);
+            }
+            else {
+                pendingResult.error(
+                        "bluetooth_adapter_off", "flutter_blue plugin requires bluetooth adapter to be ON for scanning", null);
+                pendingResult = null;
+                pendingCall = null;
+            }
+            return true;
+        }
+        return false;
     }
 
 }
