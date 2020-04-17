@@ -16,11 +16,12 @@ class FlutterBlue {
   FlutterBlue._() {
     _channel.setMethodCallHandler((MethodCall call) {
       _methodStreamController.add(call);
+      return;
     });
 
-    // Send the log level to the underlying platforms.
-    setLogLevel(logLevel);
+    _setLogLevelIfAvailable();
   }
+
   static FlutterBlue _instance = new FlutterBlue._();
   static FlutterBlue get instance => _instance;
 
@@ -64,6 +65,13 @@ class FlutterBlue {
         .then((p) => p.devices)
         .then((p) => p.map((d) => BluetoothDevice.fromProto(d)).toList());
   }
+ 
+  _setLogLevelIfAvailable() async {
+    if (await isAvailable) {
+      // Send the log level to the underlying platforms.
+      setLogLevel(logLevel);
+    }
+  }
 
   /// Starts a scan for Bluetooth Low Energy devices
   /// Timeout closes the stream after a specified [Duration]
@@ -89,7 +97,7 @@ class FlutterBlue {
     final killStreams = <Stream>[];
     killStreams.add(_stopScanPill);
     if (timeout != null) {
-      killStreams.add(Observable.timer(null, timeout));
+      killStreams.add(Rx.timer(null, timeout));
     }
 
     // Clear scan results list
@@ -104,10 +112,10 @@ class FlutterBlue {
       throw e;
     }
 
-    yield* Observable(FlutterBlue.instance._methodStream
-            .where((m) => m.method == "ScanResult")
-            .map((m) => m.arguments))
-        .takeUntil(Observable.merge(killStreams))
+    yield* FlutterBlue.instance._methodStream
+        .where((m) => m.method == "ScanResult")
+        .map((m) => m.arguments)
+        .takeUntil(Rx.merge(killStreams))
         .doOnDone(stopScan)
         .map((buffer) => new protos.ScanResult.fromBuffer(buffer))
         .map((p) {
@@ -240,6 +248,11 @@ class ScanResult {
 
   @override
   int get hashCode => device.hashCode;
+
+  @override
+  String toString() {
+    return 'ScanResult{device: $device, advertisementData: $advertisementData, rssi: $rssi}';
+  }
 }
 
 class AdvertisementData {
@@ -266,4 +279,9 @@ class AdvertisementData {
         manufacturerData = p.manufacturerData,
         serviceData = p.serviceData,
         serviceUuids = p.serviceUuids;
+
+  @override
+  String toString() {
+    return 'AdvertisementData{localName: $localName, txPowerLevel: $txPowerLevel, connectable: $connectable, manufacturerData: $manufacturerData, serviceData: $serviceData, serviceUuids: $serviceUuids}';
+  }
 }

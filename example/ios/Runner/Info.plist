@@ -39,6 +39,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need BT access because it&apos;s a BT App.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need BT access because it&apos;s a BT App.</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>

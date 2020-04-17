@@ -15,7 +15,14 @@ const Int32Value$json = const {
 const BluetoothState$json = const {
   '1': 'BluetoothState',
   '2': const [
-    const {'1': 'state', '3': 1, '4': 1, '5': 14, '6': '.BluetoothState.State', '10': 'state'},
+    const {
+      '1': 'state',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.BluetoothState.State',
+      '10': 'state'
+    },
   ],
   '4': const [BluetoothState_State$json],
 };
@@ -37,13 +44,37 @@ const AdvertisementData$json = const {
   '1': 'AdvertisementData',
   '2': const [
     const {'1': 'local_name', '3': 1, '4': 1, '5': 9, '10': 'localName'},
-    const {'1': 'tx_power_level', '3': 2, '4': 1, '5': 11, '6': '.Int32Value', '10': 'txPowerLevel'},
+    const {
+      '1': 'tx_power_level',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.Int32Value',
+      '10': 'txPowerLevel'
+    },
     const {'1': 'connectable', '3': 3, '4': 1, '5': 8, '10': 'connectable'},
-    const {'1': 'manufacturer_data', '3': 4, '4': 3, '5': 11, '6': '.AdvertisementData.ManufacturerDataEntry', '10': 'manufacturerData'},
-    const {'1': 'service_data', '3': 5, '4': 3, '5': 11, '6': '.AdvertisementData.ServiceDataEntry', '10': 'serviceData'},
+    const {
+      '1': 'manufacturer_data',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.AdvertisementData.ManufacturerDataEntry',
+      '10': 'manufacturerData'
+    },
+    const {
+      '1': 'service_data',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.AdvertisementData.ServiceDataEntry',
+      '10': 'serviceData'
+    },
     const {'1': 'service_uuids', '3': 6, '4': 3, '5': 9, '10': 'serviceUuids'},
   ],
-  '3': const [AdvertisementData_ManufacturerDataEntry$json, AdvertisementData_ServiceDataEntry$json],
+  '3': const [
+    AdvertisementData_ManufacturerDataEntry$json,
+    AdvertisementData_ServiceDataEntry$json
+  ],
 };
 
 const AdvertisementData_ManufacturerDataEntry$json = const {
@@ -67,7 +98,13 @@ const AdvertisementData_ServiceDataEntry$json = const {
 const ScanSettings$json = const {
   '1': 'ScanSettings',
   '2': const [
-    const {'1': 'android_scan_mode', '3': 1, '4': 1, '5': 5, '10': 'androidScanMode'},
+    const {
+      '1': 'android_scan_mode',
+      '3': 1,
+      '4': 1,
+      '5': 5,
+      '10': 'androidScanMode'
+    },
     const {'1': 'service_uuids', '3': 2, '4': 3, '5': 9, '10': 'serviceUuids'},
     const {'1': 'allow_duplicates', '3': 3, '4': 1, '5': 8, '10': 'allowDuplicates'},
   ],
@@ -76,8 +113,22 @@ const ScanSettings$json = const {
 const ScanResult$json = const {
   '1': 'ScanResult',
   '2': const [
-    const {'1': 'device', '3': 1, '4': 1, '5': 11, '6': '.BluetoothDevice', '10': 'device'},
-    const {'1': 'advertisement_data', '3': 2, '4': 1, '5': 11, '6': '.AdvertisementData', '10': 'advertisementData'},
+    const {
+      '1': 'device',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.BluetoothDevice',
+      '10': 'device'
+    },
+    const {
+      '1': 'advertisement_data',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.AdvertisementData',
+      '10': 'advertisementData'
+    },
     const {'1': 'rssi', '3': 3, '4': 1, '5': 5, '10': 'rssi'},
   ],
 };
@@ -86,7 +137,13 @@ const ConnectRequest$json = const {
   '1': 'ConnectRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'android_auto_connect', '3': 2, '4': 1, '5': 8, '10': 'androidAutoConnect'},
+    const {
+      '1': 'android_auto_connect',
+      '3': 2,
+      '4': 1,
+      '5': 8,
+      '10': 'androidAutoConnect'
+    },
   ],
 };
 
@@ -95,7 +152,14 @@ const BluetoothDevice$json = const {
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'type', '3': 3, '4': 1, '5': 14, '6': '.BluetoothDevice.Type', '10': 'type'},
+    const {
+      '1': 'type',
+      '3': 3,
+      '4': 1,
+      '5': 14,
+      '6': '.BluetoothDevice.Type',
+      '10': 'type'
+    },
   ],
   '4': const [BluetoothDevice_Type$json],
 };
@@ -116,8 +180,22 @@ const BluetoothService$json = const {
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
     const {'1': 'remote_id', '3': 2, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'is_primary', '3': 3, '4': 1, '5': 8, '10': 'isPrimary'},
-    const {'1': 'characteristics', '3': 4, '4': 3, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristics'},
-    const {'1': 'included_services', '3': 5, '4': 3, '5': 11, '6': '.BluetoothService', '10': 'includedServices'},
+    const {
+      '1': 'characteristics',
+      '3': 4,
+      '4': 3,
+      '5': 11,
+      '6': '.BluetoothCharacteristic',
+      '10': 'characteristics'
+    },
+    const {
+      '1': 'included_services',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.BluetoothService',
+      '10': 'includedServices'
+    },
   ],
 };
 
@@ -127,9 +205,29 @@ const BluetoothCharacteristic$json = const {
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
     const {'1': 'remote_id', '3': 2, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'serviceUuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'secondaryServiceUuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'descriptors', '3': 5, '4': 3, '5': 11, '6': '.BluetoothDescriptor', '10': 'descriptors'},
-    const {'1': 'properties', '3': 6, '4': 1, '5': 11, '6': '.CharacteristicProperties', '10': 'properties'},
+    const {
+      '1': 'secondaryServiceUuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'secondaryServiceUuid'
+    },
+    const {
+      '1': 'descriptors',
+      '3': 5,
+      '4': 3,
+      '5': 11,
+      '6': '.BluetoothDescriptor',
+      '10': 'descriptors'
+    },
+    const {
+      '1': 'properties',
+      '3': 6,
+      '4': 1,
+      '5': 11,
+      '6': '.CharacteristicProperties',
+      '10': 'properties'
+    },
     const {'1': 'value', '3': 7, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -140,7 +238,13 @@ const BluetoothDescriptor$json = const {
     const {'1': 'uuid', '3': 1, '4': 1, '5': 9, '10': 'uuid'},
     const {'1': 'remote_id', '3': 2, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'serviceUuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'characteristicUuid', '3': 4, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {
+      '1': 'characteristicUuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'characteristicUuid'
+    },
     const {'1': 'value', '3': 5, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -150,14 +254,44 @@ const CharacteristicProperties$json = const {
   '2': const [
     const {'1': 'broadcast', '3': 1, '4': 1, '5': 8, '10': 'broadcast'},
     const {'1': 'read', '3': 2, '4': 1, '5': 8, '10': 'read'},
-    const {'1': 'write_without_response', '3': 3, '4': 1, '5': 8, '10': 'writeWithoutResponse'},
+    const {
+      '1': 'write_without_response',
+      '3': 3,
+      '4': 1,
+      '5': 8,
+      '10': 'writeWithoutResponse'
+    },
     const {'1': 'write', '3': 4, '4': 1, '5': 8, '10': 'write'},
     const {'1': 'notify', '3': 5, '4': 1, '5': 8, '10': 'notify'},
     const {'1': 'indicate', '3': 6, '4': 1, '5': 8, '10': 'indicate'},
-    const {'1': 'authenticated_signed_writes', '3': 7, '4': 1, '5': 8, '10': 'authenticatedSignedWrites'},
-    const {'1': 'extended_properties', '3': 8, '4': 1, '5': 8, '10': 'extendedProperties'},
-    const {'1': 'notify_encryption_required', '3': 9, '4': 1, '5': 8, '10': 'notifyEncryptionRequired'},
-    const {'1': 'indicate_encryption_required', '3': 10, '4': 1, '5': 8, '10': 'indicateEncryptionRequired'},
+    const {
+      '1': 'authenticated_signed_writes',
+      '3': 7,
+      '4': 1,
+      '5': 8,
+      '10': 'authenticatedSignedWrites'
+    },
+    const {
+      '1': 'extended_properties',
+      '3': 8,
+      '4': 1,
+      '5': 8,
+      '10': 'extendedProperties'
+    },
+    const {
+      '1': 'notify_encryption_required',
+      '3': 9,
+      '4': 1,
+      '5': 8,
+      '10': 'notifyEncryptionRequired'
+    },
+    const {
+      '1': 'indicate_encryption_required',
+      '3': 10,
+      '4': 1,
+      '5': 8,
+      '10': 'indicateEncryptionRequired'
+    },
   ],
 };
 
@@ -165,7 +299,14 @@ const DiscoverServicesResult$json = const {
   '1': 'DiscoverServicesResult',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'services', '3': 2, '4': 3, '5': 11, '6': '.BluetoothService', '10': 'services'},
+    const {
+      '1': 'services',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.BluetoothService',
+      '10': 'services'
+    },
   ],
 };
 
@@ -173,9 +314,21 @@ const ReadCharacteristicRequest$json = const {
   '1': 'ReadCharacteristicRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic_uuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {
+      '1': 'characteristic_uuid',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'characteristicUuid'
+    },
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
+    const {
+      '1': 'secondary_service_uuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'secondaryServiceUuid'
+    },
   ],
 };
 
@@ -183,7 +336,14 @@ const ReadCharacteristicResponse$json = const {
   '1': 'ReadCharacteristicResponse',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristic'},
+    const {
+      '1': 'characteristic',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.BluetoothCharacteristic',
+      '10': 'characteristic'
+    },
   ],
 };
 
@@ -191,17 +351,42 @@ const ReadDescriptorRequest$json = const {
   '1': 'ReadDescriptorRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'descriptor_uuid', '3': 2, '4': 1, '5': 9, '10': 'descriptorUuid'},
+    const {
+      '1': 'descriptor_uuid',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'descriptorUuid'
+    },
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'characteristic_uuid', '3': 5, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {
+      '1': 'secondary_service_uuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'secondaryServiceUuid'
+    },
+    const {
+      '1': 'characteristic_uuid',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'characteristicUuid'
+    },
   ],
 };
 
 const ReadDescriptorResponse$json = const {
   '1': 'ReadDescriptorResponse',
   '2': const [
-    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.ReadDescriptorRequest', '10': 'request'},
+    const {
+      '1': 'request',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.ReadDescriptorRequest',
+      '10': 'request'
+    },
     const {'1': 'value', '3': 2, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -210,10 +395,29 @@ const WriteCharacteristicRequest$json = const {
   '1': 'WriteCharacteristicRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic_uuid', '3': 2, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {
+      '1': 'characteristic_uuid',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'characteristicUuid'
+    },
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'write_type', '3': 5, '4': 1, '5': 14, '6': '.WriteCharacteristicRequest.WriteType', '10': 'writeType'},
+    const {
+      '1': 'secondary_service_uuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'secondaryServiceUuid'
+    },
+    const {
+      '1': 'write_type',
+      '3': 5,
+      '4': 1,
+      '5': 14,
+      '6': '.WriteCharacteristicRequest.WriteType',
+      '10': 'writeType'
+    },
     const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
   ],
   '4': const [WriteCharacteristicRequest_WriteType$json],
@@ -230,7 +434,14 @@ const WriteCharacteristicRequest_WriteType$json = const {
 const WriteCharacteristicResponse$json = const {
   '1': 'WriteCharacteristicResponse',
   '2': const [
-    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.WriteCharacteristicRequest', '10': 'request'},
+    const {
+      '1': 'request',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.WriteCharacteristicRequest',
+      '10': 'request'
+    },
     const {'1': 'success', '3': 2, '4': 1, '5': 8, '10': 'success'},
   ],
 };
@@ -239,10 +450,28 @@ const WriteDescriptorRequest$json = const {
   '1': 'WriteDescriptorRequest',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'descriptor_uuid', '3': 2, '4': 1, '5': 9, '10': 'descriptorUuid'},
+    const {
+      '1': 'descriptor_uuid',
+      '3': 2,
+      '4': 1,
+      '5': 9,
+      '10': 'descriptorUuid'
+    },
     const {'1': 'service_uuid', '3': 3, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'secondary_service_uuid', '3': 4, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'characteristic_uuid', '3': 5, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {
+      '1': 'secondary_service_uuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'secondaryServiceUuid'
+    },
+    const {
+      '1': 'characteristic_uuid',
+      '3': 5,
+      '4': 1,
+      '5': 9,
+      '10': 'characteristicUuid'
+    },
     const {'1': 'value', '3': 6, '4': 1, '5': 12, '10': 'value'},
   ],
 };
@@ -250,7 +479,14 @@ const WriteDescriptorRequest$json = const {
 const WriteDescriptorResponse$json = const {
   '1': 'WriteDescriptorResponse',
   '2': const [
-    const {'1': 'request', '3': 1, '4': 1, '5': 11, '6': '.WriteDescriptorRequest', '10': 'request'},
+    const {
+      '1': 'request',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.WriteDescriptorRequest',
+      '10': 'request'
+    },
     const {'1': 'success', '3': 2, '4': 1, '5': 8, '10': 'success'},
   ],
 };
@@ -260,8 +496,20 @@ const SetNotificationRequest$json = const {
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'service_uuid', '3': 2, '4': 1, '5': 9, '10': 'serviceUuid'},
-    const {'1': 'secondary_service_uuid', '3': 3, '4': 1, '5': 9, '10': 'secondaryServiceUuid'},
-    const {'1': 'characteristic_uuid', '3': 4, '4': 1, '5': 9, '10': 'characteristicUuid'},
+    const {
+      '1': 'secondary_service_uuid',
+      '3': 3,
+      '4': 1,
+      '5': 9,
+      '10': 'secondaryServiceUuid'
+    },
+    const {
+      '1': 'characteristic_uuid',
+      '3': 4,
+      '4': 1,
+      '5': 9,
+      '10': 'characteristicUuid'
+    },
     const {'1': 'enable', '3': 5, '4': 1, '5': 8, '10': 'enable'},
   ],
 };
@@ -270,7 +518,14 @@ const SetNotificationResponse$json = const {
   '1': 'SetNotificationResponse',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristic'},
+    const {
+      '1': 'characteristic',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.BluetoothCharacteristic',
+      '10': 'characteristic'
+    },
     const {'1': 'success', '3': 3, '4': 1, '5': 8, '10': 'success'},
   ],
 };
@@ -279,7 +534,14 @@ const OnCharacteristicChanged$json = const {
   '1': 'OnCharacteristicChanged',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'characteristic', '3': 2, '4': 1, '5': 11, '6': '.BluetoothCharacteristic', '10': 'characteristic'},
+    const {
+      '1': 'characteristic',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.BluetoothCharacteristic',
+      '10': 'characteristic'
+    },
   ],
 };
 
@@ -287,7 +549,14 @@ const DeviceStateResponse$json = const {
   '1': 'DeviceStateResponse',
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
-    const {'1': 'state', '3': 2, '4': 1, '5': 14, '6': '.DeviceStateResponse.BluetoothDeviceState', '10': 'state'},
+    const {
+      '1': 'state',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.DeviceStateResponse.BluetoothDeviceState',
+      '10': 'state'
+    },
   ],
   '4': const [DeviceStateResponse_BluetoothDeviceState$json],
 };
@@ -305,7 +574,14 @@ const DeviceStateResponse_BluetoothDeviceState$json = const {
 const ConnectedDevicesResponse$json = const {
   '1': 'ConnectedDevicesResponse',
   '2': const [
-    const {'1': 'devices', '3': 1, '4': 3, '5': 11, '6': '.BluetoothDevice', '10': 'devices'},
+    const {
+      '1': 'devices',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.BluetoothDevice',
+      '10': 'devices'
+    },
   ],
 };
 
@@ -324,4 +600,3 @@ const MtuSizeResponse$json = const {
     const {'1': 'mtu', '3': 2, '4': 1, '5': 13, '10': 'mtu'},
   ],
 };
-
