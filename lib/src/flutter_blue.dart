@@ -65,7 +65,7 @@ class FlutterBlue {
         .then((p) => p.devices)
         .then((p) => p.map((d) => BluetoothDevice.fromProto(d)).toList());
   }
- 
+
   _setLogLevelIfAvailable() async {
     if (await isAvailable) {
       // Send the log level to the underlying platforms.
