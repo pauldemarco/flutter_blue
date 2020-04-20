@@ -41,6 +41,7 @@ message AdvertisementData {
 message ScanSettings {
   int32 android_scan_mode = 1;
   repeated string service_uuids = 2;
+  bool allow_duplicates = 3;
 }
 
 message ScanResult {

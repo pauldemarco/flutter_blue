@@ -35,15 +35,16 @@ class Int32Value extends $pb.GeneratedMessage {
   static Int32Value create() => Int32Value._();
   Int32Value createEmptyInstance() => create();
   static $pb.PbList<Int32Value> createRepeated() => $pb.PbList<Int32Value>();
-  static Int32Value getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static Int32Value getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Int32Value>(create);
   static Int32Value _defaultInstance;
 
   $core.int get value => $_get(0, 0);
   set value($core.int v) {
     $_setSignedInt32(0, v);
   }
-
   $core.bool hasValue() => $_has(0);
+  @$pb.TagNumber(1)
   void clearValue() => clearField(1);
 }
 
@@ -76,12 +77,14 @@ class BluetoothState extends $pb.GeneratedMessage {
   static BluetoothState getDefault() => _defaultInstance ??= create()..freeze();
   static BluetoothState _defaultInstance;
 
+  @$pb.TagNumber(1)
   BluetoothState_State get state => $_getN(0);
   set state(BluetoothState_State v) {
     setField(1, v);
   }
-
+  
   $core.bool hasState() => $_has(0);
+  @$pb.TagNumber(1)
   void clearState() => clearField(1);
 }
 
@@ -129,31 +132,36 @@ class AdvertisementData extends $pb.GeneratedMessage {
   set localName($core.String v) {
     $_setString(0, v);
   }
-
   $core.bool hasLocalName() => $_has(0);
+  @$pb.TagNumber(1)
   void clearLocalName() => clearField(1);
 
+  @$pb.TagNumber(2)
   Int32Value get txPowerLevel => $_getN(1);
   set txPowerLevel(Int32Value v) {
     setField(2, v);
   }
-
   $core.bool hasTxPowerLevel() => $_has(1);
+  @$pb.TagNumber(2)
   void clearTxPowerLevel() => clearField(2);
+  @$pb.TagNumber(2)
+  Int32Value ensureTxPowerLevel() => $_ensure(1);
 
   $core.bool get connectable => $_get(2, false);
   set connectable($core.bool v) {
     $_setBool(2, v);
   }
-
   $core.bool hasConnectable() => $_has(2);
+  @$pb.TagNumber(3)
   void clearConnectable() => clearField(3);
 
   $core.Map<$core.int, $core.List<$core.int>> get manufacturerData =>
       $_getMap(3);
 
+  @$pb.TagNumber(5)
   $core.Map<$core.String, $core.List<$core.int>> get serviceData => $_getMap(4);
 
+  @$pb.TagNumber(6)
   $core.List<$core.String> get serviceUuids => $_getList(5);
 }
 
@@ -162,6 +170,7 @@ class ScanSettings extends $pb.GeneratedMessage {
       $pb.BuilderInfo('ScanSettings', createEmptyInstance: create)
         ..a<$core.int>(1, 'androidScanMode', $pb.PbFieldType.O3)
         ..pPS(2, 'serviceUuids')
+        ..aOB(3, 'allowDuplicates')
         ..hasRequiredFields = false;
 
   ScanSettings._() : super();
@@ -188,11 +197,21 @@ class ScanSettings extends $pb.GeneratedMessage {
   set androidScanMode($core.int v) {
     $_setSignedInt32(0, v);
   }
-
   $core.bool hasAndroidScanMode() => $_has(0);
+  @$pb.TagNumber(1)
   void clearAndroidScanMode() => clearField(1);
 
+  @$pb.TagNumber(2)
   $core.List<$core.String> get serviceUuids => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.bool get allowDuplicates => $_getBF(2);
+  @$pb.TagNumber(3)
+  set allowDuplicates($core.bool v) { $_setBool(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasAllowDuplicates() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAllowDuplicates() => clearField(3);
 }
 
 class ScanResult extends $pb.GeneratedMessage {
@@ -223,31 +242,38 @@ class ScanResult extends $pb.GeneratedMessage {
   static ScanResult create() => ScanResult._();
   ScanResult createEmptyInstance() => create();
   static $pb.PbList<ScanResult> createRepeated() => $pb.PbList<ScanResult>();
-  static ScanResult getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ScanResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ScanResult>(create);
   static ScanResult _defaultInstance;
 
+  @$pb.TagNumber(1)
   BluetoothDevice get device => $_getN(0);
   set device(BluetoothDevice v) {
     setField(1, v);
   }
-
   $core.bool hasDevice() => $_has(0);
+  @$pb.TagNumber(1)
   void clearDevice() => clearField(1);
+  @$pb.TagNumber(1)
+  BluetoothDevice ensureDevice() => $_ensure(0);
 
+  @$pb.TagNumber(2)
   AdvertisementData get advertisementData => $_getN(1);
   set advertisementData(AdvertisementData v) {
     setField(2, v);
   }
-
   $core.bool hasAdvertisementData() => $_has(1);
+  @$pb.TagNumber(2)
   void clearAdvertisementData() => clearField(2);
+  @$pb.TagNumber(2)
+  AdvertisementData ensureAdvertisementData() => $_ensure(1);
 
   $core.int get rssi => $_get(2, 0);
   set rssi($core.int v) {
     $_setSignedInt32(2, v);
   }
-
   $core.bool hasRssi() => $_has(2);
+  @$pb.TagNumber(3)
   void clearRssi() => clearField(3);
 }
 
@@ -282,16 +308,16 @@ class ConnectRequest extends $pb.GeneratedMessage {
   set remoteId($core.String v) {
     $_setString(0, v);
   }
-
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.bool get androidAutoConnect => $_get(1, false);
   set androidAutoConnect($core.bool v) {
     $_setBool(1, v);
   }
-
   $core.bool hasAndroidAutoConnect() => $_has(1);
+  @$pb.TagNumber(2)
   void clearAndroidAutoConnect() => clearField(2);
 }
 
@@ -331,24 +357,24 @@ class BluetoothDevice extends $pb.GeneratedMessage {
   set remoteId($core.String v) {
     $_setString(0, v);
   }
-
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
-
   $core.String get name => $_getS(1, '');
   set name($core.String v) {
     $_setString(1, v);
   }
-
   $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
   void clearName() => clearField(2);
 
+  @$pb.TagNumber(3)
   BluetoothDevice_Type get type => $_getN(2);
   set type(BluetoothDevice_Type v) {
     setField(3, v);
   }
-
   $core.bool hasType() => $_has(2);
+  @$pb.TagNumber(3)
   void clearType() => clearField(3);
 }
 
@@ -389,28 +415,30 @@ class BluetoothService extends $pb.GeneratedMessage {
   set uuid($core.String v) {
     $_setString(0, v);
   }
-
   $core.bool hasUuid() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
 
   $core.String get remoteId => $_getS(1, '');
   set remoteId($core.String v) {
     $_setString(1, v);
   }
-
   $core.bool hasRemoteId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRemoteId() => clearField(2);
 
   $core.bool get isPrimary => $_get(2, false);
   set isPrimary($core.bool v) {
     $_setBool(2, v);
   }
-
   $core.bool hasIsPrimary() => $_has(2);
+  @$pb.TagNumber(3)
   void clearIsPrimary() => clearField(3);
 
+  @$pb.TagNumber(4)
   $core.List<BluetoothCharacteristic> get characteristics => $_getList(3);
 
+  @$pb.TagNumber(5)
   $core.List<BluetoothService> get includedServices => $_getList(4);
 }
 
@@ -458,6 +486,7 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   }
 
   $core.bool hasUuid() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
 
   $core.String get remoteId => $_getS(1, '');
@@ -466,6 +495,7 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRemoteId() => clearField(2);
 
   $core.String get serviceUuid => $_getS(2, '');
@@ -474,32 +504,40 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   }
 
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
   $core.String get secondaryServiceUuid => $_getS(3, '');
   set secondaryServiceUuid($core.String v) {
     $_setString(3, v);
   }
-
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
+  @$pb.TagNumber(5)
   $core.List<BluetoothDescriptor> get descriptors => $_getList(4);
 
+  @$pb.TagNumber(6)
   CharacteristicProperties get properties => $_getN(5);
   set properties(CharacteristicProperties v) {
     setField(6, v);
   }
 
   $core.bool hasProperties() => $_has(5);
+  @$pb.TagNumber(6)
   void clearProperties() => clearField(6);
+  @$pb.TagNumber(6)
+  CharacteristicProperties ensureProperties() => $_ensure(5);
 
+  @$pb.TagNumber(7)
   $core.List<$core.int> get value => $_getN(6);
   set value($core.List<$core.int> v) {
     $_setBytes(6, v);
   }
 
   $core.bool hasValue() => $_has(6);
+  @$pb.TagNumber(7)
   void clearValue() => clearField(7);
 }
 
@@ -540,22 +578,23 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   }
 
   $core.bool hasUuid() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
 
   $core.String get remoteId => $_getS(1, '');
   set remoteId($core.String v) {
     $_setString(1, v);
   }
-
   $core.bool hasRemoteId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRemoteId() => clearField(2);
-
   $core.String get serviceUuid => $_getS(2, '');
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
   $core.String get characteristicUuid => $_getS(3, '');
@@ -564,14 +603,17 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   }
 
   $core.bool hasCharacteristicUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearCharacteristicUuid() => clearField(4);
 
+  @$pb.TagNumber(5)
   $core.List<$core.int> get value => $_getN(4);
   set value($core.List<$core.int> v) {
     $_setBytes(4, v);
   }
 
   $core.bool hasValue() => $_has(4);
+  @$pb.TagNumber(5)
   void clearValue() => clearField(5);
 }
 
@@ -619,6 +661,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasBroadcast() => $_has(0);
+  @$pb.TagNumber(1)
   void clearBroadcast() => clearField(1);
 
   $core.bool get read => $_get(1, false);
@@ -627,6 +670,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRead() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRead() => clearField(2);
 
   $core.bool get writeWithoutResponse => $_get(2, false);
@@ -635,6 +679,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasWriteWithoutResponse() => $_has(2);
+  @$pb.TagNumber(3)
   void clearWriteWithoutResponse() => clearField(3);
 
   $core.bool get write => $_get(3, false);
@@ -643,6 +688,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasWrite() => $_has(3);
+  @$pb.TagNumber(4)
   void clearWrite() => clearField(4);
 
   $core.bool get notify => $_get(4, false);
@@ -651,6 +697,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasNotify() => $_has(4);
+  @$pb.TagNumber(5)
   void clearNotify() => clearField(5);
 
   $core.bool get indicate => $_get(5, false);
@@ -659,6 +706,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasIndicate() => $_has(5);
+  @$pb.TagNumber(6)
   void clearIndicate() => clearField(6);
 
   $core.bool get authenticatedSignedWrites => $_get(6, false);
@@ -667,6 +715,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasAuthenticatedSignedWrites() => $_has(6);
+  @$pb.TagNumber(7)
   void clearAuthenticatedSignedWrites() => clearField(7);
 
   $core.bool get extendedProperties => $_get(7, false);
@@ -675,6 +724,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasExtendedProperties() => $_has(7);
+  @$pb.TagNumber(8)
   void clearExtendedProperties() => clearField(8);
 
   $core.bool get notifyEncryptionRequired => $_get(8, false);
@@ -683,6 +733,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasNotifyEncryptionRequired() => $_has(8);
+  @$pb.TagNumber(9)
   void clearNotifyEncryptionRequired() => clearField(9);
 
   $core.bool get indicateEncryptionRequired => $_get(9, false);
@@ -691,6 +742,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   }
 
   $core.bool hasIndicateEncryptionRequired() => $_has(9);
+  @$pb.TagNumber(10)
   void clearIndicateEncryptionRequired() => clearField(10);
 }
 
@@ -731,8 +783,10 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   $core.List<BluetoothService> get services => $_getList(1);
 }
 
@@ -775,6 +829,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.String get characteristicUuid => $_getS(1, '');
@@ -783,6 +838,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasCharacteristicUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristicUuid() => clearField(2);
 
   $core.String get serviceUuid => $_getS(2, '');
@@ -791,6 +847,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
   $core.String get secondaryServiceUuid => $_getS(3, '');
@@ -799,6 +856,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 }
 
@@ -841,15 +899,20 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   BluetoothCharacteristic get characteristic => $_getN(1);
   set characteristic(BluetoothCharacteristic v) {
     setField(2, v);
   }
 
   $core.bool hasCharacteristic() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristic() => clearField(2);
+  @$pb.TagNumber(2)
+  BluetoothCharacteristic ensureCharacteristic() => $_ensure(1);
 }
 
 class ReadDescriptorRequest extends $pb.GeneratedMessage {
@@ -891,6 +954,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.String get descriptorUuid => $_getS(1, '');
@@ -899,6 +963,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasDescriptorUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearDescriptorUuid() => clearField(2);
 
   $core.String get serviceUuid => $_getS(2, '');
@@ -907,6 +972,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
   $core.String get secondaryServiceUuid => $_getS(3, '');
@@ -915,6 +981,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
   $core.String get characteristicUuid => $_getS(4, '');
@@ -923,6 +990,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasCharacteristicUuid() => $_has(4);
+  @$pb.TagNumber(5)
   void clearCharacteristicUuid() => clearField(5);
 }
 
@@ -958,20 +1026,26 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
       _defaultInstance ??= create()..freeze();
   static ReadDescriptorResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   ReadDescriptorRequest get request => $_getN(0);
   set request(ReadDescriptorRequest v) {
     setField(1, v);
   }
 
   $core.bool hasRequest() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRequest() => clearField(1);
+  @$pb.TagNumber(1)
+  ReadDescriptorRequest ensureRequest() => $_ensure(0);
 
+  @$pb.TagNumber(2)
   $core.List<$core.int> get value => $_getN(1);
   set value($core.List<$core.int> v) {
     $_setBytes(1, v);
   }
 
   $core.bool hasValue() => $_has(1);
+  @$pb.TagNumber(2)
   void clearValue() => clearField(2);
 }
 
@@ -1020,6 +1094,7 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.String get characteristicUuid => $_getS(1, '');
@@ -1028,6 +1103,7 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasCharacteristicUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristicUuid() => clearField(2);
 
   $core.String get serviceUuid => $_getS(2, '');
@@ -1036,6 +1112,7 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
   $core.String get secondaryServiceUuid => $_getS(3, '');
@@ -1044,22 +1121,27 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
+  @$pb.TagNumber(5)
   WriteCharacteristicRequest_WriteType get writeType => $_getN(4);
   set writeType(WriteCharacteristicRequest_WriteType v) {
     setField(5, v);
   }
 
   $core.bool hasWriteType() => $_has(4);
+  @$pb.TagNumber(5)
   void clearWriteType() => clearField(5);
 
+  @$pb.TagNumber(6)
   $core.List<$core.int> get value => $_getN(5);
   set value($core.List<$core.int> v) {
     $_setBytes(5, v);
   }
 
   $core.bool hasValue() => $_has(5);
+  @$pb.TagNumber(6)
   void clearValue() => clearField(6);
 }
 
@@ -1098,13 +1180,17 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
       _defaultInstance ??= create()..freeze();
   static WriteCharacteristicResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   WriteCharacteristicRequest get request => $_getN(0);
   set request(WriteCharacteristicRequest v) {
     setField(1, v);
   }
 
   $core.bool hasRequest() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRequest() => clearField(1);
+  @$pb.TagNumber(1)
+  WriteCharacteristicRequest ensureRequest() => $_ensure(0);
 
   $core.bool get success => $_get(1, false);
   set success($core.bool v) {
@@ -1112,6 +1198,7 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSuccess() => $_has(1);
+  @$pb.TagNumber(2)
   void clearSuccess() => clearField(2);
 }
 
@@ -1155,6 +1242,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.String get descriptorUuid => $_getS(1, '');
@@ -1163,6 +1251,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasDescriptorUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearDescriptorUuid() => clearField(2);
 
   $core.String get serviceUuid => $_getS(2, '');
@@ -1171,6 +1260,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
   $core.String get secondaryServiceUuid => $_getS(3, '');
@@ -1179,6 +1269,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
   $core.String get characteristicUuid => $_getS(4, '');
@@ -1187,14 +1278,17 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasCharacteristicUuid() => $_has(4);
+  @$pb.TagNumber(5)
   void clearCharacteristicUuid() => clearField(5);
 
+  @$pb.TagNumber(6)
   $core.List<$core.int> get value => $_getN(5);
   set value($core.List<$core.int> v) {
     $_setBytes(5, v);
   }
 
   $core.bool hasValue() => $_has(5);
+  @$pb.TagNumber(6)
   void clearValue() => clearField(6);
 }
 
@@ -1230,13 +1324,17 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
       _defaultInstance ??= create()..freeze();
   static WriteDescriptorResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   WriteDescriptorRequest get request => $_getN(0);
   set request(WriteDescriptorRequest v) {
     setField(1, v);
   }
 
   $core.bool hasRequest() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRequest() => clearField(1);
+  @$pb.TagNumber(1)
+  WriteDescriptorRequest ensureRequest() => $_ensure(0);
 
   $core.bool get success => $_get(1, false);
   set success($core.bool v) {
@@ -1244,6 +1342,7 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSuccess() => $_has(1);
+  @$pb.TagNumber(2)
   void clearSuccess() => clearField(2);
 }
 
@@ -1286,14 +1385,15 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.String get serviceUuid => $_getS(1, '');
   set serviceUuid($core.String v) {
     $_setString(1, v);
   }
-
   $core.bool hasServiceUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearServiceUuid() => clearField(2);
 
   $core.String get secondaryServiceUuid => $_getS(2, '');
@@ -1302,6 +1402,7 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSecondaryServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearSecondaryServiceUuid() => clearField(3);
 
   $core.String get characteristicUuid => $_getS(3, '');
@@ -1310,6 +1411,7 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasCharacteristicUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearCharacteristicUuid() => clearField(4);
 
   $core.bool get enable => $_get(4, false);
@@ -1318,6 +1420,7 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasEnable() => $_has(4);
+  @$pb.TagNumber(5)
   void clearEnable() => clearField(5);
 }
 
@@ -1360,15 +1463,20 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   BluetoothCharacteristic get characteristic => $_getN(1);
   set characteristic(BluetoothCharacteristic v) {
     setField(2, v);
   }
 
   $core.bool hasCharacteristic() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristic() => clearField(2);
+  @$pb.TagNumber(2)
+  BluetoothCharacteristic ensureCharacteristic() => $_ensure(1);
 
   $core.bool get success => $_get(2, false);
   set success($core.bool v) {
@@ -1376,6 +1484,7 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasSuccess() => $_has(2);
+  @$pb.TagNumber(3)
   void clearSuccess() => clearField(3);
 }
 
@@ -1415,17 +1524,20 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
   set remoteId($core.String v) {
     $_setString(0, v);
   }
-
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   BluetoothCharacteristic get characteristic => $_getN(1);
   set characteristic(BluetoothCharacteristic v) {
     setField(2, v);
   }
-
   $core.bool hasCharacteristic() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristic() => clearField(2);
+  @$pb.TagNumber(2)
+  BluetoothCharacteristic ensureCharacteristic() => $_ensure(1);
 }
 
 class DeviceStateResponse extends $pb.GeneratedMessage {
@@ -1466,14 +1578,17 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   DeviceStateResponse_BluetoothDeviceState get state => $_getN(1);
   set state(DeviceStateResponse_BluetoothDeviceState v) {
     setField(2, v);
   }
 
   $core.bool hasState() => $_has(1);
+  @$pb.TagNumber(2)
   void clearState() => clearField(2);
 }
 
@@ -1507,6 +1622,7 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
       _defaultInstance ??= create()..freeze();
   static ConnectedDevicesResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   $core.List<BluetoothDevice> get devices => $_getList(0);
 }
 
@@ -1543,6 +1659,7 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.int get mtu => $_get(1, 0);
@@ -1551,6 +1668,7 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
   }
 
   $core.bool hasMtu() => $_has(1);
+  @$pb.TagNumber(2)
   void clearMtu() => clearField(2);
 }
 
@@ -1588,6 +1706,7 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
   $core.int get mtu => $_get(1, 0);
@@ -1596,5 +1715,6 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
   }
 
   $core.bool hasMtu() => $_has(1);
+  @$pb.TagNumber(2)
   void clearMtu() => clearField(2);
 }
