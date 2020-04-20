@@ -744,6 +744,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         try {
             settings = Protos.ScanSettings.newBuilder().mergeFrom(data).build();
             allowDuplicates = settings.getAllowDuplicates();
+            macDeviceScanned.clear();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 startScan21(settings);
             } else {
