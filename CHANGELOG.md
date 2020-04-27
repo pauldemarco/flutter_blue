@@ -1,3 +1,11 @@
+## 0.7.2
+* Add `allowDuplicates` option to `startScan`.
+* Fix performance issue with GUID initializers.
+
+## 0.7.1+1
+* Fix for FlutterBlue constructor when running on emulator.
+* Return error when attempting to `discoverServices` while not connected.
+
 ## 0.7.1
 * Fix incorrect value notification when write is performed.
 * Add `toString` to each bluetooth class.
