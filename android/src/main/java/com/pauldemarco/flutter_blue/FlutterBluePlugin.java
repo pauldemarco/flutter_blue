@@ -63,7 +63,6 @@ import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 /** FlutterBluePlugin */
 public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, RequestPermissionsResultListener  {
     private static final String TAG = "FlutterBluePlugin";
-    private static FlutterBluePlugin instance;
     private Object initializationLock = new Object();
     private Context context;
     private MethodChannel channel;
@@ -91,9 +90,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
-        if (instance == null) {
-            instance = new FlutterBluePlugin();
-        }
+        FlutterBluePlugin instance = new FlutterBluePlugin();
         Activity activity = registrar.activity();
         Application application = null;
         if (registrar.context() != null) {
@@ -151,6 +148,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             Log.i(TAG, "setup");
             this.activity = activity;
             this.application = application;
+            this.context = application;
             channel = new MethodChannel(messenger, NAMESPACE + "/methods");
             channel.setMethodCallHandler(this);
             stateChannel = new EventChannel(messenger, NAMESPACE + "/state");
