@@ -128,8 +128,16 @@ class BluetoothDevice {
       ..remoteId = id.toString()
       ..mtu = desiredMtu;
 
-    return await FlutterBlue.instance._channel
+    await FlutterBlue.instance._channel
         .invokeMethod('requestMtu', request.writeToBuffer());
+    
+    await FlutterBlue.instance._methodStream
+        .where((m) => m.method == "MtuSize")
+        .map((m) => m.arguments)
+        .map((buffer) => protos.MtuSizeResponse.fromBuffer(buffer))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => p.mtu)
+        .first;
   }
 
   /// Indicates whether the Bluetooth Device can send a write without response
