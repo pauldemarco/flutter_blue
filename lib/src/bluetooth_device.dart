@@ -128,7 +128,7 @@ class BluetoothDevice {
       ..remoteId = id.toString()
       ..mtu = desiredMtu;
 
-    return FlutterBlue.instance._channel
+    return await FlutterBlue.instance._channel
         .invokeMethod('requestMtu', request.writeToBuffer());
   }
 
