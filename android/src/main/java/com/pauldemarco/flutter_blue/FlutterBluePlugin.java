@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
@@ -266,10 +267,18 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             case "getConnectedDevices":
             {
                 List<BluetoothDevice> devices = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
+                final Set<BluetoothDevice> bondedDevices = mBluetoothAdapter.getBondedDevices();
+//                Log.d(TAG, "bondedDevices: " + bondedDevices);
+
                 Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
                 for(BluetoothDevice d : devices) {
                     p.addDevices(ProtoMaker.from(d));
                 }
+
+                for (BluetoothDevice d : bondedDevices) {
+                    p.addDevices(ProtoMaker.from(d));
+                }
+
                 result.success(p.build().toByteArray());
                 log(LogLevel.EMERGENCY, "mDevices size: " + mDevices.size());
                 break;
