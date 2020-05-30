@@ -139,7 +139,7 @@ class ServiceTile extends StatelessWidget {
             Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}',
                 style: Theme.of(context)
                     .textTheme
-                    .body1
+                    .bodyText1
                     .copyWith(color: Theme.of(context).textTheme.caption.color))
           ],
         ),
@@ -187,7 +187,7 @@ class CharacteristicTile extends StatelessWidget {
                 Text('Characteristic'),
                 Text(
                     '0x${characteristic.uuid.toString().toUpperCase().substring(4, 8)}',
-                    style: Theme.of(context).textTheme.body1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
                         color: Theme.of(context).textTheme.caption.color))
               ],
             ),
@@ -246,7 +246,7 @@ class DescriptorTile extends StatelessWidget {
           Text('0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
               style: Theme.of(context)
                   .textTheme
-                  .body1
+                  .bodyText1
                   .copyWith(color: Theme.of(context).textTheme.caption.color))
         ],
       ),
