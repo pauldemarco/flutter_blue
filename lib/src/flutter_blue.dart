@@ -65,7 +65,7 @@ class FlutterBlue {
         .then((p) => p.devices)
         .then((p) => p.map((d) => BluetoothDevice.fromProto(d)).toList());
   }
- 
+
   _setLogLevelIfAvailable() async {
     if (await isAvailable) {
       // Send the log level to the underlying platforms.
@@ -80,9 +80,11 @@ class FlutterBlue {
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
     Duration timeout,
+    bool allowDuplicates = false,
   }) async* {
     var settings = protos.ScanSettings.create()
       ..androidScanMode = scanMode.value
+      ..allowDuplicates = allowDuplicates
       ..serviceUuids.addAll(withServices.map((g) => g.toString()).toList());
 
     if (_isScanning.value == true) {
@@ -135,12 +137,14 @@ class FlutterBlue {
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
     Duration timeout,
+    bool allowDuplicates = false,
   }) async {
     await scan(
             scanMode: scanMode,
             withServices: withServices,
             withDevices: withDevices,
-            timeout: timeout)
+            timeout: timeout,
+            allowDuplicates: allowDuplicates)
         .drain();
     return _scanResults.value;
   }

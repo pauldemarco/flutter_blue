@@ -94,8 +94,11 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       NSString *u = [request.serviceUuidsArray objectAtIndex:i];
       uuids = [uuids arrayByAddingObject:[CBUUID UUIDWithString:u]];
     }
-    // TODO: iOS Scan Options (#35)
-    [self->_centralManager scanForPeripheralsWithServices:uuids options:nil];
+    NSMutableDictionary<NSString *, id> *scanOpts = [NSMutableDictionary new];
+    if (request.allowDuplicates) {
+        [scanOpts setObject:[NSNumber numberWithBool:YES] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
+    }
+    [self->_centralManager scanForPeripheralsWithServices:uuids options:scanOpts];
     result(nil);
   } else if([@"stopScan" isEqualToString:call.method]) {
     [self->_centralManager stopScan];

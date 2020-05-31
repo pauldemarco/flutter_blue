@@ -35,15 +35,21 @@ class Int32Value extends $pb.GeneratedMessage {
   static Int32Value create() => Int32Value._();
   Int32Value createEmptyInstance() => create();
   static $pb.PbList<Int32Value> createRepeated() => $pb.PbList<Int32Value>();
-  static Int32Value getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static Int32Value getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<Int32Value>(create);
   static Int32Value _defaultInstance;
 
-  $core.int get value => $_get(0, 0);
+  @$pb.TagNumber(1)
+  $core.int get value => $_getIZ(0);
+  @$pb.TagNumber(1)
   set value($core.int v) {
     $_setSignedInt32(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasValue() => $_has(0);
+  @$pb.TagNumber(1)
   void clearValue() => clearField(1);
 }
 
@@ -73,15 +79,21 @@ class BluetoothState extends $pb.GeneratedMessage {
   BluetoothState createEmptyInstance() => create();
   static $pb.PbList<BluetoothState> createRepeated() =>
       $pb.PbList<BluetoothState>();
-  static BluetoothState getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static BluetoothState getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BluetoothState>(create);
   static BluetoothState _defaultInstance;
 
+  @$pb.TagNumber(1)
   BluetoothState_State get state => $_getN(0);
+  @$pb.TagNumber(1)
   set state(BluetoothState_State v) {
     setField(1, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
+  @$pb.TagNumber(1)
   void clearState() => clearField(1);
 }
 
@@ -89,9 +101,7 @@ class AdvertisementData extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('AdvertisementData', createEmptyInstance: create)
         ..aOS(1, 'localName')
-        ..a<Int32Value>(2, 'txPowerLevel', $pb.PbFieldType.OM,
-            defaultOrMaker: Int32Value.getDefault,
-            subBuilder: Int32Value.create)
+        ..aOM<Int32Value>(2, 'txPowerLevel', subBuilder: Int32Value.create)
         ..aOB(3, 'connectable')
         ..m<$core.int, $core.List<$core.int>>(4, 'manufacturerData',
             entryClassName: 'AdvertisementData.ManufacturerDataEntry',
@@ -121,39 +131,57 @@ class AdvertisementData extends $pb.GeneratedMessage {
   AdvertisementData createEmptyInstance() => create();
   static $pb.PbList<AdvertisementData> createRepeated() =>
       $pb.PbList<AdvertisementData>();
-  static AdvertisementData getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static AdvertisementData getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AdvertisementData>(create);
   static AdvertisementData _defaultInstance;
 
-  $core.String get localName => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get localName => $_getSZ(0);
+  @$pb.TagNumber(1)
   set localName($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasLocalName() => $_has(0);
+  @$pb.TagNumber(1)
   void clearLocalName() => clearField(1);
 
+  @$pb.TagNumber(2)
   Int32Value get txPowerLevel => $_getN(1);
+  @$pb.TagNumber(2)
   set txPowerLevel(Int32Value v) {
     setField(2, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasTxPowerLevel() => $_has(1);
+  @$pb.TagNumber(2)
   void clearTxPowerLevel() => clearField(2);
+  @$pb.TagNumber(2)
+  Int32Value ensureTxPowerLevel() => $_ensure(1);
 
-  $core.bool get connectable => $_get(2, false);
+  @$pb.TagNumber(3)
+  $core.bool get connectable => $_getBF(2);
+  @$pb.TagNumber(3)
   set connectable($core.bool v) {
     $_setBool(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasConnectable() => $_has(2);
+  @$pb.TagNumber(3)
   void clearConnectable() => clearField(3);
 
+  @$pb.TagNumber(4)
   $core.Map<$core.int, $core.List<$core.int>> get manufacturerData =>
       $_getMap(3);
 
+  @$pb.TagNumber(5)
   $core.Map<$core.String, $core.List<$core.int>> get serviceData => $_getMap(4);
 
+  @$pb.TagNumber(6)
   $core.List<$core.String> get serviceUuids => $_getList(5);
 }
 
@@ -162,6 +190,7 @@ class ScanSettings extends $pb.GeneratedMessage {
       $pb.BuilderInfo('ScanSettings', createEmptyInstance: create)
         ..a<$core.int>(1, 'androidScanMode', $pb.PbFieldType.O3)
         ..pPS(2, 'serviceUuids')
+        ..aOB(3, 'allowDuplicates')
         ..hasRequiredFields = false;
 
   ScanSettings._() : super();
@@ -181,28 +210,44 @@ class ScanSettings extends $pb.GeneratedMessage {
   ScanSettings createEmptyInstance() => create();
   static $pb.PbList<ScanSettings> createRepeated() =>
       $pb.PbList<ScanSettings>();
-  static ScanSettings getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ScanSettings getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ScanSettings>(create);
   static ScanSettings _defaultInstance;
 
-  $core.int get androidScanMode => $_get(0, 0);
+  @$pb.TagNumber(1)
+  $core.int get androidScanMode => $_getIZ(0);
+  @$pb.TagNumber(1)
   set androidScanMode($core.int v) {
     $_setSignedInt32(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasAndroidScanMode() => $_has(0);
+  @$pb.TagNumber(1)
   void clearAndroidScanMode() => clearField(1);
 
+  @$pb.TagNumber(2)
   $core.List<$core.String> get serviceUuids => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $core.bool get allowDuplicates => $_getBF(2);
+  @$pb.TagNumber(3)
+  set allowDuplicates($core.bool v) {
+    $_setBool(2, v);
+  }
+
+  @$pb.TagNumber(3)
+  $core.bool hasAllowDuplicates() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAllowDuplicates() => clearField(3);
 }
 
 class ScanResult extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('ScanResult', createEmptyInstance: create)
-        ..a<BluetoothDevice>(1, 'device', $pb.PbFieldType.OM,
-            defaultOrMaker: BluetoothDevice.getDefault,
-            subBuilder: BluetoothDevice.create)
-        ..a<AdvertisementData>(2, 'advertisementData', $pb.PbFieldType.OM,
-            defaultOrMaker: AdvertisementData.getDefault,
+        ..aOM<BluetoothDevice>(1, 'device', subBuilder: BluetoothDevice.create)
+        ..aOM<AdvertisementData>(2, 'advertisementData',
             subBuilder: AdvertisementData.create)
         ..a<$core.int>(3, 'rssi', $pb.PbFieldType.O3)
         ..hasRequiredFields = false;
@@ -223,31 +268,49 @@ class ScanResult extends $pb.GeneratedMessage {
   static ScanResult create() => ScanResult._();
   ScanResult createEmptyInstance() => create();
   static $pb.PbList<ScanResult> createRepeated() => $pb.PbList<ScanResult>();
-  static ScanResult getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ScanResult getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ScanResult>(create);
   static ScanResult _defaultInstance;
 
+  @$pb.TagNumber(1)
   BluetoothDevice get device => $_getN(0);
+  @$pb.TagNumber(1)
   set device(BluetoothDevice v) {
     setField(1, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasDevice() => $_has(0);
+  @$pb.TagNumber(1)
   void clearDevice() => clearField(1);
+  @$pb.TagNumber(1)
+  BluetoothDevice ensureDevice() => $_ensure(0);
 
+  @$pb.TagNumber(2)
   AdvertisementData get advertisementData => $_getN(1);
+  @$pb.TagNumber(2)
   set advertisementData(AdvertisementData v) {
     setField(2, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasAdvertisementData() => $_has(1);
+  @$pb.TagNumber(2)
   void clearAdvertisementData() => clearField(2);
+  @$pb.TagNumber(2)
+  AdvertisementData ensureAdvertisementData() => $_ensure(1);
 
-  $core.int get rssi => $_get(2, 0);
+  @$pb.TagNumber(3)
+  $core.int get rssi => $_getIZ(2);
+  @$pb.TagNumber(3)
   set rssi($core.int v) {
     $_setSignedInt32(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasRssi() => $_has(2);
+  @$pb.TagNumber(3)
   void clearRssi() => clearField(3);
 }
 
@@ -275,23 +338,33 @@ class ConnectRequest extends $pb.GeneratedMessage {
   ConnectRequest createEmptyInstance() => create();
   static $pb.PbList<ConnectRequest> createRepeated() =>
       $pb.PbList<ConnectRequest>();
-  static ConnectRequest getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ConnectRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ConnectRequest>(create);
   static ConnectRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.bool get androidAutoConnect => $_get(1, false);
+  @$pb.TagNumber(2)
+  $core.bool get androidAutoConnect => $_getBF(1);
+  @$pb.TagNumber(2)
   set androidAutoConnect($core.bool v) {
     $_setBool(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasAndroidAutoConnect() => $_has(1);
+  @$pb.TagNumber(2)
   void clearAndroidAutoConnect() => clearField(2);
 }
 
@@ -323,32 +396,45 @@ class BluetoothDevice extends $pb.GeneratedMessage {
   BluetoothDevice createEmptyInstance() => create();
   static $pb.PbList<BluetoothDevice> createRepeated() =>
       $pb.PbList<BluetoothDevice>();
-  static BluetoothDevice getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static BluetoothDevice getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BluetoothDevice>(create);
   static BluetoothDevice _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.String get name => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get name => $_getSZ(1);
+  @$pb.TagNumber(2)
   set name($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
+  @$pb.TagNumber(2)
   void clearName() => clearField(2);
 
+  @$pb.TagNumber(3)
   BluetoothDevice_Type get type => $_getN(2);
+  @$pb.TagNumber(3)
   set type(BluetoothDevice_Type v) {
     setField(3, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasType() => $_has(2);
+  @$pb.TagNumber(3)
   void clearType() => clearField(3);
 }
 
@@ -381,36 +467,51 @@ class BluetoothService extends $pb.GeneratedMessage {
   BluetoothService createEmptyInstance() => create();
   static $pb.PbList<BluetoothService> createRepeated() =>
       $pb.PbList<BluetoothService>();
-  static BluetoothService getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static BluetoothService getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BluetoothService>(create);
   static BluetoothService _defaultInstance;
 
-  $core.String get uuid => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get uuid => $_getSZ(0);
+  @$pb.TagNumber(1)
   set uuid($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasUuid() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
 
-  $core.String get remoteId => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get remoteId => $_getSZ(1);
+  @$pb.TagNumber(2)
   set remoteId($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasRemoteId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRemoteId() => clearField(2);
 
-  $core.bool get isPrimary => $_get(2, false);
+  @$pb.TagNumber(3)
+  $core.bool get isPrimary => $_getBF(2);
+  @$pb.TagNumber(3)
   set isPrimary($core.bool v) {
     $_setBool(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasIsPrimary() => $_has(2);
+  @$pb.TagNumber(3)
   void clearIsPrimary() => clearField(3);
 
+  @$pb.TagNumber(4)
   $core.List<BluetoothCharacteristic> get characteristics => $_getList(3);
 
+  @$pb.TagNumber(5)
   $core.List<BluetoothService> get includedServices => $_getList(4);
 }
 
@@ -423,8 +524,7 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
         ..aOS(4, 'secondaryServiceUuid', protoName: 'secondaryServiceUuid')
         ..pc<BluetoothDescriptor>(5, 'descriptors', $pb.PbFieldType.PM,
             subBuilder: BluetoothDescriptor.create)
-        ..a<CharacteristicProperties>(6, 'properties', $pb.PbFieldType.OM,
-            defaultOrMaker: CharacteristicProperties.getDefault,
+        ..aOM<CharacteristicProperties>(6, 'properties',
             subBuilder: CharacteristicProperties.create)
         ..a<$core.List<$core.int>>(7, 'value', $pb.PbFieldType.OY)
         ..hasRequiredFields = false;
@@ -448,58 +548,86 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   BluetoothCharacteristic createEmptyInstance() => create();
   static $pb.PbList<BluetoothCharacteristic> createRepeated() =>
       $pb.PbList<BluetoothCharacteristic>();
-  static BluetoothCharacteristic getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static BluetoothCharacteristic getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BluetoothCharacteristic>(create);
   static BluetoothCharacteristic _defaultInstance;
 
-  $core.String get uuid => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get uuid => $_getSZ(0);
+  @$pb.TagNumber(1)
   set uuid($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasUuid() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
 
-  $core.String get remoteId => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get remoteId => $_getSZ(1);
+  @$pb.TagNumber(2)
   set remoteId($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasRemoteId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRemoteId() => clearField(2);
 
-  $core.String get serviceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get serviceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
-  $core.String get secondaryServiceUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get secondaryServiceUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set secondaryServiceUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
+  @$pb.TagNumber(5)
   $core.List<BluetoothDescriptor> get descriptors => $_getList(4);
 
+  @$pb.TagNumber(6)
   CharacteristicProperties get properties => $_getN(5);
+  @$pb.TagNumber(6)
   set properties(CharacteristicProperties v) {
     setField(6, v);
   }
 
+  @$pb.TagNumber(6)
   $core.bool hasProperties() => $_has(5);
+  @$pb.TagNumber(6)
   void clearProperties() => clearField(6);
+  @$pb.TagNumber(6)
+  CharacteristicProperties ensureProperties() => $_ensure(5);
 
+  @$pb.TagNumber(7)
   $core.List<$core.int> get value => $_getN(6);
+  @$pb.TagNumber(7)
   set value($core.List<$core.int> v) {
     $_setBytes(6, v);
   }
 
+  @$pb.TagNumber(7)
   $core.bool hasValue() => $_has(6);
+  @$pb.TagNumber(7)
   void clearValue() => clearField(7);
 }
 
@@ -530,48 +658,69 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   BluetoothDescriptor createEmptyInstance() => create();
   static $pb.PbList<BluetoothDescriptor> createRepeated() =>
       $pb.PbList<BluetoothDescriptor>();
-  static BluetoothDescriptor getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static BluetoothDescriptor getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<BluetoothDescriptor>(create);
   static BluetoothDescriptor _defaultInstance;
 
-  $core.String get uuid => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get uuid => $_getSZ(0);
+  @$pb.TagNumber(1)
   set uuid($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasUuid() => $_has(0);
+  @$pb.TagNumber(1)
   void clearUuid() => clearField(1);
 
-  $core.String get remoteId => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get remoteId => $_getSZ(1);
+  @$pb.TagNumber(2)
   set remoteId($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasRemoteId() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRemoteId() => clearField(2);
 
-  $core.String get serviceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get serviceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
-  $core.String get characteristicUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get characteristicUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set characteristicUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasCharacteristicUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearCharacteristicUuid() => clearField(4);
 
+  @$pb.TagNumber(5)
   $core.List<$core.int> get value => $_getN(4);
+  @$pb.TagNumber(5)
   set value($core.List<$core.int> v) {
     $_setBytes(4, v);
   }
 
+  @$pb.TagNumber(5)
   $core.bool hasValue() => $_has(4);
+  @$pb.TagNumber(5)
   void clearValue() => clearField(5);
 }
 
@@ -609,88 +758,129 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   CharacteristicProperties createEmptyInstance() => create();
   static $pb.PbList<CharacteristicProperties> createRepeated() =>
       $pb.PbList<CharacteristicProperties>();
-  static CharacteristicProperties getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static CharacteristicProperties getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<CharacteristicProperties>(create);
   static CharacteristicProperties _defaultInstance;
 
-  $core.bool get broadcast => $_get(0, false);
+  @$pb.TagNumber(1)
+  $core.bool get broadcast => $_getBF(0);
+  @$pb.TagNumber(1)
   set broadcast($core.bool v) {
     $_setBool(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasBroadcast() => $_has(0);
+  @$pb.TagNumber(1)
   void clearBroadcast() => clearField(1);
 
-  $core.bool get read => $_get(1, false);
+  @$pb.TagNumber(2)
+  $core.bool get read => $_getBF(1);
+  @$pb.TagNumber(2)
   set read($core.bool v) {
     $_setBool(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasRead() => $_has(1);
+  @$pb.TagNumber(2)
   void clearRead() => clearField(2);
 
-  $core.bool get writeWithoutResponse => $_get(2, false);
+  @$pb.TagNumber(3)
+  $core.bool get writeWithoutResponse => $_getBF(2);
+  @$pb.TagNumber(3)
   set writeWithoutResponse($core.bool v) {
     $_setBool(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasWriteWithoutResponse() => $_has(2);
+  @$pb.TagNumber(3)
   void clearWriteWithoutResponse() => clearField(3);
 
-  $core.bool get write => $_get(3, false);
+  @$pb.TagNumber(4)
+  $core.bool get write => $_getBF(3);
+  @$pb.TagNumber(4)
   set write($core.bool v) {
     $_setBool(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasWrite() => $_has(3);
+  @$pb.TagNumber(4)
   void clearWrite() => clearField(4);
 
-  $core.bool get notify => $_get(4, false);
+  @$pb.TagNumber(5)
+  $core.bool get notify => $_getBF(4);
+  @$pb.TagNumber(5)
   set notify($core.bool v) {
     $_setBool(4, v);
   }
 
+  @$pb.TagNumber(5)
   $core.bool hasNotify() => $_has(4);
+  @$pb.TagNumber(5)
   void clearNotify() => clearField(5);
 
-  $core.bool get indicate => $_get(5, false);
+  @$pb.TagNumber(6)
+  $core.bool get indicate => $_getBF(5);
+  @$pb.TagNumber(6)
   set indicate($core.bool v) {
     $_setBool(5, v);
   }
 
+  @$pb.TagNumber(6)
   $core.bool hasIndicate() => $_has(5);
+  @$pb.TagNumber(6)
   void clearIndicate() => clearField(6);
 
-  $core.bool get authenticatedSignedWrites => $_get(6, false);
+  @$pb.TagNumber(7)
+  $core.bool get authenticatedSignedWrites => $_getBF(6);
+  @$pb.TagNumber(7)
   set authenticatedSignedWrites($core.bool v) {
     $_setBool(6, v);
   }
 
+  @$pb.TagNumber(7)
   $core.bool hasAuthenticatedSignedWrites() => $_has(6);
+  @$pb.TagNumber(7)
   void clearAuthenticatedSignedWrites() => clearField(7);
 
-  $core.bool get extendedProperties => $_get(7, false);
+  @$pb.TagNumber(8)
+  $core.bool get extendedProperties => $_getBF(7);
+  @$pb.TagNumber(8)
   set extendedProperties($core.bool v) {
     $_setBool(7, v);
   }
 
+  @$pb.TagNumber(8)
   $core.bool hasExtendedProperties() => $_has(7);
+  @$pb.TagNumber(8)
   void clearExtendedProperties() => clearField(8);
 
-  $core.bool get notifyEncryptionRequired => $_get(8, false);
+  @$pb.TagNumber(9)
+  $core.bool get notifyEncryptionRequired => $_getBF(8);
+  @$pb.TagNumber(9)
   set notifyEncryptionRequired($core.bool v) {
     $_setBool(8, v);
   }
 
+  @$pb.TagNumber(9)
   $core.bool hasNotifyEncryptionRequired() => $_has(8);
+  @$pb.TagNumber(9)
   void clearNotifyEncryptionRequired() => clearField(9);
 
-  $core.bool get indicateEncryptionRequired => $_get(9, false);
+  @$pb.TagNumber(10)
+  $core.bool get indicateEncryptionRequired => $_getBF(9);
+  @$pb.TagNumber(10)
   set indicateEncryptionRequired($core.bool v) {
     $_setBool(9, v);
   }
 
+  @$pb.TagNumber(10)
   $core.bool hasIndicateEncryptionRequired() => $_has(9);
+  @$pb.TagNumber(10)
   void clearIndicateEncryptionRequired() => clearField(10);
 }
 
@@ -721,18 +911,24 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
   DiscoverServicesResult createEmptyInstance() => create();
   static $pb.PbList<DiscoverServicesResult> createRepeated() =>
       $pb.PbList<DiscoverServicesResult>();
-  static DiscoverServicesResult getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static DiscoverServicesResult getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DiscoverServicesResult>(create);
   static DiscoverServicesResult _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   $core.List<BluetoothService> get services => $_getList(1);
 }
 
@@ -765,40 +961,57 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   ReadCharacteristicRequest createEmptyInstance() => create();
   static $pb.PbList<ReadCharacteristicRequest> createRepeated() =>
       $pb.PbList<ReadCharacteristicRequest>();
-  static ReadCharacteristicRequest getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ReadCharacteristicRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ReadCharacteristicRequest>(create);
   static ReadCharacteristicRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.String get characteristicUuid => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get characteristicUuid => $_getSZ(1);
+  @$pb.TagNumber(2)
   set characteristicUuid($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasCharacteristicUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristicUuid() => clearField(2);
 
-  $core.String get serviceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get serviceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
-  $core.String get secondaryServiceUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get secondaryServiceUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set secondaryServiceUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 }
 
@@ -806,8 +1019,7 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('ReadCharacteristicResponse', createEmptyInstance: create)
         ..aOS(1, 'remoteId')
-        ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM,
-            defaultOrMaker: BluetoothCharacteristic.getDefault,
+        ..aOM<BluetoothCharacteristic>(2, 'characteristic',
             subBuilder: BluetoothCharacteristic.create)
         ..hasRequiredFields = false;
 
@@ -831,25 +1043,36 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
   ReadCharacteristicResponse createEmptyInstance() => create();
   static $pb.PbList<ReadCharacteristicResponse> createRepeated() =>
       $pb.PbList<ReadCharacteristicResponse>();
-  static ReadCharacteristicResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ReadCharacteristicResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ReadCharacteristicResponse>(create);
   static ReadCharacteristicResponse _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   BluetoothCharacteristic get characteristic => $_getN(1);
+  @$pb.TagNumber(2)
   set characteristic(BluetoothCharacteristic v) {
     setField(2, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasCharacteristic() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristic() => clearField(2);
+  @$pb.TagNumber(2)
+  BluetoothCharacteristic ensureCharacteristic() => $_ensure(1);
 }
 
 class ReadDescriptorRequest extends $pb.GeneratedMessage {
@@ -881,56 +1104,76 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   ReadDescriptorRequest createEmptyInstance() => create();
   static $pb.PbList<ReadDescriptorRequest> createRepeated() =>
       $pb.PbList<ReadDescriptorRequest>();
-  static ReadDescriptorRequest getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ReadDescriptorRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ReadDescriptorRequest>(create);
   static ReadDescriptorRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.String get descriptorUuid => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get descriptorUuid => $_getSZ(1);
+  @$pb.TagNumber(2)
   set descriptorUuid($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasDescriptorUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearDescriptorUuid() => clearField(2);
 
-  $core.String get serviceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get serviceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
-  $core.String get secondaryServiceUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get secondaryServiceUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set secondaryServiceUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
-  $core.String get characteristicUuid => $_getS(4, '');
+  @$pb.TagNumber(5)
+  $core.String get characteristicUuid => $_getSZ(4);
+  @$pb.TagNumber(5)
   set characteristicUuid($core.String v) {
     $_setString(4, v);
   }
 
+  @$pb.TagNumber(5)
   $core.bool hasCharacteristicUuid() => $_has(4);
+  @$pb.TagNumber(5)
   void clearCharacteristicUuid() => clearField(5);
 }
 
 class ReadDescriptorResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('ReadDescriptorResponse', createEmptyInstance: create)
-        ..a<ReadDescriptorRequest>(1, 'request', $pb.PbFieldType.OM,
-            defaultOrMaker: ReadDescriptorRequest.getDefault,
+        ..aOM<ReadDescriptorRequest>(1, 'request',
             subBuilder: ReadDescriptorRequest.create)
         ..a<$core.List<$core.int>>(2, 'value', $pb.PbFieldType.OY)
         ..hasRequiredFields = false;
@@ -954,24 +1197,35 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
   ReadDescriptorResponse createEmptyInstance() => create();
   static $pb.PbList<ReadDescriptorResponse> createRepeated() =>
       $pb.PbList<ReadDescriptorResponse>();
-  static ReadDescriptorResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ReadDescriptorResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ReadDescriptorResponse>(create);
   static ReadDescriptorResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   ReadDescriptorRequest get request => $_getN(0);
+  @$pb.TagNumber(1)
   set request(ReadDescriptorRequest v) {
     setField(1, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRequest() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRequest() => clearField(1);
+  @$pb.TagNumber(1)
+  ReadDescriptorRequest ensureRequest() => $_ensure(0);
 
+  @$pb.TagNumber(2)
   $core.List<$core.int> get value => $_getN(1);
+  @$pb.TagNumber(2)
   set value($core.List<$core.int> v) {
     $_setBytes(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasValue() => $_has(1);
+  @$pb.TagNumber(2)
   void clearValue() => clearField(2);
 }
 
@@ -1010,56 +1264,81 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   WriteCharacteristicRequest createEmptyInstance() => create();
   static $pb.PbList<WriteCharacteristicRequest> createRepeated() =>
       $pb.PbList<WriteCharacteristicRequest>();
-  static WriteCharacteristicRequest getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static WriteCharacteristicRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<WriteCharacteristicRequest>(create);
   static WriteCharacteristicRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.String get characteristicUuid => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get characteristicUuid => $_getSZ(1);
+  @$pb.TagNumber(2)
   set characteristicUuid($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasCharacteristicUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristicUuid() => clearField(2);
 
-  $core.String get serviceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get serviceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
-  $core.String get secondaryServiceUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get secondaryServiceUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set secondaryServiceUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
+  @$pb.TagNumber(5)
   WriteCharacteristicRequest_WriteType get writeType => $_getN(4);
+  @$pb.TagNumber(5)
   set writeType(WriteCharacteristicRequest_WriteType v) {
     setField(5, v);
   }
 
+  @$pb.TagNumber(5)
   $core.bool hasWriteType() => $_has(4);
+  @$pb.TagNumber(5)
   void clearWriteType() => clearField(5);
 
+  @$pb.TagNumber(6)
   $core.List<$core.int> get value => $_getN(5);
+  @$pb.TagNumber(6)
   set value($core.List<$core.int> v) {
     $_setBytes(5, v);
   }
 
+  @$pb.TagNumber(6)
   $core.bool hasValue() => $_has(5);
+  @$pb.TagNumber(6)
   void clearValue() => clearField(6);
 }
 
@@ -1067,8 +1346,7 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       'WriteCharacteristicResponse',
       createEmptyInstance: create)
-    ..a<WriteCharacteristicRequest>(1, 'request', $pb.PbFieldType.OM,
-        defaultOrMaker: WriteCharacteristicRequest.getDefault,
+    ..aOM<WriteCharacteristicRequest>(1, 'request',
         subBuilder: WriteCharacteristicRequest.create)
     ..aOB(2, 'success')
     ..hasRequiredFields = false;
@@ -1094,24 +1372,35 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
   WriteCharacteristicResponse createEmptyInstance() => create();
   static $pb.PbList<WriteCharacteristicResponse> createRepeated() =>
       $pb.PbList<WriteCharacteristicResponse>();
-  static WriteCharacteristicResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static WriteCharacteristicResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<WriteCharacteristicResponse>(create);
   static WriteCharacteristicResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   WriteCharacteristicRequest get request => $_getN(0);
+  @$pb.TagNumber(1)
   set request(WriteCharacteristicRequest v) {
     setField(1, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRequest() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRequest() => clearField(1);
+  @$pb.TagNumber(1)
+  WriteCharacteristicRequest ensureRequest() => $_ensure(0);
 
-  $core.bool get success => $_get(1, false);
+  @$pb.TagNumber(2)
+  $core.bool get success => $_getBF(1);
+  @$pb.TagNumber(2)
   set success($core.bool v) {
     $_setBool(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasSuccess() => $_has(1);
+  @$pb.TagNumber(2)
   void clearSuccess() => clearField(2);
 }
 
@@ -1145,64 +1434,88 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   WriteDescriptorRequest createEmptyInstance() => create();
   static $pb.PbList<WriteDescriptorRequest> createRepeated() =>
       $pb.PbList<WriteDescriptorRequest>();
-  static WriteDescriptorRequest getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static WriteDescriptorRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<WriteDescriptorRequest>(create);
   static WriteDescriptorRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.String get descriptorUuid => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get descriptorUuid => $_getSZ(1);
+  @$pb.TagNumber(2)
   set descriptorUuid($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasDescriptorUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearDescriptorUuid() => clearField(2);
 
-  $core.String get serviceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get serviceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set serviceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearServiceUuid() => clearField(3);
 
-  $core.String get secondaryServiceUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get secondaryServiceUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set secondaryServiceUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasSecondaryServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearSecondaryServiceUuid() => clearField(4);
 
-  $core.String get characteristicUuid => $_getS(4, '');
+  @$pb.TagNumber(5)
+  $core.String get characteristicUuid => $_getSZ(4);
+  @$pb.TagNumber(5)
   set characteristicUuid($core.String v) {
     $_setString(4, v);
   }
 
+  @$pb.TagNumber(5)
   $core.bool hasCharacteristicUuid() => $_has(4);
+  @$pb.TagNumber(5)
   void clearCharacteristicUuid() => clearField(5);
 
+  @$pb.TagNumber(6)
   $core.List<$core.int> get value => $_getN(5);
+  @$pb.TagNumber(6)
   set value($core.List<$core.int> v) {
     $_setBytes(5, v);
   }
 
+  @$pb.TagNumber(6)
   $core.bool hasValue() => $_has(5);
+  @$pb.TagNumber(6)
   void clearValue() => clearField(6);
 }
 
 class WriteDescriptorResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('WriteDescriptorResponse', createEmptyInstance: create)
-        ..a<WriteDescriptorRequest>(1, 'request', $pb.PbFieldType.OM,
-            defaultOrMaker: WriteDescriptorRequest.getDefault,
+        ..aOM<WriteDescriptorRequest>(1, 'request',
             subBuilder: WriteDescriptorRequest.create)
         ..aOB(2, 'success')
         ..hasRequiredFields = false;
@@ -1226,24 +1539,35 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
   WriteDescriptorResponse createEmptyInstance() => create();
   static $pb.PbList<WriteDescriptorResponse> createRepeated() =>
       $pb.PbList<WriteDescriptorResponse>();
-  static WriteDescriptorResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static WriteDescriptorResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<WriteDescriptorResponse>(create);
   static WriteDescriptorResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   WriteDescriptorRequest get request => $_getN(0);
+  @$pb.TagNumber(1)
   set request(WriteDescriptorRequest v) {
     setField(1, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRequest() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRequest() => clearField(1);
+  @$pb.TagNumber(1)
+  WriteDescriptorRequest ensureRequest() => $_ensure(0);
 
-  $core.bool get success => $_get(1, false);
+  @$pb.TagNumber(2)
+  $core.bool get success => $_getBF(1);
+  @$pb.TagNumber(2)
   set success($core.bool v) {
     $_setBool(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasSuccess() => $_has(1);
+  @$pb.TagNumber(2)
   void clearSuccess() => clearField(2);
 }
 
@@ -1276,48 +1600,69 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   SetNotificationRequest createEmptyInstance() => create();
   static $pb.PbList<SetNotificationRequest> createRepeated() =>
       $pb.PbList<SetNotificationRequest>();
-  static SetNotificationRequest getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static SetNotificationRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetNotificationRequest>(create);
   static SetNotificationRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.String get serviceUuid => $_getS(1, '');
+  @$pb.TagNumber(2)
+  $core.String get serviceUuid => $_getSZ(1);
+  @$pb.TagNumber(2)
   set serviceUuid($core.String v) {
     $_setString(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasServiceUuid() => $_has(1);
+  @$pb.TagNumber(2)
   void clearServiceUuid() => clearField(2);
 
-  $core.String get secondaryServiceUuid => $_getS(2, '');
+  @$pb.TagNumber(3)
+  $core.String get secondaryServiceUuid => $_getSZ(2);
+  @$pb.TagNumber(3)
   set secondaryServiceUuid($core.String v) {
     $_setString(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasSecondaryServiceUuid() => $_has(2);
+  @$pb.TagNumber(3)
   void clearSecondaryServiceUuid() => clearField(3);
 
-  $core.String get characteristicUuid => $_getS(3, '');
+  @$pb.TagNumber(4)
+  $core.String get characteristicUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
   set characteristicUuid($core.String v) {
     $_setString(3, v);
   }
 
+  @$pb.TagNumber(4)
   $core.bool hasCharacteristicUuid() => $_has(3);
+  @$pb.TagNumber(4)
   void clearCharacteristicUuid() => clearField(4);
 
-  $core.bool get enable => $_get(4, false);
+  @$pb.TagNumber(5)
+  $core.bool get enable => $_getBF(4);
+  @$pb.TagNumber(5)
   set enable($core.bool v) {
     $_setBool(4, v);
   }
 
+  @$pb.TagNumber(5)
   $core.bool hasEnable() => $_has(4);
+  @$pb.TagNumber(5)
   void clearEnable() => clearField(5);
 }
 
@@ -1325,8 +1670,7 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('SetNotificationResponse', createEmptyInstance: create)
         ..aOS(1, 'remoteId')
-        ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM,
-            defaultOrMaker: BluetoothCharacteristic.getDefault,
+        ..aOM<BluetoothCharacteristic>(2, 'characteristic',
             subBuilder: BluetoothCharacteristic.create)
         ..aOB(3, 'success')
         ..hasRequiredFields = false;
@@ -1350,32 +1694,47 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   SetNotificationResponse createEmptyInstance() => create();
   static $pb.PbList<SetNotificationResponse> createRepeated() =>
       $pb.PbList<SetNotificationResponse>();
-  static SetNotificationResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static SetNotificationResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetNotificationResponse>(create);
   static SetNotificationResponse _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   BluetoothCharacteristic get characteristic => $_getN(1);
+  @$pb.TagNumber(2)
   set characteristic(BluetoothCharacteristic v) {
     setField(2, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasCharacteristic() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristic() => clearField(2);
+  @$pb.TagNumber(2)
+  BluetoothCharacteristic ensureCharacteristic() => $_ensure(1);
 
-  $core.bool get success => $_get(2, false);
+  @$pb.TagNumber(3)
+  $core.bool get success => $_getBF(2);
+  @$pb.TagNumber(3)
   set success($core.bool v) {
     $_setBool(2, v);
   }
 
+  @$pb.TagNumber(3)
   $core.bool hasSuccess() => $_has(2);
+  @$pb.TagNumber(3)
   void clearSuccess() => clearField(3);
 }
 
@@ -1383,8 +1742,7 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =
       $pb.BuilderInfo('OnCharacteristicChanged', createEmptyInstance: create)
         ..aOS(1, 'remoteId')
-        ..a<BluetoothCharacteristic>(2, 'characteristic', $pb.PbFieldType.OM,
-            defaultOrMaker: BluetoothCharacteristic.getDefault,
+        ..aOM<BluetoothCharacteristic>(2, 'characteristic',
             subBuilder: BluetoothCharacteristic.create)
         ..hasRequiredFields = false;
 
@@ -1407,25 +1765,36 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
   OnCharacteristicChanged createEmptyInstance() => create();
   static $pb.PbList<OnCharacteristicChanged> createRepeated() =>
       $pb.PbList<OnCharacteristicChanged>();
-  static OnCharacteristicChanged getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static OnCharacteristicChanged getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<OnCharacteristicChanged>(create);
   static OnCharacteristicChanged _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   BluetoothCharacteristic get characteristic => $_getN(1);
+  @$pb.TagNumber(2)
   set characteristic(BluetoothCharacteristic v) {
     setField(2, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasCharacteristic() => $_has(1);
+  @$pb.TagNumber(2)
   void clearCharacteristic() => clearField(2);
+  @$pb.TagNumber(2)
+  BluetoothCharacteristic ensureCharacteristic() => $_ensure(1);
 }
 
 class DeviceStateResponse extends $pb.GeneratedMessage {
@@ -1456,24 +1825,33 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   DeviceStateResponse createEmptyInstance() => create();
   static $pb.PbList<DeviceStateResponse> createRepeated() =>
       $pb.PbList<DeviceStateResponse>();
-  static DeviceStateResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static DeviceStateResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DeviceStateResponse>(create);
   static DeviceStateResponse _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
+  @$pb.TagNumber(2)
   DeviceStateResponse_BluetoothDeviceState get state => $_getN(1);
+  @$pb.TagNumber(2)
   set state(DeviceStateResponse_BluetoothDeviceState v) {
     setField(2, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasState() => $_has(1);
+  @$pb.TagNumber(2)
   void clearState() => clearField(2);
 }
 
@@ -1503,10 +1881,12 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
   ConnectedDevicesResponse createEmptyInstance() => create();
   static $pb.PbList<ConnectedDevicesResponse> createRepeated() =>
       $pb.PbList<ConnectedDevicesResponse>();
-  static ConnectedDevicesResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static ConnectedDevicesResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<ConnectedDevicesResponse>(create);
   static ConnectedDevicesResponse _defaultInstance;
 
+  @$pb.TagNumber(1)
   $core.List<BluetoothDevice> get devices => $_getList(0);
 }
 
@@ -1534,23 +1914,33 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
   MtuSizeRequest createEmptyInstance() => create();
   static $pb.PbList<MtuSizeRequest> createRepeated() =>
       $pb.PbList<MtuSizeRequest>();
-  static MtuSizeRequest getDefault() => _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static MtuSizeRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<MtuSizeRequest>(create);
   static MtuSizeRequest _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.int get mtu => $_get(1, 0);
+  @$pb.TagNumber(2)
+  $core.int get mtu => $_getIZ(1);
+  @$pb.TagNumber(2)
   set mtu($core.int v) {
     $_setUnsignedInt32(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasMtu() => $_has(1);
+  @$pb.TagNumber(2)
   void clearMtu() => clearField(2);
 }
 
@@ -1578,23 +1968,32 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
   MtuSizeResponse createEmptyInstance() => create();
   static $pb.PbList<MtuSizeResponse> createRepeated() =>
       $pb.PbList<MtuSizeResponse>();
-  static MtuSizeResponse getDefault() =>
-      _defaultInstance ??= create()..freeze();
+  @$core.pragma('dart2js:noInline')
+  static MtuSizeResponse getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<MtuSizeResponse>(create);
   static MtuSizeResponse _defaultInstance;
 
-  $core.String get remoteId => $_getS(0, '');
+  @$pb.TagNumber(1)
+  $core.String get remoteId => $_getSZ(0);
+  @$pb.TagNumber(1)
   set remoteId($core.String v) {
     $_setString(0, v);
   }
 
+  @$pb.TagNumber(1)
   $core.bool hasRemoteId() => $_has(0);
+  @$pb.TagNumber(1)
   void clearRemoteId() => clearField(1);
 
-  $core.int get mtu => $_get(1, 0);
+  @$pb.TagNumber(2)
+  $core.int get mtu => $_getIZ(1);
+  @$pb.TagNumber(2)
   set mtu($core.int v) {
     $_setUnsignedInt32(1, v);
   }
 
+  @$pb.TagNumber(2)
   $core.bool hasMtu() => $_has(1);
+  @$pb.TagNumber(2)
   void clearMtu() => clearField(2);
 }
