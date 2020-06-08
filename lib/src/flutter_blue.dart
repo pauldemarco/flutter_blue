@@ -132,7 +132,7 @@ class FlutterBlue {
     });
   }
 
-  Future startScan({
+  Future<List<ScanResult>> startScan({
     ScanMode scanMode = ScanMode.lowLatency,
     List<Guid> withServices = const [],
     List<Guid> withDevices = const [],
