@@ -486,10 +486,18 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     [response setSuccess:false];
     [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
     return;
+  } else {
+    ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
+    [response setRemoteId:[peripheral.identifier UUIDString]];
+    [response setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
+    [response setSuccess:true];
+    [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
   }
+
   
   // Request a read
-  [peripheral readValueForDescriptor:cccd];
+  // here may lose notification of some peripherals.
+  // [peripheral readValueForDescriptor:cccd];
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
@@ -511,13 +519,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [_channel invokeMethod:@"ReadDescriptorResponse" arguments:[self toFlutterData:result]];
 
   // If descriptor is CCCD, send a SetNotificationResponse in case anything is awaiting
-  if([descriptor.UUID.UUIDString isEqualToString:@"2902"]){
-    ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
-    [response setRemoteId:[peripheral.identifier UUIDString]];
-    [response setCharacteristic:[self toCharacteristicProto:peripheral characteristic:descriptor.characteristic]];
-    [response setSuccess:true];
-    [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
-  }
+  // if([descriptor.UUID.UUIDString isEqualToString:@"2902"]){
+  //   ProtosSetNotificationResponse *response = [[ProtosSetNotificationResponse alloc] init];
+  //   [response setRemoteId:[peripheral.identifier UUIDString]];
+  //   [response setCharacteristic:[self toCharacteristicProto:peripheral characteristic:descriptor.characteristic]];
+  //   [response setSuccess:true];
+  //   [_channel invokeMethod:@"SetNotificationResponse" arguments:[self toFlutterData:response]];
+  // }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
