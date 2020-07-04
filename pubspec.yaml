@@ -26,8 +26,6 @@ dev_dependencies:
 
 flutter:
   plugin:
-    androidPackage: com.pauldemarco.flutter_blue
-    pluginClass: FlutterBluePlugin
     platforms:
       android:
         package: com.pauldemarco.flutter_blue
