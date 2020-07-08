@@ -858,12 +858,27 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             log(LogLevel.DEBUG, "[onConnectionStateChange] status: " + status + " newState: " + newState);
+
+            String deviceId = gatt.getDevice().getAddress();
+
             if(newState == BluetoothProfile.STATE_DISCONNECTED) {
                 if(!mDevices.containsKey(gatt.getDevice().getAddress())) {
                     gatt.close();
                 }
             }
             invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
+
+            if (status == 133) {
+                log(LogLevel.DEBUG, "recive 133 reconnect");
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+                BluetoothGatt gattServer;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    gattServer = device.connectGatt(activity, false, mGattCallback, BluetoothDevice.TRANSPORT_LE);
+                } else {
+                    gattServer = device.connectGatt(activity, false, mGattCallback);
+                }
+                mDevices.put(deviceId, new BluetoothDeviceCache(gattServer));
+            }
         }
 
         @Override
