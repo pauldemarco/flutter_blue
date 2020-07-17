@@ -15,6 +15,7 @@ class BluetoothDevice {
         type = BluetoothDeviceType.values[p.type.value];
 
   BehaviorSubject<bool> _isDiscoveringServices = BehaviorSubject.seeded(false);
+
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;
 
   /// Establishes a connection to the Bluetooth Device.
@@ -26,20 +27,24 @@ class BluetoothDevice {
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
 
-    Timer timer;
-    if (timeout != null) {
-      timer = Timer(timeout, () {
-        disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
-      });
-    }
-
     await FlutterBlue.instance._channel
         .invokeMethod('connect', request.writeToBuffer());
 
-    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+    var stateFuture =
+        state.firstWhere((s) => s == BluetoothDeviceState.connected);
 
-    timer?.cancel();
+    if (timeout != null) {
+      var timeoutFuture = Future.delayed(timeout);
+      var ret = await Future.any([stateFuture, timeoutFuture]);
+
+      /// timeout
+      if (ret == timeoutFuture) {
+        disconnect();
+        throw TimeoutException('Failed to connect in time.', timeout);
+      }
+    } else {
+      await stateFuture;
+    }
 
     return;
   }
