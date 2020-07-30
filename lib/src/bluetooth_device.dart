@@ -34,11 +34,16 @@ class BluetoothDevice {
         state.firstWhere((s) => s == BluetoothDeviceState.connected);
 
     if (timeout != null) {
-      var timeoutFuture = Future.delayed(timeout);
-      var ret = await Future.any([stateFuture, timeoutFuture]);
+      var isTimeOut = false;
+      var timeoutFuture = Future(() async {
+        await Future.delayed(timeout);
+        isTimeOut = true;
+      });
+
+      await Future.any([stateFuture, timeoutFuture]);
 
       /// timeout
-      if (ret == timeoutFuture) {
+      if (isTimeOut) {
         disconnect();
         throw TimeoutException('Failed to connect in time.', timeout);
       }
