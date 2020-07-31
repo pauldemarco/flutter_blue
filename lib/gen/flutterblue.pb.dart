@@ -256,7 +256,7 @@ class ScanResult extends $pb.GeneratedMessage {
   factory ScanResult() => create();
   factory ScanResult.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+      create()..mergeFromBuffer(i, r)..buff=i;
   factory ScanResult.fromJson($core.String i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
       create()..mergeFromJson(i, r);
