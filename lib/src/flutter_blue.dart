@@ -233,7 +233,7 @@ class ScanResult {
       : device = new BluetoothDevice.fromProto(p.device),
         advertisementData =
             new AdvertisementData.fromProto(p.advertisementData),
-        rssi = p.rssi;
+        rssi = p.rssi,
         buff = p.buff;
 
   final BluetoothDevice device;
