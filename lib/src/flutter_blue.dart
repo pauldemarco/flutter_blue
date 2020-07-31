@@ -227,17 +227,19 @@ class DeviceIdentifier {
 }
 
 class ScanResult {
-  const ScanResult({this.device, this.advertisementData, this.rssi});
+  const ScanResult({this.device, this.advertisementData, this.rssi, this.buff});
 
   ScanResult.fromProto(protos.ScanResult p)
       : device = new BluetoothDevice.fromProto(p.device),
         advertisementData =
             new AdvertisementData.fromProto(p.advertisementData),
         rssi = p.rssi;
+        buff=p.buff;
 
   final BluetoothDevice device;
   final AdvertisementData advertisementData;
   final int rssi;
+  final List<int> buff;
 
   @override
   bool operator ==(Object other) =>
