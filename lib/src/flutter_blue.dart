@@ -234,7 +234,7 @@ class ScanResult {
         advertisementData =
             new AdvertisementData.fromProto(p.advertisementData),
         rssi = p.rssi;
-        buff=p.buff;
+        buff = p.buff;
 
   final BluetoothDevice device;
   final AdvertisementData advertisementData;
@@ -253,7 +253,7 @@ class ScanResult {
 
   @override
   String toString() {
-    return 'ScanResult{device: $device, advertisementData: $advertisementData, rssi: $rssi}';
+    return 'ScanResult{device: $device, advertisementData: $advertisementData, rssi: $rssi, buff: $buff}';
   }
 }
 
