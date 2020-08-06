@@ -2065,6 +2065,9 @@ typedef struct ProtosConnectedDevicesResponse__storage_ {
                                     fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
                                    storageSize:sizeof(ProtosConnectedDevicesResponse__storage_)
                                          flags:GPBDescriptorInitializationFlag_None];
+<<<<<<< HEAD
+    NSAssert(descriptor == nil, @"Startup recursed!");
+=======
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
@@ -2180,6 +2183,7 @@ typedef struct ProtosMtuSizeResponse__storage_ {
     #if defined(DEBUG) && DEBUG
       NSAssert(descriptor == nil, @"Startup recursed!");
     #endif  // DEBUG
+>>>>>>> b43127bedca75d2fdfa30948f319a7204966a51d
     descriptor = localDescriptor;
   }
   return descriptor;
