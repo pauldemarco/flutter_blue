@@ -587,20 +587,24 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   }
   // Manufacturer Specific Data
   NSData *manufData = advertisementData[CBAdvertisementDataManufacturerDataKey];
-  if(manufData.length > 2) {
+  if(manufData != nil && manufData.length > 2) {
     unsigned short manufacturerId;
     [manufData getBytes:&manufacturerId length:2];
     [[ads manufacturerData] setObject:[manufData subdataWithRange:NSMakeRange(2, manufData.length - 2)] forKey:manufacturerId];
   }
   // Service Data
   NSDictionary *serviceData = advertisementData[CBAdvertisementDataServiceDataKey];
-  for (CBUUID *uuid in serviceData) {
-    [[ads serviceData] setObject:serviceData[uuid] forKey:uuid.UUIDString];
+  if(serviceData != nil){
+      for (CBUUID *uuid in serviceData) {
+        [[ads serviceData] setObject:serviceData[uuid] forKey:uuid.UUIDString];
+      }
   }
   // Service Uuids
   NSArray *serviceUuids = advertisementData[CBAdvertisementDataServiceUUIDsKey];
-  for (CBUUID *uuid in serviceUuids) {
-    [[ads serviceUuidsArray] addObject:uuid.UUIDString];
+  if(serviceUuids != nil){
+      for (CBUUID *uuid in serviceUuids) {
+        [[ads serviceUuidsArray] addObject:uuid.UUIDString];
+      }
   }
   [result setAdvertisementData:ads];
   return result;
