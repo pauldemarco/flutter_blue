@@ -16,6 +16,7 @@ FlutterBlue is a bluetooth plugin for [Flutter](http://www.flutter.io), a new mo
 This library is actively developed alongside production apps, and the API will evolve as we continue our way to version 1.0.
 
 **Please be fully prepared to deal with breaking changes.**
+**This package must be tested on a real device.**
 
 Having trouble adapting to the latest API?   I'd love to hear your use-case, please contact me.
 
@@ -26,6 +27,45 @@ Using the FlutterBlue instance, you can scan for and connect to nearby devices (
 Once connected to a device, the BluetoothDevice object can discover services ([BluetoothService](lib/src/bluetooth_service.dart)), characteristics ([BluetoothCharacteristic](lib/src/bluetooth_characteristic.dart)), and descriptors ([BluetoothDescriptor](lib/src/bluetooth_descriptor.dart)).
 The BluetoothDevice object is then used to directly interact with characteristics and descriptors.
 
+## Setup
+### Change the minSdkVersion for Android
+
+Flutter_blue is compatible only from version 19 of Android SDK so you should change this in **android/app/build.gradle**:
+```dart
+Android {
+  defaultConfig {
+     minSdkVersion: 19
+```
+### Add permissions for Bluetooth
+We need to add the permission to use Bluetooth and access location:
+
+#### **Android**
+In the **android/app/src/main/AndroidManifest.xml** let’s add:
+
+```dart 
+	 <uses-permission android:name="android.permission.BLUETOOTH" />  
+	 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />  
+	 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>  
+ <application
+```
+#### **IOS**
+In the **ios/Runner/Info.plist** let’s add:
+
+```dart 
+	<dict>  
+	    <key>NSBluetoothAlwaysUsageDescription</key>  
+	    <string>Need BLE permission</string>  
+	    <key>NSBluetoothPeripheralUsageDescription</key>  
+	    <string>Need BLE permission</string>  
+	    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>  
+	    <string>Need Location permission</string>  
+	    <key>NSLocationAlwaysUsageDescription</key>  
+	    <string>Need Location permission</string>  
+	    <key>NSLocationWhenInUseUsageDescription</key>  
+	    <string>Need Location permission</string>
+```
+
+For location permissions on iOS see more at: [https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services](https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services)
 ## Usage
 ### Obtain an instance
 ```dart
