@@ -802,14 +802,26 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         BluetoothLeScanner scanner = mBluetoothAdapter.getBluetoothLeScanner();
         if(scanner == null) throw new IllegalStateException("getBluetoothLeScanner() is null. Is the Adapter on?");
         int scanMode = proto.getAndroidScanMode();
-        int count = proto.getServiceUuidsCount();
-        List<ScanFilter> filters = new ArrayList<>(count);
-        for(int i = 0; i < count; i++) {
+        int count_service_uuids = proto.getServiceUuidsCount();
+        int count_device_macs = proto.getDeviceMacsCount();
+        List<ScanFilter> filters = null;
+        if ((count_device_macs + count_service_uuids) > 0)
+            filters = new ArrayList<>(count_service_uuids + count_device_macs);
+        for(int i = 0; i < count_service_uuids; i++) {
             String uuid = proto.getServiceUuids(i);
             ScanFilter f = new ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString(uuid)).build();
             filters.add(f);
         }
-        ScanSettings settings = new ScanSettings.Builder().setScanMode(scanMode).build();
+        for(int i = 0; i < count_device_macs; i++) {
+            String address = proto.getDeviceMacs(i);
+            ScanFilter f = new ScanFilter.Builder().setDeviceAddress(address).build();
+            filters.add(f);
+        }
+        ScanSettings settings = new ScanSettings.Builder()
+            .setScanMode(scanMode)
+            .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
+            .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
+            .build();
         scanner.startScan(filters, settings, getScanCallback21());
     }
 
