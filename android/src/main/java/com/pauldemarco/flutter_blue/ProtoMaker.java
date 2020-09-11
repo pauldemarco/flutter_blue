@@ -67,12 +67,8 @@ public class ProtoMaker {
                 a.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(txPower));
             }
             // Manufacturer Specific Data
-            SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
-            for (int i = 0; i < msd.size(); i++) {
-                int key = msd.keyAt(i);
-                byte[] value = msd.valueAt(i);
-                a.putManufacturerData(key, ByteString.copyFrom(value));
             if (msd != null) {
+                SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
                 for (int i = 0; i < msd.size(); i++) {
                     int key = msd.keyAt(i);
                     byte[] value = msd.valueAt(i);
@@ -81,11 +77,7 @@ public class ProtoMaker {
             }
             // Service Data
             Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
-            for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
-                ParcelUuid key = entry.getKey();
-                byte[] value = entry.getValue();
-                a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
-            if (serviceData != null){
+            if (serviceData != null) {
                 for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
                     ParcelUuid key = entry.getKey();
                     byte[] value = entry.getValue();
