@@ -41,6 +41,15 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @end
 
 @implementation FlutterBluePlugin
+
+-(CBCentralManager *)centralManager{
+    
+    if (!_centralManager) {
+        _centralManager=   [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+    }
+    return  _centralManager;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
                                    methodChannelWithName:NAMESPACE @"/methods"
@@ -48,7 +57,6 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   FlutterEventChannel* stateChannel = [FlutterEventChannel eventChannelWithName:NAMESPACE @"/state" binaryMessenger:[registrar messenger]];
   FlutterBluePlugin* instance = [[FlutterBluePlugin alloc] init];
   instance.channel = channel;
-  instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
   instance.scannedPeripherals = [NSMutableDictionary new];
   instance.servicesThatNeedDiscovered = [NSMutableArray new];
   instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
