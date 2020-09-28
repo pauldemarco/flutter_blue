@@ -573,7 +573,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 
 - (ProtosScanResult*)toScanResultProto:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
   ProtosScanResult *result = [[ProtosScanResult alloc] init];
-  [result setDevice:[self toDeviceProto:peripheral]];
+  ProtosBluetoothDevice *device = [self toDeviceProto:peripheral];
+  [device setName:[advertisementData objectForKey:@"kCBAdvDataLocalName"]];
+  [result setDevice:device];
   [result setRssi:[RSSI intValue]];
   ProtosAdvertisementData *ads = [[ProtosAdvertisementData alloc] init];
   [ads setConnectable:[advertisementData[CBAdvertisementDataIsConnectable] boolValue]];
