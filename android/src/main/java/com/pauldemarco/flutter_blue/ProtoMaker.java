@@ -75,7 +75,7 @@ public class ProtoMaker {
                     a.putManufacturerData(key, ByteString.copyFrom(value));
                 }
             } else {
-                a.putManufacturerData(0, ByteString.copyFrom([0]));
+                a.putManufacturerData(0, ByteString.copyFrom([]));
             }
             // Service Data
             Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
@@ -86,7 +86,7 @@ public class ProtoMaker {
                     a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
                 }
             } else {
-                a.putServiceData(0, ByteString.copyFrom([0]));
+                a.putServiceData(0, ByteString.copyFrom([]));
             }
             // Service UUIDs
             List<ParcelUuid> serviceUuids = scanRecord.getServiceUuids();
