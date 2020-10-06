@@ -28,11 +28,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_blue/ios"
 
 SPEC CHECKSUMS:
-  e2e: 967b9b1fc533b7636a3b7a719f840c27f301fe1f
+  e2e: d0c9f8c832b4cc7ab386d0c0f0af67fe5ac0c3bd
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_blue: eeb381dc4727a0954dede73515f683865494b370
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

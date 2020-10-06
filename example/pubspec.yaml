@@ -3,7 +3,8 @@ description: Demonstrates how to use the flutter_blue plugin.
 publish_to: "none"
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0 <2.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +15,7 @@ dev_dependencies:
     sdk: flutter
   flutter_blue:
     path: ../
-  e2e: ^0.2.1
+  e2e: ^0.7.0
   flutter_driver:
     sdk: flutter
 
