@@ -75,7 +75,7 @@ public class ProtoMaker {
                     a.putManufacturerData(key, ByteString.copyFrom(value));
                 }
             } else {
-                a.putManufacturerData("0", ByteString.EMPTY);
+                a.putManufacturerData(0, ByteString.EMPTY);
             }
             // Service Data
             Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
