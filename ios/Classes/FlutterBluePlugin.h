@@ -10,6 +10,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 #define NAMESPACE @"plugins.pauldemarco.com/flutter_blue"
+@class SwiftFlutterMidiSynthPlugin;
 
 @interface FlutterBluePlugin : NSObject<FlutterPlugin, CBCentralManagerDelegate, CBPeripheralDelegate>
 @end

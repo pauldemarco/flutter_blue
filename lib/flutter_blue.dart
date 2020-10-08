@@ -21,3 +21,4 @@ part 'src/bluetooth_service.dart';
 part 'src/constants.dart';
 part 'src/flutter_blue.dart';
 part 'src/guid.dart';
+part 'src/FlutterMidiSynthPlugin.dart';

@@ -2,8 +2,18 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+#if __has_include(<flutter_blue/flutter_blue-Swift.h>)
+#import <flutter_blue/flutter_blue-Swift.h>
+#else
+// Support project import fallback if the generated compatibility header
+// is not copied when this plugin is created as a library.
+// https://forums.swift.org/t/swift-static-libraries-dont-copy-generated-objective-c-header/19816
+#import "flutter_blue-Swift.h"
+#endif
+
 #import "FlutterBluePlugin.h"
 #import "Flutterblue.pbobjc.h"
+#import "FlutterMidiSynthPlugin.h"
 
 @interface CBUUID (CBUUIDAdditionsFlutterBlue)
 - (NSString *)fullUUIDString;
@@ -38,6 +48,8 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
+@property(nonatomic, retain) SwiftFlutterMidiSynthPlugin *midiSynth;
+
 @end
 
 @implementation FlutterBluePlugin
@@ -60,6 +72,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   instance.stateStreamHandler = stateStreamHandler;
   
   [registrar addMethodCallDelegate:instance channel:channel];
+
+  //FlutterMidiSynthPlugin
+  //[SwiftFlutterMidiSynthPlugin registerWithRegistrar:registrar];
+  instance.midiSynth = [[SwiftFlutterMidiSynthPlugin alloc] init];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -177,7 +193,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     } @catch(FlutterError *e) {
       result(e);
     }
-  } else if([@"readDescriptor" isEqualToString:call.method]) {
+  } else if([@"SNTX readDescriptor" isEqualToString:call.method]) {
     FlutterStandardTypedData *data = [call arguments];
     ProtosReadDescriptorRequest *request = [[ProtosReadDescriptorRequest alloc] initWithData:[data data] error:nil];
     NSString *remoteId = [request remoteId];
@@ -205,6 +221,8 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Get correct write type
       CBCharacteristicWriteType type = ([request writeType] == ProtosWriteCharacteristicRequest_WriteType_WithoutResponse) ? CBCharacteristicWriteWithoutResponse : CBCharacteristicWriteWithResponse;
       // Write to characteristic
+      NSLog(@"writeCharacteristic");
+
       [peripheral writeValue:[request value] forCharacteristic:characteristic type:type];
       result(nil);
     } @catch(FlutterError *e) {
@@ -253,10 +271,79 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     }
   } else if([@"requestMtu" isEqualToString:call.method]) {
     result([FlutterError errorWithCode:@"requestMtu" message:@"iOS does not allow mtu requests to the peripheral" details:NULL]);
-  } else {
+  }
+
+  //FlutterMidiSynthPlugin
+  else if(
+    [@"initSynth" isEqualToString:call.method] ||
+    [@"setInstrument" isEqualToString:call.method] ||
+    [@"noteOn" isEqualToString:call.method] ||
+    [@"noteOff" isEqualToString:call.method] ||
+    [@"midiEvent" isEqualToString:call.method] ||
+    [@"setReverb" isEqualToString:call.method] ||
+    [@"setDelay" isEqualToString:call.method]
+    ) {
+      NSLog(@"SNTX FlutterMidiSynthPlugin method: TODO forward ****");
+      [_midiSynth handleMethodCall:call result:result];
+    }
+  /*
+  else if([@"initSynth" isEqualToString:call.method]) {
+        int i = [call arguments];
+        self.initSynth(instrument: i);
+  } else if([@"setInstrument" isEqualToString:call.method]) {
+        NSDictionary* args = [call arguments];
+        int instrument = args[@"instrument"];
+        int channel = args[@"channel];
+        self.setInstrument(instrument: instrument, channel: channel)
+  } else if([@"noteOn" isEqualToString:call.method]) {
+        NSDictionary* args = [call arguments];
+        int channel = args[@"channel];
+        int note = args[@"note];
+        int velocity = args[@"velocity];
+        self.noteOn(channel: channel ?? 0, note: note ?? 60, velocity: velocity ?? 255)
+  } else if([@"noteOff" isEqualToString:call.method]) {
+        NSDictionary* args = [call arguments];
+        int channel = args[@"channel];
+        int note = args[@"note];
+        int velocity = args[@"velocity];
+        self.noteOff(channel: channel ?? 0, note: note ?? 60, velocity: velocity ?? 255)
+  } else if([@"midiEvent" isEqualToString:call.method]) {
+        NSDictionary* args = [call arguments];
+        unsigned int command = args[@"command"];
+        unsigned int d1 = args[@"d1"];
+        unsigned int d2 = args[@"d2"];
+        self.midiEvent(command: command, d1: d1, d2: d2)
+  } else if([@"setReverb" isEqualToString:call.method]) {
+        NSNumber amount = [call arguments];
+        self.setReverb(dryWet: Float(amount.doubleValue))
+  } else if([@"setDelay" isEqualToString:call.method]) {
+        NSNumber amount = [call arguments];
+        self.setDelay(dryWet: Float(amount.doubleValue))
+  */
+  //FINE FlutterMidiSynthPlugin
+
+
+  else {
     result(FlutterMethodNotImplemented);
   }
 }
+
+
+//FlutterMidiSynthPlugin
+
+
+
+//FINE FlutterMidiSynthPlugin
+
+
+
+
+
+
+
+
+
+
 
 - (CBPeripheral*)findPeripheral:(NSString*)remoteId {
   NSArray<CBPeripheral*> *peripherals = [_centralManager retrievePeripheralsWithIdentifiers:@[[[NSUUID alloc] initWithUUIDString:remoteId]]];
@@ -375,7 +462,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-  NSLog(@"didConnectPeripheral");
+  NSLog(@"SNTX didConnectPeripheral");
   // Register self as delegate for peripheral
   peripheral.delegate = self;
   
@@ -429,7 +516,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-  NSLog(@"didDiscoverDescriptorsForCharacteristic");
+  NSLog(@"SNTX didDiscoverDescriptorsForCharacteristic");
   [_characteristicsThatNeedDiscovered removeObject:characteristic];
   if(_servicesThatNeedDiscovered.count > 0 || _characteristicsThatNeedDiscovered.count > 0) {
     // Still discovering
@@ -448,18 +535,139 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   }
 }
 
+- (NSArray*) parse:(NSData*) data {
+    
+    const char *bytes = [data bytes];
+    NSMutableArray* ret = [NSMutableArray array];
+    
+    
+    if (data.length > 11) {
+        NSLog(@"SNTX could be a sysex");
+        return nil;
+        //if(Sysex.parse(data,deviceid))
+        //return [];
+    }
+
+    //Se non è un sysex, procedo nel processare il pacchetto.
+    const int STATE_HDR = 0;
+    const int STATE_TS = 1;
+    const int STATE_ST = 2;
+    const int STATE_D1 = 3;
+    const int STATE_D2 = 4;
+
+    int state = STATE_HDR;
+
+    unsigned char status = 0;
+    unsigned char channel = 0;
+    unsigned char d1 = -1;
+    unsigned char d2 = -1;
+
+    for (int i = 0; i < data.length; i++) {
+      unsigned char b = bytes[i];
+      switch (state) {
+        case STATE_HDR:
+          state = STATE_TS;
+          continue;
+        case STATE_TS:
+          state = STATE_ST;
+          continue;
+        case STATE_ST:
+          status = b & 0xf0;
+          channel = b & 0x0f;
+          state = STATE_D1;
+          continue;
+        case STATE_D1:
+          d1 = b;
+          if (status < 0xC0 || status > 0xE0) {
+            state = STATE_D2;
+          } else {
+            const unsigned char message[] = {status,channel,d1,d2};
+            [ret addObject:[NSData dataWithBytes:message length: 4]];
+            status = channel = 0;
+            d1 = d2 = -1;
+            state = STATE_TS;
+          }
+          continue;
+        case STATE_D2:
+          d2 = b;
+          const unsigned char message[] = {status,channel,d1,d2};
+          [ret addObject:[NSData dataWithBytes:message length: 4]];
+          status = channel = 0;
+          d1 = d2 = -1;
+          state = STATE_TS;
+          continue;
+
+        default:
+          NSLog(@"you should never reach this state!");
+          break;
+      }
+    }
+
+    return [ret copy];
+  }
+
+
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-  NSLog(@"didUpdateValueForCharacteristic %@", [peripheral.identifier UUIDString]);
-  ProtosReadCharacteristicResponse *result = [[ProtosReadCharacteristicResponse alloc] init];
-  [result setRemoteId:[peripheral.identifier UUIDString]];
-  [result setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
-  [_channel invokeMethod:@"ReadCharacteristicResponse" arguments:[self toFlutterData:result]];
-  
-  // on iOS, this method also handles notification values
-  ProtosOnCharacteristicChanged *onChangedResult = [[ProtosOnCharacteristicChanged alloc] init];
-  [onChangedResult setRemoteId:[peripheral.identifier UUIDString]];
-  [onChangedResult setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
-  [_channel invokeMethod:@"OnCharacteristicChanged" arguments:[self toFlutterData:onChangedResult]];
+  //NSLog(@"SNTX didUpdateValueForCharacteristic %@", [peripheral.identifier UUIDString]);
+
+  NSData* data = characteristic.value;
+
+  //parse bytes
+    NSArray* messages = [self parse:data];
+    if (messages){
+        NSLog(@"SNTX uuid: %@", [characteristic.UUID fullUUIDString]);
+        //Direct midi messages management
+        for (NSData* data in messages){
+            const char *m = [data bytes];
+            unsigned char status = m[0];
+            unsigned char ch = m[1];
+            unsigned char d1 = m[2];
+            unsigned char d2 = m[3];
+            NSLog(@"SNTX value:[status:%02x ch:%02x d1:%02x d2:%02x]", status, ch, d1, d2);
+            
+            if(status == 0x80 /*NoteON*/ || status == 0x90 /*NoteOFF*/ ||
+                (status >= 0xb0 /*CC*/ && status < 0xc0 /*PrgChg*/ && (ch != 52 && ch != 53) /*filtering accelerometer y an z*/ ) ||
+                (status >= 0xd0 /*ChPressure*/ && status < 0xe0 /*Bender*/)
+               ){
+                NSLog(@"SNTX forwarding MidiMessage to Synth!");
+                switch(status){
+                case 0x80:
+                    [_midiSynth noteOnChannel:ch note:d1 velocity:d2];
+                    break;
+                case 0x90:
+                    [_midiSynth noteOffWithChannel:ch note:d1 velocity:d2];
+                    break;
+                default:
+                    if(status == 0xD0 /*aftertouch*/){
+                      //print ("remapping aftertouch message ${msg.status} ${msg.d1} to Expression CC 0xB0 11 {msg.d1}" );
+                      status = 0xB0;
+                      int c = 40;
+                      double a = (127-c)/127;
+                      double v = a*d1 + c;
+                      d2 = (int)v;
+                      d1 = 11; //Expression CC
+                      //print ("xpression c=$c a=$a d1=$msg.d1 => v=$v ");
+                    }
+                    [_midiSynth midiEventWithCommand:ch | status d1:d1 d2:d2];
+                    break;
+                }
+            }
+        }
+    } else {
+      //NORMAL flutter_blue management (SYSEX)
+        NSLog(@"SNTX uuid: %@ value: %@  len: %d ", [characteristic.UUID fullUUIDString], [characteristic value], (int)[characteristic.value length]);
+
+      ProtosReadCharacteristicResponse *result = [[ProtosReadCharacteristicResponse alloc] init];
+      [result setRemoteId:[peripheral.identifier UUIDString]];
+      [result setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
+      [_channel invokeMethod:@"ReadCharacteristicResponse" arguments:[self toFlutterData:result]];
+      
+      // on iOS, this method also handles notification values
+      ProtosOnCharacteristicChanged *onChangedResult = [[ProtosOnCharacteristicChanged alloc] init];
+      [onChangedResult setRemoteId:[peripheral.identifier UUIDString]];
+      [onChangedResult setCharacteristic:[self toCharacteristicProto:peripheral characteristic:characteristic]];
+      [_channel invokeMethod:@"OnCharacteristicChanged" arguments:[self toFlutterData:onChangedResult]];
+    }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {

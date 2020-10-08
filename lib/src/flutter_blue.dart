@@ -197,6 +197,9 @@ class FlutterBlue {
       print(message);
     }
   }
+
+
+
 }
 
 /// Log levels for FlutterBlue
