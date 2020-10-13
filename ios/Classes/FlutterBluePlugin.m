@@ -590,28 +590,28 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
             unsigned char d2 = m[3];
             NSLog(@"SNTX value:[status:%02x ch:%02x d1:%02x d2:%02x]", status, ch, d1, d2);
             
-            if(status == 0x80 /*NoteON*/ || status == 0x90 /*NoteOFF*/ ||
+            if(status == 0x90 /*NoteON*/ || status == 0x80 /*NoteOFF*/ ||
                 (status >= 0xb0 /*CC*/ && status < 0xc0 /*PrgChg*/ && (ch != 52 && ch != 53) /*filtering accelerometer y an z*/ ) ||
                 (status >= 0xd0 /*ChPressure*/ && status < 0xe0 /*Bender*/)
                ){
                 NSLog(@"SNTX forwarding MidiMessage to Synth! status=%02x",status);
                 switch(status){
-                case 0x80:
+                case 0x90:
                     [_midiSynth noteOnChannel:ch note:d1 velocity:d2];
                     break;
-                case 0x90:
+                case 0x80:
                     [_midiSynth noteOffWithChannel:ch note:d1 velocity:d2];
                     break;
                 default:
                     if(status == 0xD0 /*aftertouch*/){
                       //print ("remapping aftertouch message ${msg.status} ${msg.d1} to Expression CC 0xB0 11 {msg.d1}" );
                       status = 0xB0;
-                      int c = 40;
+                      int c = 60;
                       double a = (127-c)/127;
                       double v = a*d1 + c;
                       d2 = (int)v;
                       d1 = 11; //Expression CC
-                      //print ("xpression c=$c a=$a d1=$msg.d1 => v=$v ");
+                      print ("xpression c=$c a=$a d1=$msg.d1 => v=$v ");
                     }
                     [_midiSynth midiEventWithCommand:ch | status d1:d1 d2:d2];
                     break;
