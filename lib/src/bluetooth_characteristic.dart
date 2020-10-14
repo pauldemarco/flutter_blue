@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-part of flutter_blue;
+part of flutter_ble_central;
 
 class BluetoothCharacteristic {
   final Guid uuid;
@@ -43,7 +43,7 @@ class BluetoothCharacteristic {
         _value = BehaviorSubject.seeded(p.value);
 
   Stream<BluetoothCharacteristic> get _onCharacteristicChangedStream =>
-      FlutterBlue.instance._methodStream
+      FlutterBleCentral.instance._methodStream
           .where((m) => m.method == "OnCharacteristicChanged")
           .map((m) => m.arguments)
           .map(
@@ -76,13 +76,13 @@ class BluetoothCharacteristic {
       ..remoteId = deviceId.toString()
       ..characteristicUuid = uuid.toString()
       ..serviceUuid = serviceUuid.toString();
-    FlutterBlue.instance._log(LogLevel.info,
+    FlutterBleCentral.instance._log(LogLevel.info,
         'remoteId: ${deviceId.toString()} characteristicUuid: ${uuid.toString()} serviceUuid: ${serviceUuid.toString()}');
 
-    await FlutterBlue.instance._channel
+    await FlutterBleCentral.instance._channel
         .invokeMethod('readCharacteristic', request.writeToBuffer());
 
-    return FlutterBlue.instance._methodStream
+    return FlutterBleCentral.instance._methodStream
         .where((m) => m.method == "ReadCharacteristicResponse")
         .map((m) => m.arguments)
         .map((buffer) =>
@@ -117,14 +117,14 @@ class BluetoothCharacteristic {
           protos.WriteCharacteristicRequest_WriteType.valueOf(type.index)
       ..value = value;
 
-    var result = await FlutterBlue.instance._channel
+    var result = await FlutterBleCentral.instance._channel
         .invokeMethod('writeCharacteristic', request.writeToBuffer());
 
     if (type == CharacteristicWriteType.withoutResponse) {
       return result;
     }
 
-    return FlutterBlue.instance._methodStream
+    return FlutterBleCentral.instance._methodStream
         .where((m) => m.method == "WriteCharacteristicResponse")
         .map((m) => m.arguments)
         .map((buffer) =>
@@ -149,10 +149,10 @@ class BluetoothCharacteristic {
       ..characteristicUuid = uuid.toString()
       ..enable = notify;
 
-    await FlutterBlue.instance._channel
+    await FlutterBleCentral.instance._channel
         .invokeMethod('setNotification', request.writeToBuffer());
 
-    return FlutterBlue.instance._methodStream
+    return FlutterBleCentral.instance._methodStream
         .where((m) => m.method == "SetNotificationResponse")
         .map((m) => m.arguments)
         .map((buffer) => new protos.SetNotificationResponse.fromBuffer(buffer))

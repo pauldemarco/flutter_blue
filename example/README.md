@@ -1,6 +1,6 @@
-# flutter_blue_example
+# flutter_ble_central_example
 
-Demonstrates how to use the flutter_blue plugin.
+Demonstrates how to use the flutter_ble_central plugin.
 
 ## Getting Started
 

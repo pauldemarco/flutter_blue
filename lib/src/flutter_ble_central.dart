@@ -2,9 +2,9 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-part of flutter_blue;
+part of flutter_ble_central;
 
-class FlutterBlue {
+class FlutterBleCentral {
   final MethodChannel _channel = const MethodChannel('$NAMESPACE/methods');
   final EventChannel _stateChannel = const EventChannel('$NAMESPACE/state');
   final StreamController<MethodCall> _methodStreamController =
@@ -13,7 +13,7 @@ class FlutterBlue {
       .stream; // Used internally to dispatch methods from platform.
 
   /// Singleton boilerplate
-  FlutterBlue._() {
+  FlutterBleCentral._() {
     _channel.setMethodCallHandler((MethodCall call) {
       _methodStreamController.add(call);
       return;
@@ -22,8 +22,8 @@ class FlutterBlue {
     _setLogLevelIfAvailable();
   }
 
-  static FlutterBlue _instance = new FlutterBlue._();
-  static FlutterBlue get instance => _instance;
+  static FlutterBleCentral _instance = new FlutterBleCentral._();
+  static FlutterBleCentral get instance => _instance;
 
   /// Log level of the instance, default is all messages (debug).
   LogLevel _logLevel = LogLevel.debug;
@@ -124,7 +124,7 @@ class FlutterBlue {
       throw e;
     }
 
-    yield* FlutterBlue.instance._methodStream
+    yield* FlutterBleCentral.instance._methodStream
         .where((m) => m.method == "ScanResult")
         .map((m) => m.arguments)
         .takeUntil(Rx.merge(killStreams))
@@ -184,7 +184,7 @@ class FlutterBlue {
 //  }) =>
 //      throw UnimplementedError();
 
-  /// Sets the log level of the FlutterBlue instance
+  /// Sets the log level of the FlutterBleCentral instance
   /// Messages equal or below the log level specified are stored/forwarded,
   /// messages above are dropped.
   void setLogLevel(LogLevel level) async {
@@ -199,7 +199,7 @@ class FlutterBlue {
   }
 }
 
-/// Log levels for FlutterBlue
+/// Log levels for FlutterBleCentral
 enum LogLevel {
   emergency,
   alert,

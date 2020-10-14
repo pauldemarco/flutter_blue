@@ -1,4 +1,4 @@
-def PLUGIN = "flutter_blue";
+def PLUGIN = "flutter_ble_central";
 def ANDROIDX_WARNING = "flutterPluginsAndroidXWarning";
 gradle.buildFinished { buildResult ->
     if (buildResult.failure && !rootProject.ext.has(ANDROIDX_WARNING)) {
@@ -11,7 +11,7 @@ gradle.buildFinished { buildResult ->
     }
 }
 
-group 'com.pauldemarco.flutter_blue'
+group 'dev.steenbakker.flutter_ble_central'
 version '1.0-SNAPSHOT'
 
 buildscript {

@@ -1,6 +1,6 @@
 ///
 //  Generated code. Do not modify.
-//  source: flutterblue.proto
+//  source: FlutterBleCentral.proto
 //
 // @dart = 2.3
 // ignore_for_file: camel_case_types,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type
@@ -9,9 +9,9 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'flutterblue.pbenum.dart';
+import 'flutterblecentral.pbenum.dart';
 
-export 'flutterblue.pbenum.dart';
+export 'flutterblecentral.pbenum.dart';
 
 class Int32Value extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i =

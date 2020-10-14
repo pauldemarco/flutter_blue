@@ -10,5 +10,5 @@
 1. Get the latest linux protoc compiler from https://github.com/google/protobuf/releases/ (protoc-X.X.X-linux-x86_64.zip)
 1. Copy /bin/protoc into /home/.pub-cache/bin/
 1. Run the following commands from this project's protos folder
-```protoc --dart_out=../lib/gen ./flutterblue.proto```
-```protoc --objc_out=../ios/gen ./flutterblue.proto```
+```protoc --dart_out=../lib/gen ./FlutterBleCentral.proto```
+```protoc --objc_out=../ios/gen ./FlutterBleCentral.proto```

@@ -2,10 +2,10 @@ PODS:
   - e2e (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_blue (0.0.1):
+  - flutter_ble_central (0.0.1):
     - Flutter
-    - flutter_blue/Protos (= 0.0.1)
-  - flutter_blue/Protos (0.0.1):
+    - flutter_ble_central/Protos (= 0.0.1)
+  - flutter_ble_central/Protos (0.0.1):
     - Flutter
     - Protobuf (~> 3.11.4)
   - Protobuf (3.11.4)
@@ -13,7 +13,7 @@ PODS:
 DEPENDENCIES:
   - e2e (from `.symlinks/plugins/e2e/ios`)
   - Flutter (from `Flutter`)
-  - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
+  - flutter_ble_central (from `.symlinks/plugins/flutter_ble_central/ios`)
 
 SPEC REPOS:
   trunk:
@@ -24,13 +24,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/e2e/ios"
   Flutter:
     :path: Flutter
-  flutter_blue:
-    :path: ".symlinks/plugins/flutter_blue/ios"
+  flutter_ble_central:
+    :path: ".symlinks/plugins/flutter_ble_central/ios"
 
 SPEC CHECKSUMS:
   e2e: d0c9f8c832b4cc7ab386d0c0f0af67fe5ac0c3bd
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_blue: eeb381dc4727a0954dede73515f683865494b370
+  flutter_ble_central: 964b8b4eae8840cac1047f53dce8df9f0d52a041
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271

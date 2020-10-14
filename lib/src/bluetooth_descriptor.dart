@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-part of flutter_blue;
+part of flutter_ble_central;
 
 class BluetoothDescriptor {
   static final Guid cccd = new Guid("00002902-0000-1000-8000-00805f9b34fb");
@@ -32,10 +32,10 @@ class BluetoothDescriptor {
       ..characteristicUuid = characteristicUuid.toString()
       ..serviceUuid = serviceUuid.toString();
 
-    await FlutterBlue.instance._channel
+    await FlutterBleCentral.instance._channel
         .invokeMethod('readDescriptor', request.writeToBuffer());
 
-    return FlutterBlue.instance._methodStream
+    return FlutterBleCentral.instance._methodStream
         .where((m) => m.method == "ReadDescriptorResponse")
         .map((m) => m.arguments)
         .map((buffer) => new protos.ReadDescriptorResponse.fromBuffer(buffer))
@@ -61,10 +61,10 @@ class BluetoothDescriptor {
       ..serviceUuid = serviceUuid.toString()
       ..value = value;
 
-    await FlutterBlue.instance._channel
+    await FlutterBleCentral.instance._channel
         .invokeMethod('writeDescriptor', request.writeToBuffer());
 
-    return FlutterBlue.instance._methodStream
+    return FlutterBleCentral.instance._methodStream
         .where((m) => m.method == "WriteDescriptorResponse")
         .map((m) => m.arguments)
         .map((buffer) => new protos.WriteDescriptorResponse.fromBuffer(buffer))

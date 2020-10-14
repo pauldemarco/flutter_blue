@@ -1,15 +1,15 @@
-[![pub package](https://img.shields.io/pub/v/flutter_blue.svg)](https://pub.dartlang.org/packages/flutter_blue)
+[![pub package](https://img.shields.io/pub/v/flutter_ble_central.svg)](https://pub.dartlang.org/packages/flutter_ble_central)
 [![Chat](https://img.shields.io/discord/634853295160033301.svg?style=flat-square&colorB=758ED3)](https://discord.gg/Yk5Efra)
 
 <br>
 <p align="center">
-<img alt="FlutterBlue" src="https://github.com/pauldemarco/flutter_blue/blob/master/site/flutterblue.png?raw=true" />
+<img alt="FlutterBleCentral" src="https://github.com/juliansteenbakker/flutter_ble_central/blob/master/site/FlutterBleCentral.png?raw=true" />
 </p>
 <br><br>
 
 ## Introduction
 
-FlutterBlue is a bluetooth plugin for [Flutter](http://www.flutter.io), a new mobile SDK to help developers build modern apps for iOS and Android.
+FlutterBleCentral is a bluetooth plugin for [Flutter](http://www.flutter.io), a new mobile SDK to help developers build modern apps for iOS and Android.
 
 ## Alpha version
 
@@ -21,16 +21,16 @@ This library is actively developed alongside production apps, and the API will e
 Having trouble adapting to the latest API?   I'd love to hear your use-case, please contact me.
 
 ## Cross-Platform Bluetooth LE
-FlutterBlue aims to offer the most from both platforms (iOS and Android).
+FlutterBleCentral aims to offer the most from both platforms (iOS and Android).
 
-Using the FlutterBlue instance, you can scan for and connect to nearby devices ([BluetoothDevice](#bluetoothdevice-api)).
+Using the FlutterBleCentral instance, you can scan for and connect to nearby devices ([BluetoothDevice](#bluetoothdevice-api)).
 Once connected to a device, the BluetoothDevice object can discover services ([BluetoothService](lib/src/bluetooth_service.dart)), characteristics ([BluetoothCharacteristic](lib/src/bluetooth_characteristic.dart)), and descriptors ([BluetoothDescriptor](lib/src/bluetooth_descriptor.dart)).
 The BluetoothDevice object is then used to directly interact with characteristics and descriptors.
 
 ## Setup
 ### Change the minSdkVersion for Android
 
-Flutter_blue is compatible only from version 19 of Android SDK so you should change this in **android/app/build.gradle**:
+flutter_ble_central is compatible only from version 19 of Android SDK so you should change this in **android/app/build.gradle**:
 ```dart
 Android {
   defaultConfig {
@@ -69,16 +69,16 @@ For location permissions on iOS see more at: [https://developer.apple.com/docume
 ## Usage
 ### Obtain an instance
 ```dart
-FlutterBlue flutterBlue = FlutterBlue.instance;
+FlutterBleCentral FlutterBleCentral = FlutterBleCentral.instance;
 ```
 
 ### Scan for devices
 ```dart
 // Start scanning
-flutterBlue.startScan(timeout: Duration(seconds: 4));
+FlutterBleCentral.startScan(timeout: Duration(seconds: 4));
 
 // Listen to scan results
-var subscription = flutterBlue.scanResults.listen((results) {
+var subscription = FlutterBleCentral.scanResults.listen((results) {
     // do something with scan results
     for (ScanResult r in results) {
         print('${r.device.name} found! rssi: ${r.rssi}');
@@ -86,7 +86,7 @@ var subscription = flutterBlue.scanResults.listen((results) {
 });
 
 // Stop scanning
-flutterBlue.stopScan();
+FlutterBleCentral.stopScan();
 ```
 
 ### Connect to a device
@@ -148,7 +148,7 @@ await device.requestMtu(512);
 Note that iOS will not allow requests of MTU size, and will always try to negotiate the highest possible MTU (iOS supports up to MTU size 185)
 
 ## Reference
-### FlutterBlue API
+### FlutterBleCentral API
 |                  |      Android       |         iOS          |             Description            |
 | :--------------- | :----------------: | :------------------: |  :-------------------------------- |
 | scan             | :white_check_mark: |  :white_check_mark:  | Starts a scan for Bluetooth Low Energy devices. |

@@ -1,5 +1,5 @@
-name: flutter_blue_example
-description: Demonstrates how to use the flutter_blue plugin.
+name: flutter_ble_central_example
+description: Demonstrates how to use the flutter_ble_central plugin.
 publish_to: "none"
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_blue:
+  flutter_ble_central:
     path: ../
   e2e: ^0.7.0
   flutter_driver:

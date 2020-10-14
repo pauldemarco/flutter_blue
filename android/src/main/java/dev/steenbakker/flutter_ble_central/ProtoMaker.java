@@ -2,7 +2,7 @@
 // All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-package com.pauldemarco.flutter_blue;
+package dev.steenbakker.flutter_ble_central;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
@@ -14,14 +14,11 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.os.Build;
-import android.os.Parcel;
 import android.os.ParcelUuid;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.protobuf.ByteString;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;

@@ -3,7 +3,7 @@
 * Fix performance issue with GUID initializers.
 
 ## 0.7.1+1
-* Fix for FlutterBlue constructor when running on emulator.
+* Fix for FlutterBleCentral constructor when running on emulator.
 * Return error when attempting to `discoverServices` while not connected.
 
 ## 0.7.1

@@ -1,10 +1,10 @@
-name: flutter_blue
+name: flutter_ble_central
 description:
   Flutter plugin for connecting and communicating with Bluetooth Low Energy devices,
-  on Android and iOS
+  on Android and iOS. Fork from FlutterBleCentral.
 version: 0.8.0
-author: Paul DeMarco <paulmdemarco@gmail.com>
-homepage: https://github.com/pauldemarco/flutter_blue
+author: Julian Steenbakker <juliansteenbakker@outlook.com>
+homepage: https://github.com/juliansteenbakker/flutter_ble_central
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -28,9 +28,9 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.pauldemarco.flutter_blue
-        pluginClass: FlutterBluePlugin
+        package: dev.steenbakker.flutter_ble_central
+        pluginClass: FlutterBleCentralPlugin
       ios:
-        pluginClass: FlutterBluePlugin
+        pluginClass: FlutterBleCentralPlugin
       macos:
-        pluginClass: FlutterBluePlugin
+        pluginClass: FlutterBleCentralPlugin
