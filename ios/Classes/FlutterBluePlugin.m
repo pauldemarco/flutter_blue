@@ -607,13 +607,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
                       //print ("remapping aftertouch message ${msg.status} ${msg.d1} to Expression CC 0xB0 11 {msg.d1}" );
                       status = 0xB0;
                       int c = 60;
-                      double a = (127-c)/127;
-                      double v = a*d1 + c;
+                      //d1=0x7f; //test
+                      double v = c + ((127.0f-c)*d1)/127.0f;
+                      NSLog (@"xpression c=%d d1=%d => v=%lf (int)v=%d",c,d1,v,(int)v);
                       d2 = (int)v;
                       d1 = 11; //Expression CC
-                      print ("xpression c=$c a=$a d1=$msg.d1 => v=$v ");
                     }
-                    [_midiSynth midiEventWithCommand:ch | status d1:d1 d2:d2];
+                    [_midiSynth midiEventWithCommand:(ch | status) d1:d1 d2:d2];
                     break;
                 }
             }
