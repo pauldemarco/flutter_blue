@@ -36,6 +36,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,8 @@ import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import org.billthefarmer.mididriver.FlutterMidiSynthPlugin;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -59,7 +62,6 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 
-
 /** FlutterBluePlugin */
 public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, RequestPermissionsResultListener  {
     private static final String TAG = "FlutterBluePlugin";
@@ -67,7 +69,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private Object initializationLock = new Object();
     private Context context;
     private MethodChannel channel;
-    private static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
+    public static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
 
     private EventChannel stateChannel;
     private BluetoothManager mBluetoothManager;
@@ -89,6 +91,8 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private ArrayList<String> macDeviceScanned = new ArrayList<>();
     private boolean allowDuplicates = false;
 
+    private FlutterMidiSynthPlugin midiSynthPlugin = new FlutterMidiSynthPlugin();
+
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
         if (instance == null) {
@@ -106,12 +110,15 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     @Override
     public void onAttachedToEngine(FlutterPluginBinding binding) {
+
         pluginBinding = binding;
+        midiSynthPlugin.attachToEngine(binding);
     }
 
     @Override
     public void onDetachedFromEngine(FlutterPluginBinding binding) {
         pluginBinding = null;
+        midiSynthPlugin.detachFromEngine(binding);
 
     }
 
@@ -629,6 +636,19 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 break;
             }
 
+            ///FlutterMidiSynthPlugin
+            case "initSynth":
+            case "setInstrument":
+            case "noteOn":
+            case "noteOnìff":
+            case "midiEvent":
+            case "setReverb":
+            case "setDelay":
+                log(LogLevel.INFO, "[handleCall] bridging call to FlutterMidiSynthPlugin");
+                midiSynthPlugin.manageMethodCall(call,result);
+                break;
+            ///FINE FlutterMidiSynthPlugin
+
             default:
             {
                 result.notImplemented();
@@ -899,9 +919,129 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             invokeMethodUIThread("WriteCharacteristicResponse", p.build().toByteArray());
         }
 
+        private boolean isSysex(byte[] data){
+            if(data.length -2 < 6){
+                return false;
+            }
+
+            final byte[] header = {(byte)0xf0,(byte)0x0,(byte)0x2f,(byte)0x7f,(byte)0x0,(byte)0x1};
+            byte[] hdr = {data[2],data[3],data[4],data[5],data[6],data[7]};
+
+            if (data[data.length-1] == (byte)0x7f && Arrays.equals(hdr,header)){
+                return true;
+            }
+            return false;
+        }
+
+        private ArrayList<byte[]> parseMidiMessages(byte[] data){
+
+            ArrayList<byte[]> ret = new ArrayList();
+
+            if (data.length > 11) {
+                if(isSysex(data))
+                    return ret;
+            }
+
+            //Se non è un sysex, procedo nel processare il pacchetto.
+            final int STATE_HDR = 0;
+            final int STATE_TS = 1;
+            final int STATE_ST = 2;
+            final int STATE_D1 = 3;
+            final int STATE_D2 = 4;
+
+            int state = STATE_HDR;
+
+            byte status = 0;
+            byte channel = 0;
+            byte d1 = -1;
+            byte d2 = -1;
+
+            for (int i = 0; i < data.length; i++) {
+                byte b = data[i];
+                switch (state) {
+                    case STATE_HDR:
+                        state = STATE_TS;
+                        continue;
+                    case STATE_TS:
+                        state = STATE_ST;
+                        continue;
+                    case STATE_ST:
+                        status = (byte)(b & 0xf0);
+                        channel = (byte)(b & 0x0f);
+                        state = STATE_D1;
+                        continue;
+                    case STATE_D1:
+                        d1 = b;
+                        if (status < 0xC0 || status > 0xE0) {
+                            state = STATE_D2;
+                        } else {
+                            //PRGM_CHANGE e AFTER_TOUCH hanno un solo byte di informazione
+                            ret.add(new byte[]{status,channel,d1,d2});
+                            status = channel = 0;
+                            d1 = d2 = -1;
+                            state = STATE_TS;
+                        }
+                        continue;
+                    case STATE_D2:
+                        d2 = b;
+                        ret.add(new byte[]{status,channel,d1,d2});
+                        status = channel = 0;
+                        d1 = d2 = -1;
+                        state = STATE_TS;
+                        continue;
+
+                    default:
+                        log(LogLevel.WARNING, "you should never reach this state!");
+                        break;
+                }
+            }
+
+            return ret;
+        }
+
+        private void directMidiMessageManager(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            log(LogLevel.INFO, "[directMidiMessageManager] uuid: " + characteristic.getUuid().toString());
+            byte[] data = characteristic.getValue();
+            ArrayList<byte[]> messages = parseMidiMessages(data);
+            if (messages != null && messages.size()>0){
+                for (byte[] m : messages) {
+                    byte status = m[0];
+                    byte ch = m[1];
+                    byte d1 = m[2];
+                    byte d2 = m[3];
+
+                    if (status == (byte)0x90 /*noteON*/ ||
+                            status == (byte)0x80 /*noteOFF*/ ||
+                            (status >= (byte)0xb0 /*CC*/ && status < (byte)0xc0 /*PrgChg*/ && (ch != (byte)52 && ch != (byte)53) /*filtering accelerometer y and z*/) ||
+                            (status >= (byte)0xd0 /*ChPressure*/ && status < (byte)0xe0 /*bender*/)
+                    ){
+                        switch (status){
+                            case (byte) 0x90:
+                                midiSynthPlugin.sendNoteOn(ch,d1,d2);
+                                break;
+                            case (byte) 0x80:
+                                midiSynthPlugin.sendNoteOff(ch,d1,d2);
+                                break;
+                            case (byte) 0xD0: /*aftertouch*/
+                                status = (byte)0xB0;
+                                final int c = 60;
+                                double v = c + ((127.0f-c)*d1)/127.0f;
+                                d2=(byte)(int)v;
+                                d1=11;
+                                //break; ATTENZIONE NON C'E' IL BREAK!
+                            default:
+                                midiSynthPlugin.sendMidi(ch|status,d1,d2);
+                        }
+                    }
+
+                }
+            }
+        }
+
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
             log(LogLevel.DEBUG, "[onCharacteristicChanged] uuid: " + characteristic.getUuid().toString());
+            directMidiMessageManager(gatt,characteristic);
             Protos.OnCharacteristicChanged.Builder p = Protos.OnCharacteristicChanged.newBuilder();
             p.setRemoteId(gatt.getDevice().getAddress());
             p.setCharacteristic(ProtoMaker.from(gatt.getDevice(), characteristic, gatt));

@@ -15,6 +15,10 @@ group 'com.pauldemarco.flutter_blue'
 version '1.0-SNAPSHOT'
 
 buildscript {
+    ext {
+        kotlinVersion = '1.3.72'
+    }
+
     repositories {
         google()
         jcenter()
@@ -23,6 +27,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -35,6 +40,7 @@ rootProject.allprojects {
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -51,6 +57,19 @@ android {
             proto {
                 srcDir '../protos'
             }
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 28
+
+        ndk {
+            abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
     }
 }
@@ -80,4 +99,5 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-lite:3.0.1'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     api 'androidx.core:core:1.0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
