@@ -23,7 +23,8 @@ import AudioToolbox
           let args = call.arguments as? Dictionary<String, Any>
           let instrument = args?["instrument"] as! Int
           let channel = args?["channel"] as! Int
-          self.setInstrument(instrument: instrument, channel: channel)
+          let bank = args?["bank"] as! Int
+          self.setInstrument(instrument: instrument, channel: channel, bank: bank)
       case "noteOn":
           let args = call.arguments as? Dictionary<String, Any>
           let channel = args?["channel"] as? Int
@@ -135,8 +136,8 @@ import AudioToolbox
         return sequencers[channel]!
     }
     
-   public func setInstrument(instrument: Int, channel: Int = 0){
-       synth!.loadPatch(patchNo: instrument, channel: channel)
+   private func setInstrument(instrument: Int, channel: Int = 0, bank: Int = 0){
+       synth!.loadPatch(patchNo: instrument, channel: channel, bank: bank)
        getSequencer(channel: channel).patch = UInt32(instrument)
    }
    

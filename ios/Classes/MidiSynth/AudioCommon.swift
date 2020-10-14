@@ -208,7 +208,7 @@ class AudioCommon
     }
   }
   
-  func loadPatch(patchNo: Int, channel: Int = 0) {
+  func loadPatch(patchNo: Int, channel: Int = 0, bank: Int = 0) {
     var enabled = UInt32(1)
     var disabled = UInt32(0)
     patch = UInt32(patchNo)
@@ -220,7 +220,22 @@ class AudioCommon
       0,
       &enabled,
       UInt32(MemoryLayout<UInt32>.size)))
-    
+
+    let ccCommand = UInt32(0xB0 | channel)
+/*
+    You can select any bank in the SF like this:
+    Banks 0-127: bankMSB = kAUSampler_DefaultMelodicBankMSB, bankLSB = (SoundFont bank)
+    Bank 128: bankMSB = kAUSampler_DefaultPercussionBankMSB, bankLSB = kAUSampler_DefaultBankLSB
+*/
+    //let bankMsb = bank >> 7;
+    if(bank == 128){
+        checkError(osstatus: MusicDeviceMIDIEvent(self.synthUnit!, ccCommand, 0, UInt32(kAUSampler_DefaultPercussionBankMSB), 0))
+        checkError(osstatus: MusicDeviceMIDIEvent(self.synthUnit!, ccCommand, 0x20, UInt32(kAUSampler_DefaultBankLSB), 0))
+    } else {
+        checkError(osstatus: MusicDeviceMIDIEvent(self.synthUnit!, ccCommand, 0, UInt32(kAUSampler_DefaultMelodicBankMSB), 0))
+        checkError(osstatus: MusicDeviceMIDIEvent(self.synthUnit!, ccCommand, 0x20, UInt32(bank), 0))
+    }
+
     let programChangeCommand = UInt32(0xC0 | channel)
     checkError(osstatus: MusicDeviceMIDIEvent(self.synthUnit!, programChangeCommand, patch, 0, 0))
     
