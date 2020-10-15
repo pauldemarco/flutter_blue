@@ -78,8 +78,9 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
       "setInstrument" -> {
         val i = call.argument<Int>("instrument")
         val ch = call.argument<Int>("channel")
-        print("setInstrument ch " + ch + " i " + i)
-        selectInstrument(ch!!, i!!)
+        val bank = call.argument<Int>("bank")
+        print("setInstrument ch " + ch + " i " + i + " bank" + bank)
+        selectInstrument(ch!!, i!!, bank!!)
         result.success(null);
       }
       "noteOn" -> {
@@ -136,7 +137,7 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
   }
 
   override fun onMidiStart() { // Program change - harpsichord
-    selectInstrument(0, 0)
+    selectInstrument(0, 0, 0)
 
     // Get the config
     val config = midiBridge.config()
@@ -147,12 +148,17 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
     val info: String = java.lang.String.format(Locale.getDefault(), format, config[0],
             config[1], config[2], config[3])
 
-    print("$TAG:  $info");
+    print("$TAG:  $info")
   }
 
 
-  public fun selectInstrument(ch: Int, i: Int) {
-    print("selectInstrument ch $ch i $i\n")
+  public fun selectInstrument(ch: Int, i: Int, bank: Int) {
+    print("selectInstrument ch $ch i $i bank $bank\n")
+    //Select Sound Bank MSB
+    val bankMSB = bank shr 7
+    val bankLSB = bank and 0x7f
+    sendMidi(0xB0, 0x0,  bankMSB)
+    sendMidi(0xB0, 0x20, bankLSB)
     sendMidiProgramChange(ch, i)
   }
 
