@@ -29,12 +29,14 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
   private lateinit var midiBridge: MidiBridge
   private var TAG: String = "FlutterMidiSynthPlugin"
 
+  private val recorders = HashMap<String, Int>() //mac,ch
+
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     attachToEngine(flutterPluginBinding)
   }
 
   public fun attachToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    print("SNTX *** attachToEngine")
+    println("SNTX *** attachToEngine")
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, com.pauldemarco.flutter_blue.FlutterBluePlugin.NAMESPACE + "/methods")
     //channel = MethodChannel(flutterPluginBinding.binaryMessenger, "FlutterMidiSynthPlugin")
     channel.setMethodCallHandler(this)
@@ -79,8 +81,9 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
         val i = call.argument<Int>("instrument")
         val ch = call.argument<Int>("channel")
         val bank = call.argument<Int>("bank")
-        print("setInstrument ch " + ch + " i " + i + " bank" + bank)
-        selectInstrument(ch!!, i!!, bank!!)
+        val mac = call.argument<String>("mac")
+        println("setInstrument ch " + ch + " i " + i + " bank" + bank + " mac" + mac)
+        selectInstrument(ch!!, i!!, bank!!,mac!!)
         result.success(null);
       }
       "noteOn" -> {
@@ -113,16 +116,16 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
         for (ch in 0 until 16) {
           sendMidi(0xB0 + ch, 91 /*(CC91: reverb)*/, (amount * 1.27).toInt())
         }
-        //print("FlutterMidiSynthplugin: setReverb not yet implemented under Android.");
+        //println("FlutterMidiSynthplugin: setReverb not yet implemented under Android.");
         result.success(null);
       }
       "setDelay" -> {
-        print("FlutterMidiSynthplugin: setDelay not yet implemented under Android.");
+        println("FlutterMidiSynthplugin: setDelay not yet implemented under Android.");
         result.success(null);
       }
 
       else -> {
-        print("unknown method " + call.method);
+        println("unknown method " + call.method);
         result.notImplemented();
       }
     }
@@ -137,7 +140,7 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
   }
 
   override fun onMidiStart() { // Program change - harpsichord
-    selectInstrument(0, 0, 0)
+    selectInstrument(0, 0, 0, null)
 
     // Get the config
     val config = midiBridge.config()
@@ -148,21 +151,49 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
     val info: String = java.lang.String.format(Locale.getDefault(), format, config[0],
             config[1], config[2], config[3])
 
-    print("$TAG:  $info")
+    println("$TAG:  $info")
   }
 
 
-  public fun selectInstrument(ch: Int, i: Int, bank: Int) {
-    print("selectInstrument ch $ch i $i bank $bank\n")
+  public fun selectInstrument(ch: Int, i: Int, bank: Int, mac:String?) {
     //Select Sound Bank MSB
+    if (mac != null) {
+      recorders[mac] = ch
+      print ("recorders: $recorders")
+    }
     val bankMSB = bank shr 7
     val bankLSB = bank and 0x7f
+    println(" -> selectInstrument ch $ch i $i bank $bank (bankMSB $bankMSB bankLSB $bankLSB mac $mac\n")
     sendMidi(0xB0, 0x0,  bankMSB)
     sendMidi(0xB0, 0x20, bankLSB)
     sendMidiProgramChange(ch, i)
   }
 
+  public fun sendNoteOnWithMAC(ch: Int, n: Int, v: Int, mac: String) {
+    println ("sendNoteOnWithMAC $ch $n $v $mac recorders= $recorders")
+    var idx = 0
+    try {
+      if(mac != null) {
+        idx = recorders[mac]!!
+      }
+    } catch (e: KotlinNullPointerException){}
+    sendNoteOn(ch+idx, n, v)
+  }
+
+  public fun sendNoteOffWithMAC(ch: Int, n: Int, v: Int, mac: String) {
+    println ("sendNoteOffWithMAC $ch $n $v $mac recorders= $recorders")
+
+    var idx = 0
+    try {
+      if(mac != null) {
+        idx = recorders[mac]!!
+      }
+    } catch (e: KotlinNullPointerException){}
+    sendNoteOff(ch+idx, n, v)
+  }
+
   public fun sendNoteOn(ch: Int, n: Int, v: Int) {
+    println (" -> noteON ch $ch n $n v $v")
     val msg = ByteArray(3)
     msg[0] = (0x90 or ch).toByte()
     msg[1] = n.toByte()
@@ -208,6 +239,18 @@ public class FlutterMidiSynthPlugin: FlutterPlugin, MethodCallHandler, MidiDrive
     msg[1] = n.toByte()
     msg[2] = v.toByte()
     if ( midiBridge.engine != null) midiBridge.write(msg)
+  }
+
+  public fun sendMidiWithMAC(m: Int, n: Int, v: Int, mac: String?) {
+    println("sendMidiWithMAC $m $n $v $mac recorders= $recorders")
+
+    var idx = 0
+    try {
+      if(mac != null) {
+        idx = recorders[mac]!!
+      }
+    } catch (e: KotlinNullPointerException){}
+    sendMidi(m + idx, n, v)
   }
 
   override fun onDetachedFromActivity() {

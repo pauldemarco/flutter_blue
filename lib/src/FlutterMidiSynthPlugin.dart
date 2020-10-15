@@ -8,8 +8,8 @@ class FlutterMidiSynthPlugin {
     return _channel.invokeMethod('initSynth',i);
   }
 
-  static Future<void> setInstrument(int instrument, int channel, int bank) async {
-    return _channel.invokeMethod('setInstrument',{'channel':channel, 'instrument':instrument, 'bank':bank });
+  static Future<void> setInstrument(int instrument, int channel, int bank, String mac) async {
+    return _channel.invokeMethod('setInstrument',{'channel':channel, 'instrument':instrument, 'bank':bank , 'mac':mac});
   }
 
   static Future<void> noteOn(int channel, int note, int velocity) async {

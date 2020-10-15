@@ -1000,7 +1000,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         }
 
         private void directMidiMessageManager(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            log(LogLevel.INFO, "[directMidiMessageManager] uuid: " + characteristic.getUuid().toString());
+            //log(LogLevel.INFO, "[directMidiMessageManager] uuid: " + characteristic.getUuid().toString());
             byte[] data = characteristic.getValue();
             ArrayList<byte[]> messages = parseMidiMessages(data);
             if (messages != null && messages.size()>0){
@@ -1017,10 +1017,10 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     ){
                         switch (status){
                             case (byte) 0x90:
-                                midiSynthPlugin.sendNoteOn(ch,d1,d2);
+                                midiSynthPlugin.sendNoteOnWithMAC(ch,d1,d2,gatt.getDevice().getAddress());
                                 break;
                             case (byte) 0x80:
-                                midiSynthPlugin.sendNoteOff(ch,d1,d2);
+                                midiSynthPlugin.sendNoteOffWithMAC(ch,d1,d2,gatt.getDevice().getAddress());
                                 break;
                             case (byte) 0xD0: /*aftertouch*/
                                 status = (byte)0xB0;
@@ -1030,7 +1030,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                                 d1=11;
                                 //break; ATTENZIONE NON C'E' IL BREAK!
                             default:
-                                midiSynthPlugin.sendMidi(ch|status,d1,d2);
+                                midiSynthPlugin.sendMidiWithMAC(ch|status,d1,d2,gatt.getDevice().getAddress());
                         }
                     }
 
@@ -1040,7 +1040,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            log(LogLevel.DEBUG, "[onCharacteristicChanged] uuid: " + characteristic.getUuid().toString());
+            //log(LogLevel.DEBUG, "[onCharacteristicChanged] uuid: " + characteristic.getUuid().toString());
             directMidiMessageManager(gatt,characteristic);
             Protos.OnCharacteristicChanged.Builder p = Protos.OnCharacteristicChanged.newBuilder();
             p.setRemoteId(gatt.getDevice().getAddress());
