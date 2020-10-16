@@ -580,7 +580,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   //parse bytes
     NSArray* messages = [self parse:data];
     if (messages){
-        NSLog(@"SNTX didUpdateValueForCharacteristic uuid: %@", [characteristic.UUID fullUUIDString]);
+        //NSLog(@"SNTX didUpdateValueForCharacteristic uuid: %@", [characteristic.UUID fullUUIDString]);
         //Direct midi messages management
         for (NSData* data in messages){
             const char *m = [data bytes];
@@ -588,19 +588,19 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
             unsigned char ch = m[1];
             unsigned char d1 = m[2];
             unsigned char d2 = m[3];
-            NSLog(@"SNTX value:[status:%02x ch:%02x d1:%02x d2:%02x]", status, ch, d1, d2);
+            //NSLog(@"SNTX value:[status:%02x ch:%02x d1:%02x d2:%02x]", status, ch, d1, d2);
             
             if(status == 0x90 /*NoteON*/ || status == 0x80 /*NoteOFF*/ ||
                 (status >= 0xb0 /*CC*/ && status < 0xc0 /*PrgChg*/ && (ch != 52 && ch != 53) /*filtering accelerometer y an z*/ ) ||
                 (status >= 0xd0 /*ChPressure*/ && status < 0xe0 /*Bender*/)
                ){
-                NSLog(@"SNTX forwarding MidiMessage to Synth! status=%02x",status);
+                //NSLog(@"SNTX forwarding MidiMessage to Synth! status=%02x uuid=%@",status ,peripheral.identifier);
                 switch(status){
                 case 0x90:
-                    [_midiSynth noteOnChannel:ch note:d1 velocity:d2];
+                    [_midiSynth noteOnWithMacWithChannel:ch note:d1 velocity:d2 mac:[peripheral.identifier UUIDString]];
                     break;
                 case 0x80:
-                    [_midiSynth noteOffWithChannel:ch note:d1 velocity:d2];
+                    [_midiSynth noteOffWithMacWithChannel:ch note:d1 velocity:d2 mac:[peripheral.identifier UUIDString]];
                     break;
                 default:
                     if(status == 0xD0 /*aftertouch*/){
@@ -609,11 +609,11 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
                       int c = 60;
                       //d1=0x7f; //test
                       double v = c + ((127.0f-c)*d1)/127.0f;
-                      NSLog (@"xpression c=%d d1=%d => v=%lf (int)v=%d",c,d1,v,(int)v);
+                      //NSLog (@"xpression c=%d d1=%d => v=%lf (int)v=%d",c,d1,v,(int)v);
                       d2 = (int)v;
                       d1 = 11; //Expression CC
                     }
-                    [_midiSynth midiEventWithCommand:(ch | status) d1:d1 d2:d2];
+                    [_midiSynth midiEventWithMacWithCommand:(ch | status) d1:d1 d2:d2 mac:[peripheral.identifier UUIDString]];
                     break;
                 }
             }
@@ -858,8 +858,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [result setRemoteId:[peripheral.identifier UUIDString]];
   [result setProperties:[self toCharacteristicPropsProto:characteristic.properties]];
   [result setValue:[characteristic value]];
-  NSLog(@"toCharacteristicProto uuid: %@ value: %@", [characteristic.UUID fullUUIDString], [characteristic value]);
-  NSMutableArray *descriptorProtos = [NSMutableArray new];
+  //NSLog(@"toCharacteristicProto uuid: %@ value: %@", [characteristic.UUID fullUUIDString], [characteristic value]);
+  NSMutable
+    Array *descriptorProtos = [NSMutableArray new];
   for(CBDescriptor *d in [characteristic descriptors]) {
     [descriptorProtos addObject:[self toDescriptorProto:peripheral descriptor:d]];
   }

@@ -7,6 +7,7 @@ import AudioToolbox
     
   var synth: SoftSynth?
   var sequencers: [Int:Sequencer] = [:] 
+  var recorders = [String : Int]()
     
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "FlutterMidiSynthPlugin", binaryMessenger: registrar.messenger())
@@ -24,7 +25,8 @@ import AudioToolbox
           let instrument = args?["instrument"] as! Int
           let channel = args?["channel"] as! Int
           let bank = args?["bank"] as! Int
-          self.setInstrument(instrument: instrument, channel: channel, bank: bank)
+          let mac = args?["mac"] as! String
+          self.setInstrument(instrument: instrument, channel: channel, bank: bank, mac: mac)
       case "noteOn":
           let args = call.arguments as? Dictionary<String, Any>
           let channel = args?["channel"] as? Int
@@ -136,18 +138,40 @@ import AudioToolbox
         return sequencers[channel]!
     }
     
-   private func setInstrument(instrument: Int, channel: Int = 0, bank: Int = 0){
+   private func setInstrument(instrument: Int, channel: Int = 0, bank: Int = 0, mac: String? = nil){
+    print ("setInstrument \(instrument) \(channel) \(bank) \(mac)")
+
+       if(mac != nil){
+        recorders[mac!] = channel
+       }
        synth!.loadPatch(patchNo: instrument, channel: channel, bank: bank)
        getSequencer(channel: channel).patch = UInt32(instrument)
    }
-   
+
+   public func noteOnWithMac(channel: Int, note: Int, velocity: Int, mac: String ){
+    //print ("noteOnWithMac \(channel) \(note) \(velocity) \(mac)")
+    let idx = recorders[mac] ?? 0
+    noteOn(channel: channel+idx, note: note, velocity: velocity)
+   }
+
+
+   public func noteOffWithMac(channel: Int, note: Int, velocity: Int, mac: String){
+    let idx = recorders[mac] ?? 0
+    noteOff(channel: channel+idx, note: note, velocity: velocity)
+   }
+
+   public func midiEventWithMac(command: UInt32, d1: UInt32, d2: UInt32, mac: String){
+    let idx = recorders[mac] ?? 0
+    midiEvent(command: command+UInt32(idx), d1: d1, d2: d2)
+   }
+
    public func noteOn(channel: Int, note: Int, velocity: Int){
     if (channel < 0 || note < 0 || velocity < 0){ return }
     let sequencer = getSequencer(channel: channel)
     synth!.playNoteOn(channel: channel, note: UInt8(note), midiVelocity: velocity, sequencer: sequencer)
     sequencer.noteOn(note: UInt8(note))
     let now = (Int64)(NSDate().timeIntervalSince1970*1000)
-    print("\(now) SwiftFlutterMidiSyntPlugin.swift noteOn \(channel)  \(note) \(velocity) ")
+    //print("\(now) SwiftFlutterMidiSyntPlugin.swift noteOn \(channel)  \(note) \(velocity) ")
    }
 
    public func noteOff(channel: Int, note: Int, velocity: Int){
@@ -156,7 +180,7 @@ import AudioToolbox
     synth!.playNoteOff(channel: channel, note: UInt8(note), midiVelocity: velocity, sequencer: sequencer)
     sequencer.noteOff(note: UInt8(note))
     let now = (Int64)(NSDate().timeIntervalSince1970*1000)
-    print("\(now) SwiftFlutterMidiSyntPlugin.swift noteOff \(channel)  \(note) \(velocity) ")
+    //print("\(now) SwiftFlutterMidiSyntPlugin.swift noteOff \(channel)  \(note) \(velocity) ")
    }
 
    public func midiEvent(command: UInt32, d1: UInt32, d2: UInt32){
