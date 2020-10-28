@@ -30,9 +30,9 @@ package com.pauldemarco.flutter_blue;
 import com.google.protobuf.ByteString;
 import com.pauldemarco.flutter_blue.Protos.AdvertisementData;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /**
@@ -73,11 +73,7 @@ class AdvertisementParser {
           }
           byte[] name = new byte[length];
           data.get(name);
-          try {
-            ret.setLocalName(new String(name, "UTF-8"));
-          } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-          }
+          ret.setLocalName(new String(name, StandardCharsets.UTF_8));
           if (type == 0x09) {
             seenLongLocalName = true;
           }
@@ -91,14 +87,14 @@ class AdvertisementParser {
         case 0x20: // Service Data with 32 bit UUID.
         case 0x21: { // Service Data with 128 bit UUID.
           UUID uuid;
-          int remainingDataLength = 0;
+          int remainingDataLength;
           if (type == 0x16 || type == 0x20) {
             long uuidValue;
             if (type == 0x16) {
               uuidValue = data.getShort() & 0xFFFF;
               remainingDataLength = length - 2;
             } else {
-              uuidValue = data.getInt() & 0xFFFFFFFF;
+              uuidValue = data.getInt();
               remainingDataLength = length - 4;
             }
             uuid = UUID.fromString(String.format("%08x-0000-1000-8000-00805f9b34fb", uuidValue));
