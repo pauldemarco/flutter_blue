@@ -14,26 +14,19 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.os.Build;
-import android.os.Parcel;
 import android.os.ParcelUuid;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.protobuf.ByteString;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by paul on 8/31/17.
  */
 
 public class ProtoMaker {
-
-    private static final UUID CCCD_UUID = UUID.fromString("000002902-0000-1000-8000-00805f9b34fb");
-
     static Protos.ScanResult from(BluetoothDevice device, byte[] advertisementData, int rssi) {
         Protos.ScanResult.Builder p = Protos.ScanResult.newBuilder();
         p.setDevice(from(device));
