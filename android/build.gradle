@@ -80,6 +80,6 @@ protobuf {
 }
 
 dependencies {
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+    implementation 'com.google.protobuf:protobuf-javalite:3.11.0'
     implementation 'androidx.core:core:1.2.0'
 }
