@@ -6,7 +6,7 @@
 pubspec.lock
 
 build/
-
+android/.cxx/
 .atom/
 .idea/
 .vscode/
