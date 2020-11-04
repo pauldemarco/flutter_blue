@@ -492,14 +492,14 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     
     const char header[] = { 0xF0, 0x0, 0x2F, 0x7f, 0x0, 0x1};
     unsigned char hdr[] = {bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7]};
-    NSLog(@"isSysex: hdr=[%02x %02x %02x %02x %02x %02x] tail=[%02x]",bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[data.length -1] );
+    //NSLog(@"isSysex: hdr=[%02x %02x %02x %02x %02x %02x] tail=[%02x]",bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[data.length -1] );
 
     if ((unsigned char)bytes[data.length -1] == 0xf7 && memcmp(header,hdr,6)==0 ){
         NSLog(@"isSysex: true");
         return true;
     }
     
-    NSLog(@"isSysex: false");
+    //NSLog(@"isSysex: false");
     return false;
 }
 
