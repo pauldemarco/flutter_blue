@@ -10,3 +10,5 @@ android/.cxx/
 .atom/
 .idea/
 .vscode/
+example/ios/Flutter/.last_build_id
+example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/
