@@ -6,7 +6,7 @@ version: 0.7.3
 homepage: https://github.com/pauldemarco/flutter_blue
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.6 <2.0.0"
 
 dependencies:
