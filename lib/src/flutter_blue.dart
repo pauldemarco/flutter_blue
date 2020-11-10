@@ -129,7 +129,7 @@ class FlutterBlue {
         .map((m) => m.arguments)
         .takeUntil(Rx.merge(killStreams))
         .doOnDone(stopScan)
-        .map((buffer) => new protos.ScanResult.fromBuffer(buffer))
+        .map((buffer) => new protos.ScanResult.fromBuffer(buffer)..buff=buffer)
         .map((p) {
       final result = new ScanResult.fromProto(p);
       final list = _scanResults.value;
@@ -247,17 +247,19 @@ class DeviceIdentifier {
 }
 
 class ScanResult {
-  const ScanResult({this.device, this.advertisementData, this.rssi});
+  const ScanResult({this.device, this.advertisementData, this.rssi, this.buff});
 
   ScanResult.fromProto(protos.ScanResult p)
       : device = new BluetoothDevice.fromProto(p.device),
         advertisementData =
             new AdvertisementData.fromProto(p.advertisementData),
-        rssi = p.rssi;
+        rssi = p.rssi,
+        buff = p.buff;
 
   final BluetoothDevice device;
   final AdvertisementData advertisementData;
   final int rssi;
+  final List<int> buff;
 
   @override
   bool operator ==(Object other) =>
@@ -271,7 +273,7 @@ class ScanResult {
 
   @override
   String toString() {
-    return 'ScanResult{device: $device, advertisementData: $advertisementData, rssi: $rssi}';
+    return 'ScanResult{device: $device, advertisementData: $advertisementData, rssi: $rssi, buff: $buff}';
   }
 }
 

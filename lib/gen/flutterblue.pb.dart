@@ -251,7 +251,7 @@ class ScanResult extends $pb.GeneratedMessage {
             subBuilder: AdvertisementData.create)
         ..a<$core.int>(3, 'rssi', $pb.PbFieldType.O3)
         ..hasRequiredFields = false;
-
+  var buff;
   ScanResult._() : super();
   factory ScanResult() => create();
   factory ScanResult.fromBuffer($core.List<$core.int> i,
