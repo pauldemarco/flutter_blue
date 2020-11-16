@@ -40,6 +40,14 @@ class FlutterBlue {
   Stream<bool> get isScanning => _isScanning.stream;
 
   BehaviorSubject<List<ScanResult>> _scanResults = BehaviorSubject.seeded([]);
+  
+  /// Returns a stream that is a list of [ScanResult] results while a scan is in progress.
+  ///
+  /// The list emitted is all the scanned results as of the last initiated scan. When a scan is
+  /// first started, an empty list is emitted. The returned stream is never closed.
+  ///
+  /// One use for [scanResults] is as the stream in a StreamBuilder to display the
+  /// results of a scan in real time while the scan is in progress.
   Stream<List<ScanResult>> get scanResults => _scanResults.stream;
 
   PublishSubject _stopScanPill = new PublishSubject();
@@ -73,8 +81,12 @@ class FlutterBlue {
     }
   }
 
-  /// Starts a scan for Bluetooth Low Energy devices
-  /// Timeout closes the stream after a specified [Duration]
+  /// Starts a scan for Bluetooth Low Energy devices and returns a stream
+  /// of the [ScanResult] results as they are received.
+  ///
+  /// timeout calls stopStream after a specified [Duration].
+  /// You can also get a list of ongoing results in the [scanResults] stream.
+  /// If scanning is already in progress, this will throw an [Exception].
   Stream<ScanResult> scan({
     ScanMode scanMode = ScanMode.lowLatency,
     List<Guid> withServices = const [],
@@ -132,6 +144,14 @@ class FlutterBlue {
     });
   }
 
+  /// Starts a scan and returns a future that will complete once the scan has finished.
+  /// 
+  /// Once a scan is started, call [stopScan] to stop the scan and complete the returned future.
+  ///
+  /// timeout automatically stops the scan after a specified [Duration].
+  ///
+  /// To observe the results while the scan is in progress, listen to the [scanResults] stream, 
+  /// or call [scan] instead.
   Future startScan({
     ScanMode scanMode = ScanMode.lowLatency,
     List<Guid> withServices = const [],
