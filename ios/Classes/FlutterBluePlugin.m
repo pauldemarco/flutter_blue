@@ -35,6 +35,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
+@property(nonatomic) NSMutableDictionary *connectedPeripherals;
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
@@ -50,6 +51,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   instance.channel = channel;
   instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
   instance.scannedPeripherals = [NSMutableDictionary new];
+  instance.connectedPeripherals = [NSMutableDictionary new];
   instance.servicesThatNeedDiscovered = [NSMutableArray new];
   instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
   instance.logLevel = emergency;
@@ -378,6 +380,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   NSLog(@"didConnectPeripheral");
   // Register self as delegate for peripheral
   peripheral.delegate = self;
+
+  // Hold reference to the connected peripheral
+  [self.connectedPeripherals setObject:peripheral
+                              forKey:[[peripheral identifier] UUIDString]];
   
   // Send initial mtu size
   uint32_t mtu = [self getMtu:peripheral];
@@ -391,6 +397,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   NSLog(@"didDisconnectPeripheral");
   // Unregister self as delegate for peripheral, not working #42
   peripheral.delegate = nil;
+
+  // Remove reference as a connected peripheral
+  [self.connectedPeripherals removeObjectForKey:[[peripheral identifier] UUIDString]];
   
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
@@ -398,6 +407,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
   // TODO:?
+
+  // Make sure there is no reference as a connected peripheral
+  [self.connectedPeripherals removeObjectForKey:[[peripheral identifier] UUIDString]];
 }
 
 //
