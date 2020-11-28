@@ -247,17 +247,19 @@ class DeviceIdentifier {
 }
 
 class ScanResult {
-  const ScanResult({this.device, this.advertisementData, this.rssi});
+  const ScanResult({this.device, this.advertisementData, this.rssi, this.timestamp});
 
   ScanResult.fromProto(protos.ScanResult p)
       : device = new BluetoothDevice.fromProto(p.device),
         advertisementData =
             new AdvertisementData.fromProto(p.advertisementData),
-        rssi = p.rssi;
+        rssi = p.rssi,
+        timestamp = DateTime.now();
 
   final BluetoothDevice device;
   final AdvertisementData advertisementData;
   final int rssi;
+  final DateTime timestamp;
 
   @override
   bool operator ==(Object other) =>
