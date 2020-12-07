@@ -25,8 +25,7 @@ class AudioCommon
         
         do {
             try
-                audioSession.setCategory(AVAudioSession.Category.playAndRecord
-                    /*, with: AVAudioSession.CategoryOptions.mixWithOthers*/)
+                audioSession.setCategory(.playback, options: .mixWithOthers)
         } catch {
             print("couldn't set category \(error)")
             return

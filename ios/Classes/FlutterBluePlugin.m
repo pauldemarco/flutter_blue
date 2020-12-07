@@ -221,7 +221,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       // Get correct write type
       CBCharacteristicWriteType type = ([request writeType] == ProtosWriteCharacteristicRequest_WriteType_WithoutResponse) ? CBCharacteristicWriteWithoutResponse : CBCharacteristicWriteWithResponse;
       // Write to characteristic
-      NSLog(@"writeCharacteristic");
+      NSLog(@"writeCharacteristic %@ (%@)",[request value],characteristic);
 
       [peripheral writeValue:[request value] forCharacteristic:characteristic type:type];
       result(nil);
@@ -445,14 +445,14 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   // Loop through and discover characteristics and secondary services
   [_servicesThatNeedDiscovered addObjectsFromArray:peripheral.services];
   for(CBService *s in [peripheral services]) {
-    NSLog(@"Found service: %@", [s.UUID UUIDString]);
+    NSLog(@"  Found service: %@", [s.UUID UUIDString]);
     [peripheral discoverCharacteristics:nil forService:s];
     // [peripheral discoverIncludedServices:nil forService:s]; // Secondary services in the future (#8)
   }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
-  NSLog(@"didDiscoverCharacteristicsForService");
+  NSLog(@"didDiscoverCharacteristicsForService %@",service );
   // Loop through and discover descriptors for characteristics
   [_servicesThatNeedDiscovered removeObject:service];
   [_characteristicsThatNeedDiscovered addObjectsFromArray:service.characteristics];
@@ -462,7 +462,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-  NSLog(@"SNTX didDiscoverDescriptorsForCharacteristic");
+  NSLog(@"SNTX didDiscoverDescriptorsForCharacteristic %@",characteristic);
   [_characteristicsThatNeedDiscovered removeObject:characteristic];
   if(_servicesThatNeedDiscovered.count > 0 || _characteristicsThatNeedDiscovered.count > 0) {
     // Still discovering
@@ -830,7 +830,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 - (ProtosBluetoothService*)toServiceProto:(CBPeripheral *)peripheral service:(CBService *)service  {
   ProtosBluetoothService *result = [[ProtosBluetoothService alloc] init];
   NSLog(@"peripheral uuid:%@", [peripheral.identifier UUIDString]);
-  NSLog(@"service uuid:%@", [service.UUID fullUUIDString]);
+  NSLog(@"   service uuid:%@", [service.UUID fullUUIDString]);
   [result setRemoteId:[peripheral.identifier UUIDString]];
   [result setUuid:[service.UUID fullUUIDString]];
   [result setIsPrimary:[service isPrimary]];
