@@ -795,7 +795,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     // SET PIN //
                     if(devicePin != null)
                         setPin(bluetoothDevice.getAddress().toString(),devicePin);
-                    //sink.success("pairRequest");
                 }
             }
         };
