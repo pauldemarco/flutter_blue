@@ -797,12 +797,18 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 if(BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action))
                 {
                     BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    int varient = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, -1);
+
+                    System.out.println(varient);
 
                     // SET PIN //
                     if(devicePin != null){
                         // HIDE SYSTEM PIN REQUEST
-                        abortBroadcast();
-                        setPin(bluetoothDevice.getAddress().toString(),devicePin);
+                        if(varient == BluetoothDevice.PAIRING_VARIANT_PIN){
+                            abortBroadcast();
+                            setPin(bluetoothDevice.getAddress().toString(),devicePin);
+                        }
+                        //bluetoothDevice.setPairingConfirmation(true);
                     }
                 }
             }
