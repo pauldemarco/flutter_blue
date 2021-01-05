@@ -29,7 +29,7 @@ class Int32Value extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   Int32Value clone() => Int32Value()..mergeFromMessage(this);
   Int32Value copyWith(void Function(Int32Value) updates) =>
-      super.copyWith((message) => updates(message as Int32Value));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static Int32Value create() => Int32Value._();
@@ -72,7 +72,7 @@ class BluetoothState extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   BluetoothState clone() => BluetoothState()..mergeFromMessage(this);
   BluetoothState copyWith(void Function(BluetoothState) updates) =>
-      super.copyWith((message) => updates(message as BluetoothState));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static BluetoothState create() => BluetoothState._();
@@ -124,7 +124,7 @@ class AdvertisementData extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   AdvertisementData clone() => AdvertisementData()..mergeFromMessage(this);
   AdvertisementData copyWith(void Function(AdvertisementData) updates) =>
-      super.copyWith((message) => updates(message as AdvertisementData));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static AdvertisementData create() => AdvertisementData._();
@@ -203,7 +203,7 @@ class ScanSettings extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   ScanSettings clone() => ScanSettings()..mergeFromMessage(this);
   ScanSettings copyWith(void Function(ScanSettings) updates) =>
-      super.copyWith((message) => updates(message as ScanSettings));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ScanSettings create() => ScanSettings._();
@@ -262,7 +262,7 @@ class ScanResult extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   ScanResult clone() => ScanResult()..mergeFromMessage(this);
   ScanResult copyWith(void Function(ScanResult) updates) =>
-      super.copyWith((message) => updates(message as ScanResult));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ScanResult create() => ScanResult._();
@@ -331,7 +331,7 @@ class ConnectRequest extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   ConnectRequest clone() => ConnectRequest()..mergeFromMessage(this);
   ConnectRequest copyWith(void Function(ConnectRequest) updates) =>
-      super.copyWith((message) => updates(message as ConnectRequest));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ConnectRequest create() => ConnectRequest._();
@@ -389,7 +389,7 @@ class BluetoothDevice extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   BluetoothDevice clone() => BluetoothDevice()..mergeFromMessage(this);
   BluetoothDevice copyWith(void Function(BluetoothDevice) updates) =>
-      super.copyWith((message) => updates(message as BluetoothDevice));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static BluetoothDevice create() => BluetoothDevice._();
@@ -460,7 +460,7 @@ class BluetoothService extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   BluetoothService clone() => BluetoothService()..mergeFromMessage(this);
   BluetoothService copyWith(void Function(BluetoothService) updates) =>
-      super.copyWith((message) => updates(message as BluetoothService));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static BluetoothService create() => BluetoothService._();
@@ -541,7 +541,7 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
       BluetoothCharacteristic()..mergeFromMessage(this);
   BluetoothCharacteristic copyWith(
           void Function(BluetoothCharacteristic) updates) =>
-      super.copyWith((message) => updates(message as BluetoothCharacteristic));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static BluetoothCharacteristic create() => BluetoothCharacteristic._();
@@ -651,7 +651,7 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   BluetoothDescriptor clone() => BluetoothDescriptor()..mergeFromMessage(this);
   BluetoothDescriptor copyWith(void Function(BluetoothDescriptor) updates) =>
-      super.copyWith((message) => updates(message as BluetoothDescriptor));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static BluetoothDescriptor create() => BluetoothDescriptor._();
@@ -751,7 +751,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
       CharacteristicProperties()..mergeFromMessage(this);
   CharacteristicProperties copyWith(
           void Function(CharacteristicProperties) updates) =>
-      super.copyWith((message) => updates(message as CharacteristicProperties));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static CharacteristicProperties create() => CharacteristicProperties._();
@@ -904,7 +904,7 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
       DiscoverServicesResult()..mergeFromMessage(this);
   DiscoverServicesResult copyWith(
           void Function(DiscoverServicesResult) updates) =>
-      super.copyWith((message) => updates(message as DiscoverServicesResult));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static DiscoverServicesResult create() => DiscoverServicesResult._();
@@ -953,8 +953,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
       ReadCharacteristicRequest()..mergeFromMessage(this);
   ReadCharacteristicRequest copyWith(
           void Function(ReadCharacteristicRequest) updates) =>
-      super
-          .copyWith((message) => updates(message as ReadCharacteristicRequest));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ReadCharacteristicRequest create() => ReadCharacteristicRequest._();
@@ -1035,8 +1034,7 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
       ReadCharacteristicResponse()..mergeFromMessage(this);
   ReadCharacteristicResponse copyWith(
           void Function(ReadCharacteristicResponse) updates) =>
-      super.copyWith(
-          (message) => updates(message as ReadCharacteristicResponse));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ReadCharacteristicResponse create() => ReadCharacteristicResponse._();
@@ -1097,7 +1095,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
       ReadDescriptorRequest()..mergeFromMessage(this);
   ReadDescriptorRequest copyWith(
           void Function(ReadDescriptorRequest) updates) =>
-      super.copyWith((message) => updates(message as ReadDescriptorRequest));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ReadDescriptorRequest create() => ReadDescriptorRequest._();
@@ -1190,7 +1188,7 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
       ReadDescriptorResponse()..mergeFromMessage(this);
   ReadDescriptorResponse copyWith(
           void Function(ReadDescriptorResponse) updates) =>
-      super.copyWith((message) => updates(message as ReadDescriptorResponse));
+                    rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ReadDescriptorResponse create() => ReadDescriptorResponse._();
@@ -1256,8 +1254,7 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
       WriteCharacteristicRequest()..mergeFromMessage(this);
   WriteCharacteristicRequest copyWith(
           void Function(WriteCharacteristicRequest) updates) =>
-      super.copyWith(
-          (message) => updates(message as WriteCharacteristicRequest));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static WriteCharacteristicRequest create() => WriteCharacteristicRequest._();
@@ -1363,8 +1360,7 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
       WriteCharacteristicResponse()..mergeFromMessage(this);
   WriteCharacteristicResponse copyWith(
           void Function(WriteCharacteristicResponse) updates) =>
-      super.copyWith(
-          (message) => updates(message as WriteCharacteristicResponse));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static WriteCharacteristicResponse create() =>
@@ -1427,7 +1423,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
       WriteDescriptorRequest()..mergeFromMessage(this);
   WriteDescriptorRequest copyWith(
           void Function(WriteDescriptorRequest) updates) =>
-      super.copyWith((message) => updates(message as WriteDescriptorRequest));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static WriteDescriptorRequest create() => WriteDescriptorRequest._();
@@ -1532,7 +1528,7 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
       WriteDescriptorResponse()..mergeFromMessage(this);
   WriteDescriptorResponse copyWith(
           void Function(WriteDescriptorResponse) updates) =>
-      super.copyWith((message) => updates(message as WriteDescriptorResponse));
+              rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static WriteDescriptorResponse create() => WriteDescriptorResponse._();
@@ -1593,7 +1589,7 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
       SetNotificationRequest()..mergeFromMessage(this);
   SetNotificationRequest copyWith(
           void Function(SetNotificationRequest) updates) =>
-      super.copyWith((message) => updates(message as SetNotificationRequest));
+                    rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static SetNotificationRequest create() => SetNotificationRequest._();
@@ -1687,7 +1683,7 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
       SetNotificationResponse()..mergeFromMessage(this);
   SetNotificationResponse copyWith(
           void Function(SetNotificationResponse) updates) =>
-      super.copyWith((message) => updates(message as SetNotificationResponse));
+                rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static SetNotificationResponse create() => SetNotificationResponse._();
@@ -1758,7 +1754,7 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
       OnCharacteristicChanged()..mergeFromMessage(this);
   OnCharacteristicChanged copyWith(
           void Function(OnCharacteristicChanged) updates) =>
-      super.copyWith((message) => updates(message as OnCharacteristicChanged));
+                    rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static OnCharacteristicChanged create() => OnCharacteristicChanged._();
@@ -1818,7 +1814,7 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   DeviceStateResponse clone() => DeviceStateResponse()..mergeFromMessage(this);
   DeviceStateResponse copyWith(void Function(DeviceStateResponse) updates) =>
-      super.copyWith((message) => updates(message as DeviceStateResponse));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static DeviceStateResponse create() => DeviceStateResponse._();
@@ -1874,7 +1870,7 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
       ConnectedDevicesResponse()..mergeFromMessage(this);
   ConnectedDevicesResponse copyWith(
           void Function(ConnectedDevicesResponse) updates) =>
-      super.copyWith((message) => updates(message as ConnectedDevicesResponse));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static ConnectedDevicesResponse create() => ConnectedDevicesResponse._();
@@ -1907,7 +1903,7 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   MtuSizeRequest clone() => MtuSizeRequest()..mergeFromMessage(this);
   MtuSizeRequest copyWith(void Function(MtuSizeRequest) updates) =>
-      super.copyWith((message) => updates(message as MtuSizeRequest));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static MtuSizeRequest create() => MtuSizeRequest._();
@@ -1961,7 +1957,7 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
       create()..mergeFromJson(i, r);
   MtuSizeResponse clone() => MtuSizeResponse()..mergeFromMessage(this);
   MtuSizeResponse copyWith(void Function(MtuSizeResponse) updates) =>
-      super.copyWith((message) => updates(message as MtuSizeResponse));
+      rebuild((message) => updates(message));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static MtuSizeResponse create() => MtuSizeResponse._();
