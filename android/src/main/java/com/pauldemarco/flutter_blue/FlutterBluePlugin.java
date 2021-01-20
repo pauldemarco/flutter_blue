@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -40,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.lang.reflect.Method;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -403,6 +405,19 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 }
                 break;
             }
+
+            case "refreshServices":
+             {
+                try{
+                    String deviceId = (String)call.argument("id");
+                    boolean callback = refreshServices(deviceId);
+                    result.success(callback);
+                }catch(Exception e){
+                    result.error("set_pin_error", e.getMessage(), e);
+                }
+                break;
+            }
+
 
             case "discoverServices":
             {
@@ -855,6 +870,26 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
         device.setPin(pin.getBytes());
         device.createBond();
+        return true;
+    }
+
+    /**
+     * Refresh services of a device
+     * @param deviceId
+     * @return
+     */
+    private boolean refreshServices(String deviceId) {
+        try {
+            BluetoothGatt gatt = locateGatt(deviceId);
+            // BluetoothGatt gatt
+            final Method refresh = gatt.getClass().getMethod("refresh");
+            if (refresh != null) {
+                refresh.invoke(gatt);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
         return true;
     }
 

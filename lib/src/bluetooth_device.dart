@@ -83,6 +83,14 @@ class BluetoothDevice {
         .invokeMethod('setPin', {"id": id.toString(), "pin": pin});
   }
 
+  /**
+   * Refresh device services
+   */
+  Future refreshServices() async {
+    return await FlutterBlue.instance._channel
+        .invokeMethod('refreshServices', {"id": id.toString()});
+  }
+
   BehaviorSubject<List<BluetoothService>> _services =
       BehaviorSubject.seeded([]);
 
