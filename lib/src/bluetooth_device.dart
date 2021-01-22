@@ -84,11 +84,13 @@ class BluetoothDevice {
   }
 
   /**
-   * Refresh device services
+   * Refresh device services (Android Only)
    */
   Future refreshServices() async {
-    return await FlutterBlue.instance._channel
-        .invokeMethod('refreshServices', {"id": id.toString()});
+    if (Platform.isAndroid) {
+      return await FlutterBlue.instance._channel
+          .invokeMethod('refreshServices', {"id": id.toString()});
+    }
   }
 
   BehaviorSubject<List<BluetoothService>> _services =
