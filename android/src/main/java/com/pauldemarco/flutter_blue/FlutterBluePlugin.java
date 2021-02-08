@@ -144,7 +144,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             final PluginRegistry.Registrar registrar,
             final ActivityPluginBinding activityBinding) {
         synchronized (initializationLock) {
-            Log.i(TAG, "setup");
             this.activity = activity;
             this.context = application;
             channel = new MethodChannel(messenger, NAMESPACE + "/methods");
@@ -164,10 +163,10 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     }
 
     private void tearDown() {
-        Log.i(TAG, "teardown");
         context = null;
         activityBinding.removeRequestPermissionsResultListener(this);
         activityBinding = null;
+        activity = null;
         channel.setMethodCallHandler(null);
         channel = null;
         stateChannel.setStreamHandler(null);
@@ -1000,13 +999,20 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     private void invokeMethodUIThread(final String name, final byte[] byteArray)
     {
-        activity.runOnUiThread(
+        // this activity should never be null, but there may exist a timing where a method is invoked before the plugin is setup
+        // if the activity is null this may lead to a future not timing out properly.
+        if (activity != null) {
+            activity.runOnUiThread(
                 new Runnable() {
                     @Override
                     public void run() {
-                        channel.invokeMethod(name, byteArray);
+                        if (channel != null) {
+                            channel.invokeMethod(name, byteArray);
+                        }
                     }
                 });
+        }
+        
     }
 
     // BluetoothDeviceCache contains any other cached information not stored in Android Bluetooth API
