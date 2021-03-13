@@ -8,7 +8,7 @@ class BluetoothCharacteristic {
   final Guid uuid;
   final DeviceIdentifier deviceId;
   final Guid serviceUuid;
-  final Guid secondaryServiceUuid;
+  final Guid? secondaryServiceUuid;
   final CharacteristicProperties properties;
   final List<BluetoothDescriptor> descriptors;
   bool get isNotifying {
@@ -27,7 +27,7 @@ class BluetoothCharacteristic {
         _onValueChangedStream,
       ]);
 
-  List<int> get lastValue => _value.value;
+  List<int> get lastValue => _value.value ?? [];
 
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
       : uuid = new Guid(p.uuid),
