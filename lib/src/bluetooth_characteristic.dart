@@ -114,7 +114,7 @@ class BluetoothCharacteristic {
       ..characteristicUuid = uuid.toString()
       ..serviceUuid = serviceUuid.toString()
       ..writeType =
-          protos.WriteCharacteristicRequest_WriteType.valueOf(type.index)
+          protos.WriteCharacteristicRequest_WriteType.valueOf(type.index)!
       ..value = value;
 
     var result = await FlutterBlue.instance._channel
