@@ -148,7 +148,7 @@ class BluetoothDevice {
 
   @override
   String toString() {
-    return 'BluetoothDevice{id: $id, name: $name, type: $type, isDiscoveringServices: ${_isDiscoveringServices?.value}, _services: ${_services?.value}';
+    return 'BluetoothDevice{id: $id, name: $name, type: $type, isDiscoveringServices: ${_isDiscoveringServices.value}, _services: ${_services.value}';
   }
 }
 
