@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: flutterblue.proto
 //
-// @dart = 2.7
+// @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 import 'dart:core' as $core;
@@ -21,7 +21,7 @@ class Int32Value extends $pb.GeneratedMessage {
 
   Int32Value._() : super();
   factory Int32Value({
-    $core.int value,
+    $core.int? value,
   }) {
     final _result = create();
     if (value != null) {
@@ -48,7 +48,7 @@ class Int32Value extends $pb.GeneratedMessage {
   static $pb.PbList<Int32Value> createRepeated() => $pb.PbList<Int32Value>();
   @$core.pragma('dart2js:noInline')
   static Int32Value getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Int32Value>(create);
-  static Int32Value _defaultInstance;
+  static Int32Value? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get value => $_getIZ(0);
@@ -68,7 +68,7 @@ class BluetoothState extends $pb.GeneratedMessage {
 
   BluetoothState._() : super();
   factory BluetoothState({
-    BluetoothState_State state,
+    BluetoothState_State? state,
   }) {
     final _result = create();
     if (state != null) {
@@ -95,7 +95,7 @@ class BluetoothState extends $pb.GeneratedMessage {
   static $pb.PbList<BluetoothState> createRepeated() => $pb.PbList<BluetoothState>();
   @$core.pragma('dart2js:noInline')
   static BluetoothState getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BluetoothState>(create);
-  static BluetoothState _defaultInstance;
+  static BluetoothState? _defaultInstance;
 
   @$pb.TagNumber(1)
   BluetoothState_State get state => $_getN(0);
@@ -120,12 +120,12 @@ class AdvertisementData extends $pb.GeneratedMessage {
 
   AdvertisementData._() : super();
   factory AdvertisementData({
-    $core.String localName,
-    Int32Value txPowerLevel,
-    $core.bool connectable,
-    $core.Map<$core.int, $core.List<$core.int>> manufacturerData,
-    $core.Map<$core.String, $core.List<$core.int>> serviceData,
-    $core.Iterable<$core.String> serviceUuids,
+    $core.String? localName,
+    Int32Value? txPowerLevel,
+    $core.bool? connectable,
+    $core.Map<$core.int, $core.List<$core.int>>? manufacturerData,
+    $core.Map<$core.String, $core.List<$core.int>>? serviceData,
+    $core.Iterable<$core.String>? serviceUuids,
   }) {
     final _result = create();
     if (localName != null) {
@@ -167,7 +167,7 @@ class AdvertisementData extends $pb.GeneratedMessage {
   static $pb.PbList<AdvertisementData> createRepeated() => $pb.PbList<AdvertisementData>();
   @$core.pragma('dart2js:noInline')
   static AdvertisementData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AdvertisementData>(create);
-  static AdvertisementData _defaultInstance;
+  static AdvertisementData? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get localName => $_getSZ(0);
@@ -218,9 +218,9 @@ class ScanSettings extends $pb.GeneratedMessage {
 
   ScanSettings._() : super();
   factory ScanSettings({
-    $core.int androidScanMode,
-    $core.Iterable<$core.String> serviceUuids,
-    $core.bool allowDuplicates,
+    $core.int? androidScanMode,
+    $core.Iterable<$core.String>? serviceUuids,
+    $core.bool? allowDuplicates,
   }) {
     final _result = create();
     if (androidScanMode != null) {
@@ -253,7 +253,7 @@ class ScanSettings extends $pb.GeneratedMessage {
   static $pb.PbList<ScanSettings> createRepeated() => $pb.PbList<ScanSettings>();
   @$core.pragma('dart2js:noInline')
   static ScanSettings getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ScanSettings>(create);
-  static ScanSettings _defaultInstance;
+  static ScanSettings? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.int get androidScanMode => $_getIZ(0);
@@ -287,9 +287,9 @@ class ScanResult extends $pb.GeneratedMessage {
 
   ScanResult._() : super();
   factory ScanResult({
-    BluetoothDevice device,
-    AdvertisementData advertisementData,
-    $core.int rssi,
+    BluetoothDevice? device,
+    AdvertisementData? advertisementData,
+    $core.int? rssi,
   }) {
     final _result = create();
     if (device != null) {
@@ -322,7 +322,7 @@ class ScanResult extends $pb.GeneratedMessage {
   static $pb.PbList<ScanResult> createRepeated() => $pb.PbList<ScanResult>();
   @$core.pragma('dart2js:noInline')
   static ScanResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ScanResult>(create);
-  static ScanResult _defaultInstance;
+  static ScanResult? _defaultInstance;
 
   @$pb.TagNumber(1)
   BluetoothDevice get device => $_getN(0);
@@ -365,8 +365,8 @@ class ConnectRequest extends $pb.GeneratedMessage {
 
   ConnectRequest._() : super();
   factory ConnectRequest({
-    $core.String remoteId,
-    $core.bool androidAutoConnect,
+    $core.String? remoteId,
+    $core.bool? androidAutoConnect,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -396,7 +396,7 @@ class ConnectRequest extends $pb.GeneratedMessage {
   static $pb.PbList<ConnectRequest> createRepeated() => $pb.PbList<ConnectRequest>();
   @$core.pragma('dart2js:noInline')
   static ConnectRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ConnectRequest>(create);
-  static ConnectRequest _defaultInstance;
+  static ConnectRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -427,9 +427,9 @@ class BluetoothDevice extends $pb.GeneratedMessage {
 
   BluetoothDevice._() : super();
   factory BluetoothDevice({
-    $core.String remoteId,
-    $core.String name,
-    BluetoothDevice_Type type,
+    $core.String? remoteId,
+    $core.String? name,
+    BluetoothDevice_Type? type,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -462,7 +462,7 @@ class BluetoothDevice extends $pb.GeneratedMessage {
   static $pb.PbList<BluetoothDevice> createRepeated() => $pb.PbList<BluetoothDevice>();
   @$core.pragma('dart2js:noInline')
   static BluetoothDevice getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BluetoothDevice>(create);
-  static BluetoothDevice _defaultInstance;
+  static BluetoothDevice? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -504,11 +504,11 @@ class BluetoothService extends $pb.GeneratedMessage {
 
   BluetoothService._() : super();
   factory BluetoothService({
-    $core.String uuid,
-    $core.String remoteId,
-    $core.bool isPrimary,
-    $core.Iterable<BluetoothCharacteristic> characteristics,
-    $core.Iterable<BluetoothService> includedServices,
+    $core.String? uuid,
+    $core.String? remoteId,
+    $core.bool? isPrimary,
+    $core.Iterable<BluetoothCharacteristic>? characteristics,
+    $core.Iterable<BluetoothService>? includedServices,
   }) {
     final _result = create();
     if (uuid != null) {
@@ -547,7 +547,7 @@ class BluetoothService extends $pb.GeneratedMessage {
   static $pb.PbList<BluetoothService> createRepeated() => $pb.PbList<BluetoothService>();
   @$core.pragma('dart2js:noInline')
   static BluetoothService getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BluetoothService>(create);
-  static BluetoothService _defaultInstance;
+  static BluetoothService? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get uuid => $_getSZ(0);
@@ -597,13 +597,13 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
 
   BluetoothCharacteristic._() : super();
   factory BluetoothCharacteristic({
-    $core.String uuid,
-    $core.String remoteId,
-    $core.String serviceUuid,
-    $core.String secondaryServiceUuid,
-    $core.Iterable<BluetoothDescriptor> descriptors,
-    CharacteristicProperties properties,
-    $core.List<$core.int> value,
+    $core.String? uuid,
+    $core.String? remoteId,
+    $core.String? serviceUuid,
+    $core.String? secondaryServiceUuid,
+    $core.Iterable<BluetoothDescriptor>? descriptors,
+    CharacteristicProperties? properties,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (uuid != null) {
@@ -648,7 +648,7 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   static $pb.PbList<BluetoothCharacteristic> createRepeated() => $pb.PbList<BluetoothCharacteristic>();
   @$core.pragma('dart2js:noInline')
   static BluetoothCharacteristic getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BluetoothCharacteristic>(create);
-  static BluetoothCharacteristic _defaultInstance;
+  static BluetoothCharacteristic? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get uuid => $_getSZ(0);
@@ -722,11 +722,11 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
 
   BluetoothDescriptor._() : super();
   factory BluetoothDescriptor({
-    $core.String uuid,
-    $core.String remoteId,
-    $core.String serviceUuid,
-    $core.String characteristicUuid,
-    $core.List<$core.int> value,
+    $core.String? uuid,
+    $core.String? remoteId,
+    $core.String? serviceUuid,
+    $core.String? characteristicUuid,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (uuid != null) {
@@ -765,7 +765,7 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   static $pb.PbList<BluetoothDescriptor> createRepeated() => $pb.PbList<BluetoothDescriptor>();
   @$core.pragma('dart2js:noInline')
   static BluetoothDescriptor getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BluetoothDescriptor>(create);
-  static BluetoothDescriptor _defaultInstance;
+  static BluetoothDescriptor? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get uuid => $_getSZ(0);
@@ -830,16 +830,16 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
 
   CharacteristicProperties._() : super();
   factory CharacteristicProperties({
-    $core.bool broadcast,
-    $core.bool read,
-    $core.bool writeWithoutResponse,
-    $core.bool write,
-    $core.bool notify,
-    $core.bool indicate,
-    $core.bool authenticatedSignedWrites,
-    $core.bool extendedProperties,
-    $core.bool notifyEncryptionRequired,
-    $core.bool indicateEncryptionRequired,
+    $core.bool? broadcast,
+    $core.bool? read,
+    $core.bool? writeWithoutResponse,
+    $core.bool? write,
+    $core.bool? notify,
+    $core.bool? indicate,
+    $core.bool? authenticatedSignedWrites,
+    $core.bool? extendedProperties,
+    $core.bool? notifyEncryptionRequired,
+    $core.bool? indicateEncryptionRequired,
   }) {
     final _result = create();
     if (broadcast != null) {
@@ -893,7 +893,7 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   static $pb.PbList<CharacteristicProperties> createRepeated() => $pb.PbList<CharacteristicProperties>();
   @$core.pragma('dart2js:noInline')
   static CharacteristicProperties getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<CharacteristicProperties>(create);
-  static CharacteristicProperties _defaultInstance;
+  static CharacteristicProperties? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.bool get broadcast => $_getBF(0);
@@ -995,8 +995,8 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
 
   DiscoverServicesResult._() : super();
   factory DiscoverServicesResult({
-    $core.String remoteId,
-    $core.Iterable<BluetoothService> services,
+    $core.String? remoteId,
+    $core.Iterable<BluetoothService>? services,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1026,7 +1026,7 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
   static $pb.PbList<DiscoverServicesResult> createRepeated() => $pb.PbList<DiscoverServicesResult>();
   @$core.pragma('dart2js:noInline')
   static DiscoverServicesResult getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DiscoverServicesResult>(create);
-  static DiscoverServicesResult _defaultInstance;
+  static DiscoverServicesResult? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1052,10 +1052,10 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
 
   ReadCharacteristicRequest._() : super();
   factory ReadCharacteristicRequest({
-    $core.String remoteId,
-    $core.String characteristicUuid,
-    $core.String serviceUuid,
-    $core.String secondaryServiceUuid,
+    $core.String? remoteId,
+    $core.String? characteristicUuid,
+    $core.String? serviceUuid,
+    $core.String? secondaryServiceUuid,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1091,7 +1091,7 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   static $pb.PbList<ReadCharacteristicRequest> createRepeated() => $pb.PbList<ReadCharacteristicRequest>();
   @$core.pragma('dart2js:noInline')
   static ReadCharacteristicRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadCharacteristicRequest>(create);
-  static ReadCharacteristicRequest _defaultInstance;
+  static ReadCharacteristicRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1139,8 +1139,8 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
 
   ReadCharacteristicResponse._() : super();
   factory ReadCharacteristicResponse({
-    $core.String remoteId,
-    BluetoothCharacteristic characteristic,
+    $core.String? remoteId,
+    BluetoothCharacteristic? characteristic,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1170,7 +1170,7 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
   static $pb.PbList<ReadCharacteristicResponse> createRepeated() => $pb.PbList<ReadCharacteristicResponse>();
   @$core.pragma('dart2js:noInline')
   static ReadCharacteristicResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadCharacteristicResponse>(create);
-  static ReadCharacteristicResponse _defaultInstance;
+  static ReadCharacteristicResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1205,11 +1205,11 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
 
   ReadDescriptorRequest._() : super();
   factory ReadDescriptorRequest({
-    $core.String remoteId,
-    $core.String descriptorUuid,
-    $core.String serviceUuid,
-    $core.String secondaryServiceUuid,
-    $core.String characteristicUuid,
+    $core.String? remoteId,
+    $core.String? descriptorUuid,
+    $core.String? serviceUuid,
+    $core.String? secondaryServiceUuid,
+    $core.String? characteristicUuid,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1248,7 +1248,7 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   static $pb.PbList<ReadDescriptorRequest> createRepeated() => $pb.PbList<ReadDescriptorRequest>();
   @$core.pragma('dart2js:noInline')
   static ReadDescriptorRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadDescriptorRequest>(create);
-  static ReadDescriptorRequest _defaultInstance;
+  static ReadDescriptorRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1305,8 +1305,8 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
 
   ReadDescriptorResponse._() : super();
   factory ReadDescriptorResponse({
-    ReadDescriptorRequest request,
-    $core.List<$core.int> value,
+    ReadDescriptorRequest? request,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (request != null) {
@@ -1336,7 +1336,7 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
   static $pb.PbList<ReadDescriptorResponse> createRepeated() => $pb.PbList<ReadDescriptorResponse>();
   @$core.pragma('dart2js:noInline')
   static ReadDescriptorResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ReadDescriptorResponse>(create);
-  static ReadDescriptorResponse _defaultInstance;
+  static ReadDescriptorResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   ReadDescriptorRequest get request => $_getN(0);
@@ -1372,12 +1372,12 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
 
   WriteCharacteristicRequest._() : super();
   factory WriteCharacteristicRequest({
-    $core.String remoteId,
-    $core.String characteristicUuid,
-    $core.String serviceUuid,
-    $core.String secondaryServiceUuid,
-    WriteCharacteristicRequest_WriteType writeType,
-    $core.List<$core.int> value,
+    $core.String? remoteId,
+    $core.String? characteristicUuid,
+    $core.String? serviceUuid,
+    $core.String? secondaryServiceUuid,
+    WriteCharacteristicRequest_WriteType? writeType,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1419,7 +1419,7 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   static $pb.PbList<WriteCharacteristicRequest> createRepeated() => $pb.PbList<WriteCharacteristicRequest>();
   @$core.pragma('dart2js:noInline')
   static WriteCharacteristicRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WriteCharacteristicRequest>(create);
-  static WriteCharacteristicRequest _defaultInstance;
+  static WriteCharacteristicRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1485,8 +1485,8 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
 
   WriteCharacteristicResponse._() : super();
   factory WriteCharacteristicResponse({
-    WriteCharacteristicRequest request,
-    $core.bool success,
+    WriteCharacteristicRequest? request,
+    $core.bool? success,
   }) {
     final _result = create();
     if (request != null) {
@@ -1516,7 +1516,7 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
   static $pb.PbList<WriteCharacteristicResponse> createRepeated() => $pb.PbList<WriteCharacteristicResponse>();
   @$core.pragma('dart2js:noInline')
   static WriteCharacteristicResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WriteCharacteristicResponse>(create);
-  static WriteCharacteristicResponse _defaultInstance;
+  static WriteCharacteristicResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   WriteCharacteristicRequest get request => $_getN(0);
@@ -1552,12 +1552,12 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
 
   WriteDescriptorRequest._() : super();
   factory WriteDescriptorRequest({
-    $core.String remoteId,
-    $core.String descriptorUuid,
-    $core.String serviceUuid,
-    $core.String secondaryServiceUuid,
-    $core.String characteristicUuid,
-    $core.List<$core.int> value,
+    $core.String? remoteId,
+    $core.String? descriptorUuid,
+    $core.String? serviceUuid,
+    $core.String? secondaryServiceUuid,
+    $core.String? characteristicUuid,
+    $core.List<$core.int>? value,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1599,7 +1599,7 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   static $pb.PbList<WriteDescriptorRequest> createRepeated() => $pb.PbList<WriteDescriptorRequest>();
   @$core.pragma('dart2js:noInline')
   static WriteDescriptorRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WriteDescriptorRequest>(create);
-  static WriteDescriptorRequest _defaultInstance;
+  static WriteDescriptorRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1665,8 +1665,8 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
 
   WriteDescriptorResponse._() : super();
   factory WriteDescriptorResponse({
-    WriteDescriptorRequest request,
-    $core.bool success,
+    WriteDescriptorRequest? request,
+    $core.bool? success,
   }) {
     final _result = create();
     if (request != null) {
@@ -1696,7 +1696,7 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
   static $pb.PbList<WriteDescriptorResponse> createRepeated() => $pb.PbList<WriteDescriptorResponse>();
   @$core.pragma('dart2js:noInline')
   static WriteDescriptorResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<WriteDescriptorResponse>(create);
-  static WriteDescriptorResponse _defaultInstance;
+  static WriteDescriptorResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   WriteDescriptorRequest get request => $_getN(0);
@@ -1731,11 +1731,11 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
 
   SetNotificationRequest._() : super();
   factory SetNotificationRequest({
-    $core.String remoteId,
-    $core.String serviceUuid,
-    $core.String secondaryServiceUuid,
-    $core.String characteristicUuid,
-    $core.bool enable,
+    $core.String? remoteId,
+    $core.String? serviceUuid,
+    $core.String? secondaryServiceUuid,
+    $core.String? characteristicUuid,
+    $core.bool? enable,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1774,7 +1774,7 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   static $pb.PbList<SetNotificationRequest> createRepeated() => $pb.PbList<SetNotificationRequest>();
   @$core.pragma('dart2js:noInline')
   static SetNotificationRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetNotificationRequest>(create);
-  static SetNotificationRequest _defaultInstance;
+  static SetNotificationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1832,9 +1832,9 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
 
   SetNotificationResponse._() : super();
   factory SetNotificationResponse({
-    $core.String remoteId,
-    BluetoothCharacteristic characteristic,
-    $core.bool success,
+    $core.String? remoteId,
+    BluetoothCharacteristic? characteristic,
+    $core.bool? success,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1867,7 +1867,7 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   static $pb.PbList<SetNotificationResponse> createRepeated() => $pb.PbList<SetNotificationResponse>();
   @$core.pragma('dart2js:noInline')
   static SetNotificationResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SetNotificationResponse>(create);
-  static SetNotificationResponse _defaultInstance;
+  static SetNotificationResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1908,8 +1908,8 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
 
   OnCharacteristicChanged._() : super();
   factory OnCharacteristicChanged({
-    $core.String remoteId,
-    BluetoothCharacteristic characteristic,
+    $core.String? remoteId,
+    BluetoothCharacteristic? characteristic,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1939,7 +1939,7 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
   static $pb.PbList<OnCharacteristicChanged> createRepeated() => $pb.PbList<OnCharacteristicChanged>();
   @$core.pragma('dart2js:noInline')
   static OnCharacteristicChanged getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<OnCharacteristicChanged>(create);
-  static OnCharacteristicChanged _defaultInstance;
+  static OnCharacteristicChanged? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -1971,8 +1971,8 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
 
   DeviceStateResponse._() : super();
   factory DeviceStateResponse({
-    $core.String remoteId,
-    DeviceStateResponse_BluetoothDeviceState state,
+    $core.String? remoteId,
+    DeviceStateResponse_BluetoothDeviceState? state,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -2002,7 +2002,7 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   static $pb.PbList<DeviceStateResponse> createRepeated() => $pb.PbList<DeviceStateResponse>();
   @$core.pragma('dart2js:noInline')
   static DeviceStateResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<DeviceStateResponse>(create);
-  static DeviceStateResponse _defaultInstance;
+  static DeviceStateResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -2031,7 +2031,7 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
 
   ConnectedDevicesResponse._() : super();
   factory ConnectedDevicesResponse({
-    $core.Iterable<BluetoothDevice> devices,
+    $core.Iterable<BluetoothDevice>? devices,
   }) {
     final _result = create();
     if (devices != null) {
@@ -2058,7 +2058,7 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
   static $pb.PbList<ConnectedDevicesResponse> createRepeated() => $pb.PbList<ConnectedDevicesResponse>();
   @$core.pragma('dart2js:noInline')
   static ConnectedDevicesResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ConnectedDevicesResponse>(create);
-  static ConnectedDevicesResponse _defaultInstance;
+  static ConnectedDevicesResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.List<BluetoothDevice> get devices => $_getList(0);
@@ -2073,8 +2073,8 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
 
   MtuSizeRequest._() : super();
   factory MtuSizeRequest({
-    $core.String remoteId,
-    $core.int mtu,
+    $core.String? remoteId,
+    $core.int? mtu,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -2104,7 +2104,7 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
   static $pb.PbList<MtuSizeRequest> createRepeated() => $pb.PbList<MtuSizeRequest>();
   @$core.pragma('dart2js:noInline')
   static MtuSizeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MtuSizeRequest>(create);
-  static MtuSizeRequest _defaultInstance;
+  static MtuSizeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
@@ -2134,8 +2134,8 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
 
   MtuSizeResponse._() : super();
   factory MtuSizeResponse({
-    $core.String remoteId,
-    $core.int mtu,
+    $core.String? remoteId,
+    $core.int? mtu,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -2165,7 +2165,7 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
   static $pb.PbList<MtuSizeResponse> createRepeated() => $pb.PbList<MtuSizeResponse>();
   @$core.pragma('dart2js:noInline')
   static MtuSizeResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MtuSizeResponse>(create);
-  static MtuSizeResponse _defaultInstance;
+  static MtuSizeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
   $core.String get remoteId => $_getSZ(0);
