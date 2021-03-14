@@ -274,7 +274,7 @@ class ScanResult {
 
 class AdvertisementData {
   final String localName;
-  final int txPowerLevel;
+  final int? txPowerLevel;
   final bool connectable;
   final Map<int, List<int>> manufacturerData;
   final Map<String, List<int>> serviceData;
