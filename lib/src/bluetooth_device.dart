@@ -121,15 +121,25 @@ class BluetoothDevice {
         .map((p) => p.mtu);
   }
 
-  /// Request to change the MTU Size
+  /// Request to change the MTU Size and returns the response back
   /// Throws error if request did not complete successfully
-  Future<void> requestMtu(int desiredMtu) async {
+  Future<int> requestMtu(int desiredMtu) async {
     var request = protos.MtuSizeRequest.create()
       ..remoteId = id.toString()
       ..mtu = desiredMtu;
 
-    return FlutterBlue.instance._channel
+    var response = FlutterBlue.instance._methodStream
+        .where((m) => m.method == "MtuSize")
+        .map((m) => m.arguments)
+        .map((buffer) => protos.MtuSizeResponse.fromBuffer(buffer))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => p.mtu)
+        .first;
+
+    await FlutterBlue.instance._channel
         .invokeMethod('requestMtu', request.writeToBuffer());
+
+    return response;
   }
 
   /// Indicates whether the Bluetooth Device can send a write without response
