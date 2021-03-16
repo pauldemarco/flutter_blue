@@ -8,7 +8,7 @@ class BluetoothCharacteristic {
   final Guid uuid;
   final DeviceIdentifier deviceId;
   final Guid serviceUuid;
-  final Guid secondaryServiceUuid;
+  final Guid? secondaryServiceUuid;
   final CharacteristicProperties properties;
   final List<BluetoothDescriptor> descriptors;
   bool get isNotifying {
@@ -27,7 +27,7 @@ class BluetoothCharacteristic {
         _onValueChangedStream,
       ]);
 
-  List<int> get lastValue => _value.value;
+  List<int> get lastValue => _value.value ?? [];
 
   BluetoothCharacteristic.fromProto(protos.BluetoothCharacteristic p)
       : uuid = new Guid(p.uuid),
@@ -114,7 +114,7 @@ class BluetoothCharacteristic {
       ..characteristicUuid = uuid.toString()
       ..serviceUuid = serviceUuid.toString()
       ..writeType =
-          protos.WriteCharacteristicRequest_WriteType.valueOf(type.index)
+          protos.WriteCharacteristicRequest_WriteType.valueOf(type.index)!
       ..value = value;
 
     var result = await FlutterBlue.instance._channel
@@ -170,7 +170,7 @@ class BluetoothCharacteristic {
 
   @override
   String toString() {
-    return 'BluetoothCharacteristic{uuid: $uuid, deviceId: $deviceId, serviceUuid: $serviceUuid, secondaryServiceUuid: $secondaryServiceUuid, properties: $properties, descriptors: $descriptors, value: ${_value?.value}';
+    return 'BluetoothCharacteristic{uuid: $uuid, deviceId: $deviceId, serviceUuid: $serviceUuid, secondaryServiceUuid: $secondaryServiceUuid, properties: $properties, descriptors: $descriptors, value: ${_value.value}';
   }
 }
 

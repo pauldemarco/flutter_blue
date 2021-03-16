@@ -1,18 +1,5 @@
-def PLUGIN = "flutter_blue";
-def ANDROIDX_WARNING = "flutterPluginsAndroidXWarning";
-gradle.buildFinished { buildResult ->
-    if (buildResult.failure && !rootProject.ext.has(ANDROIDX_WARNING)) {
-        println '         *********************************************************'
-        println 'WARNING: This version of ' + PLUGIN + ' will break your Android build if it or its dependencies aren\'t compatible with AndroidX.'
-        println '         See https://goo.gl/CP92wY for more information on the problem and how to fix it.'
-        println '         This warning prints for all Android build failures. The real root cause of the error may be unrelated.'
-        println '         *********************************************************'
-        rootProject.ext.set(ANDROIDX_WARNING, true);
-    }
-}
-
 group 'com.pauldemarco.flutter_blue'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 buildscript {
     repositories {
@@ -21,8 +8,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.10'
+        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.15'
     }
 }
 
@@ -37,14 +24,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.google.protobuf'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 19
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-    lintOptions {
-        disable 'InvalidPackage'
     }
     sourceSets {
         main {
@@ -56,28 +39,20 @@ android {
 }
 
 protobuf {
-    // Configure the protoc executable
     protoc {
-        // Download from repositories
-        artifact = 'com.google.protobuf:protoc:3.9.1'
-    }
-    plugins {
-        javalite {
-            // The codegen for lite comes as a separate artifact
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
-        }
+        artifact = 'com.google.protobuf:protoc:3.11.4'
     }
     generateProtoTasks {
         all().each { task ->
-            task.plugins {
-                javalite { }
+            task.builtins {
+                java {
+                    option "lite"
+                }
             }
         }
     }
 }
 
 dependencies {
-    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.core:core:1.0.1'
+    implementation 'com.google.protobuf:protobuf-javalite:3.11.4'
 }
