@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f9a2a7b0-be08-4e0c-ac22-29d107d17eef" name="Default" comment="Fixed possible NPE [Android].">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1848142576">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="xml" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="XML" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/flutter_blue.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1530">
+              <caret line="102" selection-start-line="102" selection-end-line="102" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/src/bluetooth_device.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/android/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="705">
+              <caret line="47" column="1" lean-forward="true" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2010">
+              <caret line="134" selection-start-line="134" selection-end-line="134" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/FlutterBluePlugin.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2250">
+              <caret line="196" column="66" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="66" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>disconnect</find>
+      <find>connectGatt</find>
+      <find>getConnectedDevices</find>
+      <find>rapidreboot</find>
+      <find>discover</find>
+      <find>print</find>
+      <find>getConnect</find>
+      <find>new</find>
+      <find>const</find>
+      <find>theme</find>
+      <find>state</find>
+      <find>children</find>
+      <find>new</find>
+      <find>_readCharacteristic</find>
+      <find>have you called discoverServices() yet?</find>
+      <find>toServicesResultProto</find>
+      <find>const</find>
+      <find>OnNotificationResponse</find>
+      <find>OnValueChanged</find>
+      <find>OnCharacteristicChanged</find>
+      <find>writeCharacteristic</find>
+      <find>_methodStream</find>
+      <find>_methodStreamController</find>
+      <find>_value.value</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>OnCharacteristicChanged</replace>
+      <replace>OnValueChanged</replace>
+      <replace>lastValue</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="reactivex" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/android/.gitignore" />
+        <option value="$PROJECT_DIR$/android/build.gradle" />
+        <option value="$PROJECT_DIR$/android/flutter_blue_android.iml" />
+        <option value="$PROJECT_DIR$/flutter_blue.iml" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/example/.gitignore" />
+        <option value="$PROJECT_DIR$/example/flutter_blue_example.iml" />
+        <option value="$PROJECT_DIR$/example/android/flutter_blue_example_android.iml" />
+        <option value="$PROJECT_DIR$/example/android/build.gradle" />
+        <option value="$PROJECT_DIR$/example/android/settings.gradle" />
+        <option value="$PROJECT_DIR$/example/android/app/build.gradle" />
+        <option value="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/test/guid_test.dart" />
+        <option value="$PROJECT_DIR$/example/test/widget_test.dart" />
+        <option value="$PROJECT_DIR$/lib/src/constants.dart" />
+        <option value="$PROJECT_DIR$/lib/src/guid.dart" />
+        <option value="$PROJECT_DIR$/example/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
+        <option value="$PROJECT_DIR$/lib/flutter_blue.dart" />
+        <option value="$PROJECT_DIR$/lib/src/bluetooth_service.dart" />
+        <option value="$PROJECT_DIR$/protos/regenerate.md" />
+        <option value="$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/ProtoMaker.java" />
+        <option value="$PROJECT_DIR$/ios/Classes/FlutterBluePlugin.m" />
+        <option value="$PROJECT_DIR$/protos/flutterblue.proto" />
+        <option value="$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/FlutterBluePlugin.java" />
+        <option value="$PROJECT_DIR$/lib/src/flutter_blue.dart" />
+        <option value="$PROJECT_DIR$/lib/src/bluetooth_device.dart" />
+        <option value="$PROJECT_DIR$/example/lib/main.dart" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/lib/src/bluetooth_descriptor.dart" />
+        <option value="$PROJECT_DIR$/lib/src/bluetooth_characteristic.dart" />
+        <option value="$PROJECT_DIR$/example/lib/widgets.dart" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="15" />
+    <option name="y" value="23" />
+    <option name="width" value="2237" />
+    <option name="height" value="1337" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="flutter_blue_upstream" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flutter_blue_upstream" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flutter_blue_upstream" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flutter_blue_upstream" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="flutter_blue_upstream" type="b2602c69:ProjectViewProjectNode" />
+              <item name="flutter_blue_upstream" type="462c0819:PsiDirectoryNode" />
+              <item name="android" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
+    <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="io.flutter.reload.alreadyRun" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/example" />
+      <recent name="$PROJECT_DIR$/example/android/app/src/main" />
+      <recent name="$PROJECT_DIR$/example/android" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/example/android" />
+      <recent name="$PROJECT_DIR$/android" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Unknown.main.dart1073481858">
+    <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/example/lib/main.dart" />
+    </configuration>
+    <configuration name="tests in guid_test.dart" type="FlutterTestConfigType" factoryName="Flutter Test" temporary="true" nameIsGenerated="true">
+      <option name="testFile" value="$PROJECT_DIR$/test/guid_test.dart" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f9a2a7b0-be08-4e0c-ac22-29d107d17eef" name="Default" comment="" />
+      <created>1544553457689</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1544553457689</updated>
+    </task>
+    <task id="LOCAL-00001" summary="[Android] Print newState for onConnectionStateChange.">
+      <created>1544560338903</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1544560338903</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Expose autoConnect as a parameter to connect().">
+      <created>1544560382943</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1544560382943</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Updated plugin to latest plugin structure [Dart] [Android].">
+      <created>1545352112921</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1545352112921</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Setup servicesDiscoveredChannel before invoking method. Fixes #107">
+      <created>1545515736219</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1545515736219</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Fix uuid bug in startScan18.">
+      <created>1545515757574</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1545515757574</updated>
+    </task>
+    <task id="LOCAL-00006" summary="dartfmt on src folder.">
+      <created>1545515836257</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1545515836257</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Casting to bool for isAvailable/isOn. Fixes #122">
+      <created>1545517807282</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1545517807282</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[Dart] [Android] Standardize logging across plugin, iOS still needed. #45">
+      <created>1545874873867</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1545874873867</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Put connect and disconnect into BluetoothDevice.">
+      <created>1545932798247</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1545932798247</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Moved methods from BluetoothDevice to Characteristic/Descriptor. Updated README and example app.">
+      <created>1545935205691</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1545935205691</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Removed optional new and const from Example main.dart">
+      <created>1545935270355</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1545935270355</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Disconnect gatt first so callback fires, then close it. Fixes #160">
+      <created>1545953402903</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1545953402903</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Fixed possible NPE [Android].">
+      <created>1545953693422</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1545953693422</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Override hashcode/equals for ScanResult and BluetoothDevice.">
+      <created>1546024874325</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1546024874325</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Fix NPE in connect function.">
+      <created>1546024919847</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1546024919847</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Stop throwing error on Android when services are empty.">
+      <created>1546030924796</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1546030924796</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Make updateDescriptors private to library.">
+      <created>1546036375910</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1546036375910</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Remove default constructors for Device/Service/Characteristic/Descriptor.">
+      <created>1546037137956</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1546037137956</updated>
+    </task>
+    <task id="LOCAL-00019" summary="OnValueChanged -&gt; OnCharacteristicChanged. Moved value stream to characteristic.&#10;&#10;This is the beginning of the API overhaul to a fully reactive plugin.">
+      <created>1546038169112</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1546038169112</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Updating iOS files to latest plugin structure.">
+      <created>1546055451744</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1546055451744</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Updating iOS project files.">
+      <created>1546055492253</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1546055492253</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="tests_in_guid_test_dart - 2018.12.20 at 19h 19m 44s.xml">
+      <configuration name="tests in guid_test.dart" configurationId="FlutterTestConfigType" />
+    </history-entry>
+    <history-entry file="tests_in_guid_test_dart - 2018.12.20 at 19h 21m 27s.xml">
+      <configuration name="tests in guid_test.dart" configurationId="FlutterTestConfigType" />
+    </history-entry>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="2160" height="1337" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27162224" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Captures" order="2" weight="0.25" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info id="Image Layers" order="4" />
+      <window_info id="Designer" order="5" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3299532" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3299532" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.3299532" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" weight="0.3299532" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3299532" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Flutter Performance" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="11" visible="true" weight="0.32931727" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.3299532" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info anchor="right" id="Flutter Inspector" order="5" />
+      <window_info anchor="right" id="Flutter Outline" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[Android] Print newState for onConnectionStateChange." />
+    <MESSAGE value="Expose autoConnect as a parameter to connect()." />
+    <MESSAGE value="Updated plugin to latest plugin structure [Dart] [Android]." />
+    <MESSAGE value="Setup servicesDiscoveredChannel before invoking method. Fixes #107" />
+    <MESSAGE value="Fix uuid bug in startScan18." />
+    <MESSAGE value="dartfmt on src folder." />
+    <MESSAGE value="Casting to bool for isAvailable/isOn. Fixes #122" />
+    <MESSAGE value="[Dart] [Android] Standardize logging across plugin, iOS still needed. #45" />
+    <MESSAGE value="Put connect and disconnect into BluetoothDevice." />
+    <MESSAGE value="Moved methods from BluetoothDevice to Characteristic/Descriptor. Updated README and example app." />
+    <MESSAGE value="Removed optional new and const from Example main.dart" />
+    <MESSAGE value="Disconnect gatt first so callback fires, then close it. Fixes #160" />
+    <MESSAGE value="Fixed possible NPE [Android]." />
+    <MESSAGE value="Override hashcode/equals for ScanResult and BluetoothDevice." />
+    <MESSAGE value="Fix NPE in connect function." />
+    <MESSAGE value="Stop throwing error on Android when services are empty." />
+    <MESSAGE value="Make updateDescriptors private to library." />
+    <MESSAGE value="Remove default constructors for Device/Service/Characteristic/Descriptor." />
+    <MESSAGE value="OnValueChanged -&gt; OnCharacteristicChanged. Moved value stream to characteristic.&#10;&#10;This is the beginning of the API overhaul to a fully reactive plugin." />
+    <MESSAGE value="Updating iOS files to latest plugin structure." />
+    <MESSAGE value="Updating iOS project files." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updating iOS project files." />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/example/android/gradle.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/local.properties" />
+    <entry file="file://$PROJECT_DIR$/example/android/gradlew" />
+    <entry file="file://$PROJECT_DIR$/example/android/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="38" column="40" lean-forward="true" selection-start-line="38" selection-start-column="40" selection-end-line="38" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/settings.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/app/src/main/java/com/pauldemarco/flutterblueexample/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java" />
+    <entry file="file://$PROJECT_DIR$/example/android/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/test/widget_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="13" column="1" lean-forward="true" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/gen/flutterblue.pb.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="107" column="26" selection-start-line="107" selection-start-column="26" selection-end-line="107" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/guid_test.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="5" column="48" selection-start-line="5" selection-start-column="48" selection-end-line="5" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/guid.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="32" column="27" selection-start-line="32" selection-start-column="27" selection-end-line="32" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib/async/future.dart" />
+    <entry file="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib/async/timer.dart" />
+    <entry file="file://$PROJECT_DIR$/ios/gen/Flutterblue.pbobjc.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/theme_data.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/app.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/colors.dart" />
+    <entry file="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib/core/set.dart" />
+    <entry file="file://$PROJECT_DIR$/example/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/refresh_indicator.dart" />
+    <entry file="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib/async/stream.dart" />
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="18" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/rxdart-0.20.0/lib/src/subjects/publish_subject.dart" />
+    <entry file="file://$PROJECT_DIR$/lib/flutter_blue.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="36" selection-start-line="12" selection-start-column="36" selection-end-line="12" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/rxdart-0.20.0/lib/src/observables/observable.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/expansion_tile.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/widgets/preferred_size.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/animation/animations.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/animated_icons/animated_icons.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/widgets/implicit_animations.dart" />
+    <entry file="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/vector_math-2.0.8/lib/src/vector_math_64/matrix4.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/material/progress_indicator.dart" />
+    <entry file="file://$USER_HOME$/flutter/packages/flutter/lib/src/widgets/transitions.dart" />
+    <entry file="file://$PROJECT_DIR$/protos/regenerate.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="12" column="3" lean-forward="true" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/constants.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/ProtoMaker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="738">
+          <caret line="207" column="1" selection-start-line="207" selection-start-column="1" selection-end-line="207" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ios/Classes/FlutterBluePlugin.m">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="436" column="45" selection-start-line="436" selection-start-column="45" selection-end-line="436" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protos/flutterblue.proto">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="439">
+          <caret line="184" column="20" selection-start-line="184" selection-start-column="20" selection-end-line="184" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-630">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/bluetooth_service.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/bluetooth_descriptor.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/lib/widgets.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="250" column="6" selection-start-line="250" selection-start-column="6" selection-end-line="250" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/bluetooth_characteristic.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="52" column="3" selection-start-line="52" selection-start-column="3" selection-end-line="52" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/flutter_blue.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="102" selection-start-line="102" selection-end-line="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2010">
+          <caret line="134" selection-start-line="134" selection-end-line="134" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/src/main/java/com/pauldemarco/flutterblue/FlutterBluePlugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2250">
+          <caret line="196" column="66" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/bluetooth_device.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="705">
+          <caret line="47" column="1" lean-forward="true" selection-start-line="47" selection-start-column="1" selection-end-line="47" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

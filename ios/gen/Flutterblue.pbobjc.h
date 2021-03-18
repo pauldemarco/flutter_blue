@@ -747,6 +747,8 @@ typedef GPB_ENUM(ProtosConnectedDevicesResponse_FieldNumber) {
 
 @end
 
+<<<<<<< HEAD
+=======
 #pragma mark - ProtosMtuSizeRequest
 
 typedef GPB_ENUM(ProtosMtuSizeRequest_FieldNumber) {
@@ -777,6 +779,7 @@ typedef GPB_ENUM(ProtosMtuSizeResponse_FieldNumber) {
 
 @end
 
+>>>>>>> b43127bedca75d2fdfa30948f319a7204966a51d
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END
