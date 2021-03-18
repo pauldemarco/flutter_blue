@@ -8,11 +8,13 @@ class BluetoothDevice {
   final DeviceIdentifier id;
   final String name;
   final BluetoothDeviceType type;
+  final int rssi;
 
   BluetoothDevice.fromProto(protos.BluetoothDevice p)
       : id = new DeviceIdentifier(p.remoteId),
         name = p.name,
-        type = BluetoothDeviceType.values[p.type.value];
+        type = BluetoothDeviceType.values[p.type.value],
+        rssi = p.rssi; 
 
   BehaviorSubject<bool> _isDiscoveringServices = BehaviorSubject.seeded(false);
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;

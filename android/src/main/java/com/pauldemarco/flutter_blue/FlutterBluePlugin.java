@@ -80,6 +80,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private static final int REQUEST_FINE_LOCATION_PERMISSIONS = 1452;
     static final private UUID CCCD_ID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     private final Map<String, BluetoothDeviceCache> mDevices = new HashMap<>();
+    private final Map<String,Integer > peripheralRSSIs = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
 
     // Pending call and result for startScan, in the case where permissions are needed
@@ -266,12 +267,17 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 List<BluetoothDevice> devices = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT);
                 Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
                 for(BluetoothDevice d : devices) {
-                    p.addDevices(ProtoMaker.from(d));
+                    if(mGattServers.size() > 0){
+                        BluetoothGatt gattServer  =  mGattServers.get(d.getAddress());
+                        gattServer.readRemoteRssi();
+                        p.addDevices(ProtoMaker.from(d,peripheralRSSIs.get(d.getAddress()),""));
+                    }
                 }
                 result.success(p.build().toByteArray());
-                log(LogLevel.EMERGENCY, "mDevices size: " + mDevices.size());
+                log(LogLevel.EMERGENCY, "mGattServers size: " + mGattServers.size());
                 break;
             }
+
 
             case "connect":
             {
@@ -963,6 +969,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+            peripheralRSSIs.put(gatt.getDevice().getAddress(),rssi);
             log(LogLevel.DEBUG, "[onReadRemoteRssi] rssi: " + rssi + " status: " + status);
         }
 

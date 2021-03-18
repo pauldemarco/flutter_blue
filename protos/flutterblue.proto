@@ -66,6 +66,7 @@ message BluetoothDevice {
   string remote_id = 1;
   string name = 2;
   Type type = 3;
+  int rssi =4;
 }
 
 message BluetoothService {
@@ -212,3 +213,4 @@ message MtuSizeResponse {
   string remote_id = 1;
   uint32 mtu = 2;
 }
+
