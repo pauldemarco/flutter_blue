@@ -887,7 +887,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private boolean setPin(String deviceId, String pin){
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
         device.setPin(pin.getBytes());
-        device.createBond();
+        //device.createBond();
         return true;
     }
 
