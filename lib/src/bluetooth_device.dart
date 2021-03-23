@@ -84,6 +84,17 @@ class BluetoothDevice {
   }
 
   /**
+   * Request connection priority (Android Only)
+   * @author Michael Douglas
+   */
+  Future<void> requestConnectionPriority(
+      BluetoothConnectionPriority priority) async {
+    if (Platform.isAndroid) {
+      print(priority);
+    }
+  }
+
+  /**
    * Refresh device services (Android Only)
    */
   Future refreshServices() async {
@@ -200,3 +211,5 @@ class BluetoothDevice {
 enum BluetoothDeviceType { unknown, classic, le, dual }
 
 enum BluetoothDeviceState { disconnected, connecting, connected, disconnecting }
+
+enum BluetoothConnectionPriority { high, le, balanced }

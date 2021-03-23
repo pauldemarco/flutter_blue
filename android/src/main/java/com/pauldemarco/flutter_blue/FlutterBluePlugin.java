@@ -284,7 +284,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 log(LogLevel.EMERGENCY, "mDevices size: " + mDevices.size());
                 break;
             }
-
             case "connect":
             {
                 byte[] data = call.arguments();
@@ -405,6 +404,18 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 }
                 break;
             }
+
+            case "requestConnectionPriority":
+            {
+                String deviceId = (String)call.argument("id");
+                String priority = (String)call.argument("priority");
+                try{
+                    requestConnectionPriority(deviceId, priority);
+                }catch(Exception e){
+                    result.error("connection_priority_error", e.getMessage(),e);
+                }
+            }
+
 
             case "refreshServices":
              {
@@ -811,6 +822,8 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
                 if(BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action))
                 {
+                    // CLOSE PAIRING REQUEST //
+                    abortBroadcast();
                     BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     int varient = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, -1);
 
@@ -819,10 +832,9 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     // SET PIN //
                     if(devicePin != null){
                         // HIDE SYSTEM PIN REQUEST
-                        if(varient == BluetoothDevice.PAIRING_VARIANT_PIN){
-                            abortBroadcast();
-                            setPin(bluetoothDevice.getAddress().toString(),devicePin);
-                        }
+
+                        if(varient == BluetoothDevice.PAIRING_VARIANT_PIN)
+                            setPin(bluetoothDevice.getAddress().toString(),devicePin)
                         //bluetoothDevice.setPairingConfirmation(true);
                     }
                 }
@@ -876,6 +888,25 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
         device.setPin(pin.getBytes());
         device.createBond();
+        return true;
+    }
+
+
+    /**
+     * Set pin to device pair
+     * @param deviceId
+     * @param pin
+     * @return
+     */
+    private boolean requestConnectionPriority(String deviceId, String priority){
+        System.out.println("REQUEST CONNECTION PRIORITY!");
+        System.out.println(priority);
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+
+        Integer.parseInt(priority);
+
+
+        //device.requestConnectionPriority(Integer.parseInt(priority));
         return true;
     }
 
