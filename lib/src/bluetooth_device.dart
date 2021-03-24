@@ -47,11 +47,10 @@ class BluetoothDevice {
   /**
    * /// Establishes a connection to the Bluetooth Device using a pin. (only in android)
    */
-  Future<void> connectWithPin(
-    String pin, {
-    Duration timeout,
-    bool autoConnect = true,
-  }) async {
+  Future<void> connectWithPin(String pin,
+      {Duration timeout,
+      bool autoConnect = true,
+      bool abortBroadcast = false}) async {
     Timer timer;
     if (timeout != null) {
       timer = Timer(timeout, () {
@@ -61,8 +60,12 @@ class BluetoothDevice {
     }
 
     if (Platform.isAndroid) {
-      await FlutterBlue.instance._channel.invokeMethod('connectWithPin',
-          {"id": id.toString(), "pin": pin, "autoconnect": autoConnect});
+      await FlutterBlue.instance._channel.invokeMethod('connectWithPin', {
+        "id": id.toString(),
+        "pin": pin,
+        "autoconnect": autoConnect,
+        "abortBroadcast": abortBroadcast
+      });
     } else {
       await connect(timeout: timeout, autoConnect: autoConnect);
     }
