@@ -19,14 +19,14 @@ class BluetoothDevice {
 
   /// Establishes a connection to the Bluetooth Device.
   Future<void> connect({
-    Duration timeout,
+    Duration? timeout,
     bool autoConnect = true,
   }) async {
     var request = protos.ConnectRequest.create()
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
 
-    Timer timer;
+    Timer? timer;
     if (timeout != null) {
       timer = Timer(timeout, () {
         disconnect();
@@ -148,7 +148,7 @@ class BluetoothDevice {
 
   @override
   String toString() {
-    return 'BluetoothDevice{id: $id, name: $name, type: $type, isDiscoveringServices: ${_isDiscoveringServices?.value}, _services: ${_services?.value}';
+    return 'BluetoothDevice{id: $id, name: $name, type: $type, isDiscoveringServices: ${_isDiscoveringServices.value}, _services: ${_services.value}';
   }
 }
 

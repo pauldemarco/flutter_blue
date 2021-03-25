@@ -27,45 +27,6 @@ Using the FlutterBlue instance, you can scan for and connect to nearby devices (
 Once connected to a device, the BluetoothDevice object can discover services ([BluetoothService](lib/src/bluetooth_service.dart)), characteristics ([BluetoothCharacteristic](lib/src/bluetooth_characteristic.dart)), and descriptors ([BluetoothDescriptor](lib/src/bluetooth_descriptor.dart)).
 The BluetoothDevice object is then used to directly interact with characteristics and descriptors.
 
-## Setup
-### Change the minSdkVersion for Android
-
-Flutter_blue is compatible only from version 19 of Android SDK so you should change this in **android/app/build.gradle**:
-```dart
-Android {
-  defaultConfig {
-     minSdkVersion: 19
-```
-### Add permissions for Bluetooth
-We need to add the permission to use Bluetooth and access location:
-
-#### **Android**
-In the **android/app/src/main/AndroidManifest.xml** let’s add:
-
-```dart 
-	 <uses-permission android:name="android.permission.BLUETOOTH" />  
-	 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />  
-	 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>  
- <application
-```
-#### **IOS**
-In the **ios/Runner/Info.plist** let’s add:
-
-```dart 
-	<dict>  
-	    <key>NSBluetoothAlwaysUsageDescription</key>  
-	    <string>Need BLE permission</string>  
-	    <key>NSBluetoothPeripheralUsageDescription</key>  
-	    <string>Need BLE permission</string>  
-	    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>  
-	    <string>Need Location permission</string>  
-	    <key>NSLocationAlwaysUsageDescription</key>  
-	    <string>Need Location permission</string>  
-	    <key>NSLocationWhenInUseUsageDescription</key>  
-	    <string>Need Location permission</string>
-```
-
-For location permissions on iOS see more at: [https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services](https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services)
 ## Usage
 ### Obtain an instance
 ```dart
@@ -147,6 +108,47 @@ await device.requestMtu(512);
 ```
 Note that iOS will not allow requests of MTU size, and will always try to negotiate the highest possible MTU (iOS supports up to MTU size 185)
 
+## Getting Started
+### Change the minSdkVersion for Android
+
+Flutter_blue is compatible only from version 19 of Android SDK so you should change this in **android/app/build.gradle**:
+```dart
+Android {
+  defaultConfig {
+     minSdkVersion: 19
+```
+### Add permissions for Bluetooth
+We need to add the permission to use Bluetooth and access location:
+
+#### **Android**
+In the **android/app/src/main/AndroidManifest.xml** let’s add:
+
+```xml 
+	 <uses-permission android:name="android.permission.BLUETOOTH" />  
+	 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />  
+	 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>  
+ <application
+```
+#### **IOS**
+In the **ios/Runner/Info.plist** let’s add:
+
+```dart 
+	<dict>  
+	    <key>NSBluetoothAlwaysUsageDescription</key>  
+	    <string>Need BLE permission</string>  
+	    <key>NSBluetoothPeripheralUsageDescription</key>  
+	    <string>Need BLE permission</string>  
+	    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>  
+	    <string>Need Location permission</string>  
+	    <key>NSLocationAlwaysUsageDescription</key>  
+	    <string>Need Location permission</string>  
+	    <key>NSLocationWhenInUseUsageDescription</key>  
+	    <string>Need Location permission</string>
+```
+
+For location permissions on iOS see more at: [https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services](https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services)
+
+
 ## Reference
 ### FlutterBlue API
 |                  |      Android       |         iOS          |             Description            |
@@ -182,6 +184,6 @@ Note that iOS will not allow requests of MTU size, and will always try to negoti
 | write                       |  :white_check_mark:  |  :white_check_mark:  | Writes the value of the descriptor. |
 
 ## Troubleshooting
-### Scanning for service UUID's doesn't return any results
+### When I scan using a service UUID filter, it doesn't find any devices.
 Make sure the device is advertising which service UUID's it supports.  This is found in the advertisement
 packet as **UUID 16 bit complete list** or **UUID 128 bit complete list**.
