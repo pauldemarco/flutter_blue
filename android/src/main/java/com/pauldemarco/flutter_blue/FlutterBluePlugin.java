@@ -111,8 +111,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     @Override
     public void onDetachedFromEngine(FlutterPluginBinding binding) {
-        pluginBinding = null;
-
+        tearDown();
     }
 
     @Override
@@ -124,7 +123,9 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     @Override
     public void onDetachedFromActivity() {
-        tearDown();
+        activityBinding.removeRequestPermissionsResultListener(this);
+        activityBinding = null;
+        activity = null;
     }
 
     @Override
@@ -152,9 +153,9 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     private void tearDown() {
         Log.i(TAG, "teardown");
+        stopScan();
         context = null;
-        activityBinding.removeRequestPermissionsResultListener(this);
-        activityBinding = null;
+        pluginBinding = null;
         channel.setMethodCallHandler(null);
         channel = null;
         stateChannel.setStreamHandler(null);
