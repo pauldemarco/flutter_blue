@@ -999,7 +999,12 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                channel.invokeMethod(name, byteArray);
+                //Could already be teared down at this moment
+                if(channel!=null)  {
+                    channel.invokeMethod(name, byteArray);
+                }else {
+                    Log.w(TAG,"Tried to call " + String.valueOf(name) + " on closed channel");
+                }
             }
         });
     }
