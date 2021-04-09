@@ -66,6 +66,7 @@ import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
 public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, RequestPermissionsResultListener, ActivityAware  {
     private static final String TAG = "FlutterBluePlugin";
     private Object initializationLock = new Object();
+    private Object tearDownLock = new Object();
     private Context context;
     private MethodChannel channel;
     private static final String NAMESPACE = "plugins.pauldemarco.com/flutter_blue";
@@ -169,15 +170,17 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
     }
 
     private void tearDown() {
-        Log.i(TAG, "teardown");
-        context = null;
-        channel.setMethodCallHandler(null);
-        channel = null;
-        stateChannel.setStreamHandler(null);
-        stateChannel = null;
-        mBluetoothAdapter = null;
-        mBluetoothManager = null;
-        application = null;
+        synchronized (tearDownLock)  {
+            Log.i(TAG, "teardown");
+            context = null;
+            channel.setMethodCallHandler(null);
+            channel = null;
+            stateChannel.setStreamHandler(null);
+            stateChannel = null;
+            mBluetoothAdapter = null;
+            mBluetoothManager = null;
+            application = null;
+        }
     }
 
 
@@ -999,11 +1002,13 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                //Could already be teared down at this moment
-                if(channel!=null)  {
-                    channel.invokeMethod(name, byteArray);
-                }else {
-                    Log.w(TAG,"Tried to call " + String.valueOf(name) + " on closed channel");
+                synchronized (tearDownLock) {
+                    //Could already be teared down at this moment
+                    if (channel != null) {
+                        channel.invokeMethod(name, byteArray);
+                    } else {
+                        Log.w(TAG, "Tried to call " + String.valueOf(name) + " on closed channel");
+                    }
                 }
             }
         });
