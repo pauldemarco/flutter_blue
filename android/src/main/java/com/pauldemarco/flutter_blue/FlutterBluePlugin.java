@@ -106,7 +106,7 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
 
     @Override
     public void onAttachedToEngine(FlutterPluginBinding binding) {
-        Log.i(TAG, "onAttachedEngine");
+        Log.d(TAG, "onAttachedEngine");
         pluginBinding = binding;
         setup(
                 pluginBinding.getBinaryMessenger(),
@@ -117,34 +117,34 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
 
     @Override
     public void onDetachedFromEngine(FlutterPluginBinding binding) {
-        Log.i(TAG, "onDetachedEngine");
+        Log.d(TAG, "onDetachedEngine");
         pluginBinding = null;
         tearDown();
     }
 
     @Override
     public void onAttachedToActivity(ActivityPluginBinding binding) {
-        Log.i(TAG, "onAttached");
+        Log.d(TAG, "onAttached");
         activityBinding = binding;
         activityBinding.addRequestPermissionsResultListener(this);
     }
 
     @Override
     public void onDetachedFromActivity() {
-        Log.i(TAG, "onDetached");
+        Log.d(TAG, "onDetached");
         activityBinding.removeRequestPermissionsResultListener(this);
         activityBinding = null;
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        Log.i(TAG, "onDetachedConfig");
+        Log.d(TAG, "onDetachedConfig");
         onDetachedFromActivity();
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
-        Log.i(TAG, "onReattachConfig");
+        Log.d(TAG, "onReattachConfig");
         onAttachedToActivity(binding);
     }
 
@@ -153,7 +153,7 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
             final Application application,
             final PluginRegistry.Registrar registrar) {
         synchronized (initializationLock) {
-            Log.i(TAG, "setup");
+            Log.d(TAG, "setup");
             this.application = application;
             this.context = application;
             channel = new MethodChannel(messenger, NAMESPACE + "/methods");
@@ -171,7 +171,7 @@ public class FlutterBluePlugin implements FlutterPlugin, MethodCallHandler, Requ
 
     private void tearDown() {
         synchronized (tearDownLock)  {
-            Log.i(TAG, "teardown");
+            Log.d(TAG, "teardown");
             context = null;
             channel.setMethodCallHandler(null);
             channel = null;
