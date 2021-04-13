@@ -29,11 +29,11 @@ package com.pauldemarco.flutter_blue;
 
 import com.google.protobuf.ByteString;
 import com.pauldemarco.flutter_blue.Protos.AdvertisementData;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.UUID;
+
 
 /**
  * Parser of Bluetooth Advertisement packets.

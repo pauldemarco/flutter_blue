@@ -34,10 +34,14 @@ class BluetoothDevice {
       });
     }
 
-    await FlutterBlue.instance._channel
-        .invokeMethod('connect', request.writeToBuffer());
+    try {
+      await FlutterBlue.instance._channel
+          .invokeMethod('connect', request.writeToBuffer());
 
-    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+      await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+    } catch (e) {
+      throw Exception('Falha ao conectar!');
+    }
 
     timer?.cancel();
 
@@ -67,7 +71,11 @@ class BluetoothDevice {
         "abortBroadcast": abortBroadcast
       });
     } else {
-      await connect(timeout: timeout, autoConnect: autoConnect);
+      try {
+        await connect(timeout: timeout, autoConnect: autoConnect);
+      } on Exception catch (e) {
+        throw Exception(e);
+      }
     }
 
     await state.firstWhere((s) => s == BluetoothDeviceState.connected);
