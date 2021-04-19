@@ -34,8 +34,49 @@ class BluetoothDevice {
       });
     }
 
-    await FlutterBlue.instance._channel
-        .invokeMethod('connect', request.writeToBuffer());
+    try {
+      await FlutterBlue.instance._channel
+          .invokeMethod('connect', request.writeToBuffer());
+
+      await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+    } catch (e) {
+      throw Exception('Falha ao conectar!');
+    }
+
+    timer?.cancel();
+
+    return;
+  }
+
+  /**
+   * /// Establishes a connection to the Bluetooth Device using a pin. (only in android)
+   */
+  Future<void> connectWithPin(String pin,
+      {Duration timeout,
+      bool autoConnect = true,
+      bool abortBroadcast = false}) async {
+    Timer timer;
+    if (timeout != null) {
+      timer = Timer(timeout, () {
+        disconnect();
+        throw TimeoutException('Failed to connect in time.', timeout);
+      });
+    }
+
+    if (Platform.isAndroid) {
+      await FlutterBlue.instance._channel.invokeMethod('connectWithPin', {
+        "id": id.toString(),
+        "pin": pin,
+        "autoconnect": autoConnect,
+        "abortBroadcast": abortBroadcast
+      });
+    } else {
+      try {
+        await connect(timeout: timeout, autoConnect: autoConnect);
+      } on Exception catch (e) {
+        throw Exception(e);
+      }
+    }
 
     await state.firstWhere((s) => s == BluetoothDeviceState.connected);
 
@@ -47,6 +88,32 @@ class BluetoothDevice {
   /// Cancels connection to the Bluetooth Device
   Future disconnect() =>
       FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
+
+  Future setPin(String pin) async {
+    return await FlutterBlue.instance._channel
+        .invokeMethod('setPin', {"id": id.toString(), "pin": pin});
+  }
+
+  /**
+   * Request connection priority (Android Only)
+   * @author Michael Douglas
+   */
+  Future<void> requestConnectionPriority(
+      BluetoothConnectionPriority priority) async {
+    if (Platform.isAndroid) {
+      print(priority);
+    }
+  }
+
+  /**
+   * Refresh device services (Android Only)
+   */
+  Future refreshServices() async {
+    if (Platform.isAndroid) {
+      return await FlutterBlue.instance._channel
+          .invokeMethod('refreshServices', {"id": id.toString()});
+    }
+  }
 
   BehaviorSubject<List<BluetoothService>> _services =
       BehaviorSubject.seeded([]);
@@ -155,3 +222,5 @@ class BluetoothDevice {
 enum BluetoothDeviceType { unknown, classic, le, dual }
 
 enum BluetoothDeviceState { disconnected, connecting, connected, disconnecting }
+
+enum BluetoothConnectionPriority { high, le, balanced }

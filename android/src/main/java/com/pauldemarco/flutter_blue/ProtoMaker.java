@@ -19,12 +19,17 @@ import android.os.ParcelUuid;
 import android.util.Log;
 import android.util.SparseArray;
 
+
 import com.google.protobuf.ByteString;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.math.BigInteger;
+
 
 /**
  * Created by paul on 8/31/17.
@@ -66,19 +71,46 @@ public class ProtoMaker {
             if(txPower != Integer.MIN_VALUE) {
                 a.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(txPower));
             }
+
+            // GET FULL RAW DATA //
+            byte[] byteArray = new BigInteger(scanRecord.getBytes()).toByteArray();
+
+            // SPLIT ADVERTISEMENT AND SCAN RESPONSE //
+            byte[] advertisement = Arrays.copyOfRange(byteArray, 0, byteArray.length >= 30 ? 30 : (byteArray.length -1));
+            byte[] scanResponse = byteArray.length > 30 ? Arrays.copyOfRange(byteArray, 30, byteArray.length -1) : new byte[0];
+
+            // REMOVE HEADERS FROM ADVERTISEMENT AND SCAN RESPONSE //
+            byte[] advertisementWithoutHeader = advertisement.length > 4 ? Arrays.copyOfRange(advertisement, 4, advertisement.length) : advertisement ;
+            byte[] scanResponseWithoutHeader = scanResponse.length > 4 ? Arrays.copyOfRange(scanResponse, 4, scanResponse.length): scanResponse;
+
+            // CONCAT ADVERTISEMENT AND SCAN RESPONSE DATA //
+            byte[] data = ProtoMaker.concat(advertisementWithoutHeader, scanResponseWithoutHeader);
+
+            //System.out.println("-------------------- BYTE DATA[INIT]  ------------------------");
+            //System.out.println("Data raw: " + device.getAddress() + ": " + Arrays.toString(byteArray));
+            //System.out.println("Advertisement raw: " + device.getAddress() + ": " + Arrays.toString(advertisement));
+            //System.out.println("Scan response raw: " + device.getAddress() + ": " + Arrays.toString(scanResponse));
+            //System.out.println("Advertisement: " + device.getAddress() + ": " + Arrays.toString(advertisementWithoutHeader));
+            //System.out.println("Scan response: " + device.getAddress() + ": " + Arrays.toString(scanResponseWithoutHeader));
+            //System.out.println("Merge data: " + device.getAddress() + ": " + Arrays.toString(data));
+            //System.out.println("-------------------- BYTE DATA[END] ------------------------");
+
             // Manufacturer Specific Data
             SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
+
             for (int i = 0; i < msd.size(); i++) {
                 int key = msd.keyAt(i);
                 byte[] value = msd.valueAt(i);
-                a.putManufacturerData(key, ByteString.copyFrom(value));
+                //System.out.println("Android data: " + device.getAddress() + ": " + Arrays.toString(value));
+                a.putManufacturerData(key, ByteString.copyFrom(data));
             }
             // Service Data
             Map<ParcelUuid, byte[]> serviceData = scanRecord.getServiceData();
+
             for (Map.Entry<ParcelUuid, byte[]> entry : serviceData.entrySet()) {
                 ParcelUuid key = entry.getKey();
-                byte[] value = entry.getValue();
-                a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(value));
+                byte[] serviceValue = entry.getValue();
+                a.putServiceData(key.getUuid().toString(), ByteString.copyFrom(serviceValue));
             }
             // Service UUIDs
             List<ParcelUuid> serviceUuids = scanRecord.getServiceUuids();
@@ -91,6 +123,34 @@ public class ProtoMaker {
         p.setRssi(scanResult.getRssi());
         p.setAdvertisementData(a.build());
         return p.build();
+    }
+
+    /**
+     * Concat two or more byte arrays
+     * @param arrays
+     * @return
+     */
+    static byte[] concat(byte[]...arrays)
+    {
+        // Determine the length of the result array
+        int totalLength = 0;
+        for (int i = 0; i < arrays.length; i++)
+        {
+            totalLength += arrays[i].length;
+        }
+
+        // create the result array
+        byte[] result = new byte[totalLength];
+
+        // copy the source arrays into the result array
+        int currentIndex = 0;
+        for (int i = 0; i < arrays.length; i++)
+        {
+            System.arraycopy(arrays[i], 0, result, currentIndex, arrays[i].length);
+            currentIndex += arrays[i].length;
+        }
+
+        return result;
     }
 
     static Protos.BluetoothDevice from(BluetoothDevice device) {

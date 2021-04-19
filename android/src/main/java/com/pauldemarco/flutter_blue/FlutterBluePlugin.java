@@ -32,6 +32,7 @@ import android.os.Build;
 import android.os.ParcelUuid;
 import android.util.Log;
 
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -40,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.lang.reflect.Method;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -58,6 +60,14 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
+
+
+
+
+
+
+
+
 
 
 /** FlutterBluePlugin */
@@ -87,6 +97,9 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private Result pendingResult;
     private ArrayList<String> macDeviceScanned = new ArrayList<>();
     private boolean allowDuplicates = false;
+
+    private String devicePin = null;
+    private boolean abortBroadcast = false;
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
@@ -272,7 +285,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 log(LogLevel.EMERGENCY, "mDevices size: " + mDevices.size());
                 break;
             }
-
             case "connect":
             {
                 byte[] data = call.arguments();
@@ -315,6 +327,44 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 break;
             }
 
+            case "connectWithPin":
+            {
+                String deviceId = (String)call.argument("id");
+                this.devicePin = (String)call.argument("pin");
+                boolean autoConnect = (boolean)call.argument("autoconnect");
+                this.abortBroadcast = (boolean) call.argument("abortBroadcast");
+
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+                boolean isConnected = mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT).contains(device);
+
+                // If device is already connected, return error
+                if(mDevices.containsKey(deviceId) && isConnected) {
+                    result.error("already_connected", "connection with device already exists", null);
+                    return;
+                }
+
+                // If device was connected to previously but is now disconnected, attempt a reconnect
+                if(mDevices.containsKey(deviceId) && !isConnected) {
+                    if(mDevices.get(deviceId).gatt.connect()){
+                        result.success(null);
+                    } else {
+                        result.error("reconnect_error", "error when reconnecting to device", null);
+                    }
+                    return;
+                }
+
+                // New request, connect and add gattServer to Map
+                BluetoothGatt gattServer;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    gattServer = device.connectGatt(context, autoConnect, mGattCallback, BluetoothDevice.TRANSPORT_LE);
+                } else {
+                    gattServer = device.connectGatt(context, autoConnect, mGattCallback);
+                }
+                mDevices.put(deviceId, new BluetoothDeviceCache(gattServer));
+                result.success(null);
+                break;
+            }
+
             case "disconnect":
             {
                 String deviceId = (String)call.arguments;
@@ -344,6 +394,43 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 }
                 break;
             }
+
+            case "setPin":{
+                String deviceId = (String)call.argument("id");
+                String pin = (String)call.argument("pin");
+                try{
+                    setPin(deviceId,pin);
+                    result.success(true);
+                }catch(Exception e){
+                    result.error("set_pin_error", e.getMessage(), e);
+                }
+                break;
+            }
+
+            case "requestConnectionPriority":
+            {
+                String deviceId = (String)call.argument("id");
+                String priority = (String)call.argument("priority");
+                try{
+                    requestConnectionPriority(deviceId, priority);
+                }catch(Exception e){
+                    result.error("connection_priority_error", e.getMessage(),e);
+                }
+            }
+
+
+            case "refreshServices":
+             {
+                try{
+                    String deviceId = (String)call.argument("id");
+                    boolean callback = refreshServices(deviceId);
+                    result.success(callback);
+                }catch(Exception e){
+                    result.error("set_pin_error", e.getMessage(), e);
+                }
+                break;
+            }
+
 
             case "discoverServices":
             {
@@ -719,6 +806,42 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                             break;
                     }
                 }
+
+
+
+            }
+        };
+
+        /**
+         * Receive the pairing request and handler to eventChannel
+         * Pairing request receiver
+         * @author Michael Douglas
+         */
+        private final BroadcastReceiver mPairingRequestRecevier = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String action = intent.getAction();
+
+                if(BluetoothDevice.ACTION_PAIRING_REQUEST.equals(action))
+                {
+                    // CLOSE PAIRING REQUEST //
+                    if (abortBroadcast) {
+                        abortBroadcast();
+                    }
+
+                    BluetoothDevice bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    int varient = intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, -1);
+
+                    // SET PIN //
+                    if(devicePin != null){
+                        // HIDE SYSTEM PIN REQUEST
+
+                        if(varient == BluetoothDevice.PAIRING_VARIANT_PIN){
+                            setPin(bluetoothDevice.getAddress().toString(),devicePin);
+                        }
+                        //bluetoothDevice.setPairingConfirmation(true);
+                    }
+                }
             }
         };
 
@@ -727,6 +850,11 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             sink = eventSink;
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
             context.registerReceiver(mReceiver, filter);
+
+            /// LISTEM TO PAIR RECEIVE METHOD //
+            IntentFilter pairingRequestFilter = new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST);
+            pairingRequestFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY - 1);
+            context.registerReceiver(mPairingRequestRecevier, pairingRequestFilter);
         }
 
         @Override
@@ -754,6 +882,58 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         }
     }
 
+    /**
+     * Set pin to device pair
+     * @param deviceId
+     * @param pin
+     * @return
+     */
+    private boolean setPin(String deviceId, String pin){
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+        device.setPin(pin.getBytes());
+        device.createBond();
+        return true;
+    }
+
+
+    /**
+     * Set pin to device pair
+     * @param deviceId
+     * @param pin
+     * @return
+     */
+    private boolean requestConnectionPriority(String deviceId, String priority){
+        System.out.println("REQUEST CONNECTION PRIORITY!");
+        System.out.println(priority);
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+
+        Integer.parseInt(priority);
+
+
+        //device.requestConnectionPriority(Integer.parseInt(priority));
+        return true;
+    }
+
+    /**
+     * Refresh services of a device
+     * @param deviceId
+     * @return
+     */
+    private boolean refreshServices(String deviceId) {
+        try {
+            BluetoothGatt gatt = locateGatt(deviceId);
+            // BluetoothGatt gatt
+            final Method refresh = gatt.getClass().getMethod("refresh");
+            if (refresh != null) {
+                refresh.invoke(gatt);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
     private void stopScan() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             stopScan21();
@@ -776,19 +956,11 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                         if (macDeviceScanned.contains(result.getDevice().getAddress())) return;
                         macDeviceScanned.add(result.getDevice().getAddress());
                     }
-                    Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result);
-                    invokeMethodUIThread("ScanResult", scanResult.toByteArray());
-                }
 
-                @Override
-                public void onBatchScanResults(List<ScanResult> results) {
-                    super.onBatchScanResults(results);
-
-                }
-
-                @Override
-                public void onScanFailed(int errorCode) {
-                    super.onScanFailed(errorCode);
+                    if (result != null) {
+                        Protos.ScanResult scanResult = ProtoMaker.from(result.getDevice(), result);
+                        invokeMethodUIThread("ScanResult", scanResult.toByteArray());
+                    }
                 }
             };
         }
@@ -808,6 +980,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             filters.add(f);
         }
         ScanSettings settings = new ScanSettings.Builder().setScanMode(scanMode).build();
+        macDeviceScanned.clear();
         scanner.startScan(filters, settings, getScanCallback21());
     }
 
