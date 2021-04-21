@@ -42,7 +42,9 @@ class FlutterBlue {
   ///
   ///returns false if an error occured or bluetooth is already running
   ///
-  Future<bool> turnOn() => _channel.invokeMethod('turnOn').then<bool>((d) => d);
+  Future<bool> turnOn() {
+    return _channel.invokeMethod('turnOn').then<bool>((d) => d);
+  }
 
   ///Tries to turn off Bluetooth,
   ///
@@ -51,8 +53,9 @@ class FlutterBlue {
   ///
   ///returns false if an error occured
   ///
-  Future<bool> turnOff() =>
-      _channel.invokeMethod('turnOff').then<bool>((d) => d);
+  Future<bool> turnOff() {
+    return _channel.invokeMethod('turnOff').then<bool>((d) => d);
+  }
 
   BehaviorSubject<bool> _isScanning = BehaviorSubject.seeded(false);
   Stream<bool> get isScanning => _isScanning.stream;
