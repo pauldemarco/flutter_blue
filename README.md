@@ -28,6 +28,9 @@ Once connected to a device, the BluetoothDevice object can discover services ([B
 The BluetoothDevice object is then used to directly interact with characteristics and descriptors.
 
 ## Usage
+
+To use this plugin, add `flutter_blue` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
 ### Obtain an instance
 ```dart
 FlutterBlue flutterBlue = FlutterBlue.instance;
@@ -187,3 +190,19 @@ For location permissions on iOS see more at: [https://developer.apple.com/docume
 ### When I scan using a service UUID filter, it doesn't find any devices.
 Make sure the device is advertising which service UUID's it supports.  This is found in the advertisement
 packet as **UUID 16 bit complete list** or **UUID 128 bit complete list**.
+
+### On build you recieve an error that Flutter Blue's minSdk version is higher than yours
+
+Modify `android\app\build.gradle` and change your `minSdkVersion` to at least 19.
+```gradle
+android {
+    ...
+    defaultConfig {
+        applicationId "com.example.yourapp"
+        minSdkVersion 19
+        targetSdkVersion 27
+        ...
+    }
+    ...
+}
+```
