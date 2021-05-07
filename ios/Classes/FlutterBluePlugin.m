@@ -35,6 +35,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
+@property(nonatomic) NSMutableDictionary<NSString*, NSNumber*> *peripheralRSSIs;
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
@@ -50,6 +51,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   instance.channel = channel;
   instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
   instance.scannedPeripherals = [NSMutableDictionary new];
+  instance.peripheralRSSIs = [NSMutableDictionary new];
   instance.servicesThatNeedDiscovered = [NSMutableArray new];
   instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
   instance.logLevel = emergency;
@@ -253,6 +255,38 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     }
   } else if([@"requestMtu" isEqualToString:call.method]) {
     result([FlutterError errorWithCode:@"requestMtu" message:@"iOS does not allow mtu requests to the peripheral" details:NULL]);
+  } else if([@"rssi" isEqualToString:call.method]) {
+    NSString *remoteId = [call arguments];
+    @try {
+      CBPeripheral *peripheral = [self findPeripheral:remoteId];
+      NSNumber *rssi = _peripheralRSSIs[remoteId];
+      result([self toFlutterData:[self toRssiResponseProto:peripheral rssi:rssi.intValue]]);
+    } @catch(FlutterError *e) {
+      result(e);
+    }
+    result(FlutterMethodNotImplemented);
+  } else if([@"requestRssi" isEqualToString:call.method]) {
+    FlutterStandardTypedData *data = [call arguments];
+    ProtosRssiRequest *request = [[ProtosRssiRequest alloc] initWithData:[data data] error:nil];
+    @try {
+      CBPeripheral *peripheral = [self findPeripheral:request.remoteId];
+      [peripheral readRSSI];
+      result(nil);
+    } @catch(FlutterError *e) {
+      result(e);
+    }
+  } else if([@"reset" isEqualToString:call.method]) {
+    [_centralManager stopScan];
+    [_scannedPeripherals removeAllObjects];
+    [_peripheralRSSIs removeAllObjects];
+    [_servicesThatNeedDiscovered removeAllObjects];
+    [_characteristicsThatNeedDiscovered removeAllObjects];
+    NSArray<CBPeripheral *> *periphs = [self->_centralManager retrieveConnectedPeripheralsWithServices:@[[CBUUID UUIDWithString:@"1800"]]];
+    for (CBPeripheral *periph in periphs) {
+      [_centralManager cancelPeripheralConnection:periph];
+    }
+    
+    result(nil);
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -403,6 +437,12 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 //
 // CBPeripheralDelegate methods
 //
+- (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error {
+  NSLog(@"RSSI returned %@", [RSSI stringValue]);
+  [_peripheralRSSIs setValue:RSSI forKey:[[peripheral identifier] UUIDString]];
+  [_channel invokeMethod:@"rssi" arguments:[self toFlutterData:[self toRssiResponseProto:peripheral rssi:RSSI.intValue]]];
+}
+
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
   NSLog(@"didDiscoverServices");
   // Send negotiated mtu size
@@ -733,6 +773,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   ProtosMtuSizeResponse *result = [[ProtosMtuSizeResponse alloc] init];
   [result setRemoteId:[[peripheral identifier] UUIDString]];
   [result setMtu:mtu];
+  return result;
+}
+
+- (ProtosRssiResponse*)toRssiResponseProto:(CBPeripheral *)peripheral rssi:(int32_t)rssi {
+  ProtosRssiResponse *result = [[ProtosRssiResponse alloc] init];
+  [result setRemoteId:[[peripheral identifier] UUIDString]];
+  [result setRssi:rssi];
   return result;
 }
 

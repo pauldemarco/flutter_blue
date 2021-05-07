@@ -85,7 +85,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
     private Result pendingResult;
-    private ArrayList<String> macDeviceScanned = new ArrayList<>();
+    private final ArrayList<String> macDeviceScanned = new ArrayList<>();
     private boolean allowDuplicates = false;
 
     /** Plugin registration. */
@@ -154,6 +154,10 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private void tearDown() {
         Log.i(TAG, "teardown");
         stopScan();
+        for (BluetoothDeviceCache cache: mDevices.values()) {
+            cache.gatt.disconnect();
+            cache.gatt.close();
+        }
         context = null;
         pluginBinding = null;
         channel.setMethodCallHandler(null);
@@ -163,7 +167,21 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         mBluetoothAdapter = null;
         mBluetoothManager = null;
     }
+    
+    private void reset() {
+        stopScan();
+        for (BluetoothDeviceCache cache: mDevices.values()) {
+            cache.gatt.disconnect();
+            cache.gatt.close();
+        }
+        mDevices.clear();
+        macDeviceScanned.clear();
+        // mBluetoothAdapter.disable();
 
+        mBluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = mBluetoothManager.getAdapter();
+        // mBluetoothAdapter.enable();
+    }
 
     @Override
     public void onMethodCall(MethodCall call, Result result) {
@@ -623,6 +641,54 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 break;
             }
 
+            case "rssi":
+            {
+                String deviceId = (String)call.arguments;
+                BluetoothDeviceCache cache = mDevices.get(deviceId);
+                if(cache != null) {
+                    Protos.RssiResponse.Builder p = Protos.RssiResponse.newBuilder();
+                    p.setRemoteId(deviceId);
+                    p.setRssi(cache.rssi);
+                    result.success(p.build().toByteArray());
+                } else {
+                    result.error("rssi", "no instance of BluetoothGatt, have you connected first?", null);
+                }
+                break;
+            }
+
+            case "requestRssi":
+            {
+                byte[] data = call.arguments();
+                Protos.RssiRequest request;
+                try {
+                    request = Protos.RssiRequest.newBuilder().mergeFrom(data).build();
+                } catch (InvalidProtocolBufferException e) {
+                    result.error("RuntimeException", e.getMessage(), e);
+                    break;
+                }
+
+                BluetoothGatt gatt;
+                try {
+                    gatt = locateGatt(request.getRemoteId());
+                    if (gatt.readRemoteRssi()) {
+                        result.success(null);
+                    } else {
+                        result.error("requestRssi", "gatt.readRemoteRssi returned false", null);
+                    }
+                } catch (Exception e) {
+                    result.error("requestRssi", e.getMessage(), e);
+                }
+
+                break;
+            }
+            
+            case "reset":
+            {
+                reset();
+                result.success(null);
+                break;
+            }
+
             default:
             {
                 result.notImplemented();
@@ -960,6 +1026,16 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
             log(LogLevel.DEBUG, "[onReadRemoteRssi] rssi: " + rssi + " status: " + status);
+            if(status == BluetoothGatt.GATT_SUCCESS) {
+                if(mDevices.containsKey(gatt.getDevice().getAddress())) {
+                    BluetoothDeviceCache cache = mDevices.get(gatt.getDevice().getAddress());
+                    cache.rssi = rssi;
+                    Protos.RssiResponse.Builder p = Protos.RssiResponse.newBuilder();
+                    p.setRemoteId(gatt.getDevice().getAddress());
+                    p.setRssi(rssi);
+                    invokeMethodUIThread("rssi", p.build().toByteArray());
+                }
+            }
         }
 
         @Override
@@ -1005,6 +1081,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     class BluetoothDeviceCache {
         final BluetoothGatt gatt;
         int mtu;
+        int rssi;
 
         BluetoothDeviceCache(BluetoothGatt gatt) {
             this.gatt = gatt;

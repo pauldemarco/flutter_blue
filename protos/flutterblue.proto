@@ -212,3 +212,12 @@ message MtuSizeResponse {
   string remote_id = 1;
   uint32 mtu = 2;
 }
+
+message RssiRequest {
+  string remote_id = 1;
+}
+
+message RssiResponse {
+  string remote_id = 1;
+  int32 rssi = 2;
+}

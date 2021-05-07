@@ -7,8 +7,8 @@ PODS:
     - flutter_blue/Protos (= 0.0.1)
   - flutter_blue/Protos (0.0.1):
     - Flutter
-    - Protobuf (~> 3.11.4)
-  - Protobuf (3.11.4)
+    - Protobuf (~> 3.15.8)
+  - Protobuf (3.15.8)
 
 DEPENDENCIES:
   - e2e (from `.symlinks/plugins/e2e/ios`)
@@ -29,10 +29,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   e2e: 967b9b1fc533b7636a3b7a719f840c27f301fe1f
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_blue: eeb381dc4727a0954dede73515f683865494b370
-  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_blue: 0c6281e67dd48996820a5fd1b98d6d532a1e5efb
+  Protobuf: adb85cd18a15bd1a777c158af9fd6e612a0e6d69
 
-PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.1

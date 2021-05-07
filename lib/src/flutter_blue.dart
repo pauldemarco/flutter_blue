@@ -24,7 +24,7 @@ class FlutterBlue {
 
   static FlutterBlue _instance = new FlutterBlue._();
   static FlutterBlue get instance => _instance;
-  
+
   static newInstance() {
     _instance = new FlutterBlue._();
   }
@@ -44,7 +44,7 @@ class FlutterBlue {
   Stream<bool> get isScanning => _isScanning.stream;
 
   BehaviorSubject<List<ScanResult>> _scanResults = BehaviorSubject.seeded([]);
-  
+
   /// Returns a stream that is a list of [ScanResult] results while a scan is in progress.
   ///
   /// The list emitted is all the scanned results as of the last initiated scan. When a scan is
@@ -149,12 +149,12 @@ class FlutterBlue {
   }
 
   /// Starts a scan and returns a future that will complete once the scan has finished.
-  /// 
+  ///
   /// Once a scan is started, call [stopScan] to stop the scan and complete the returned future.
   ///
   /// timeout automatically stops the scan after a specified [Duration].
   ///
-  /// To observe the results while the scan is in progress, listen to the [scanResults] stream, 
+  /// To observe the results while the scan is in progress, listen to the [scanResults] stream,
   /// or call [scan] instead.
   Future startScan({
     ScanMode scanMode = ScanMode.lowLatency,
@@ -179,6 +179,8 @@ class FlutterBlue {
     _stopScanPill.add(null);
     _isScanning.add(false);
   }
+
+  Future reset() => _channel.invokeMethod('reset');
 
   /// The list of connected peripherals can include those that are connected
   /// by other apps and that will need to be connected locally using the

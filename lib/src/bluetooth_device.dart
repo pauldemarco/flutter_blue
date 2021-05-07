@@ -53,7 +53,7 @@ class BluetoothDevice {
 
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
-    final s = await state.first;
+    final s = await currentState;
     if (s != BluetoothDeviceState.connected) {
       return Future.error(new Exception(
           'Cannot discoverServices while device is not connected. State == $s'));
@@ -91,13 +91,15 @@ class BluetoothDevice {
     yield* _services.stream;
   }
 
-  /// The current connection state of the device
-  Stream<BluetoothDeviceState> get state async* {
-    yield await FlutterBlue.instance._channel
+  Future<BluetoothDeviceState> get currentState {
+    return FlutterBlue.instance._channel
         .invokeMethod('deviceState', id.toString())
         .then((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
         .then((p) => BluetoothDeviceState.values[p.state.value]);
+  }
 
+  /// The current connection state of the device
+  Stream<BluetoothDeviceState> get state async* {
     yield* FlutterBlue.instance._methodStream
         .where((m) => m.method == "DeviceState")
         .map((m) => m.arguments)
@@ -106,13 +108,15 @@ class BluetoothDevice {
         .map((p) => BluetoothDeviceState.values[p.state.value]);
   }
 
-  /// The MTU size in bytes
-  Stream<int> get mtu async* {
-    yield await FlutterBlue.instance._channel
+  Future<int> get currentMtu {
+    return FlutterBlue.instance._channel
         .invokeMethod('mtu', id.toString())
         .then((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
         .then((p) => p.mtu);
+  }
 
+  /// The MTU size in bytes
+  Stream<int> get mtu async* {
     yield* FlutterBlue.instance._methodStream
         .where((m) => m.method == "MtuSize")
         .map((m) => m.arguments)
@@ -130,6 +134,32 @@ class BluetoothDevice {
 
     return FlutterBlue.instance._channel
         .invokeMethod('requestMtu', request.writeToBuffer());
+  }
+
+  Future<int> get currentRssi {
+    return FlutterBlue.instance._channel
+        .invokeMethod('rssi', id.toString())
+        .then((buffer) => new protos.RssiResponse.fromBuffer(buffer))
+        .then((p) => p.rssi);
+  }
+
+  /// The rssi in bytes
+  Stream<int> get rssi async* {
+    yield* FlutterBlue.instance._methodStream
+        .where((m) => m.method == "rssi")
+        .map((m) => m.arguments)
+        .map((buffer) => new protos.RssiResponse.fromBuffer(buffer))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => p.rssi);
+  }
+
+  /// Request the rssi,
+  /// Throws error if request did not complete successfully
+  Future<void> requestRssi() async {
+    var request = protos.RssiRequest.create()..remoteId = id.toString();
+
+    return FlutterBlue.instance._channel
+        .invokeMethod('requestRssi', request.writeToBuffer());
   }
 
   /// Indicates whether the Bluetooth Device can send a write without response
