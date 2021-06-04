@@ -23,7 +23,7 @@ Bluetooth Low Energy plugin for Flutter.
     ss.source_files = "gen/*.pbobjc.{h,m}", "gen/**/*.pbobjc.{h,m}"
     ss.header_mappings_dir = "gen"
     ss.requires_arc = false
-    ss.dependency "Protobuf", '~> 3.11.4'
+    ss.dependency "Protobuf", '~> 3.11'
   end
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
