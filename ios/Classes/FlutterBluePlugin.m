@@ -318,7 +318,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       }
     }
   }
-  return nil;
+
+  // If no primary service was found (this should not happen in a well behaving device), return the secondary as a fallback
+  return secondaryService;
 }
 
 - (CBDescriptor*)findCCCDescriptor:(CBCharacteristic*)characteristic {
