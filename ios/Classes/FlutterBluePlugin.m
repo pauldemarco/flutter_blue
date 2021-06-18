@@ -318,7 +318,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       }
     }
   }
-  return nil;
+
+  // If no primary service was found (this should not happen in a well behaving device), return the secondary as a fallback
+  return secondaryService;
 }
 
 - (CBDescriptor*)findCCCDescriptor:(CBCharacteristic*)characteristic {
@@ -506,8 +508,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   }
   ProtosReadDescriptorResponse *result = [[ProtosReadDescriptorResponse alloc] init];
   [result setRequest:q];
-  int value = [descriptor.value intValue];
-  [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
+  [result setValue:[self getDescriptorDataFromValue:descriptor.value]];
   [_channel invokeMethod:@"ReadDescriptorResponse" arguments:[self toFlutterData:result]];
 
   // If descriptor is CCCD, send a SetNotificationResponse in case anything is awaiting
@@ -709,9 +710,25 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [result setRemoteId:[peripheral.identifier UUIDString]];
   [result setCharacteristicUuid:[descriptor.characteristic.UUID fullUUIDString]];
   [result setServiceUuid:[descriptor.characteristic.service.UUID fullUUIDString]];
-  int value = [descriptor.value intValue];
-  [result setValue:[NSData dataWithBytes:&value length:sizeof(value)]];
+  [result setValue:[self getDescriptorDataFromValue:descriptor.value]];
   return result;
+}
+
+- (NSData*)getDescriptorDataFromValue:(id)value {
+  if ([value isKindOfClass:[NSNumber class]]) {
+    int intValue = [value intValue];
+    return [NSData dataWithBytes:&intValue length:sizeof(intValue)];
+  }
+
+  if ([value isKindOfClass:[NSData class]]) {
+    return value;
+  }
+
+  if ([value isKindOfClass:[NSString class]]) {
+    return [value dataUsingEncoding:NSUTF8StringEncoding];
+  }
+
+  return [[NSData alloc] init];
 }
 
 - (ProtosCharacteristicProperties*)toCharacteristicPropsProto:(CBCharacteristicProperties)props {
