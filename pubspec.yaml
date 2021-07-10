@@ -30,5 +30,5 @@ flutter:
         pluginClass: FlutterBluePlugin
       ios:
         pluginClass: FlutterBluePlugin
-      macos:
-        pluginClass: FlutterBluePlugin
+      # macos:
+      #   pluginClass: FlutterBluePlugin
