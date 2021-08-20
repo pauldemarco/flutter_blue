@@ -415,3 +415,14 @@ const MtuSizeResponse$json = const {
 
 /// Descriptor for `MtuSizeResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List mtuSizeResponseDescriptor = $convert.base64Decode('Cg9NdHVTaXplUmVzcG9uc2USGwoJcmVtb3RlX2lkGAEgASgJUghyZW1vdGVJZBIQCgNtdHUYAiABKA1SA210dQ==');
+@$core.Deprecated('Use readRssiResultDescriptor instead')
+const ReadRssiResult$json = const {
+  '1': 'ReadRssiResult',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'rssi', '3': 2, '4': 1, '5': 5, '10': 'rssi'},
+  ],
+};
+
+/// Descriptor for `ReadRssiResult`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List readRssiResultDescriptor = $convert.base64Decode('Cg5SZWFkUnNzaVJlc3VsdBIbCglyZW1vdGVfaWQYASABKAlSCHJlbW90ZUlkEhIKBHJzc2kYAiABKAVSBHJzc2k=');

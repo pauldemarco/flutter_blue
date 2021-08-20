@@ -247,9 +247,22 @@ class DeviceScreen extends StatelessWidget {
               stream: device.state,
               initialData: BluetoothDeviceState.connecting,
               builder: (c, snapshot) => ListTile(
-                leading: (snapshot.data == BluetoothDeviceState.connected)
-                    ? Icon(Icons.bluetooth_connected)
-                    : Icon(Icons.bluetooth_disabled),
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(snapshot.data == BluetoothDeviceState.connected
+                        ? Icons.bluetooth_connected
+                        : Icons.bluetooth_disabled),
+                    snapshot.data == BluetoothDeviceState.connected
+                        ? FutureBuilder<int>(
+                        future: device.readRssi(),
+                        builder: (context, snapshot) {
+                          return Text(snapshot.hasData ? '${snapshot.data}' : '',
+                              style: Theme.of(context).textTheme.caption);
+                        })
+                        : Text('', style: Theme.of(context).textTheme.caption),
+                  ],
+                ),
                 title: Text(
                     'Device is ${snapshot.data.toString().split('.')[1]}.'),
                 subtitle: Text('${device.id}'),

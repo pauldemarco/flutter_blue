@@ -253,6 +253,15 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     }
   } else if([@"requestMtu" isEqualToString:call.method]) {
     result([FlutterError errorWithCode:@"requestMtu" message:@"iOS does not allow mtu requests to the peripheral" details:NULL]);
+  } else if([@"readRssi" isEqualToString:call.method]) {
+    NSString *remoteId = [call arguments];
+    @try {
+      CBPeripheral *peripheral = [self findPeripheral:remoteId];
+      [peripheral readRSSI];
+      result(nil);
+    } @catch(FlutterError *e) {
+      result(e);
+    }
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -536,6 +545,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [result setRequest:request];
   [result setSuccess:(error == nil)];
   [_channel invokeMethod:@"WriteDescriptorResponse" arguments:[self toFlutterData:result]];
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)rssi error:(NSError *)error {
+  ProtosReadRssiResult *result = [[ProtosReadRssiResult alloc] init];
+  [result setRemoteId:[peripheral.identifier UUIDString]];
+  [result setRssi:[rssi intValue]];
+  [_channel invokeMethod:@"ReadRssiResult" arguments:[self toFlutterData:result]];
 }
 
 //

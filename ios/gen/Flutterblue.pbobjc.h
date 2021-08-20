@@ -777,6 +777,21 @@ typedef GPB_ENUM(ProtosMtuSizeResponse_FieldNumber) {
 
 @end
 
+#pragma mark - ProtosReadRssiResult
+
+typedef GPB_ENUM(ProtosReadRssiResult_FieldNumber) {
+  ProtosReadRssiResult_FieldNumber_RemoteId = 1,
+  ProtosReadRssiResult_FieldNumber_Rssi = 2,
+};
+
+@interface ProtosReadRssiResult : GPBMessage
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
+
+@property(nonatomic, readwrite) int32_t rssi;
+
+@end
+
 NS_ASSUME_NONNULL_END
 
 CF_EXTERN_C_END
