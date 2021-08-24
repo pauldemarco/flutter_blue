@@ -58,10 +58,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener;
+import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 
 
 /** FlutterBluePlugin */
-public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, RequestPermissionsResultListener  {
+public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, RequestPermissionsResultListener, ActivityResultListener {
     private static final String TAG = "FlutterBluePlugin";
     private Object initializationLock = new Object();
     private Context context;
@@ -78,6 +79,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     private Activity activity;
 
     private static final int REQUEST_FINE_LOCATION_PERMISSIONS = 1452;
+    private static final int REQUEST_ENABLE_BT = 1453;
     static final private UUID CCCD_ID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     private final Map<String, BluetoothDeviceCache> mDevices = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
@@ -158,9 +160,11 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             if (registrar != null) {
                 // V1 embedding setup for activity listeners.
                 registrar.addRequestPermissionsResultListener(this);
+                registrar.addActivityResultListener(this);
             } else {
                 // V2 embedding setup for activity listeners.
                 activityBinding.addRequestPermissionsResultListener(this);
+                activityBinding.addActivityResultListener(this);
             }
         }
     }
@@ -233,6 +237,24 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             case "isOn":
             {
                 result.success(mBluetoothAdapter.isEnabled());
+                break;
+            }
+
+            case "enable":
+            {
+                if (!mBluetoothAdapter.isEnabled()) {
+                    boolean ask = (boolean)(call.arguments);
+                    if (ask) {
+                        activity.startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), REQUEST_ENABLE_BT);
+                        result.success(null);
+                    }
+                    else {
+                        result.success(mBluetoothAdapter.enable());
+                    }
+                }
+                else {
+                    result.success(true);
+                }
                 break;
             }
 
@@ -647,6 +669,15 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 pendingResult = null;
                 pendingCall = null;
             }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            channel.invokeMethod("EnableResult", resultCode == Activity.RESULT_OK);
             return true;
         }
         return false;

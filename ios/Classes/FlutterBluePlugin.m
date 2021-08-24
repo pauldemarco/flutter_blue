@@ -82,6 +82,14 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     } else {
       result(@(NO));
     }
+  } else if([@"enable" isEqualToString:call.method]) {
+    // Enabling Bluetooth programmatically is not possible on iOS.
+    // If it is already enabled, we still consider it successful to match Android behaviour
+    if(self.centralManager.state == CBManagerStatePoweredOn) {
+      result(@(YES));
+    } else {
+      result(@(NO));
+    }
   } else if([@"startScan" isEqualToString:call.method]) {
     // Clear any existing scan results
     [self.scannedPeripherals removeAllObjects];
