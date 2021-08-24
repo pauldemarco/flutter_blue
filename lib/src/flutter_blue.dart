@@ -69,7 +69,8 @@ class FlutterBlue {
   /// On Android, this is done silently by default (needs `android.permission.BLUETOOTH_ADMIN` permission).
   /// If [ask] is true, a system dialog asking for permission is shown.
   ///
-  /// On iOS, the functionality is not supported by the operating system and [enable] will always return false.
+  /// On iOS, the functionality is not supported by the operating system and [enable] will return false if the Bluetooth is turned off
+  /// and true if it is on.
   Future<bool> enable({bool ask = false}) async {
     var result = await _channel
         .invokeMethod<bool>('enable', ask);
