@@ -41,23 +41,29 @@ class BluetoothOffScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              Icons.bluetooth_disabled,
-              size: 200.0,
-              color: Colors.white54,
-            ),
-            Text(
-              'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .subhead
-                  ?.copyWith(color: Colors.white),
-            ),
-          ],
+      body: InkWell(
+        onTap: () {
+          FlutterBlue.instance.enable(ask: true)
+              .then((value) => print('Bluetooth enable returned $value'));
+        },
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.bluetooth_disabled,
+                size: 200.0,
+                color: Colors.white54,
+              ),
+              Text(
+                'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
+                style: Theme.of(context)
+                    .primaryTextTheme
+                    .subhead
+                    ?.copyWith(color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );
