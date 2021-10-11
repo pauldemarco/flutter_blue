@@ -538,6 +538,12 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [_channel invokeMethod:@"WriteDescriptorResponse" arguments:[self toFlutterData:result]];
 }
 
+- (void)peripheralIsReadyToSendWriteWithoutResponse:(CBPeripheral *)peripheral {
+    ProtosIsReadyToSendWriteWithoutResponse *result = [[ProtosIsReadyToSendWriteWithoutResponse alloc] init];
+    [result setRemoteId:[peripheral.identifier UUIDString]];
+    [_channel invokeMethod:@"IsReadyToSendWriteWithoutResponse" arguments:[self toFlutterData:result]];
+}
+
 //
 // Proto Helper methods
 //

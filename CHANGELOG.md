@@ -1,3 +1,6 @@
+## 0.8.1
+* add write without available
+
 ## 0.8.0
 * Migrate the plugin to null safety.
 
