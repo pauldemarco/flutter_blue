@@ -891,10 +891,17 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             request.setRemoteId(gatt.getDevice().getAddress());
             request.setCharacteristicUuid(characteristic.getUuid().toString());
             request.setServiceUuid(characteristic.getService().getUuid().toString());
-            Protos.WriteCharacteristicResponse.Builder p = Protos.WriteCharacteristicResponse.newBuilder();
-            p.setRequest(request);
-            p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
-            invokeMethodUIThread("WriteCharacteristicResponse", p.build().toByteArray());
+            log(LogLevel.DEBUG, "[onCharacteristicWrite] writeType: " + characteristic.getWriteType());
+            if (characteristic.getWriteType() == BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE){
+                Protos.IsReadyToSendWriteWithoutResponse.Builder p = Protos.IsReadyToSendWriteWithoutResponse.newBuilder();
+                p.setRemoteId(gatt.getDevice().getAddress());
+                invokeMethodUIThread("IsReadyToSendWriteWithoutResponse", p.build().toByteArray());
+            }else {
+                Protos.WriteCharacteristicResponse.Builder p = Protos.WriteCharacteristicResponse.newBuilder();
+                p.setRequest(request);
+                p.setSuccess(status == BluetoothGatt.GATT_SUCCESS);
+                invokeMethodUIThread("WriteCharacteristicResponse", p.build().toByteArray());
+            }
         }
 
         @Override

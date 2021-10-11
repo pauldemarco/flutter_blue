@@ -121,24 +121,37 @@ class BluetoothCharacteristic {
         .invokeMethod('writeCharacteristic', request.writeToBuffer());
 
     if (type == CharacteristicWriteType.withoutResponse) {
-      return result;
+      return FlutterBlue.instance._methodStream
+          .where((m) => m.method == "IsReadyToSendWriteWithoutResponse")
+          .map((m) => m.arguments)
+          .map((buffer) =>
+      new protos.IsReadyToSendWriteWithoutResponse.fromBuffer(buffer))
+          .where((p) =>
+      (p.remoteId == request.remoteId))
+          .first
+          .then((w) => result==null)
+          .then((success) => (!success)
+          ? throw new Exception('Failed to write the characteristic')
+          : null)
+          .then((_) => null);
+    } else {
+      return FlutterBlue.instance._methodStream
+          .where((m) => m.method == "WriteCharacteristicResponse")
+          .map((m) => m.arguments)
+          .map((buffer) =>
+      new protos.WriteCharacteristicResponse.fromBuffer(buffer))
+          .where((p) =>
+      (p.request.remoteId == request.remoteId) &&
+          (p.request.characteristicUuid == request.characteristicUuid) &&
+          (p.request.serviceUuid == request.serviceUuid))
+          .first
+          .then((w) => w.success)
+          .then((success) => (!success)
+          ? throw new Exception('Failed to write the characteristic')
+          : null)
+          .then((_) => null);
     }
 
-    return FlutterBlue.instance._methodStream
-        .where((m) => m.method == "WriteCharacteristicResponse")
-        .map((m) => m.arguments)
-        .map((buffer) =>
-            new protos.WriteCharacteristicResponse.fromBuffer(buffer))
-        .where((p) =>
-            (p.request.remoteId == request.remoteId) &&
-            (p.request.characteristicUuid == request.characteristicUuid) &&
-            (p.request.serviceUuid == request.serviceUuid))
-        .first
-        .then((w) => w.success)
-        .then((success) => (!success)
-            ? throw new Exception('Failed to write the characteristic')
-            : null)
-        .then((_) => null);
   }
 
   /// Sets notifications or indications for the value of a specified characteristic
