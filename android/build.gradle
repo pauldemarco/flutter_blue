@@ -36,6 +36,11 @@ android {
             }
         }
     }
+    buildTypes {
+        release {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
 }
 
 protobuf {
