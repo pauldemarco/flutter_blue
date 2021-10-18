@@ -74,10 +74,8 @@ class FlutterBlue {
   }
 
   _setLogLevelIfAvailable() async {
-    if (await isAvailable) {
-      // Send the log level to the underlying platforms.
-      setLogLevel(logLevel);
-    }
+    // Send the log level to the underlying platforms.
+    setLogLevel(logLevel);
   }
 
   /// Starts a scan for Bluetooth Low Energy devices and returns a stream
