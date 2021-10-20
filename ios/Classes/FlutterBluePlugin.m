@@ -65,12 +65,13 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   if(self.centralManager == nil){
     self.centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
   }
-    
+
   if(self.centralManager.state == CBManagerStateUnknown){
     // Waiting for the CoreBluetooth to init, try again after 50 ms.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self handleMethodCall:call result:result];
     });
+    return;
   }
 
   if ([@"setLogLevel" isEqualToString:call.method]) {
