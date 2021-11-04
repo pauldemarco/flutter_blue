@@ -26,22 +26,55 @@ class BluetoothDevice {
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
 
+    Completer<void> _completer = Completer();
+
     Timer? timer;
     if (timeout != null) {
       timer = Timer(timeout, () {
         disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
+        if (!_completer.isCompleted) {
+          _completer.completeError(
+              TimeoutException('Failed to connect in time.', timeout));
+        }
       });
     }
 
     await FlutterBlue.instance._channel
         .invokeMethod('connect', request.writeToBuffer());
 
-    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
+    state.firstWhere((_state) {
+      bool connected = _state == BluetoothDeviceState.connected;
+      if (connected) {
+        timer?.cancel();
+        if (!_completer.isCompleted) {
+          _completer.complete();
+        }
+      }
+      return connected;
+    }, orElse: () {
+      if (!_completer.isCompleted) {
+        timer?.cancel();
+        disconnect();
+        _completer.completeError(
+            TimeoutException('Failed to connect in time.', timeout));
+      }
+      return BluetoothDeviceState.disconnected;
+    }).then((_state) {
+      timer?.cancel();
+      if (_state == BluetoothDeviceState.connected) {
+        if (!_completer.isCompleted) {
+          _completer.complete();
+        }
+      }
+    }).catchError((error) {
+      timer?.cancel();
+      disconnect();
+      if (!_completer.isCompleted) {
+        _completer.completeError(error);
+      }
+    });
 
-    timer?.cancel();
-
-    return;
+    return _completer.future;
   }
 
   /// Cancels connection to the Bluetooth Device
