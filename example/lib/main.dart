@@ -103,19 +103,17 @@ class FindDevicesScreen extends StatelessWidget {
                 stream: FlutterBlue.instance.scanResults,
                 initialData: [],
                 builder: (c, snapshot) => Column(
-                  children: snapshot.data == null
-                      ? []
-                      : snapshot.data!
-                          .map(
-                            (r) => ScanResultTile(
-                              result: r,
-                              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                                r.device.connect();
-                                return DeviceScreen(device: r.device);
-                              })),
-                            ),
-                          )
-                          .toList(),
+                  children: (snapshot.data ?? [])
+                      .map(
+                        (r) => ScanResultTile(
+                          result: r,
+                          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                            r.device.connect();
+                            return DeviceScreen(device: r.device);
+                          })),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],
@@ -153,7 +151,10 @@ class DeviceScreen extends StatelessWidget {
     return [math.nextInt(255), math.nextInt(255), math.nextInt(255), math.nextInt(255)];
   }
 
-  List<Widget> _buildServiceTiles(List<BluetoothService> services) {
+  List<Widget> _buildServiceTiles(List<BluetoothService>? services) {
+    if (services == null) {
+      return [];
+    }
     return services
         .map(
           (s) => ServiceTile(
@@ -278,7 +279,7 @@ class DeviceScreen extends StatelessWidget {
               initialData: [],
               builder: (c, snapshot) {
                 return Column(
-                  children: _buildServiceTiles(snapshot.data!),
+                  children: _buildServiceTiles(snapshot.data),
                 );
               },
             ),
