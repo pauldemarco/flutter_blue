@@ -241,7 +241,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
             case "startScan":
             {
-                ensurePermissionBeforeAction(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION, (granted, permission) -> {
+                ensurePermissionsBeforeAction(new String[]{ Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT }, Manifest.permission.ACCESS_FINE_LOCATION, (granted, permission) -> {
                     if (granted)
                         startScan(call, result);
                     else
@@ -647,22 +647,33 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
     }
 
     void ensurePermissionBeforeAction(String permissionA12, String permission, OperationOnPermission operation) {
-        permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? permissionA12 : permission;
-        if (permission != null && ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+        ensurePermissionsBeforeAction(new String[]{ permissionA12 }, permission, operation);
+    }
+
+    void ensurePermissionsBeforeAction(String[] permissionsA12, String permission, OperationOnPermission operation) {
+        String[] permissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? permissionsA12 : permission != null ? new String[] { permission } : null;
+        if (allPermissionsGranted(permissions)) {
             operationsOnPermission.put(lastEventId, (granted, perm) -> {
                 operationsOnPermission.remove(lastEventId);
                 operation.op(granted, perm);
             });
             ActivityCompat.requestPermissions(
                     activityBinding.getActivity(),
-                    new String[] {
-                            permission
-                    },
+                    permissions,
                     lastEventId);
             lastEventId++;
         } else {
             operation.op(true, permission);
         }
+    }
+
+    boolean allPermissionsGranted(String[] permissions) {
+        if (permissions == null) return false;
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(context, permissions[i]) != PackageManager.PERMISSION_GRANTED)
+                return false;
+        }
+        return true;
     }
 
     @Override
