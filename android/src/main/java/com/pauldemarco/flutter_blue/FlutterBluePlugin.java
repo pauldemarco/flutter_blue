@@ -652,7 +652,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     void ensurePermissionsBeforeAction(String[] permissionsA12, String permission, OperationOnPermission operation) {
         String[] permissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? permissionsA12 : permission != null ? new String[] { permission } : null;
-        if (allPermissionsGranted(permissions)) {
+        if (!allPermissionsGranted(permissions)) {
             operationsOnPermission.put(lastEventId, (granted, perm) -> {
                 operationsOnPermission.remove(lastEventId);
                 operation.op(granted, perm);
