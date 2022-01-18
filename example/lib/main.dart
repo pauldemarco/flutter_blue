@@ -52,10 +52,7 @@ class BluetoothOffScreen extends StatelessWidget {
             ),
             Text(
               'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
-              style: Theme.of(context)
-                  .primaryTextTheme
-                  .subhead
-                  ?.copyWith(color: Colors.white),
+              style: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(color: Colors.white),
             ),
           ],
         ),
@@ -72,14 +69,12 @@ class FindDevicesScreen extends StatelessWidget {
         title: Text('Find Devices'),
       ),
       body: RefreshIndicator(
-        onRefresh: () =>
-            FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
+        onRefresh: () => FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               StreamBuilder<List<BluetoothDevice>>(
-                stream: Stream.periodic(Duration(seconds: 2))
-                    .asyncMap((_) => FlutterBlue.instance.connectedDevices),
+                stream: Stream.periodic(Duration(seconds: 2)).asyncMap((_) => FlutterBlue.instance.connectedDevices),
                 initialData: [],
                 builder: (c, snapshot) => Column(
                   children: snapshot.data!
@@ -90,14 +85,11 @@ class FindDevicesScreen extends StatelessWidget {
                               stream: d.state,
                               initialData: BluetoothDeviceState.disconnected,
                               builder: (c, snapshot) {
-                                if (snapshot.data ==
-                                    BluetoothDeviceState.connected) {
+                                if (snapshot.data == BluetoothDeviceState.connected) {
                                   return RaisedButton(
                                     child: Text('OPEN'),
-                                    onPressed: () => Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DeviceScreen(device: d))),
+                                    onPressed: () => Navigator.of(context)
+                                        .push(MaterialPageRoute(builder: (context) => DeviceScreen(device: d))),
                                   );
                                 }
                                 return Text(snapshot.data.toString());
@@ -111,12 +103,11 @@ class FindDevicesScreen extends StatelessWidget {
                 stream: FlutterBlue.instance.scanResults,
                 initialData: [],
                 builder: (c, snapshot) => Column(
-                  children: snapshot.data!
+                  children: (snapshot.data ?? [])
                       .map(
                         (r) => ScanResultTile(
                           result: r,
-                          onTap: () => Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
+                          onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                             r.device.connect();
                             return DeviceScreen(device: r.device);
                           })),
@@ -142,8 +133,7 @@ class FindDevicesScreen extends StatelessWidget {
           } else {
             return FloatingActionButton(
                 child: Icon(Icons.search),
-                onPressed: () => FlutterBlue.instance
-                    .startScan(timeout: Duration(seconds: 4)));
+                onPressed: () => FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)));
           }
         },
       ),
@@ -158,15 +148,13 @@ class DeviceScreen extends StatelessWidget {
 
   List<int> _getRandomBytes() {
     final math = Random();
-    return [
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255)
-    ];
+    return [math.nextInt(255), math.nextInt(255), math.nextInt(255), math.nextInt(255)];
   }
 
-  List<Widget> _buildServiceTiles(List<BluetoothService> services) {
+  List<Widget> _buildServiceTiles(List<BluetoothService>? services) {
+    if (services == null) {
+      return [];
+    }
     return services
         .map(
           (s) => ServiceTile(
@@ -231,10 +219,7 @@ class DeviceScreen extends StatelessWidget {
                   onPressed: onPressed,
                   child: Text(
                     text,
-                    style: Theme.of(context)
-                        .primaryTextTheme
-                        .button
-                        ?.copyWith(color: Colors.white),
+                    style: Theme.of(context).primaryTextTheme.button?.copyWith(color: Colors.white),
                   ));
             },
           )
@@ -250,8 +235,7 @@ class DeviceScreen extends StatelessWidget {
                 leading: (snapshot.data == BluetoothDeviceState.connected)
                     ? Icon(Icons.bluetooth_connected)
                     : Icon(Icons.bluetooth_disabled),
-                title: Text(
-                    'Device is ${snapshot.data.toString().split('.')[1]}.'),
+                title: Text('Device is ${snapshot.data.toString().split('.')[1]}.'),
                 subtitle: Text('${device.id}'),
                 trailing: StreamBuilder<bool>(
                   stream: device.isDiscoveringServices,
@@ -295,7 +279,7 @@ class DeviceScreen extends StatelessWidget {
               initialData: [],
               builder: (c, snapshot) {
                 return Column(
-                  children: _buildServiceTiles(snapshot.data!),
+                  children: _buildServiceTiles(snapshot.data),
                 );
               },
             ),
