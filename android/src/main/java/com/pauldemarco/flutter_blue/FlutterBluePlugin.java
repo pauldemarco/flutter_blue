@@ -646,11 +646,11 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         }
     }
 
-    void ensurePermissionBeforeAction(String permissionA12, String permission, OperationOnPermission operation) {
+    private void ensurePermissionBeforeAction(String permissionA12, String permission, OperationOnPermission operation) {
         ensurePermissionsBeforeAction(new String[]{ permissionA12 }, permission, operation);
     }
 
-    void ensurePermissionsBeforeAction(String[] permissionsA12, String permission, OperationOnPermission operation) {
+    private void ensurePermissionsBeforeAction(String[] permissionsA12, String permission, OperationOnPermission operation) {
         String[] permissions = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? permissionsA12 : permission != null ? new String[] { permission } : null;
         if (!allPermissionsGranted(permissions)) {
             operationsOnPermission.put(lastEventId, (granted, perm) -> {
@@ -667,8 +667,8 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         }
     }
 
-    boolean allPermissionsGranted(String[] permissions) {
-        if (permissions == null) return false;
+    private boolean allPermissionsGranted(String[] permissions) {
+        if (permissions == null) return true;
         for (int i = 0; i < permissions.length; i++) {
             if (ContextCompat.checkSelfPermission(context, permissions[i]) != PackageManager.PERMISSION_GRANTED)
                 return false;
@@ -1017,7 +1017,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         }
     };
 
-    enum LogLevel
+    private enum LogLevel
     {
         EMERGENCY, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG;
     }
@@ -1041,7 +1041,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     // BluetoothDeviceCache contains any other cached information not stored in Android Bluetooth API
     // but still needed Dart side.
-    class BluetoothDeviceCache {
+    private class BluetoothDeviceCache {
         final BluetoothGatt gatt;
         int mtu;
 
