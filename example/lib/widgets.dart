@@ -23,8 +23,7 @@ class ScanResultTile extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            result.device.id.toString(),
-            style: Theme.of(context).textTheme.caption,
+            result.device.id.toString()
           )
         ],
       );
@@ -39,17 +38,13 @@ class ScanResultTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(title, style: Theme.of(context).textTheme.caption),
+          Text(title),
           SizedBox(
             width: 12.0,
           ),
           Expanded(
             child: Text(
               value,
-              style: Theme.of(context)
-                  .textTheme
-                  .caption
-                  ?.apply(color: Colors.black),
               softWrap: true,
             ),
           ),
@@ -135,8 +130,7 @@ class ServiceTile extends StatelessWidget {
           children: <Widget>[
             Text('Service'),
             Text('0x${service.uuid.toString().toUpperCase().substring(4, 8)}',
-                style: Theme.of(context).textTheme.body1?.copyWith(
-                    color: Theme.of(context).textTheme.caption?.color))
+                )
           ],
         ),
         children: characteristicTiles,
@@ -183,8 +177,7 @@ class CharacteristicTile extends StatelessWidget {
                 Text('Characteristic'),
                 Text(
                     '0x${characteristic.uuid.toString().toUpperCase().substring(4, 8)}',
-                    style: Theme.of(context).textTheme.body1?.copyWith(
-                        color: Theme.of(context).textTheme.caption?.color))
+                    )
               ],
             ),
             subtitle: Text(value.toString()),
@@ -243,10 +236,7 @@ class DescriptorTile extends StatelessWidget {
         children: <Widget>[
           Text('Descriptor'),
           Text('0x${descriptor.uuid.toString().toUpperCase().substring(4, 8)}',
-              style: Theme.of(context)
-                  .textTheme
-                  .body1
-                  ?.copyWith(color: Theme.of(context).textTheme.caption?.color))
+              )
         ],
       ),
       subtitle: StreamBuilder<List<int>>(
@@ -289,11 +279,11 @@ class AdapterStateTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           'Bluetooth adapter is ${state.toString().substring(15)}',
-          style: Theme.of(context).primaryTextTheme.subhead,
+          
         ),
         trailing: Icon(
           Icons.error,
-          color: Theme.of(context).primaryTextTheme.subhead?.color,
+          
         ),
       ),
     );
