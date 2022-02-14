@@ -19,10 +19,6 @@ class Guid {
   Guid.empty() : this._internal(new List.filled(16, 0));
 
   static List<int> _fromMacString(String input) {
-    if (input == null) {
-      throw new ArgumentError("Input was null");
-    }
-
     input = _removeNonHexCharacters(input);
     final bytes = hex.decode(input);
 
@@ -34,10 +30,6 @@ class Guid {
   }
 
   static List<int> _fromString(String input) {
-    if (input == null) {
-      throw new ArgumentError("Input was null");
-    }
-
     input = _removeNonHexCharacters(input);
     final bytes = hex.decode(input);
 
