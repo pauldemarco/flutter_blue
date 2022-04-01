@@ -134,10 +134,9 @@ class FlutterBlue {
       final list = _scanResults.value ?? [];
       int index = list.indexOf(result);
       if (index != -1) {
-        list[index] = result;
-      } else {
-        list.add(result);
+        list.removeAt(index);
       }
+      list.add(result);
       _scanResults.add(list);
       return result;
     });
