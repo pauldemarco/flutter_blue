@@ -35,6 +35,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
+@property(nonatomic) NSMutableDictionary *cacheConnectPeripherals;
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
@@ -49,6 +50,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   FlutterBluePlugin* instance = [[FlutterBluePlugin alloc] init];
   instance.channel = channel;
   instance.scannedPeripherals = [NSMutableDictionary new];
+  instance.cacheConnectPeripherals = [NSMutableDictionary new];
   instance.servicesThatNeedDiscovered = [NSMutableArray new];
   instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
   instance.logLevel = emergency;
@@ -130,6 +132,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
                                    message:@"Peripheral not found"
                                    details:nil];
       }
+      // Cache the peripherals info, otherwise the core bluetooh won't allow connection
+      [self.cacheConnectPeripherals setObject:peripheral
+                                       forKey:[[peripheral identifier] UUIDString]];
+
       // TODO: Implement Connect options (#36)
       [_centralManager connectPeripheral:peripheral options:nil];
       result(nil);
@@ -139,6 +145,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   } else if([@"disconnect" isEqualToString:call.method]) {
     NSString *remoteId = [call arguments];
     @try {
+      [self.cacheConnectPeripherals removeObjectForKey: remoteId];
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       [_centralManager cancelPeripheralConnection:peripheral];
       result(nil);
