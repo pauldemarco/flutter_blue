@@ -32,6 +32,10 @@ class FlutterBlue {
   Future<bool> get isAvailable =>
       _channel.invokeMethod('isAvailable').then<bool>((d) => d);
 
+  /// Return the friendly Bluetooth name of the local Bluetooth adapter
+  Future<String> get name =>
+      _channel.invokeMethod('name').then<String>((d) => d);
+
   /// Checks if Bluetooth functionality is turned on
   Future<bool> get isOn => _channel.invokeMethod('isOn').then<bool>((d) => d);
 
