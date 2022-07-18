@@ -3,7 +3,7 @@
 //  source: flutterblue.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields,deprecated_member_use_from_same_package
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,deprecated_member_use_from_same_package,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:core' as $core;
 import 'dart:convert' as $convert;
@@ -415,3 +415,14 @@ const MtuSizeResponse$json = const {
 
 /// Descriptor for `MtuSizeResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List mtuSizeResponseDescriptor = $convert.base64Decode('Cg9NdHVTaXplUmVzcG9uc2USGwoJcmVtb3RlX2lkGAEgASgJUghyZW1vdGVJZBIQCgNtdHUYAiABKA1SA210dQ==');
+@$core.Deprecated('Use rSSIResponseDescriptor instead')
+const RSSIResponse$json = const {
+  '1': 'RSSIResponse',
+  '2': const [
+    const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
+    const {'1': 'rssi', '3': 2, '4': 1, '5': 5, '10': 'rssi'},
+  ],
+};
+
+/// Descriptor for `RSSIResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List rSSIResponseDescriptor = $convert.base64Decode('CgxSU1NJUmVzcG9uc2USGwoJcmVtb3RlX2lkGAEgASgJUghyZW1vdGVJZBISCgRyc3NpGAIgASgFUgRyc3Np');
