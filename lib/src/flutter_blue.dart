@@ -131,7 +131,7 @@ class FlutterBlue {
         .map((buffer) => new protos.ScanResult.fromBuffer(buffer))
         .map((p) {
       final result = new ScanResult.fromProto(p);
-      final list = _scanResults.value ?? [];
+      final list = _scanResults.value;
       int index = list.indexOf(result);
       if (index != -1) {
         list[index] = result;
