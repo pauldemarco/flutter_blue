@@ -4,6 +4,7 @@
 
 package com.pauldemarco.flutter_blue;
 
+import static com.pauldemarco.flutter_blue.Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE;
 import android.app.Activity;
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -412,7 +413,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 byte[] data = call.arguments();
                 Protos.ReadDescriptorRequest request;
                 try {
-                    request = Protos.ReadDescriptorRequest.newBuilder().mergeFrom(data).build();
+                    request = Protos.ReadDescriptorRequest.newBuilder().mergeFrom(data).setWriteType(WITHOUT_RESPONSE).build();
                 } catch (InvalidProtocolBufferException e) {
                     result.error("RuntimeException", e.getMessage(), e);
                     break;
