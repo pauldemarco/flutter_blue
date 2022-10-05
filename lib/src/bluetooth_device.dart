@@ -132,6 +132,21 @@ class BluetoothDevice {
         .invokeMethod('requestMtu', request.writeToBuffer());
   }
 
+  Future<int> readRemoteRSSI() async {
+    final rssiGetResult = await FlutterBlue.instance._channel
+        .invokeMethod('readRemoteRSSI', id.toString());
+    if (!rssiGetResult) {
+      throw Error();
+    }
+
+    return FlutterBlue.instance._methodStream
+        .where((m) => m.method == 'onReadRemoteRssi')
+        .map((m) => m.arguments)
+        .map((buffer) => protos.RSSIResponse.fromBuffer(buffer))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => p.rssi).first;
+  }
+
   /// Indicates whether the Bluetooth Device can send a write without response
   Future<bool> get canSendWriteWithoutResponse =>
       new Future.error(new UnimplementedError());

@@ -626,7 +626,17 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
                 break;
             }
-
+            case "readRemoteRSSI": {
+                String remotId = (String) call.arguments;
+                try {
+                    BluetoothGatt gatt = locateGatt(remotId);
+                    boolean rssiGetResult = gatt.readRemoteRssi();
+                    result.success(rssiGetResult);
+                } catch (Exception e) {
+                    result.error("readRemoteRSSI", e.getMessage(), e);
+                }
+                break;
+            }
             default:
             {
                 result.notImplemented();
@@ -964,6 +974,11 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
         @Override
         public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
             log(LogLevel.DEBUG, "[onReadRemoteRssi] rssi: " + rssi + " status: " + status);
+
+            Protos.RSSIResponse.Builder p = Protos.RSSIResponse.newBuilder();
+            p.setRemoteId(gatt.getDevice().getAddress());
+            p.setRssi(rssi);
+            invokeMethodUIThread("onReadRemoteRssi", p.build().toByteArray());
         }
 
         @Override
