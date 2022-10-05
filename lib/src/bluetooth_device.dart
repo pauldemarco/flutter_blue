@@ -48,6 +48,15 @@ class BluetoothDevice {
   Future disconnect() =>
       FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
 
+  Future<void> createBond() async {
+    var request = protos.ConnectRequest.create()
+      ..remoteId = id.toString()
+      ..androidAutoConnect = false;
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('createBond', request.writeToBuffer());
+  }
+
   BehaviorSubject<List<BluetoothService>> _services =
       BehaviorSubject.seeded([]);
 
