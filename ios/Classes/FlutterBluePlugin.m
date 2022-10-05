@@ -35,9 +35,9 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
-@property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
-@property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
+@property(nonatomic) NSMutableDictionary *servicesThatNeedDiscoveredA;
+@property(nonatomic) NSMutableDictionary *characteristicsThatNeedDiscoveredA;
 @end
 
 @implementation FlutterBluePlugin
@@ -50,10 +50,11 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   instance.channel = channel;
   instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
   instance.scannedPeripherals = [NSMutableDictionary new];
-  instance.servicesThatNeedDiscovered = [NSMutableArray new];
-  instance.characteristicsThatNeedDiscovered = [NSMutableArray new];
   instance.logLevel = emergency;
   
+  instance.servicesThatNeedDiscoveredA = [NSMutableDictionary new];
+  instance.characteristicsThatNeedDiscoveredA = [NSMutableDictionary new];
+    
   // STATE
   FlutterBlueStreamHandler* stateStreamHandler = [[FlutterBlueStreamHandler alloc] init];
   [stateChannel setStreamHandler:stateStreamHandler];
@@ -84,6 +85,8 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     }
   } else if([@"startScan" isEqualToString:call.method]) {
     // Clear any existing scan results
+    [_servicesThatNeedDiscoveredA removeAllObjects];
+    [_characteristicsThatNeedDiscoveredA removeAllObjects];
     [self.scannedPeripherals removeAllObjects];
     // TODO: Request Permission?
     FlutterStandardTypedData *data = [call arguments];
@@ -147,8 +150,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     @try {
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
       // Clear helper arrays
-      [_servicesThatNeedDiscovered removeAllObjects];
-      [_characteristicsThatNeedDiscovered removeAllObjects ];
+      id services = [_servicesThatNeedDiscoveredA objectForKey:remoteId];
+      id characteristics = [_characteristicsThatNeedDiscoveredA objectForKey:remoteId];
+      [services removeAllObjects];
+      [characteristics removeAllObjects];
       [peripheral discoverServices:nil];
       result(nil);
     } @catch(FlutterError *e) {
@@ -379,6 +384,10 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary<NSString *,id> *)advertisementData RSSI:(NSNumber *)RSSI {
   [self.scannedPeripherals setObject:peripheral
                               forKey:[[peripheral identifier] UUIDString]];
+  [self.servicesThatNeedDiscoveredA setObject:[NSMutableArray new]
+                              forKey:[[peripheral identifier] UUIDString]];
+  [self.characteristicsThatNeedDiscoveredA setObject:[NSMutableArray new]
+                              forKey:[[peripheral identifier] UUIDString]];
   ProtosScanResult *result = [self toScanResultProto:peripheral advertisementData:advertisementData RSSI:RSSI];
   [_channel invokeMethod:@"ScanResult" arguments:[self toFlutterData:result]];
 }
@@ -419,28 +428,38 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [_channel invokeMethod:@"MtuSize" arguments:[self toFlutterData:[self toMtuSizeResponseProto:peripheral mtu:mtu]]];
   
   // Loop through and discover characteristics and secondary services
-  [_servicesThatNeedDiscovered addObjectsFromArray:peripheral.services];
+  id services = [_servicesThatNeedDiscoveredA objectForKey:peripheral.identifier.UUIDString];
+  [services addObjectsFromArray:peripheral.services];
   for(CBService *s in [peripheral services]) {
-    NSLog(@"Found service: %@", [s.UUID UUIDString]);
+      NSLog(@"%@: Found service: %@", peripheral.identifier.UUIDString, [s.UUID UUIDString]);
     [peripheral discoverCharacteristics:nil forService:s];
     // [peripheral discoverIncludedServices:nil forService:s]; // Secondary services in the future (#8)
   }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
-  NSLog(@"didDiscoverCharacteristicsForService");
+  NSLog(@"%@: didDiscoverCharacteristicsForService", peripheral.identifier.UUIDString);
   // Loop through and discover descriptors for characteristics
-  [_servicesThatNeedDiscovered removeObject:service];
-  [_characteristicsThatNeedDiscovered addObjectsFromArray:service.characteristics];
+    
+  id services = [_servicesThatNeedDiscoveredA objectForKey:peripheral.identifier.UUIDString];
+  [services removeObject:service];
+  id characteristics = [_characteristicsThatNeedDiscoveredA objectForKey:peripheral.identifier.UUIDString];
+  [characteristics addObjectsFromArray:service.characteristics];
+    
   for(CBCharacteristic *c in [service characteristics]) {
     [peripheral discoverDescriptorsForCharacteristic:c];
   }
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-  NSLog(@"didDiscoverDescriptorsForCharacteristic");
-  [_characteristicsThatNeedDiscovered removeObject:characteristic];
-  if(_servicesThatNeedDiscovered.count > 0 || _characteristicsThatNeedDiscovered.count > 0) {
+    
+  NSMutableArray *services = [_servicesThatNeedDiscoveredA objectForKey:peripheral.identifier.UUIDString];
+  NSMutableArray *characteristics = [_characteristicsThatNeedDiscoveredA objectForKey:peripheral.identifier.UUIDString];
+    
+  NSLog(@"%@: didDiscoverDescriptorsForCharacteristic %d, %d", peripheral.identifier.UUIDString, services.count, characteristics.count);
+    
+  [characteristics removeObject:characteristic];
+  if(services.count > 0 || characteristics.count > 0) {
     // Still discovering
     return;
   }
