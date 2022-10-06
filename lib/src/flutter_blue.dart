@@ -187,8 +187,8 @@ class FlutterBlue {
   /// Messages equal or below the log level specified are stored/forwarded,
   /// messages above are dropped.
   void setLogLevel(LogLevel level) async {
-    await _channel.invokeMethod('setLogLevel', level.index);
     _logLevel = level;
+    await _channel.invokeMethod('setLogLevel', level.index);
   }
 
   void _log(LogLevel level, String message) {
