@@ -141,7 +141,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     NSString *remoteId = [call arguments];
     @try {
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
-      result([self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]);
+        result([self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:0]]);
     } @catch(FlutterError *e) {
       result(e);
     }
@@ -402,7 +402,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [_channel invokeMethod:@"MtuSize" arguments:[self toFlutterData:[self toMtuSizeResponseProto:peripheral mtu:mtu]]];
   
   // Send connection state
-  [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
+    [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:0]]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
@@ -411,11 +411,12 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   peripheral.delegate = nil;
   
   // Send connection state
-  [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state]]];
+    [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:(int32_t)error.code]]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
   // TODO:?
+    NSLog(@"didFailToConnectPeripheral");
 }
 
 //
@@ -650,7 +651,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   return result;
 }
 
-- (ProtosDeviceStateResponse*)toDeviceStateProto:(CBPeripheral *)peripheral state:(CBPeripheralState)state {
+- (ProtosDeviceStateResponse*)toDeviceStateProto:(CBPeripheral *)peripheral state:(CBPeripheralState)state status:(int32_t)status {
   ProtosDeviceStateResponse *result = [[ProtosDeviceStateResponse alloc] init];
   switch(state) {
     case CBPeripheralStateDisconnected:
@@ -667,6 +668,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
       break;
   }
   [result setRemoteId:[[peripheral identifier] UUIDString]];
+  [result setStatus:status];
   return result;
 }
 

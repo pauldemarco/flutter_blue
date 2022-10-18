@@ -1,7 +1,6 @@
-
 part of flutter_blue;
 
-class _BluetoothStatusCodeConst {
+class _AndroidBluetoothStatusCodeConst {
   static const int Success = 0;
   static const int HCIUnknownBTLECommand = 1;
   static const int HCIUnknownConnectionId = 2;
@@ -48,352 +47,454 @@ class _BluetoothStatusCodeConst {
   static const int GATTOutOfRange = 255;
 }
 
+class _IOSBluetoothStatusCodeConst {
+  static const CBUnknownError = 0; //this is success
+  static const CBErrorInvalidParameters = 1;
+  static const CBErrorInvalidHandle = 2;
+  static const CBErrorNotConnected = 3;
+  static const CBErrorOutOfSpace = 4;
+  static const CBErrorOperationCancelled = 5;
+  static const CBErrorPeripheralDisconnected = 7;
+  static const CBErrorUUIDNotAllowed = 8;
+  static const CBErrorAlreadyAdvertising = 9;
+  static const CBErrorConnectionFailed = 10;
+  static const CBErrorConnectionLimitReached = 11;
+  static const CBErrorOperationNotSupported = 13;
+  static const CBErrorUnknownDevice = 12;
+}
+
 class BluetoothStatusCode {
   final String name;
   final int id;
   const BluetoothStatusCode(this.name, this.id);
 
   factory BluetoothStatusCode.fromId(int id) {
-    switch (id) {
-      case _BluetoothStatusCodeConst.Success:
-        return BluetoothStatusSuccess();
-      case _BluetoothStatusCodeConst.HCIUnknownBTLECommand:
-        return BluetoothHCIStatusUnknownBTLECommand();
-      case _BluetoothStatusCodeConst.HCIUnknownConnectionId:
-        return BluetoothHCIStatusUnknownConnectionId();
-      case _BluetoothStatusCodeConst.HCIAuthenticationFailure:
-        return BluetoothHCIAuthenticationFailure();
-
-      case _BluetoothStatusCodeConst.HCIPinOrKeyMissing:
-        return BluetoothHCIPinOrKeyMissing();
-      case _BluetoothStatusCodeConst.HCIMemoryCapacityExceeded:
-        return BluetoothHCIMemoryCapacityExceeded();
-      case _BluetoothStatusCodeConst.HCIConnectionTimeout:
-        return BluetoothHCIConnectionTimeout();
-      case _BluetoothStatusCodeConst.HCICommandDisallowed:
-        return BluetoothHCICommandDisallowed();
-      case _BluetoothStatusCodeConst.HCIInvalidBTLECommandParameters:
-        return BluetoothHCIInvalidBTLECommandParameters();
-      case _BluetoothStatusCodeConst.HCIRemoteUserTerminatedConnection:
-        return BluetoothHCIRemoteUserTerminatedConnection();
-      case _BluetoothStatusCodeConst.HCIRemoteDevTerminationDueToLowResources:
-        return BluetoothHCIRemoteDevTerminationDueToLowResources();
-      case _BluetoothStatusCodeConst.HCIRemoteDevTerminationDueToPowerOff:
-        return BluetoothHCIRemoteDevTerminationDueToPowerOff();
-      case _BluetoothStatusCodeConst.HCILocalHostTerminatedConnection:
-        return BluetoothHCILocalHostTerminatedConnection();
-      case _BluetoothStatusCodeConst.HCIUnsupportedRemoteFeature:
-        return BluetoothHCIUnsupportedRemoteFeature();
-      case _BluetoothStatusCodeConst.HCIInvalidLMPParameters:
-        return BluetoothHCIInvalidLMPParameters();
-      case _BluetoothStatusCodeConst.HCIUnspecifiedError:
-        return BluetoothHCIUnspecifiedError();
-      case _BluetoothStatusCodeConst.HCILMPResponseTimeout:
-        return BluetoothHCILMPResponseTimeout();
-      case _BluetoothStatusCodeConst.HCILMPPDUNotAllowed:
-        return BluetoothHCILMPPDUNotAllowed();
-      case _BluetoothStatusCodeConst.HCIInstantPassed:
-        return BluetoothHCIInstantPassed();
-      case _BluetoothStatusCodeConst.HCIPairingWithUnitKeyUnsupported:
-        return BluetoothHCIPairingWithUnitKeyUnsupported();
-      case _BluetoothStatusCodeConst.HCIDifferentTransactionCollision:
-        return BluetoothHCIDifferentTransactionCollision();
-      case _BluetoothStatusCodeConst.HCIControllerBusy:
-        return BluetoothHCIControllerBusy();
-      case _BluetoothStatusCodeConst.HCIConnIntervalUnAcceptable:
-        return BluetoothHCIConnIntervalUnAcceptable();
-      case _BluetoothStatusCodeConst.HCIDirectedAdvertiserTimeout:
-        return BluetoothHCIDirectedAdvertiserTimeout();
-      case _BluetoothStatusCodeConst.HCIConnTerminatedDueToMicFailure:
-        return BluetoothHCIConnTerminatedDueToMicFailure();
-      case _BluetoothStatusCodeConst.HCIConnFailedToBeEstablished:
-        return BluetoothHCIConnFailedToBeEstablished();
-      case _BluetoothStatusCodeConst.GATTNoResources:
-        return BluetoothGATTNoResources();
-      case _BluetoothStatusCodeConst.GATTInternalError:
-        return BluetoothGATTInternalError();
-      case _BluetoothStatusCodeConst.GATTWrongState:
-        return BluetoothGATTWrongState();
-      case _BluetoothStatusCodeConst.GATTDBFull:
-        return BluetoothGATTDBFull();
-      case _BluetoothStatusCodeConst.GATTBusy:
-        return BluetoothGATTBusy();
-      case _BluetoothStatusCodeConst.GATTError:
-        return BluetoothGATTError();
-      case _BluetoothStatusCodeConst.GATTCmdStarted:
-        return BluetoothGATTCmdStarted();
-      case _BluetoothStatusCodeConst.GATTIllegalParameter:
-        return BluetoothGATTIllegalParameter();
-      case _BluetoothStatusCodeConst.GATTAuthFail:
-        return BluetoothGATTAuthFail();
-      case _BluetoothStatusCodeConst.GATTMore:
-        return BluetoothGATTMore();
-      case _BluetoothStatusCodeConst.GATTInvalidCfg:
-        return BluetoothGATTInvalidCfg();
-      case _BluetoothStatusCodeConst.GATTServiceStarted:
-        return BluetoothGATTServiceStarted();
-      case _BluetoothStatusCodeConst.GATTEncryptedNoMITM:
-        return BluetoothGATTEncryptedNoMITM();
-      case _BluetoothStatusCodeConst.GATTNotEncrypted:
-        return BluetoothGATTNotEncrypted();
-      case _BluetoothStatusCodeConst.GATTCongested:
-        return BluetoothGATTCongested();
-      case _BluetoothStatusCodeConst.GATTCCCCfgErr:
-        return BluetoothGATTCCCCfgErr();
-      case _BluetoothStatusCodeConst.GATTPrcInProgress:
-        return BluetoothGATTPrcInProgress();
-      case _BluetoothStatusCodeConst.GATTOutOfRange:
-        return BluetoothGATTOutOfRange();
+    if (Platform.isAndroid) {
+      switch (id) {
+        case _AndroidBluetoothStatusCodeConst.Success:
+          return BluetoothStatusSuccess(id);
+        case _AndroidBluetoothStatusCodeConst.HCIUnknownBTLECommand:
+          return BluetoothHCIStatusUnknownBTLECommand();
+        case _AndroidBluetoothStatusCodeConst.HCIUnknownConnectionId:
+          return BluetoothHCIStatusUnknownConnectionId();
+        case _AndroidBluetoothStatusCodeConst.HCIAuthenticationFailure:
+          return BluetoothHCIAuthenticationFailure();
+        case _AndroidBluetoothStatusCodeConst.HCIPinOrKeyMissing:
+          return BluetoothHCIPinOrKeyMissing();
+        case _AndroidBluetoothStatusCodeConst.HCIMemoryCapacityExceeded:
+          return BluetoothOutOfSpace(id);
+        case _AndroidBluetoothStatusCodeConst.HCIConnectionTimeout:
+          return BluetoothHCIConnectionTimeout();
+        case _AndroidBluetoothStatusCodeConst.HCICommandDisallowed:
+          return BluetoothHCICommandDisallowed();
+        case _AndroidBluetoothStatusCodeConst.HCIInvalidBTLECommandParameters:
+          return BluetoothInvalidParameters(id);
+        case _AndroidBluetoothStatusCodeConst.HCIRemoteUserTerminatedConnection:
+          return BluetoothPeripheralDisconnect(id);
+        case _AndroidBluetoothStatusCodeConst
+            .HCIRemoteDevTerminationDueToLowResources:
+          return BluetoothHCIRemoteDevTerminationDueToLowResources();
+        case _AndroidBluetoothStatusCodeConst
+            .HCIRemoteDevTerminationDueToPowerOff:
+          return BluetoothHCIRemoteDevTerminationDueToPowerOff();
+        case _AndroidBluetoothStatusCodeConst.HCILocalHostTerminatedConnection:
+          return BluetoothHCILocalHostTerminatedConnection();
+        case _AndroidBluetoothStatusCodeConst.HCIUnsupportedRemoteFeature:
+          return BluetoothHCIUnsupportedRemoteFeature();
+        case _AndroidBluetoothStatusCodeConst.HCIInvalidLMPParameters:
+          return BluetoothInvalidParameters(id);
+        case _AndroidBluetoothStatusCodeConst.HCIUnspecifiedError:
+          return BluetoothHCIUnspecifiedError();
+        case _AndroidBluetoothStatusCodeConst.HCILMPResponseTimeout:
+          return BluetoothHCILMPResponseTimeout();
+        case _AndroidBluetoothStatusCodeConst.HCILMPPDUNotAllowed:
+          return BluetoothHCILMPPDUNotAllowed();
+        case _AndroidBluetoothStatusCodeConst.HCIInstantPassed:
+          return BluetoothHCIInstantPassed();
+        case _AndroidBluetoothStatusCodeConst.HCIPairingWithUnitKeyUnsupported:
+          return BluetoothHCIPairingWithUnitKeyUnsupported();
+        case _AndroidBluetoothStatusCodeConst.HCIDifferentTransactionCollision:
+          return BluetoothHCIDifferentTransactionCollision();
+        case _AndroidBluetoothStatusCodeConst.HCIControllerBusy:
+          return BluetoothHCIControllerBusy();
+        case _AndroidBluetoothStatusCodeConst.HCIConnIntervalUnAcceptable:
+          return BluetoothHCIConnIntervalUnAcceptable();
+        case _AndroidBluetoothStatusCodeConst.HCIDirectedAdvertiserTimeout:
+          return BluetoothHCIDirectedAdvertiserTimeout();
+        case _AndroidBluetoothStatusCodeConst.HCIConnTerminatedDueToMicFailure:
+          return BluetoothHCIConnTerminatedDueToMicFailure();
+        case _AndroidBluetoothStatusCodeConst.HCIConnFailedToBeEstablished:
+          return BluetoothConnectionFailed(id);
+        case _AndroidBluetoothStatusCodeConst.GATTNoResources:
+          return BluetoothGATTNoResources();
+        case _AndroidBluetoothStatusCodeConst.GATTInternalError:
+          return BluetoothGATTInternalError();
+        case _AndroidBluetoothStatusCodeConst.GATTWrongState:
+          return BluetoothGATTWrongState();
+        case _AndroidBluetoothStatusCodeConst.GATTDBFull:
+          return BluetoothGATTDBFull();
+        case _AndroidBluetoothStatusCodeConst.GATTBusy:
+          return BluetoothGATTBusy();
+        case _AndroidBluetoothStatusCodeConst.GATTError:
+          return BluetoothGATTError();
+        case _AndroidBluetoothStatusCodeConst.GATTCmdStarted:
+          return BluetoothGATTCmdStarted();
+        case _AndroidBluetoothStatusCodeConst.GATTIllegalParameter:
+          return BluetoothGATTIllegalParameter();
+        case _AndroidBluetoothStatusCodeConst.GATTAuthFail:
+          return BluetoothGATTAuthFail();
+        case _AndroidBluetoothStatusCodeConst.GATTMore:
+          return BluetoothGATTMore();
+        case _AndroidBluetoothStatusCodeConst.GATTInvalidCfg:
+          return BluetoothGATTInvalidCfg();
+        case _AndroidBluetoothStatusCodeConst.GATTServiceStarted:
+          return BluetoothGATTServiceStarted();
+        case _AndroidBluetoothStatusCodeConst.GATTEncryptedNoMITM:
+          return BluetoothGATTEncryptedNoMITM();
+        case _AndroidBluetoothStatusCodeConst.GATTNotEncrypted:
+          return BluetoothGATTNotEncrypted();
+        case _AndroidBluetoothStatusCodeConst.GATTCongested:
+          return BluetoothGATTCongested();
+        case _AndroidBluetoothStatusCodeConst.GATTCCCCfgErr:
+          return BluetoothGATTCCCCfgErr();
+        case _AndroidBluetoothStatusCodeConst.GATTPrcInProgress:
+          return BluetoothGATTPrcInProgress();
+        case _AndroidBluetoothStatusCodeConst.GATTOutOfRange:
+          return BluetoothGATTOutOfRange();
+      }
+    } else if (Platform.isIOS) {
+      switch (id) {
+        case _IOSBluetoothStatusCodeConst.CBUnknownError:
+          return BluetoothStatusSuccess(id);
+        case _IOSBluetoothStatusCodeConst.CBErrorInvalidParameters:
+          return BluetoothInvalidParameters(id);
+        case _IOSBluetoothStatusCodeConst.CBErrorInvalidHandle:
+          return BluetoothInvalidHandle();
+        case _IOSBluetoothStatusCodeConst.CBErrorNotConnected:
+          return BluetoothNotConnected();
+        case _IOSBluetoothStatusCodeConst.CBErrorOutOfSpace:
+          return BluetoothOutOfSpace(id);
+        case _IOSBluetoothStatusCodeConst.CBErrorOperationCancelled:
+          return BluetoothOperationCancelled();
+        case _IOSBluetoothStatusCodeConst.CBErrorPeripheralDisconnected:
+          return BluetoothPeripheralDisconnect(id);
+        case _IOSBluetoothStatusCodeConst.CBErrorUUIDNotAllowed:
+          return BluetoothUUIDDisallowed();
+        case _IOSBluetoothStatusCodeConst.CBErrorAlreadyAdvertising:
+          return BluetoothAlreadyAdvertising();
+        case _IOSBluetoothStatusCodeConst.CBErrorConnectionFailed:
+          return BluetoothConnectionFailed(id);
+        case _IOSBluetoothStatusCodeConst.CBErrorConnectionLimitReached:
+          return BluetoothConnectionLimitReached();
+        case _IOSBluetoothStatusCodeConst.CBErrorOperationNotSupported:
+          return BluetoothOperationNotSupported();
+        case _IOSBluetoothStatusCodeConst.CBErrorUnknownDevice:
+          return BluetoothUnknownDevice();
+      }
     }
-
     return BluetoothStatusCode('Unknown', -1);
   }
 }
 
 class BluetoothStatusSuccess extends BluetoothStatusCode {
-  const BluetoothStatusSuccess()
-      : super('Success', _BluetoothStatusCodeConst.Success);
+  const BluetoothStatusSuccess(int originalId) : super('Success', originalId);
+}
+
+class BluetoothInvalidParameters extends BluetoothStatusCode {
+  const BluetoothInvalidParameters(int originalId)
+      : super('InvalidParameters', originalId);
+}
+
+class BluetoothInvalidHandle extends BluetoothStatusCode {
+  const BluetoothInvalidHandle()
+      : super(
+            'InvalidHandle', _IOSBluetoothStatusCodeConst.CBErrorInvalidHandle);
+}
+
+class BluetoothNotConnected extends BluetoothStatusCode {
+  const BluetoothNotConnected()
+      : super('NotConnected', _IOSBluetoothStatusCodeConst.CBErrorNotConnected);
+}
+
+class BluetoothOutOfSpace extends BluetoothStatusCode {
+  const BluetoothOutOfSpace(int originalId) : super('OutOfSpace', originalId);
+}
+
+class BluetoothOperationCancelled extends BluetoothStatusCode {
+  const BluetoothOperationCancelled()
+      : super('OperationCancelled',
+            _IOSBluetoothStatusCodeConst.CBErrorOperationCancelled);
+}
+
+class BluetoothPeripheralDisconnect extends BluetoothStatusCode {
+  const BluetoothPeripheralDisconnect(int originalId)
+      : super('PeripheralDisconnect', originalId);
+}
+
+class BluetoothUUIDDisallowed extends BluetoothStatusCode {
+  const BluetoothUUIDDisallowed()
+      : super('UUIDisallowed',
+            _IOSBluetoothStatusCodeConst.CBErrorUUIDNotAllowed);
+}
+
+class BluetoothAlreadyAdvertising extends BluetoothStatusCode {
+  const BluetoothAlreadyAdvertising()
+      : super('AlreadyAdvertising',
+            _IOSBluetoothStatusCodeConst.CBErrorAlreadyAdvertising);
+}
+
+class BluetoothConnectionFailed extends BluetoothStatusCode {
+  const BluetoothConnectionFailed(int originalCode)
+      : super('ConnectionFailed', originalCode);
+}
+
+class BluetoothConnectionLimitReached extends BluetoothStatusCode {
+  const BluetoothConnectionLimitReached()
+      : super('ConnectionLimitReached',
+            _IOSBluetoothStatusCodeConst.CBErrorConnectionLimitReached);
+}
+
+class BluetoothOperationNotSupported extends BluetoothStatusCode {
+  const BluetoothOperationNotSupported()
+      : super('OperationNotSuppoerted',
+            _IOSBluetoothStatusCodeConst.CBErrorOperationNotSupported);
+}
+
+class BluetoothUnknownDevice extends BluetoothStatusCode {
+  const BluetoothUnknownDevice()
+      : super(
+            'UnknownDevice', _IOSBluetoothStatusCodeConst.CBErrorUnknownDevice);
 }
 
 class BluetoothHCIStatusUnknownBTLECommand extends BluetoothStatusCode {
   const BluetoothHCIStatusUnknownBTLECommand()
       : super('HCIUnknownBTLECommand',
-            _BluetoothStatusCodeConst.HCIUnknownBTLECommand);
+            _AndroidBluetoothStatusCodeConst.HCIUnknownBTLECommand);
 }
 
 class BluetoothHCIStatusUnknownConnectionId extends BluetoothStatusCode {
   const BluetoothHCIStatusUnknownConnectionId()
       : super('HCIUnknownConnectionId',
-            _BluetoothStatusCodeConst.HCIUnknownConnectionId);
+            _AndroidBluetoothStatusCodeConst.HCIUnknownConnectionId);
 }
 
 class BluetoothHCIAuthenticationFailure extends BluetoothStatusCode {
   const BluetoothHCIAuthenticationFailure()
       : super('HCIAuthenticationFailure',
-            _BluetoothStatusCodeConst.HCIAuthenticationFailure);
+            _AndroidBluetoothStatusCodeConst.HCIAuthenticationFailure);
 }
 
 class BluetoothHCIPinOrKeyMissing extends BluetoothStatusCode {
   const BluetoothHCIPinOrKeyMissing()
-      : super(
-            'HCIPinOrKeyMissing', _BluetoothStatusCodeConst.HCIPinOrKeyMissing);
-}
-
-class BluetoothHCIMemoryCapacityExceeded extends BluetoothStatusCode {
-  const BluetoothHCIMemoryCapacityExceeded()
-      : super('HCIMemoryCapacityExceeded',
-            _BluetoothStatusCodeConst.HCIMemoryCapacityExceeded);
+      : super('HCIPinOrKeyMissing',
+            _AndroidBluetoothStatusCodeConst.HCIPinOrKeyMissing);
 }
 
 class BluetoothHCIConnectionTimeout extends BluetoothStatusCode {
   const BluetoothHCIConnectionTimeout()
       : super('HCIConnectionTimeout',
-            _BluetoothStatusCodeConst.HCIConnectionTimeout);
+            _AndroidBluetoothStatusCodeConst.HCIConnectionTimeout);
 }
 
 class BluetoothHCICommandDisallowed extends BluetoothStatusCode {
   const BluetoothHCICommandDisallowed()
       : super('HCICommandDisallowed',
-            _BluetoothStatusCodeConst.HCICommandDisallowed);
-}
-
-class BluetoothHCIInvalidBTLECommandParameters extends BluetoothStatusCode {
-  const BluetoothHCIInvalidBTLECommandParameters()
-      : super('HCIInvalidBTLECommandParameters',
-            _BluetoothStatusCodeConst.HCIInvalidBTLECommandParameters);
-}
-
-class BluetoothHCIRemoteUserTerminatedConnection extends BluetoothStatusCode {
-  const BluetoothHCIRemoteUserTerminatedConnection()
-      : super('HCIRemoteUserTerminatedConnection',
-            _BluetoothStatusCodeConst.HCIRemoteUserTerminatedConnection);
+            _AndroidBluetoothStatusCodeConst.HCICommandDisallowed);
 }
 
 class BluetoothHCIRemoteDevTerminationDueToLowResources
     extends BluetoothStatusCode {
   const BluetoothHCIRemoteDevTerminationDueToLowResources()
-      : super('HCIRemoteDevTerminationDueToLowResources',
-            _BluetoothStatusCodeConst.HCIRemoteDevTerminationDueToLowResources);
+      : super(
+            'HCIRemoteDevTerminationDueToLowResources',
+            _AndroidBluetoothStatusCodeConst
+                .HCIRemoteDevTerminationDueToLowResources);
 }
 
 class BluetoothHCIRemoteDevTerminationDueToPowerOff
     extends BluetoothStatusCode {
   const BluetoothHCIRemoteDevTerminationDueToPowerOff()
-      : super('HCIRemoteDevTerminationDueToPowerOff',
-            _BluetoothStatusCodeConst.HCIRemoteDevTerminationDueToPowerOff);
+      : super(
+            'HCIRemoteDevTerminationDueToPowerOff',
+            _AndroidBluetoothStatusCodeConst
+                .HCIRemoteDevTerminationDueToPowerOff);
 }
 
 class BluetoothHCILocalHostTerminatedConnection extends BluetoothStatusCode {
   const BluetoothHCILocalHostTerminatedConnection()
       : super('HCILocalHostTerminatedConnection',
-            _BluetoothStatusCodeConst.HCILocalHostTerminatedConnection);
+            _AndroidBluetoothStatusCodeConst.HCILocalHostTerminatedConnection);
 }
 
 class BluetoothHCIUnsupportedRemoteFeature extends BluetoothStatusCode {
   const BluetoothHCIUnsupportedRemoteFeature()
       : super('HCIUnsupportedRemoteFeature',
-            _BluetoothStatusCodeConst.HCIUnsupportedRemoteFeature);
-}
-
-class BluetoothHCIInvalidLMPParameters extends BluetoothStatusCode {
-  const BluetoothHCIInvalidLMPParameters()
-      : super('HCIInvalidLMPParameters',
-            _BluetoothStatusCodeConst.HCIInvalidLMPParameters);
+            _AndroidBluetoothStatusCodeConst.HCIUnsupportedRemoteFeature);
 }
 
 class BluetoothHCIUnspecifiedError extends BluetoothStatusCode {
   const BluetoothHCIUnspecifiedError()
       : super('HCIUnspecifiedError',
-            _BluetoothStatusCodeConst.HCIUnspecifiedError);
+            _AndroidBluetoothStatusCodeConst.HCIUnspecifiedError);
 }
 
 class BluetoothHCILMPResponseTimeout extends BluetoothStatusCode {
   const BluetoothHCILMPResponseTimeout()
       : super('HCILMPResponseTimeout',
-            _BluetoothStatusCodeConst.HCILMPResponseTimeout);
+            _AndroidBluetoothStatusCodeConst.HCILMPResponseTimeout);
 }
 
 class BluetoothHCILMPPDUNotAllowed extends BluetoothStatusCode {
   const BluetoothHCILMPPDUNotAllowed()
       : super('HCILMPPDUNotAllowed',
-            _BluetoothStatusCodeConst.HCILMPPDUNotAllowed);
+            _AndroidBluetoothStatusCodeConst.HCILMPPDUNotAllowed);
 }
 
 class BluetoothHCIInstantPassed extends BluetoothStatusCode {
   const BluetoothHCIInstantPassed()
-      : super('HCIInstantPassed', _BluetoothStatusCodeConst.HCIInstantPassed);
+      : super('HCIInstantPassed',
+            _AndroidBluetoothStatusCodeConst.HCIInstantPassed);
 }
 
 class BluetoothHCIPairingWithUnitKeyUnsupported extends BluetoothStatusCode {
   const BluetoothHCIPairingWithUnitKeyUnsupported()
       : super('HCIPairingWithUnitKeyUnsupported',
-            _BluetoothStatusCodeConst.HCIPairingWithUnitKeyUnsupported);
+            _AndroidBluetoothStatusCodeConst.HCIPairingWithUnitKeyUnsupported);
 }
 
 class BluetoothHCIDifferentTransactionCollision extends BluetoothStatusCode {
   const BluetoothHCIDifferentTransactionCollision()
       : super('HCIDifferentTransactionCollision',
-            _BluetoothStatusCodeConst.HCIDifferentTransactionCollision);
+            _AndroidBluetoothStatusCodeConst.HCIDifferentTransactionCollision);
 }
 
 class BluetoothHCIControllerBusy extends BluetoothStatusCode {
   const BluetoothHCIControllerBusy()
-      : super('HCIControllerBusy', _BluetoothStatusCodeConst.HCIControllerBusy);
+      : super('HCIControllerBusy',
+            _AndroidBluetoothStatusCodeConst.HCIControllerBusy);
 }
 
 class BluetoothHCIConnIntervalUnAcceptable extends BluetoothStatusCode {
   const BluetoothHCIConnIntervalUnAcceptable()
       : super('HCIConnIntervalUnAcceptable',
-            _BluetoothStatusCodeConst.HCIConnIntervalUnAcceptable);
+            _AndroidBluetoothStatusCodeConst.HCIConnIntervalUnAcceptable);
 }
 
 class BluetoothHCIDirectedAdvertiserTimeout extends BluetoothStatusCode {
   const BluetoothHCIDirectedAdvertiserTimeout()
       : super('HCIDirectedAdvertiserTimeout',
-            _BluetoothStatusCodeConst.HCIDirectedAdvertiserTimeout);
+            _AndroidBluetoothStatusCodeConst.HCIDirectedAdvertiserTimeout);
 }
 
 class BluetoothHCIConnTerminatedDueToMicFailure extends BluetoothStatusCode {
   const BluetoothHCIConnTerminatedDueToMicFailure()
       : super('HCIConnTerminatedDueToMicFailure',
-            _BluetoothStatusCodeConst.HCIConnTerminatedDueToMicFailure);
+            _AndroidBluetoothStatusCodeConst.HCIConnTerminatedDueToMicFailure);
 }
 
 class BluetoothHCIConnFailedToBeEstablished extends BluetoothStatusCode {
   const BluetoothHCIConnFailedToBeEstablished()
       : super('HCIConnFailedToBeEstablished',
-            _BluetoothStatusCodeConst.HCIConnFailedToBeEstablished);
+            _AndroidBluetoothStatusCodeConst.HCIConnFailedToBeEstablished);
 }
 
 class BluetoothGATTNoResources extends BluetoothStatusCode {
   const BluetoothGATTNoResources()
-      : super('GATTNoResources', _BluetoothStatusCodeConst.GATTNoResources);
+      : super('GATTNoResources',
+            _AndroidBluetoothStatusCodeConst.GATTNoResources);
 }
 
 class BluetoothGATTInternalError extends BluetoothStatusCode {
   const BluetoothGATTInternalError()
-      : super('GATTInternalError', _BluetoothStatusCodeConst.GATTInternalError);
+      : super('GATTInternalError',
+            _AndroidBluetoothStatusCodeConst.GATTInternalError);
 }
 
 class BluetoothGATTWrongState extends BluetoothStatusCode {
   const BluetoothGATTWrongState()
-      : super('GATTWrongState', _BluetoothStatusCodeConst.GATTWrongState);
+      : super(
+            'GATTWrongState', _AndroidBluetoothStatusCodeConst.GATTWrongState);
 }
 
 class BluetoothGATTDBFull extends BluetoothStatusCode {
   const BluetoothGATTDBFull()
-      : super('GATTDBFull', _BluetoothStatusCodeConst.GATTDBFull);
+      : super('GATTDBFull', _AndroidBluetoothStatusCodeConst.GATTDBFull);
 }
 
 class BluetoothGATTBusy extends BluetoothStatusCode {
   const BluetoothGATTBusy()
-      : super('GATTBusy', _BluetoothStatusCodeConst.GATTBusy);
+      : super('GATTBusy', _AndroidBluetoothStatusCodeConst.GATTBusy);
 }
 
 class BluetoothGATTError extends BluetoothStatusCode {
   const BluetoothGATTError()
-      : super('GATTError', _BluetoothStatusCodeConst.GATTError);
+      : super('GATTError', _AndroidBluetoothStatusCodeConst.GATTError);
 }
 
 class BluetoothGATTCmdStarted extends BluetoothStatusCode {
   const BluetoothGATTCmdStarted()
-      : super('GATTCmdStarted', _BluetoothStatusCodeConst.GATTCmdStarted);
+      : super(
+            'GATTCmdStarted', _AndroidBluetoothStatusCodeConst.GATTCmdStarted);
 }
 
 class BluetoothGATTIllegalParameter extends BluetoothStatusCode {
   const BluetoothGATTIllegalParameter()
       : super('GATTIllegalParameter',
-            _BluetoothStatusCodeConst.GATTIllegalParameter);
+            _AndroidBluetoothStatusCodeConst.GATTIllegalParameter);
 }
 
 class BluetoothGATTAuthFail extends BluetoothStatusCode {
   const BluetoothGATTAuthFail()
-      : super('GATTAuthFail', _BluetoothStatusCodeConst.GATTAuthFail);
+      : super('GATTAuthFail', _AndroidBluetoothStatusCodeConst.GATTAuthFail);
 }
 
 class BluetoothGATTMore extends BluetoothStatusCode {
   const BluetoothGATTMore()
-      : super('GATTMore', _BluetoothStatusCodeConst.GATTMore);
+      : super('GATTMore', _AndroidBluetoothStatusCodeConst.GATTMore);
 }
 
 class BluetoothGATTInvalidCfg extends BluetoothStatusCode {
   const BluetoothGATTInvalidCfg()
-      : super('GATTInvalidCfg', _BluetoothStatusCodeConst.GATTInvalidCfg);
+      : super(
+            'GATTInvalidCfg', _AndroidBluetoothStatusCodeConst.GATTInvalidCfg);
 }
 
 class BluetoothGATTServiceStarted extends BluetoothStatusCode {
   const BluetoothGATTServiceStarted()
-      : super(
-            'GATTServiceStarted', _BluetoothStatusCodeConst.GATTServiceStarted);
+      : super('GATTServiceStarted',
+            _AndroidBluetoothStatusCodeConst.GATTServiceStarted);
 }
 
 class BluetoothGATTEncryptedNoMITM extends BluetoothStatusCode {
   const BluetoothGATTEncryptedNoMITM()
       : super('GATTEncryptedNoMITM',
-            _BluetoothStatusCodeConst.GATTEncryptedNoMITM);
+            _AndroidBluetoothStatusCodeConst.GATTEncryptedNoMITM);
 }
 
 class BluetoothGATTNotEncrypted extends BluetoothStatusCode {
   const BluetoothGATTNotEncrypted()
-      : super('GATTNotEncrypted', _BluetoothStatusCodeConst.GATTNotEncrypted);
+      : super('GATTNotEncrypted',
+            _AndroidBluetoothStatusCodeConst.GATTNotEncrypted);
 }
 
 class BluetoothGATTCongested extends BluetoothStatusCode {
   const BluetoothGATTCongested()
-      : super('GATTCongested', _BluetoothStatusCodeConst.GATTCongested);
+      : super('GATTCongested', _AndroidBluetoothStatusCodeConst.GATTCongested);
 }
 
 class BluetoothGATTCCCCfgErr extends BluetoothStatusCode {
   const BluetoothGATTCCCCfgErr()
-      : super('GATTCCCCfgErr', _BluetoothStatusCodeConst.GATTCCCCfgErr);
+      : super('GATTCCCCfgErr', _AndroidBluetoothStatusCodeConst.GATTCCCCfgErr);
 }
 
 class BluetoothGATTPrcInProgress extends BluetoothStatusCode {
   const BluetoothGATTPrcInProgress()
-      : super('GATTPrcInProgress', _BluetoothStatusCodeConst.GATTPrcInProgress);
+      : super('GATTPrcInProgress',
+            _AndroidBluetoothStatusCodeConst.GATTPrcInProgress);
 }
 
 class BluetoothGATTOutOfRange extends BluetoothStatusCode {
   const BluetoothGATTOutOfRange()
-      : super('GATTOutOfRange', _BluetoothStatusCodeConst.GATTOutOfRange);
+      : super(
+            'GATTOutOfRange', _AndroidBluetoothStatusCodeConst.GATTOutOfRange);
 }
