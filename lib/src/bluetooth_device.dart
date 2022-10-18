@@ -39,15 +39,13 @@ class BluetoothDevice {
     var firsStateArrived = false;
 
     final stateSubscription = state.listen(
-        null,
+      null,
     );
 
-    stateSubscription.onError(
-        (err) {
-          stateSubscription.cancel();
-          nextStateCompleter.completeError(err);
-        }
-    );
+    stateSubscription.onError((err) {
+      stateSubscription.cancel();
+      nextStateCompleter.completeError(err);
+    });
     stateSubscription.onData((state) {
       if (firsStateArrived) {
         stateSubscription.cancel();
@@ -86,7 +84,7 @@ class BluetoothDevice {
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
     final s = await state.first;
-    if (s.state != BluetoothDeviceStateEnum.connected) {
+    if (s is! BluetoothDeviceConnected) {
       return Future.error(new Exception(
           'Cannot discoverServices while device is not connected. State == $s'));
     }
@@ -128,16 +126,16 @@ class BluetoothDevice {
     yield await FlutterBlue.instance._channel
         .invokeMethod('deviceState', id.toString())
         .then((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
-        .then((p) => BluetoothDeviceState(
-            BluetoothDeviceStateEnum.values[p.state.value], p.status));
+        .then((p) => BluetoothDeviceState.fromId(
+            p.state.value, BluetoothStatusCode.fromId(p.status)));
 
     yield* FlutterBlue.instance._methodStream
         .where((m) => m.method == "DeviceState")
         .map((m) => m.arguments)
         .map((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
-        .map((p) => BluetoothDeviceState(
-            BluetoothDeviceStateEnum.values[p.state.value], p.status));
+        .map((p) => BluetoothDeviceState.fromId(
+            p.state.value, BluetoothStatusCode.fromId(p.status)));
   }
 
   /// The MTU size in bytes
