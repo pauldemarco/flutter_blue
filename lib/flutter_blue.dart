@@ -14,6 +14,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'gen/flutterblue.pb.dart' as protos;
 
+part 'src/bluetooth_device_state.dart';
 part 'src/bluetooth_characteristic.dart';
 part 'src/bluetooth_descriptor.dart';
 part 'src/bluetooth_device.dart';

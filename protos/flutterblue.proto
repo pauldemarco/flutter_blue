@@ -197,6 +197,7 @@ message DeviceStateResponse {
   }
   string remote_id = 1;
   BluetoothDeviceState state = 2;
+  int32 status = 3;
 }
 
 message ConnectedDevicesResponse {

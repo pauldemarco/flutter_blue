@@ -184,7 +184,7 @@ public class ProtoMaker {
                 .build();
     }
 
-    static Protos.DeviceStateResponse from(BluetoothDevice device, int state) {
+    static Protos.DeviceStateResponse from(BluetoothDevice device, int state, int status) {
         Protos.DeviceStateResponse.Builder p = Protos.DeviceStateResponse.newBuilder();
         switch(state) {
             case BluetoothProfile.STATE_DISCONNECTING:
@@ -203,6 +203,7 @@ public class ProtoMaker {
                 break;
         }
         p.setRemoteId(device.getAddress());
+        p.setStatus(status);
         return p.build();
     }
 }

@@ -373,7 +373,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
                 int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                 try {
-                    result.success(ProtoMaker.from(device, state).toByteArray());
+                    result.success(ProtoMaker.from(device, state, 0).toByteArray());
                 } catch(Exception e) {
                     result.error("device_state_error", e.getMessage(), e);
                 }
@@ -906,7 +906,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     gatt.close();
                 }
             }
-            invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
+            invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState, status).toByteArray());
         }
 
         @Override
