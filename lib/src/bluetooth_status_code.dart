@@ -61,6 +61,11 @@ class _IOSBluetoothStatusCodeConst {
   static const CBErrorConnectionLimitReached = 11;
   static const CBErrorOperationNotSupported = 13;
   static const CBErrorUnknownDevice = 12;
+  static const CBErrorEncryptionTimedOut = 15;
+  static const CBErrorLeGattExceedBackgroundNotificationLimit = 17;
+  static const CBErrorLeGattNearBackgroundNotificationLimit = 18;
+  static const CBErrorPeerRemovedPairingInformation = 14;
+  static const CBErrorTooManyLEPairedDevices = 16;
 }
 
 class BluetoothStatusCode {
@@ -98,7 +103,7 @@ class BluetoothStatusCode {
             .HCIRemoteDevTerminationDueToPowerOff:
           return BluetoothHCIRemoteDevTerminationDueToPowerOff();
         case _AndroidBluetoothStatusCodeConst.HCILocalHostTerminatedConnection:
-          return BluetoothHCILocalHostTerminatedConnection();
+          return BluetoothPeerDeleteParingInformation(id);
         case _AndroidBluetoothStatusCodeConst.HCIUnsupportedRemoteFeature:
           return BluetoothHCIUnsupportedRemoteFeature();
         case _AndroidBluetoothStatusCodeConst.HCIInvalidLMPParameters:
@@ -190,6 +195,18 @@ class BluetoothStatusCode {
           return BluetoothOperationNotSupported();
         case _IOSBluetoothStatusCodeConst.CBErrorUnknownDevice:
           return BluetoothUnknownDevice();
+        case _IOSBluetoothStatusCodeConst.CBErrorEncryptionTimedOut:
+          return BluetoothEncryptionTimedOut();
+        case _IOSBluetoothStatusCodeConst
+            .CBErrorLeGattExceedBackgroundNotificationLimit:
+          return BluetoothLeGattExceedBackgroundNotificationLimit();
+        case _IOSBluetoothStatusCodeConst
+            .CBErrorLeGattNearBackgroundNotificationLimit:
+          return BluetoothLeGattNearBackgroundNotificationLimit();
+        case _IOSBluetoothStatusCodeConst.CBErrorPeerRemovedPairingInformation:
+          return BluetoothPeerDeleteParingInformation(id);
+        case _IOSBluetoothStatusCodeConst.CBErrorTooManyLEPairedDevices:
+          return BluetoothTooManyLEPairedDevices();
       }
     }
     return BluetoothStatusCode('Unknown', -1);
@@ -244,8 +261,8 @@ class BluetoothAlreadyAdvertising extends BluetoothStatusCode {
 }
 
 class BluetoothConnectionFailed extends BluetoothStatusCode {
-  const BluetoothConnectionFailed(int originalCode)
-      : super('ConnectionFailed', originalCode);
+  const BluetoothConnectionFailed(int originalId)
+      : super('ConnectionFailed', originalId);
 }
 
 class BluetoothConnectionLimitReached extends BluetoothStatusCode {
@@ -264,6 +281,36 @@ class BluetoothUnknownDevice extends BluetoothStatusCode {
   const BluetoothUnknownDevice()
       : super(
             'UnknownDevice', _IOSBluetoothStatusCodeConst.CBErrorUnknownDevice);
+}
+
+class BluetoothEncryptionTimedOut extends BluetoothStatusCode {
+  const BluetoothEncryptionTimedOut()
+      : super('EncryptionTimedOut',
+            _IOSBluetoothStatusCodeConst.CBErrorEncryptionTimedOut);
+}
+
+class BluetoothLeGattExceedBackgroundNotificationLimit
+    extends BluetoothStatusCode {
+  const BluetoothLeGattExceedBackgroundNotificationLimit()
+      : super(
+            'LeGattExceedBackgroundNotificationLimit',
+            _IOSBluetoothStatusCodeConst
+                .CBErrorLeGattExceedBackgroundNotificationLimit);
+}
+
+class BluetoothLeGattNearBackgroundNotificationLimit
+    extends BluetoothStatusCode {
+  const BluetoothLeGattNearBackgroundNotificationLimit()
+      : super(
+            'LeGattNearBackgroundNotificationLimit',
+            _IOSBluetoothStatusCodeConst
+                .CBErrorLeGattNearBackgroundNotificationLimit);
+}
+
+class BluetoothTooManyLEPairedDevices extends BluetoothStatusCode {
+  const BluetoothTooManyLEPairedDevices()
+      : super('TooManyLEPairedDevices',
+            _IOSBluetoothStatusCodeConst.CBErrorTooManyLEPairedDevices);
 }
 
 class BluetoothHCIStatusUnknownBTLECommand extends BluetoothStatusCode {
@@ -320,10 +367,9 @@ class BluetoothHCIRemoteDevTerminationDueToPowerOff
                 .HCIRemoteDevTerminationDueToPowerOff);
 }
 
-class BluetoothHCILocalHostTerminatedConnection extends BluetoothStatusCode {
-  const BluetoothHCILocalHostTerminatedConnection()
-      : super('HCILocalHostTerminatedConnection',
-            _AndroidBluetoothStatusCodeConst.HCILocalHostTerminatedConnection);
+class BluetoothPeerDeleteParingInformation extends BluetoothStatusCode {
+  const BluetoothPeerDeleteParingInformation(int originalId)
+      : super('BluetoothPeerDeleteParingInformation', originalId);
 }
 
 class BluetoothHCIUnsupportedRemoteFeature extends BluetoothStatusCode {

@@ -123,7 +123,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
                                    details:nil];
       }
       // TODO: Implement Connect options (#36)
-      [_centralManager connectPeripheral:peripheral options:nil];
+        [_centralManager connectPeripheral:peripheral options:nil];
       result(nil);
     } @catch(FlutterError *e) {
       result(e);
@@ -132,7 +132,11 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     NSString *remoteId = [call arguments];
     @try {
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
-      [_centralManager cancelPeripheralConnection:peripheral];
+      if (peripheral.state == CBPeripheralStateConnected
+          || peripheral.state == CBPeripheralStateConnecting) {
+          [_centralManager cancelPeripheralConnection:peripheral];
+      }
+      //[_centralManager cancelPeripheralConnection:peripheral];
       result(nil);
     } @catch(FlutterError *e) {
       result(e);
@@ -141,6 +145,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     NSString *remoteId = [call arguments];
     @try {
       CBPeripheral *peripheral = [self findPeripheral:remoteId];
+        NSLog(@"deviceState state: %ld", peripheral.state);
         result([self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:0]]);
     } @catch(FlutterError *e) {
       result(e);
@@ -393,7 +398,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 }
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral {
-  NSLog(@"didConnectPeripheral");
+    NSLog(@"didConnectPeripheral state: %ld", peripheral.state);
   // Register self as delegate for peripheral
   peripheral.delegate = self;
   
@@ -402,21 +407,28 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   [_channel invokeMethod:@"MtuSize" arguments:[self toFlutterData:[self toMtuSizeResponseProto:peripheral mtu:mtu]]];
   
   // Send connection state
-    [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:0]]];
+  [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:0]]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-  NSLog(@"didDisconnectPeripheral");
+  NSLog(@"didDisconnectPeripheral state: %ld, error: %ld, errorStr: %@",
+        peripheral.state, error.code, error.description);
   // Unregister self as delegate for peripheral, not working #42
   peripheral.delegate = nil;
   
   // Send connection state
-    [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:(int32_t)error.code]]];
+  [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:(int32_t)error.code]]];
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
-  // TODO:?
-    NSLog(@"didFailToConnectPeripheral");
+    NSLog(@"didFailToConnectPeripheral state: %ld, error: %ld, errorStr: %@",
+          peripheral.state, error.code, error.description);
+    // Send connection state
+    [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:(int32_t)error.code]]];
+}
+
+- (void)centralManager:(CBCentralManager *)central connectionEventDidOccur:(CBConnectionEvent)event forPeripheral:(CBPeripheral *)peripheral {
+    NSLog(@"connectionEventDidOccur: ");
 }
 
 //

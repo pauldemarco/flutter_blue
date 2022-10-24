@@ -26,14 +26,6 @@ class BluetoothDevice {
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
 
-    Timer? timer;
-    if (timeout != null) {
-      timer = Timer(timeout, () {
-        disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
-      });
-    }
-
     //final res = await state.firstWhere((s) => s.state == BluetoothDeviceStateEnum.connected);
     final nextStateCompleter = Completer<BluetoothDeviceState>();
     var firsStateArrived = false;
@@ -47,7 +39,9 @@ class BluetoothDevice {
       nextStateCompleter.completeError(err);
     });
     stateSubscription.onData((state) {
-      if (firsStateArrived) {
+      if (firsStateArrived &&
+          (state is BluetoothDeviceConnected ||
+              state is BluetoothDeviceDisconnected)) {
         stateSubscription.cancel();
         nextStateCompleter.complete(state);
         return;
@@ -58,14 +52,23 @@ class BluetoothDevice {
     await FlutterBlue.instance._channel
         .invokeMethod('connect', request.writeToBuffer());
 
-    timer?.cancel();
-
     return nextStateCompleter.future;
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future disconnect() =>
-      FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
+  Future<BluetoothDeviceState> disconnect(Duration ?timeout) async {
+    final stateCompleter =
+        state.firstWhere((state) => state is BluetoothDeviceDisconnected);
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('disconnect', id.toString());
+
+    if (timeout != null) {
+      return await stateCompleter.timeout(timeout);
+    } else {
+      return await stateCompleter;
+    }
+  }
 
   /* implementation not finished and this is not available on iOS
   Future<void> createBond() async {
