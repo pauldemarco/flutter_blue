@@ -1966,6 +1966,7 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeviceStateResponse', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
     ..e<DeviceStateResponse_BluetoothDeviceState>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, valueOf: DeviceStateResponse_BluetoothDeviceState.valueOf, enumValues: DeviceStateResponse_BluetoothDeviceState.values)
+    ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
@@ -1973,6 +1974,7 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   factory DeviceStateResponse({
     $core.String? remoteId,
     DeviceStateResponse_BluetoothDeviceState? state,
+    $core.int? status,
   }) {
     final _result = create();
     if (remoteId != null) {
@@ -1980,6 +1982,9 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
     }
     if (state != null) {
       _result.state = state;
+    }
+    if (status != null) {
+      _result.status = status;
     }
     return _result;
   }
@@ -2021,6 +2026,15 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   $core.bool hasState() => $_has(1);
   @$pb.TagNumber(2)
   void clearState() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get status => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set status($core.int v) { $_setSignedInt32(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasStatus() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearStatus() => clearField(3);
 }
 
 class ConnectedDevicesResponse extends $pb.GeneratedMessage {

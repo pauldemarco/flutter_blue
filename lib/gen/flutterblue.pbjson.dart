@@ -366,6 +366,7 @@ const DeviceStateResponse$json = const {
   '2': const [
     const {'1': 'remote_id', '3': 1, '4': 1, '5': 9, '10': 'remoteId'},
     const {'1': 'state', '3': 2, '4': 1, '5': 14, '6': '.DeviceStateResponse.BluetoothDeviceState', '10': 'state'},
+    const {'1': 'status', '3': 3, '4': 1, '5': 5, '10': 'status'},
   ],
   '4': const [DeviceStateResponse_BluetoothDeviceState$json],
 };
@@ -382,7 +383,7 @@ const DeviceStateResponse_BluetoothDeviceState$json = const {
 };
 
 /// Descriptor for `DeviceStateResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List deviceStateResponseDescriptor = $convert.base64Decode('ChNEZXZpY2VTdGF0ZVJlc3BvbnNlEhsKCXJlbW90ZV9pZBgBIAEoCVIIcmVtb3RlSWQSPwoFc3RhdGUYAiABKA4yKS5EZXZpY2VTdGF0ZVJlc3BvbnNlLkJsdWV0b290aERldmljZVN0YXRlUgVzdGF0ZSJaChRCbHVldG9vdGhEZXZpY2VTdGF0ZRIQCgxESVNDT05ORUNURUQQABIOCgpDT05ORUNUSU5HEAESDQoJQ09OTkVDVEVEEAISEQoNRElTQ09OTkVDVElORxAD');
+final $typed_data.Uint8List deviceStateResponseDescriptor = $convert.base64Decode('ChNEZXZpY2VTdGF0ZVJlc3BvbnNlEhsKCXJlbW90ZV9pZBgBIAEoCVIIcmVtb3RlSWQSPwoFc3RhdGUYAiABKA4yKS5EZXZpY2VTdGF0ZVJlc3BvbnNlLkJsdWV0b290aERldmljZVN0YXRlUgVzdGF0ZRIWCgZzdGF0dXMYAyABKAVSBnN0YXR1cyJaChRCbHVldG9vdGhEZXZpY2VTdGF0ZRIQCgxESVNDT05ORUNURUQQABIOCgpDT05ORUNUSU5HEAESDQoJQ09OTkVDVEVEEAISEQoNRElTQ09OTkVDVElORxAD');
 @$core.Deprecated('Use connectedDevicesResponseDescriptor instead')
 const ConnectedDevicesResponse$json = const {
   '1': 'ConnectedDevicesResponse',

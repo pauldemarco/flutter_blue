@@ -711,6 +711,7 @@ GPB_FINAL @interface ProtosOnCharacteristicChanged : GPBMessage
 typedef GPB_ENUM(ProtosDeviceStateResponse_FieldNumber) {
   ProtosDeviceStateResponse_FieldNumber_RemoteId = 1,
   ProtosDeviceStateResponse_FieldNumber_State = 2,
+  ProtosDeviceStateResponse_FieldNumber_Status = 3,
 };
 
 GPB_FINAL @interface ProtosDeviceStateResponse : GPBMessage
@@ -718,6 +719,8 @@ GPB_FINAL @interface ProtosDeviceStateResponse : GPBMessage
 @property(nonatomic, readwrite, copy, null_resettable) NSString *remoteId;
 
 @property(nonatomic, readwrite) ProtosDeviceStateResponse_BluetoothDeviceState state;
+
+@property(nonatomic, readwrite) int32_t status;
 
 @end
 

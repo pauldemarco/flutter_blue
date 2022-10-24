@@ -18,7 +18,7 @@ class BluetoothDevice {
   Stream<bool> get isDiscoveringServices => _isDiscoveringServices.stream;
 
   /// Establishes a connection to the Bluetooth Device.
-  Future<void> connect({
+  Future<BluetoothDeviceState> connect({
     Duration? timeout,
     bool autoConnect = true,
   }) async {
@@ -26,27 +26,60 @@ class BluetoothDevice {
       ..remoteId = id.toString()
       ..androidAutoConnect = autoConnect;
 
-    Timer? timer;
-    if (timeout != null) {
-      timer = Timer(timeout, () {
-        disconnect();
-        throw TimeoutException('Failed to connect in time.', timeout);
-      });
-    }
+    //final res = await state.firstWhere((s) => s.state == BluetoothDeviceStateEnum.connected);
+    final nextStateCompleter = Completer<BluetoothDeviceState>();
+    var firsStateArrived = false;
+
+    final stateSubscription = state.listen(
+      null,
+    );
+
+    stateSubscription.onError((err) {
+      stateSubscription.cancel();
+      nextStateCompleter.completeError(err);
+    });
+    stateSubscription.onData((state) {
+      if (firsStateArrived &&
+          (state is BluetoothDeviceConnected ||
+              state is BluetoothDeviceDisconnected)) {
+        stateSubscription.cancel();
+        nextStateCompleter.complete(state);
+        return;
+      }
+      firsStateArrived = true;
+    });
 
     await FlutterBlue.instance._channel
         .invokeMethod('connect', request.writeToBuffer());
 
-    await state.firstWhere((s) => s == BluetoothDeviceState.connected);
-
-    timer?.cancel();
-
-    return;
+    return nextStateCompleter.future;
   }
 
   /// Cancels connection to the Bluetooth Device
-  Future disconnect() =>
-      FlutterBlue.instance._channel.invokeMethod('disconnect', id.toString());
+  Future<BluetoothDeviceState> disconnect(Duration ?timeout) async {
+    final stateCompleter =
+        state.firstWhere((state) => state is BluetoothDeviceDisconnected);
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('disconnect', id.toString());
+
+    if (timeout != null) {
+      return await stateCompleter.timeout(timeout);
+    } else {
+      return await stateCompleter;
+    }
+  }
+
+  /* implementation not finished and this is not available on iOS
+  Future<void> createBond() async {
+    var request = protos.ConnectRequest.create()
+      ..remoteId = id.toString()
+      ..androidAutoConnect = false;
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('createBond', request.writeToBuffer());
+  }
+   */
 
   BehaviorSubject<List<BluetoothService>> _services =
       BehaviorSubject.seeded([]);
@@ -54,7 +87,7 @@ class BluetoothDevice {
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
     final s = await state.first;
-    if (s != BluetoothDeviceState.connected) {
+    if (s is! BluetoothDeviceConnected) {
       return Future.error(new Exception(
           'Cannot discoverServices while device is not connected. State == $s'));
     }
@@ -96,14 +129,16 @@ class BluetoothDevice {
     yield await FlutterBlue.instance._channel
         .invokeMethod('deviceState', id.toString())
         .then((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
-        .then((p) => BluetoothDeviceState.values[p.state.value]);
+        .then((p) => BluetoothDeviceState.fromId(
+            p.state.value, BluetoothStatusCode.fromId(p.status)));
 
     yield* FlutterBlue.instance._methodStream
         .where((m) => m.method == "DeviceState")
         .map((m) => m.arguments)
         .map((buffer) => new protos.DeviceStateResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
-        .map((p) => BluetoothDeviceState.values[p.state.value]);
+        .map((p) => BluetoothDeviceState.fromId(
+            p.state.value, BluetoothStatusCode.fromId(p.status)));
   }
 
   /// The MTU size in bytes
@@ -144,7 +179,8 @@ class BluetoothDevice {
         .map((m) => m.arguments)
         .map((buffer) => protos.RSSIResponse.fromBuffer(buffer))
         .where((p) => p.remoteId == id.toString())
-        .map((p) => p.rssi).first;
+        .map((p) => p.rssi)
+        .first;
   }
 
   /// Indicates whether the Bluetooth Device can send a write without response
@@ -168,5 +204,3 @@ class BluetoothDevice {
 }
 
 enum BluetoothDeviceType { unknown, classic, le, dual }
-
-enum BluetoothDeviceState { disconnected, connecting, connected, disconnecting }

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import androidx.core.app.ActivityCompat;
@@ -273,6 +274,18 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 break;
             }
 
+            case "getBondedDevices":
+            {
+                Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
+                Protos.ConnectedDevicesResponse.Builder p = Protos.ConnectedDevicesResponse.newBuilder();
+                for(BluetoothDevice d : devices) {
+                    p.addDevices(ProtoMaker.from(d));
+                }
+                result.success(p.build().toByteArray());
+                log(LogLevel.EMERGENCY, "mDevices size: " + mDevices.size());
+                break;
+            }
+
             case "connect":
             {
                 byte[] data = call.arguments();
@@ -331,14 +344,36 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 result.success(null);
                 break;
             }
+            case "createBond":
+            {
+                String deviceId = (String)call.arguments;
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
+                int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+                if (state != BluetoothProfile.STATE_CONNECTED) {
+                    result.error("device not connected", "", "");
+                    break;
+                }
 
+                int bondState = device.getBondState();
+                if (bondState == BluetoothDevice.BOND_NONE) {
+                    boolean res = device.createBond();
+                    if (res) {
+                        result.success("");
+                    } else {
+                        result.error("failed start to bond", "", "");
+                    }
+                } else {
+                    result.success("");
+                }
+                break;
+            }
             case "deviceState":
             {
                 String deviceId = (String)call.arguments;
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
                 int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                 try {
-                    result.success(ProtoMaker.from(device, state).toByteArray());
+                    result.success(ProtoMaker.from(device, state, 0).toByteArray());
                 } catch(Exception e) {
                     result.error("device_state_error", e.getMessage(), e);
                 }
@@ -871,7 +906,7 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     gatt.close();
                 }
             }
-            invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
+            invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState, status).toByteArray());
         }
 
         @Override

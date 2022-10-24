@@ -1954,10 +1954,12 @@ typedef struct ProtosOnCharacteristicChanged__storage_ {
 
 @dynamic remoteId;
 @dynamic state;
+@dynamic status;
 
 typedef struct ProtosDeviceStateResponse__storage_ {
   uint32_t _has_storage_[1];
   ProtosDeviceStateResponse_BluetoothDeviceState state;
+  int32_t status;
   NSString *remoteId;
 } ProtosDeviceStateResponse__storage_;
 
@@ -1984,6 +1986,15 @@ typedef struct ProtosDeviceStateResponse__storage_ {
         .offset = (uint32_t)offsetof(ProtosDeviceStateResponse__storage_, state),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldHasEnumDescriptor | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeEnum,
+      },
+      {
+        .name = "status",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProtosDeviceStateResponse_FieldNumber_Status,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(ProtosDeviceStateResponse__storage_, status),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
       },
     };
     GPBDescriptor *localDescriptor =
