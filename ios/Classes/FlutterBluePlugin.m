@@ -114,7 +114,6 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     ProtosConnectRequest *request = [[ProtosConnectRequest alloc] initWithData:[data data] error:nil];
     NSString *remoteId = [request remoteId];
     @try {
-      NSLog(@"remoteID %@", remoteId);
       self.peripheral = [_scannedPeripherals objectForKey:remoteId];
       if(self.peripheral == nil) {
         @try {
