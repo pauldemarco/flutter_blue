@@ -38,6 +38,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic) NSMutableArray *servicesThatNeedDiscovered;
 @property(nonatomic) NSMutableArray *characteristicsThatNeedDiscovered;
 @property(nonatomic) LogLevel logLevel;
+@property(nonatomic)CBPeripheral *peripheral;
 @end
 
 @implementation FlutterBluePlugin
@@ -113,14 +114,18 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     ProtosConnectRequest *request = [[ProtosConnectRequest alloc] initWithData:[data data] error:nil];
     NSString *remoteId = [request remoteId];
     @try {
-      CBPeripheral *peripheral = [_scannedPeripherals objectForKey:remoteId];
-      if(peripheral == nil) {
-        @throw [FlutterError errorWithCode:@"connect"
+      NSLog(@"remoteID %@", remoteId);
+      self.peripheral = [_scannedPeripherals objectForKey:remoteId];
+      if(self.peripheral == nil) {
+        @try {
+          // Try finding the peripheral by UUID, as it may have been connected to before
+          self.peripheral = [self findPeripheral:remoteId];
+        } @catch(FlutterError *e){@throw [FlutterError errorWithCode:@"connect"
                                    message:@"Peripheral not found"
                                    details:nil];
-      }
+      }}
       // TODO: Implement Connect options (#36)
-      [_centralManager connectPeripheral:peripheral options:nil];
+      [_centralManager connectPeripheral:self.peripheral options:nil];
       result(nil);
     } @catch(FlutterError *e) {
       result(e);
