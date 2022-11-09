@@ -67,7 +67,11 @@ public class ProtoMaker {
                 a.setTxPowerLevel(Protos.Int32Value.newBuilder().setValue(txPower));
             }
             // Manufacturer Specific Data
-            SparseArray<byte[]> msd = scanRecord.getManufacturerSpecificData();
+            SparseArray<byte[]> nullCheck = scanRecord.getManufacturerSpecificData();
+            SparseArray<byte[]> msd = [];
+            if(test != null){
+                msd = nullCheck;
+            }
             for (int i = 0; i < msd.size(); i++) {
                 int key = msd.keyAt(i);
                 byte[] value = msd.valueAt(i);
