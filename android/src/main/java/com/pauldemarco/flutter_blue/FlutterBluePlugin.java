@@ -168,6 +168,8 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
     private void tearDown() {
         Log.i(TAG, "teardown");
+        stopScan();
+
         context = null;
         activityBinding.removeRequestPermissionsResultListener(this);
         activityBinding = null;

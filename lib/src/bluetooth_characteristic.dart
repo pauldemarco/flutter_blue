@@ -142,6 +142,60 @@ class BluetoothCharacteristic {
   }
 
   /// Sets notifications or indications for the value of a specified characteristic
+  Future<bool> setNotifyValueHandleDisconnect(
+      bool notify, Stream<BluetoothDeviceState> stateStream) async {
+    var request = protos.SetNotificationRequest.create()
+      ..remoteId = deviceId.toString()
+      ..serviceUuid = serviceUuid.toString()
+      ..characteristicUuid = uuid.toString()
+      ..enable = notify;
+
+    final resultCompleter = Completer<bool>();
+
+    StreamSubscription<protos.SetNotificationResponse>?
+        notifyStreamSubscription;
+    StreamSubscription<BluetoothDeviceState>? stateStreamSubscription;
+
+    stateStreamSubscription = stateStream.listen((state) {
+      if (state is BluetoothDeviceDisconnected) {
+        stateStreamSubscription?.cancel();
+        stateStreamSubscription = null;
+        notifyStreamSubscription?.cancel();
+        notifyStreamSubscription = null;
+        if (!resultCompleter.isCompleted) {
+          resultCompleter.complete(false);
+        }
+      }
+    });
+
+    await FlutterBlue.instance._channel
+        .invokeMethod('setNotification', request.writeToBuffer());
+
+    final resultStream = FlutterBlue.instance._methodStream
+        .where((m) => m.method == "SetNotificationResponse")
+        .map((m) => m.arguments)
+        .map((buffer) => new protos.SetNotificationResponse.fromBuffer(buffer))
+        .where((p) =>
+            (p.remoteId == request.remoteId) &&
+            (p.characteristic.uuid == request.characteristicUuid) &&
+            (p.characteristic.serviceUuid == request.serviceUuid));
+
+    notifyStreamSubscription = resultStream.listen((notificationResponse) {
+      stateStreamSubscription?.cancel();
+      stateStreamSubscription = null;
+      notifyStreamSubscription?.cancel();
+      notifyStreamSubscription = null;
+      final c = BluetoothCharacteristic.fromProto(
+          notificationResponse.characteristic);
+      _updateDescriptors(c.descriptors);
+      if (!resultCompleter.isCompleted) {
+        resultCompleter.complete(c.isNotifying == notify);
+      }
+    });
+    return resultCompleter.future;
+  }
+
+  /// Sets notifications or indications for the value of a specified characteristic
   Future<bool> setNotifyValue(bool notify) async {
     var request = protos.SetNotificationRequest.create()
       ..remoteId = deviceId.toString()
