@@ -239,11 +239,20 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
             case "startScan":
             {
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
+                        != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(
                             activityBinding.getActivity(),
                             new String[] {
-                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
                             },
                             REQUEST_FINE_LOCATION_PERMISSIONS);
                     pendingCall = call;
