@@ -1,3 +1,10 @@
+## 0.8.0
+* Migrate the plugin to null safety.
+
+## 0.7.3
+* Fix Android project template files to be compatible with protobuf-lite.
+* Add experimental support for MacOS.
+
 ## 0.7.2
 * Add `allowDuplicates` option to `startScan`.
 * Fix performance issue with GUID initializers.
