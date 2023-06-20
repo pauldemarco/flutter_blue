@@ -24,10 +24,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.google.protobuf'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 30
     }
     sourceSets {
         main {
