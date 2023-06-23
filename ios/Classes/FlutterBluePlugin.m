@@ -433,8 +433,8 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
           [self.disconnectedPeripherals addObject: peripheral];
       }
 
-      if(self.connectedPeripherals.count > 20){
-          [self.disconnectedPeripherals removeLastObject];
+      if(self.disconnectedPeripherals.count > 20){
+          [self.disconnectedPeripherals removeObjectAtIndex: 0];
       }
   }
 
