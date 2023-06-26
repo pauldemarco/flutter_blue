@@ -35,6 +35,8 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
 @property(nonatomic, retain) FlutterBlueStreamHandler *stateStreamHandler;
 @property(nonatomic, retain) CBCentralManager *centralManager;
 @property(nonatomic) NSMutableDictionary *scannedPeripherals;
+@property(nonatomic) NSMutableDictionary *connectedPeripherals;
+@property(nonatomic) NSMutableArray *disconnectedPeripherals;
 @property(nonatomic) LogLevel logLevel;
 @property(nonatomic) NSMutableDictionary *servicesThatNeedDiscoveredA;
 @property(nonatomic) NSMutableDictionary *characteristicsThatNeedDiscoveredA;
@@ -50,6 +52,8 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
   instance.channel = channel;
   instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
   instance.scannedPeripherals = [NSMutableDictionary new];
+  instance.connectedPeripherals = [NSMutableDictionary new];
+  instance.disconnectedPeripherals = [NSMutableArray new];
   instance.logLevel = emergency;
   
   instance.servicesThatNeedDiscoveredA = [NSMutableDictionary new];
@@ -116,7 +120,7 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     ProtosConnectRequest *request = [[ProtosConnectRequest alloc] initWithData:[data data] error:nil];
     NSString *remoteId = [request remoteId];
     @try {
-      CBPeripheral *peripheral = [_scannedPeripherals objectForKey:remoteId];
+      CBPeripheral *peripheral = [self findPeripheral:remoteId];
       if(peripheral == nil) {
         @throw [FlutterError errorWithCode:@"connect"
                                    message:@"Peripheral not found"
@@ -401,11 +405,15 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
     NSLog(@"didConnectPeripheral state: %ld", peripheral.state);
   // Register self as delegate for peripheral
   peripheral.delegate = self;
-  
+
+  // Keep reference of the connected peripherals
+  [self.connectedPeripherals setObject:peripheral
+                              forKey:[[peripheral identifier] UUIDString]];
+
   // Send initial mtu size
   uint32_t mtu = [self getMtu:peripheral];
   [_channel invokeMethod:@"MtuSize" arguments:[self toFlutterData:[self toMtuSizeResponseProto:peripheral mtu:mtu]]];
-  
+
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:0]]];
 }
@@ -415,6 +423,21 @@ typedef NS_ENUM(NSUInteger, LogLevel) {
         peripheral.state, error.code, error.description);
   // Unregister self as delegate for peripheral, not working #42
   peripheral.delegate = nil;
+
+  [self.connectedPeripherals removeObjectForKey:[[peripheral identifier] UUIDString]];
+
+  // Keep reference of the last 20 disconnected peripherals
+  @synchronized (self.connectedPeripherals) {
+      if(![self.disconnectedPeripherals containsObject:peripheral])
+      {
+          [self.disconnectedPeripherals addObject: peripheral];
+      }
+
+      if(self.disconnectedPeripherals.count > 20){
+          [self.disconnectedPeripherals removeObjectAtIndex: 0];
+      }
+  }
+
   
   // Send connection state
   [_channel invokeMethod:@"DeviceState" arguments:[self toFlutterData:[self toDeviceStateProto:peripheral state:peripheral.state status:(int32_t)error.code]]];
