@@ -54,7 +54,7 @@ class BluetoothOffScreen extends StatelessWidget {
               'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
               style: Theme.of(context)
                   .primaryTextTheme
-                  .subhead
+                  .titleMedium
                   ?.copyWith(color: Colors.white),
             ),
           ],
@@ -88,11 +88,12 @@ class FindDevicesScreen extends StatelessWidget {
                             subtitle: Text(d.id.toString()),
                             trailing: StreamBuilder<BluetoothDeviceState>(
                               stream: d.state,
-                              initialData: BluetoothDeviceState.disconnected,
+                              initialData: BluetoothDeviceDisconnected(
+                                BluetoothNotConnected(),
+                              ),
                               builder: (c, snapshot) {
-                                if (snapshot.data ==
-                                    BluetoothDeviceState.connected) {
-                                  return RaisedButton(
+                                if (snapshot.data is BluetoothDeviceConnected) {
+                                  return ElevatedButton(
                                     child: Text('OPEN'),
                                     onPressed: () => Navigator.of(context).push(
                                         MaterialPageRoute(
@@ -209,31 +210,29 @@ class DeviceScreen extends StatelessWidget {
         actions: <Widget>[
           StreamBuilder<BluetoothDeviceState>(
             stream: device.state,
-            initialData: BluetoothDeviceState.connecting,
+            initialData: BluetoothDeviceConnecting(
+              BluetoothNotConnected(),
+            ),
             builder: (c, snapshot) {
               VoidCallback? onPressed;
               String text;
-              switch (snapshot.data) {
-                case BluetoothDeviceState.connected:
-                  onPressed = () => device.disconnect();
-                  text = 'DISCONNECT';
-                  break;
-                case BluetoothDeviceState.disconnected:
-                  onPressed = () => device.connect();
-                  text = 'CONNECT';
-                  break;
-                default:
-                  onPressed = null;
-                  text = snapshot.data.toString().substring(21).toUpperCase();
-                  break;
+              if (snapshot.data is BluetoothDeviceConnected) {
+                onPressed = () => device.disconnect(null);
+                text = 'DISCONNECT';
+              } else if (snapshot.data is BluetoothDeviceDisconnected) {
+                onPressed = () => device.connect();
+                text = 'CONNECT';
+              } else {
+                onPressed = null;
+                text = snapshot.data.toString().substring(21).toUpperCase();
               }
-              return FlatButton(
+              return TextButton(
                   onPressed: onPressed,
                   child: Text(
                     text,
                     style: Theme.of(context)
                         .primaryTextTheme
-                        .button
+                        .labelLarge
                         ?.copyWith(color: Colors.white),
                   ));
             },
@@ -245,13 +244,13 @@ class DeviceScreen extends StatelessWidget {
           children: <Widget>[
             StreamBuilder<BluetoothDeviceState>(
               stream: device.state,
-              initialData: BluetoothDeviceState.connecting,
+              initialData: BluetoothDeviceConnecting(BluetoothNotConnected()),
               builder: (c, snapshot) => ListTile(
-                leading: (snapshot.data == BluetoothDeviceState.connected)
+                leading: (snapshot.data is BluetoothDeviceConnected)
                     ? Icon(Icons.bluetooth_connected)
                     : Icon(Icons.bluetooth_disabled),
                 title: Text(
-                    'Device is ${snapshot.data.toString().split('.')[1]}.'),
+                    'Device is ${snapshot.data?.bluetoothStatusCode.name}.'),
                 subtitle: Text('${device.id}'),
                 trailing: StreamBuilder<bool>(
                   stream: device.isDiscoveringServices,
