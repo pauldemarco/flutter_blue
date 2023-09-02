@@ -8,8 +8,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.15'
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.9.3'
     }
 }
 
@@ -24,10 +24,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.google.protobuf'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 30
     }
     sourceSets {
         main {
