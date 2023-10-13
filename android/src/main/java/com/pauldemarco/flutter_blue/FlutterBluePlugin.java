@@ -273,7 +273,6 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                 Protos.AdvertisingSettings advSettings;
                 try {
                     advSettings = Protos.AdvertisingSettings.newBuilder().mergeFrom(callData).build();
-                    result.success(null);
                 } catch (Exception e) {
                     result.error("startScan", e.getMessage(), e);
                     return;
@@ -302,10 +301,12 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
 
                 advertiser
                         .startAdvertising(settings, data, mAdvertiseCallback);
+                result.success("Success");
                 break;
             }
             case "stopAdvertising":
                 mBluetoothAdapter.getBluetoothLeAdvertiser().stopAdvertising(mAdvertiseCallback);
+                result.success("Success");
                 break;
             case "getConnectedDevices":
             {

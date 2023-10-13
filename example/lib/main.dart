@@ -169,14 +169,14 @@ class _AdvertiseWidgetState extends State<AdvertiseWidget> {
     );
   }
 
-  void _advertiseHandle() {
+  Future<void> _advertiseHandle() async {
     if (_isAdvertising) {
-      FlutterBlue.instance.stopAdvertising();
+      await FlutterBlue.instance.stopAdvertising();
       _isAdvertising = false;
     } else {
       final guid = Guid('00001111-0000-1000-8000-00805F9B34FB');
       final list = Uint8List.fromList([1, 2, 3]);
-      FlutterBlue.instance.startAdvertising(
+      await FlutterBlue.instance.startAdvertising(
         AdvertisingMode.lowLatency(),
         AdvertisingTxPower.txPowerMedium(),
         guid,
