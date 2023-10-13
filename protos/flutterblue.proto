@@ -44,6 +44,14 @@ message ScanSettings {
   bool allow_duplicates = 3;
 }
 
+message AdvertisingSettings {
+  int32 advertising_mode = 1;
+  int32 manufacturerId = 2;
+  bytes manufacturerData = 3;
+  string service_uuid = 4;
+}
+
+
 message ScanResult {
   BluetoothDevice device = 1;  // The received peer's ID.
   AdvertisementData advertisement_data = 2;

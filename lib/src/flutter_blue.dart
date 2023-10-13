@@ -193,6 +193,19 @@ class FlutterBlue {
 //  }) =>
 //      throw UnimplementedError();
 
+  Future<void> startAdvertising(Guid uuid, int manufacturerId, Uint8List manufacturerData) async {
+    final settings = protos.AdvertisingSettings.create()
+      ..advertisingMode = 0
+      ..manufacturerId = manufacturerId
+      ..manufacturerData = manufacturerData
+      ..serviceUuid = uuid.toString();
+    await _channel.invokeMethod('startAdvertising', settings.writeToBuffer());
+  }
+
+  Future<void> stopAdvertising() async {
+    await _channel.invokeMethod('stopAdvertising');
+  }
+
   /// Sets the log level of the FlutterBlue instance
   /// Messages equal or below the log level specified are stored/forwarded,
   /// messages above are dropped.

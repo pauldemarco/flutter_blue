@@ -1,9 +1,13 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: flutterblue.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:core' as $core;
 
@@ -13,24 +17,28 @@ import 'flutterblue.pbenum.dart';
 
 export 'flutterblue.pbenum.dart';
 
+///  Wrapper message for `int32`.
+///
+///  Allows for nullability of fields in messages
 class Int32Value extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Int32Value', createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.O3)
-    ..hasRequiredFields = false
-  ;
-
-  Int32Value._() : super();
   factory Int32Value({
     $core.int? value,
   }) {
-    final _result = create();
+    final $result = create();
     if (value != null) {
-      _result.value = value;
+      $result.value = value;
     }
-    return _result;
+    return $result;
   }
+  Int32Value._() : super();
   factory Int32Value.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Int32Value.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Int32Value', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'value', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -40,8 +48,10 @@ class Int32Value extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Int32Value copyWith(void Function(Int32Value) updates) => super.copyWith((message) => updates(message as Int32Value)) as Int32Value; // ignore: deprecated_member_use
+  Int32Value copyWith(void Function(Int32Value) updates) => super.copyWith((message) => updates(message as Int32Value)) as Int32Value;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Int32Value create() => Int32Value._();
   Int32Value createEmptyInstance() => create();
@@ -50,6 +60,7 @@ class Int32Value extends $pb.GeneratedMessage {
   static Int32Value getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Int32Value>(create);
   static Int32Value? _defaultInstance;
 
+  /// The int32 value.
   @$pb.TagNumber(1)
   $core.int get value => $_getIZ(0);
   @$pb.TagNumber(1)
@@ -61,23 +72,24 @@ class Int32Value extends $pb.GeneratedMessage {
 }
 
 class BluetoothState extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BluetoothState', createEmptyInstance: create)
-    ..e<BluetoothState_State>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: BluetoothState_State.UNKNOWN, valueOf: BluetoothState_State.valueOf, enumValues: BluetoothState_State.values)
-    ..hasRequiredFields = false
-  ;
-
-  BluetoothState._() : super();
   factory BluetoothState({
     BluetoothState_State? state,
   }) {
-    final _result = create();
+    final $result = create();
     if (state != null) {
-      _result.state = state;
+      $result.state = state;
     }
-    return _result;
+    return $result;
   }
+  BluetoothState._() : super();
   factory BluetoothState.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BluetoothState.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BluetoothState', createEmptyInstance: create)
+    ..e<BluetoothState_State>(1, _omitFieldNames ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: BluetoothState_State.UNKNOWN, valueOf: BluetoothState_State.valueOf, enumValues: BluetoothState_State.values)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -87,8 +99,10 @@ class BluetoothState extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BluetoothState copyWith(void Function(BluetoothState) updates) => super.copyWith((message) => updates(message as BluetoothState)) as BluetoothState; // ignore: deprecated_member_use
+  BluetoothState copyWith(void Function(BluetoothState) updates) => super.copyWith((message) => updates(message as BluetoothState)) as BluetoothState;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BluetoothState create() => BluetoothState._();
   BluetoothState createEmptyInstance() => create();
@@ -108,17 +122,6 @@ class BluetoothState extends $pb.GeneratedMessage {
 }
 
 class AdvertisementData extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'AdvertisementData', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'localName')
-    ..aOM<Int32Value>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'txPowerLevel', subBuilder: Int32Value.create)
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'connectable')
-    ..m<$core.int, $core.List<$core.int>>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'manufacturerData', entryClassName: 'AdvertisementData.ManufacturerDataEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OY)
-    ..m<$core.String, $core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceData', entryClassName: 'AdvertisementData.ServiceDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OY)
-    ..pPS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuids')
-    ..hasRequiredFields = false
-  ;
-
-  AdvertisementData._() : super();
   factory AdvertisementData({
     $core.String? localName,
     Int32Value? txPowerLevel,
@@ -127,29 +130,41 @@ class AdvertisementData extends $pb.GeneratedMessage {
     $core.Map<$core.String, $core.List<$core.int>>? serviceData,
     $core.Iterable<$core.String>? serviceUuids,
   }) {
-    final _result = create();
+    final $result = create();
     if (localName != null) {
-      _result.localName = localName;
+      $result.localName = localName;
     }
     if (txPowerLevel != null) {
-      _result.txPowerLevel = txPowerLevel;
+      $result.txPowerLevel = txPowerLevel;
     }
     if (connectable != null) {
-      _result.connectable = connectable;
+      $result.connectable = connectable;
     }
     if (manufacturerData != null) {
-      _result.manufacturerData.addAll(manufacturerData);
+      $result.manufacturerData.addAll(manufacturerData);
     }
     if (serviceData != null) {
-      _result.serviceData.addAll(serviceData);
+      $result.serviceData.addAll(serviceData);
     }
     if (serviceUuids != null) {
-      _result.serviceUuids.addAll(serviceUuids);
+      $result.serviceUuids.addAll(serviceUuids);
     }
-    return _result;
+    return $result;
   }
+  AdvertisementData._() : super();
   factory AdvertisementData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory AdvertisementData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AdvertisementData', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'localName')
+    ..aOM<Int32Value>(2, _omitFieldNames ? '' : 'txPowerLevel', subBuilder: Int32Value.create)
+    ..aOB(3, _omitFieldNames ? '' : 'connectable')
+    ..m<$core.int, $core.List<$core.int>>(4, _omitFieldNames ? '' : 'manufacturerData', entryClassName: 'AdvertisementData.ManufacturerDataEntry', keyFieldType: $pb.PbFieldType.O3, valueFieldType: $pb.PbFieldType.OY)
+    ..m<$core.String, $core.List<$core.int>>(5, _omitFieldNames ? '' : 'serviceData', entryClassName: 'AdvertisementData.ServiceDataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OY)
+    ..pPS(6, _omitFieldNames ? '' : 'serviceUuids')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -159,8 +174,10 @@ class AdvertisementData extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  AdvertisementData copyWith(void Function(AdvertisementData) updates) => super.copyWith((message) => updates(message as AdvertisementData)) as AdvertisementData; // ignore: deprecated_member_use
+  AdvertisementData copyWith(void Function(AdvertisementData) updates) => super.copyWith((message) => updates(message as AdvertisementData)) as AdvertisementData;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static AdvertisementData create() => AdvertisementData._();
   AdvertisementData createEmptyInstance() => create();
@@ -209,33 +226,34 @@ class AdvertisementData extends $pb.GeneratedMessage {
 }
 
 class ScanSettings extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ScanSettings', createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'androidScanMode', $pb.PbFieldType.O3)
-    ..pPS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuids')
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'allowDuplicates')
-    ..hasRequiredFields = false
-  ;
-
-  ScanSettings._() : super();
   factory ScanSettings({
     $core.int? androidScanMode,
     $core.Iterable<$core.String>? serviceUuids,
     $core.bool? allowDuplicates,
   }) {
-    final _result = create();
+    final $result = create();
     if (androidScanMode != null) {
-      _result.androidScanMode = androidScanMode;
+      $result.androidScanMode = androidScanMode;
     }
     if (serviceUuids != null) {
-      _result.serviceUuids.addAll(serviceUuids);
+      $result.serviceUuids.addAll(serviceUuids);
     }
     if (allowDuplicates != null) {
-      _result.allowDuplicates = allowDuplicates;
+      $result.allowDuplicates = allowDuplicates;
     }
-    return _result;
+    return $result;
   }
+  ScanSettings._() : super();
   factory ScanSettings.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ScanSettings.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ScanSettings', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'androidScanMode', $pb.PbFieldType.O3)
+    ..pPS(2, _omitFieldNames ? '' : 'serviceUuids')
+    ..aOB(3, _omitFieldNames ? '' : 'allowDuplicates')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -245,8 +263,10 @@ class ScanSettings extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ScanSettings copyWith(void Function(ScanSettings) updates) => super.copyWith((message) => updates(message as ScanSettings)) as ScanSettings; // ignore: deprecated_member_use
+  ScanSettings copyWith(void Function(ScanSettings) updates) => super.copyWith((message) => updates(message as ScanSettings)) as ScanSettings;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ScanSettings create() => ScanSettings._();
   ScanSettings createEmptyInstance() => create();
@@ -277,34 +297,127 @@ class ScanSettings extends $pb.GeneratedMessage {
   void clearAllowDuplicates() => clearField(3);
 }
 
-class ScanResult extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ScanResult', createEmptyInstance: create)
-    ..aOM<BluetoothDevice>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'device', subBuilder: BluetoothDevice.create)
-    ..aOM<AdvertisementData>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'advertisementData', subBuilder: AdvertisementData.create)
-    ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rssi', $pb.PbFieldType.O3)
+class AdvertisingSettings extends $pb.GeneratedMessage {
+  factory AdvertisingSettings({
+    $core.int? advertisingMode,
+    $core.int? manufacturerId,
+    $core.List<$core.int>? manufacturerData,
+    $core.String? serviceUuid,
+  }) {
+    final $result = create();
+    if (advertisingMode != null) {
+      $result.advertisingMode = advertisingMode;
+    }
+    if (manufacturerId != null) {
+      $result.manufacturerId = manufacturerId;
+    }
+    if (manufacturerData != null) {
+      $result.manufacturerData = manufacturerData;
+    }
+    if (serviceUuid != null) {
+      $result.serviceUuid = serviceUuid;
+    }
+    return $result;
+  }
+  AdvertisingSettings._() : super();
+  factory AdvertisingSettings.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AdvertisingSettings.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AdvertisingSettings', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'advertisingMode', $pb.PbFieldType.O3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'manufacturerId', $pb.PbFieldType.O3, protoName: 'manufacturerId')
+    ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'manufacturerData', $pb.PbFieldType.OY, protoName: 'manufacturerData')
+    ..aOS(4, _omitFieldNames ? '' : 'serviceUuid')
     ..hasRequiredFields = false
   ;
 
-  ScanResult._() : super();
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AdvertisingSettings clone() => AdvertisingSettings()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AdvertisingSettings copyWith(void Function(AdvertisingSettings) updates) => super.copyWith((message) => updates(message as AdvertisingSettings)) as AdvertisingSettings;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AdvertisingSettings create() => AdvertisingSettings._();
+  AdvertisingSettings createEmptyInstance() => create();
+  static $pb.PbList<AdvertisingSettings> createRepeated() => $pb.PbList<AdvertisingSettings>();
+  @$core.pragma('dart2js:noInline')
+  static AdvertisingSettings getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AdvertisingSettings>(create);
+  static AdvertisingSettings? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get advertisingMode => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set advertisingMode($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasAdvertisingMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAdvertisingMode() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get manufacturerId => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set manufacturerId($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasManufacturerId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearManufacturerId() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.int> get manufacturerData => $_getN(2);
+  @$pb.TagNumber(3)
+  set manufacturerData($core.List<$core.int> v) { $_setBytes(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasManufacturerData() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearManufacturerData() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get serviceUuid => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set serviceUuid($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasServiceUuid() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearServiceUuid() => clearField(4);
+}
+
+class ScanResult extends $pb.GeneratedMessage {
   factory ScanResult({
     BluetoothDevice? device,
     AdvertisementData? advertisementData,
     $core.int? rssi,
   }) {
-    final _result = create();
+    final $result = create();
     if (device != null) {
-      _result.device = device;
+      $result.device = device;
     }
     if (advertisementData != null) {
-      _result.advertisementData = advertisementData;
+      $result.advertisementData = advertisementData;
     }
     if (rssi != null) {
-      _result.rssi = rssi;
+      $result.rssi = rssi;
     }
-    return _result;
+    return $result;
   }
+  ScanResult._() : super();
   factory ScanResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ScanResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ScanResult', createEmptyInstance: create)
+    ..aOM<BluetoothDevice>(1, _omitFieldNames ? '' : 'device', subBuilder: BluetoothDevice.create)
+    ..aOM<AdvertisementData>(2, _omitFieldNames ? '' : 'advertisementData', subBuilder: AdvertisementData.create)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'rssi', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -314,8 +427,10 @@ class ScanResult extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ScanResult copyWith(void Function(ScanResult) updates) => super.copyWith((message) => updates(message as ScanResult)) as ScanResult; // ignore: deprecated_member_use
+  ScanResult copyWith(void Function(ScanResult) updates) => super.copyWith((message) => updates(message as ScanResult)) as ScanResult;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ScanResult create() => ScanResult._();
   ScanResult createEmptyInstance() => create();
@@ -357,28 +472,29 @@ class ScanResult extends $pb.GeneratedMessage {
 }
 
 class ConnectRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ConnectRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'androidAutoConnect')
-    ..hasRequiredFields = false
-  ;
-
-  ConnectRequest._() : super();
   factory ConnectRequest({
     $core.String? remoteId,
     $core.bool? androidAutoConnect,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (androidAutoConnect != null) {
-      _result.androidAutoConnect = androidAutoConnect;
+      $result.androidAutoConnect = androidAutoConnect;
     }
-    return _result;
+    return $result;
   }
+  ConnectRequest._() : super();
   factory ConnectRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ConnectRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ConnectRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOB(2, _omitFieldNames ? '' : 'androidAutoConnect')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -388,8 +504,10 @@ class ConnectRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ConnectRequest copyWith(void Function(ConnectRequest) updates) => super.copyWith((message) => updates(message as ConnectRequest)) as ConnectRequest; // ignore: deprecated_member_use
+  ConnectRequest copyWith(void Function(ConnectRequest) updates) => super.copyWith((message) => updates(message as ConnectRequest)) as ConnectRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ConnectRequest create() => ConnectRequest._();
   ConnectRequest createEmptyInstance() => create();
@@ -418,33 +536,34 @@ class ConnectRequest extends $pb.GeneratedMessage {
 }
 
 class BluetoothDevice extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BluetoothDevice', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..e<BluetoothDevice_Type>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: BluetoothDevice_Type.UNKNOWN, valueOf: BluetoothDevice_Type.valueOf, enumValues: BluetoothDevice_Type.values)
-    ..hasRequiredFields = false
-  ;
-
-  BluetoothDevice._() : super();
   factory BluetoothDevice({
     $core.String? remoteId,
     $core.String? name,
     BluetoothDevice_Type? type,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (name != null) {
-      _result.name = name;
+      $result.name = name;
     }
     if (type != null) {
-      _result.type = type;
+      $result.type = type;
     }
-    return _result;
+    return $result;
   }
+  BluetoothDevice._() : super();
   factory BluetoothDevice.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BluetoothDevice.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BluetoothDevice', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(2, _omitFieldNames ? '' : 'name')
+    ..e<BluetoothDevice_Type>(3, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: BluetoothDevice_Type.UNKNOWN, valueOf: BluetoothDevice_Type.valueOf, enumValues: BluetoothDevice_Type.values)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -454,8 +573,10 @@ class BluetoothDevice extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BluetoothDevice copyWith(void Function(BluetoothDevice) updates) => super.copyWith((message) => updates(message as BluetoothDevice)) as BluetoothDevice; // ignore: deprecated_member_use
+  BluetoothDevice copyWith(void Function(BluetoothDevice) updates) => super.copyWith((message) => updates(message as BluetoothDevice)) as BluetoothDevice;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BluetoothDevice create() => BluetoothDevice._();
   BluetoothDevice createEmptyInstance() => create();
@@ -493,16 +614,6 @@ class BluetoothDevice extends $pb.GeneratedMessage {
 }
 
 class BluetoothService extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BluetoothService', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'uuid')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'isPrimary')
-    ..pc<BluetoothCharacteristic>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristics', $pb.PbFieldType.PM, subBuilder: BluetoothCharacteristic.create)
-    ..pc<BluetoothService>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'includedServices', $pb.PbFieldType.PM, subBuilder: BluetoothService.create)
-    ..hasRequiredFields = false
-  ;
-
-  BluetoothService._() : super();
   factory BluetoothService({
     $core.String? uuid,
     $core.String? remoteId,
@@ -510,26 +621,37 @@ class BluetoothService extends $pb.GeneratedMessage {
     $core.Iterable<BluetoothCharacteristic>? characteristics,
     $core.Iterable<BluetoothService>? includedServices,
   }) {
-    final _result = create();
+    final $result = create();
     if (uuid != null) {
-      _result.uuid = uuid;
+      $result.uuid = uuid;
     }
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (isPrimary != null) {
-      _result.isPrimary = isPrimary;
+      $result.isPrimary = isPrimary;
     }
     if (characteristics != null) {
-      _result.characteristics.addAll(characteristics);
+      $result.characteristics.addAll(characteristics);
     }
     if (includedServices != null) {
-      _result.includedServices.addAll(includedServices);
+      $result.includedServices.addAll(includedServices);
     }
-    return _result;
+    return $result;
   }
+  BluetoothService._() : super();
   factory BluetoothService.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BluetoothService.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BluetoothService', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'uuid')
+    ..aOS(2, _omitFieldNames ? '' : 'remoteId')
+    ..aOB(3, _omitFieldNames ? '' : 'isPrimary')
+    ..pc<BluetoothCharacteristic>(4, _omitFieldNames ? '' : 'characteristics', $pb.PbFieldType.PM, subBuilder: BluetoothCharacteristic.create)
+    ..pc<BluetoothService>(5, _omitFieldNames ? '' : 'includedServices', $pb.PbFieldType.PM, subBuilder: BluetoothService.create)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -539,8 +661,10 @@ class BluetoothService extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BluetoothService copyWith(void Function(BluetoothService) updates) => super.copyWith((message) => updates(message as BluetoothService)) as BluetoothService; // ignore: deprecated_member_use
+  BluetoothService copyWith(void Function(BluetoothService) updates) => super.copyWith((message) => updates(message as BluetoothService)) as BluetoothService;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BluetoothService create() => BluetoothService._();
   BluetoothService createEmptyInstance() => create();
@@ -584,18 +708,6 @@ class BluetoothService extends $pb.GeneratedMessage {
 }
 
 class BluetoothCharacteristic extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BluetoothCharacteristic', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'uuid')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid', protoName: 'serviceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secondaryServiceUuid', protoName: 'secondaryServiceUuid')
-    ..pc<BluetoothDescriptor>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'descriptors', $pb.PbFieldType.PM, subBuilder: BluetoothDescriptor.create)
-    ..aOM<CharacteristicProperties>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'properties', subBuilder: CharacteristicProperties.create)
-    ..a<$core.List<$core.int>>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  BluetoothCharacteristic._() : super();
   factory BluetoothCharacteristic({
     $core.String? uuid,
     $core.String? remoteId,
@@ -605,32 +717,45 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
     CharacteristicProperties? properties,
     $core.List<$core.int>? value,
   }) {
-    final _result = create();
+    final $result = create();
     if (uuid != null) {
-      _result.uuid = uuid;
+      $result.uuid = uuid;
     }
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (secondaryServiceUuid != null) {
-      _result.secondaryServiceUuid = secondaryServiceUuid;
+      $result.secondaryServiceUuid = secondaryServiceUuid;
     }
     if (descriptors != null) {
-      _result.descriptors.addAll(descriptors);
+      $result.descriptors.addAll(descriptors);
     }
     if (properties != null) {
-      _result.properties = properties;
+      $result.properties = properties;
     }
     if (value != null) {
-      _result.value = value;
+      $result.value = value;
     }
-    return _result;
+    return $result;
   }
+  BluetoothCharacteristic._() : super();
   factory BluetoothCharacteristic.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BluetoothCharacteristic.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BluetoothCharacteristic', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'uuid')
+    ..aOS(2, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(3, _omitFieldNames ? '' : 'serviceUuid', protoName: 'serviceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'secondaryServiceUuid', protoName: 'secondaryServiceUuid')
+    ..pc<BluetoothDescriptor>(5, _omitFieldNames ? '' : 'descriptors', $pb.PbFieldType.PM, subBuilder: BluetoothDescriptor.create)
+    ..aOM<CharacteristicProperties>(6, _omitFieldNames ? '' : 'properties', subBuilder: CharacteristicProperties.create)
+    ..a<$core.List<$core.int>>(7, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -640,8 +765,10 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BluetoothCharacteristic copyWith(void Function(BluetoothCharacteristic) updates) => super.copyWith((message) => updates(message as BluetoothCharacteristic)) as BluetoothCharacteristic; // ignore: deprecated_member_use
+  BluetoothCharacteristic copyWith(void Function(BluetoothCharacteristic) updates) => super.copyWith((message) => updates(message as BluetoothCharacteristic)) as BluetoothCharacteristic;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BluetoothCharacteristic create() => BluetoothCharacteristic._();
   BluetoothCharacteristic createEmptyInstance() => create();
@@ -711,16 +838,6 @@ class BluetoothCharacteristic extends $pb.GeneratedMessage {
 }
 
 class BluetoothDescriptor extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BluetoothDescriptor', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'uuid')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid', protoName: 'serviceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristicUuid', protoName: 'characteristicUuid')
-    ..a<$core.List<$core.int>>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  BluetoothDescriptor._() : super();
   factory BluetoothDescriptor({
     $core.String? uuid,
     $core.String? remoteId,
@@ -728,26 +845,37 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
     $core.String? characteristicUuid,
     $core.List<$core.int>? value,
   }) {
-    final _result = create();
+    final $result = create();
     if (uuid != null) {
-      _result.uuid = uuid;
+      $result.uuid = uuid;
     }
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (characteristicUuid != null) {
-      _result.characteristicUuid = characteristicUuid;
+      $result.characteristicUuid = characteristicUuid;
     }
     if (value != null) {
-      _result.value = value;
+      $result.value = value;
     }
-    return _result;
+    return $result;
   }
+  BluetoothDescriptor._() : super();
   factory BluetoothDescriptor.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory BluetoothDescriptor.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BluetoothDescriptor', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'uuid')
+    ..aOS(2, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(3, _omitFieldNames ? '' : 'serviceUuid', protoName: 'serviceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'characteristicUuid', protoName: 'characteristicUuid')
+    ..a<$core.List<$core.int>>(5, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -757,8 +885,10 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  BluetoothDescriptor copyWith(void Function(BluetoothDescriptor) updates) => super.copyWith((message) => updates(message as BluetoothDescriptor)) as BluetoothDescriptor; // ignore: deprecated_member_use
+  BluetoothDescriptor copyWith(void Function(BluetoothDescriptor) updates) => super.copyWith((message) => updates(message as BluetoothDescriptor)) as BluetoothDescriptor;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static BluetoothDescriptor create() => BluetoothDescriptor._();
   BluetoothDescriptor createEmptyInstance() => create();
@@ -814,21 +944,6 @@ class BluetoothDescriptor extends $pb.GeneratedMessage {
 }
 
 class CharacteristicProperties extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CharacteristicProperties', createEmptyInstance: create)
-    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'broadcast')
-    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'read')
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'writeWithoutResponse')
-    ..aOB(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'write')
-    ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notify')
-    ..aOB(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'indicate')
-    ..aOB(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'authenticatedSignedWrites')
-    ..aOB(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'extendedProperties')
-    ..aOB(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'notifyEncryptionRequired')
-    ..aOB(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'indicateEncryptionRequired')
-    ..hasRequiredFields = false
-  ;
-
-  CharacteristicProperties._() : super();
   factory CharacteristicProperties({
     $core.bool? broadcast,
     $core.bool? read,
@@ -841,41 +956,57 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
     $core.bool? notifyEncryptionRequired,
     $core.bool? indicateEncryptionRequired,
   }) {
-    final _result = create();
+    final $result = create();
     if (broadcast != null) {
-      _result.broadcast = broadcast;
+      $result.broadcast = broadcast;
     }
     if (read != null) {
-      _result.read = read;
+      $result.read = read;
     }
     if (writeWithoutResponse != null) {
-      _result.writeWithoutResponse = writeWithoutResponse;
+      $result.writeWithoutResponse = writeWithoutResponse;
     }
     if (write != null) {
-      _result.write = write;
+      $result.write = write;
     }
     if (notify != null) {
-      _result.notify = notify;
+      $result.notify = notify;
     }
     if (indicate != null) {
-      _result.indicate = indicate;
+      $result.indicate = indicate;
     }
     if (authenticatedSignedWrites != null) {
-      _result.authenticatedSignedWrites = authenticatedSignedWrites;
+      $result.authenticatedSignedWrites = authenticatedSignedWrites;
     }
     if (extendedProperties != null) {
-      _result.extendedProperties = extendedProperties;
+      $result.extendedProperties = extendedProperties;
     }
     if (notifyEncryptionRequired != null) {
-      _result.notifyEncryptionRequired = notifyEncryptionRequired;
+      $result.notifyEncryptionRequired = notifyEncryptionRequired;
     }
     if (indicateEncryptionRequired != null) {
-      _result.indicateEncryptionRequired = indicateEncryptionRequired;
+      $result.indicateEncryptionRequired = indicateEncryptionRequired;
     }
-    return _result;
+    return $result;
   }
+  CharacteristicProperties._() : super();
   factory CharacteristicProperties.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CharacteristicProperties.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CharacteristicProperties', createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'broadcast')
+    ..aOB(2, _omitFieldNames ? '' : 'read')
+    ..aOB(3, _omitFieldNames ? '' : 'writeWithoutResponse')
+    ..aOB(4, _omitFieldNames ? '' : 'write')
+    ..aOB(5, _omitFieldNames ? '' : 'notify')
+    ..aOB(6, _omitFieldNames ? '' : 'indicate')
+    ..aOB(7, _omitFieldNames ? '' : 'authenticatedSignedWrites')
+    ..aOB(8, _omitFieldNames ? '' : 'extendedProperties')
+    ..aOB(9, _omitFieldNames ? '' : 'notifyEncryptionRequired')
+    ..aOB(10, _omitFieldNames ? '' : 'indicateEncryptionRequired')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -885,8 +1016,10 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  CharacteristicProperties copyWith(void Function(CharacteristicProperties) updates) => super.copyWith((message) => updates(message as CharacteristicProperties)) as CharacteristicProperties; // ignore: deprecated_member_use
+  CharacteristicProperties copyWith(void Function(CharacteristicProperties) updates) => super.copyWith((message) => updates(message as CharacteristicProperties)) as CharacteristicProperties;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static CharacteristicProperties create() => CharacteristicProperties._();
   CharacteristicProperties createEmptyInstance() => create();
@@ -987,28 +1120,29 @@ class CharacteristicProperties extends $pb.GeneratedMessage {
 }
 
 class DiscoverServicesResult extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DiscoverServicesResult', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..pc<BluetoothService>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'services', $pb.PbFieldType.PM, subBuilder: BluetoothService.create)
-    ..hasRequiredFields = false
-  ;
-
-  DiscoverServicesResult._() : super();
   factory DiscoverServicesResult({
     $core.String? remoteId,
     $core.Iterable<BluetoothService>? services,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (services != null) {
-      _result.services.addAll(services);
+      $result.services.addAll(services);
     }
-    return _result;
+    return $result;
   }
+  DiscoverServicesResult._() : super();
   factory DiscoverServicesResult.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DiscoverServicesResult.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DiscoverServicesResult', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..pc<BluetoothService>(2, _omitFieldNames ? '' : 'services', $pb.PbFieldType.PM, subBuilder: BluetoothService.create)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1018,8 +1152,10 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DiscoverServicesResult copyWith(void Function(DiscoverServicesResult) updates) => super.copyWith((message) => updates(message as DiscoverServicesResult)) as DiscoverServicesResult; // ignore: deprecated_member_use
+  DiscoverServicesResult copyWith(void Function(DiscoverServicesResult) updates) => super.copyWith((message) => updates(message as DiscoverServicesResult)) as DiscoverServicesResult;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DiscoverServicesResult create() => DiscoverServicesResult._();
   DiscoverServicesResult createEmptyInstance() => create();
@@ -1042,38 +1178,39 @@ class DiscoverServicesResult extends $pb.GeneratedMessage {
 }
 
 class ReadCharacteristicRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReadCharacteristicRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristicUuid')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secondaryServiceUuid')
-    ..hasRequiredFields = false
-  ;
-
-  ReadCharacteristicRequest._() : super();
   factory ReadCharacteristicRequest({
     $core.String? remoteId,
     $core.String? characteristicUuid,
     $core.String? serviceUuid,
     $core.String? secondaryServiceUuid,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (characteristicUuid != null) {
-      _result.characteristicUuid = characteristicUuid;
+      $result.characteristicUuid = characteristicUuid;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (secondaryServiceUuid != null) {
-      _result.secondaryServiceUuid = secondaryServiceUuid;
+      $result.secondaryServiceUuid = secondaryServiceUuid;
     }
-    return _result;
+    return $result;
   }
+  ReadCharacteristicRequest._() : super();
   factory ReadCharacteristicRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadCharacteristicRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadCharacteristicRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(2, _omitFieldNames ? '' : 'characteristicUuid')
+    ..aOS(3, _omitFieldNames ? '' : 'serviceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'secondaryServiceUuid')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1083,8 +1220,10 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReadCharacteristicRequest copyWith(void Function(ReadCharacteristicRequest) updates) => super.copyWith((message) => updates(message as ReadCharacteristicRequest)) as ReadCharacteristicRequest; // ignore: deprecated_member_use
+  ReadCharacteristicRequest copyWith(void Function(ReadCharacteristicRequest) updates) => super.copyWith((message) => updates(message as ReadCharacteristicRequest)) as ReadCharacteristicRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ReadCharacteristicRequest create() => ReadCharacteristicRequest._();
   ReadCharacteristicRequest createEmptyInstance() => create();
@@ -1131,28 +1270,29 @@ class ReadCharacteristicRequest extends $pb.GeneratedMessage {
 }
 
 class ReadCharacteristicResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReadCharacteristicResponse', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOM<BluetoothCharacteristic>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristic', subBuilder: BluetoothCharacteristic.create)
-    ..hasRequiredFields = false
-  ;
-
-  ReadCharacteristicResponse._() : super();
   factory ReadCharacteristicResponse({
     $core.String? remoteId,
     BluetoothCharacteristic? characteristic,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (characteristic != null) {
-      _result.characteristic = characteristic;
+      $result.characteristic = characteristic;
     }
-    return _result;
+    return $result;
   }
+  ReadCharacteristicResponse._() : super();
   factory ReadCharacteristicResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadCharacteristicResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadCharacteristicResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOM<BluetoothCharacteristic>(2, _omitFieldNames ? '' : 'characteristic', subBuilder: BluetoothCharacteristic.create)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1162,8 +1302,10 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReadCharacteristicResponse copyWith(void Function(ReadCharacteristicResponse) updates) => super.copyWith((message) => updates(message as ReadCharacteristicResponse)) as ReadCharacteristicResponse; // ignore: deprecated_member_use
+  ReadCharacteristicResponse copyWith(void Function(ReadCharacteristicResponse) updates) => super.copyWith((message) => updates(message as ReadCharacteristicResponse)) as ReadCharacteristicResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ReadCharacteristicResponse create() => ReadCharacteristicResponse._();
   ReadCharacteristicResponse createEmptyInstance() => create();
@@ -1194,16 +1336,6 @@ class ReadCharacteristicResponse extends $pb.GeneratedMessage {
 }
 
 class ReadDescriptorRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReadDescriptorRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'descriptorUuid')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secondaryServiceUuid')
-    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristicUuid')
-    ..hasRequiredFields = false
-  ;
-
-  ReadDescriptorRequest._() : super();
   factory ReadDescriptorRequest({
     $core.String? remoteId,
     $core.String? descriptorUuid,
@@ -1211,26 +1343,37 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
     $core.String? secondaryServiceUuid,
     $core.String? characteristicUuid,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (descriptorUuid != null) {
-      _result.descriptorUuid = descriptorUuid;
+      $result.descriptorUuid = descriptorUuid;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (secondaryServiceUuid != null) {
-      _result.secondaryServiceUuid = secondaryServiceUuid;
+      $result.secondaryServiceUuid = secondaryServiceUuid;
     }
     if (characteristicUuid != null) {
-      _result.characteristicUuid = characteristicUuid;
+      $result.characteristicUuid = characteristicUuid;
     }
-    return _result;
+    return $result;
   }
+  ReadDescriptorRequest._() : super();
   factory ReadDescriptorRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadDescriptorRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadDescriptorRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(2, _omitFieldNames ? '' : 'descriptorUuid')
+    ..aOS(3, _omitFieldNames ? '' : 'serviceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'secondaryServiceUuid')
+    ..aOS(5, _omitFieldNames ? '' : 'characteristicUuid')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1240,8 +1383,10 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReadDescriptorRequest copyWith(void Function(ReadDescriptorRequest) updates) => super.copyWith((message) => updates(message as ReadDescriptorRequest)) as ReadDescriptorRequest; // ignore: deprecated_member_use
+  ReadDescriptorRequest copyWith(void Function(ReadDescriptorRequest) updates) => super.copyWith((message) => updates(message as ReadDescriptorRequest)) as ReadDescriptorRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ReadDescriptorRequest create() => ReadDescriptorRequest._();
   ReadDescriptorRequest createEmptyInstance() => create();
@@ -1297,28 +1442,29 @@ class ReadDescriptorRequest extends $pb.GeneratedMessage {
 }
 
 class ReadDescriptorResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ReadDescriptorResponse', createEmptyInstance: create)
-    ..aOM<ReadDescriptorRequest>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'request', subBuilder: ReadDescriptorRequest.create)
-    ..a<$core.List<$core.int>>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  ReadDescriptorResponse._() : super();
   factory ReadDescriptorResponse({
     ReadDescriptorRequest? request,
     $core.List<$core.int>? value,
   }) {
-    final _result = create();
+    final $result = create();
     if (request != null) {
-      _result.request = request;
+      $result.request = request;
     }
     if (value != null) {
-      _result.value = value;
+      $result.value = value;
     }
-    return _result;
+    return $result;
   }
+  ReadDescriptorResponse._() : super();
   factory ReadDescriptorResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ReadDescriptorResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ReadDescriptorResponse', createEmptyInstance: create)
+    ..aOM<ReadDescriptorRequest>(1, _omitFieldNames ? '' : 'request', subBuilder: ReadDescriptorRequest.create)
+    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1328,8 +1474,10 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ReadDescriptorResponse copyWith(void Function(ReadDescriptorResponse) updates) => super.copyWith((message) => updates(message as ReadDescriptorResponse)) as ReadDescriptorResponse; // ignore: deprecated_member_use
+  ReadDescriptorResponse copyWith(void Function(ReadDescriptorResponse) updates) => super.copyWith((message) => updates(message as ReadDescriptorResponse)) as ReadDescriptorResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ReadDescriptorResponse create() => ReadDescriptorResponse._();
   ReadDescriptorResponse createEmptyInstance() => create();
@@ -1360,17 +1508,6 @@ class ReadDescriptorResponse extends $pb.GeneratedMessage {
 }
 
 class WriteCharacteristicRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WriteCharacteristicRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristicUuid')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secondaryServiceUuid')
-    ..e<WriteCharacteristicRequest_WriteType>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'writeType', $pb.PbFieldType.OE, defaultOrMaker: WriteCharacteristicRequest_WriteType.WITH_RESPONSE, valueOf: WriteCharacteristicRequest_WriteType.valueOf, enumValues: WriteCharacteristicRequest_WriteType.values)
-    ..a<$core.List<$core.int>>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  WriteCharacteristicRequest._() : super();
   factory WriteCharacteristicRequest({
     $core.String? remoteId,
     $core.String? characteristicUuid,
@@ -1379,29 +1516,41 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
     WriteCharacteristicRequest_WriteType? writeType,
     $core.List<$core.int>? value,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (characteristicUuid != null) {
-      _result.characteristicUuid = characteristicUuid;
+      $result.characteristicUuid = characteristicUuid;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (secondaryServiceUuid != null) {
-      _result.secondaryServiceUuid = secondaryServiceUuid;
+      $result.secondaryServiceUuid = secondaryServiceUuid;
     }
     if (writeType != null) {
-      _result.writeType = writeType;
+      $result.writeType = writeType;
     }
     if (value != null) {
-      _result.value = value;
+      $result.value = value;
     }
-    return _result;
+    return $result;
   }
+  WriteCharacteristicRequest._() : super();
   factory WriteCharacteristicRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory WriteCharacteristicRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WriteCharacteristicRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(2, _omitFieldNames ? '' : 'characteristicUuid')
+    ..aOS(3, _omitFieldNames ? '' : 'serviceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'secondaryServiceUuid')
+    ..e<WriteCharacteristicRequest_WriteType>(5, _omitFieldNames ? '' : 'writeType', $pb.PbFieldType.OE, defaultOrMaker: WriteCharacteristicRequest_WriteType.WITH_RESPONSE, valueOf: WriteCharacteristicRequest_WriteType.valueOf, enumValues: WriteCharacteristicRequest_WriteType.values)
+    ..a<$core.List<$core.int>>(6, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1411,8 +1560,10 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  WriteCharacteristicRequest copyWith(void Function(WriteCharacteristicRequest) updates) => super.copyWith((message) => updates(message as WriteCharacteristicRequest)) as WriteCharacteristicRequest; // ignore: deprecated_member_use
+  WriteCharacteristicRequest copyWith(void Function(WriteCharacteristicRequest) updates) => super.copyWith((message) => updates(message as WriteCharacteristicRequest)) as WriteCharacteristicRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static WriteCharacteristicRequest create() => WriteCharacteristicRequest._();
   WriteCharacteristicRequest createEmptyInstance() => create();
@@ -1477,28 +1628,29 @@ class WriteCharacteristicRequest extends $pb.GeneratedMessage {
 }
 
 class WriteCharacteristicResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WriteCharacteristicResponse', createEmptyInstance: create)
-    ..aOM<WriteCharacteristicRequest>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'request', subBuilder: WriteCharacteristicRequest.create)
-    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'success')
-    ..hasRequiredFields = false
-  ;
-
-  WriteCharacteristicResponse._() : super();
   factory WriteCharacteristicResponse({
     WriteCharacteristicRequest? request,
     $core.bool? success,
   }) {
-    final _result = create();
+    final $result = create();
     if (request != null) {
-      _result.request = request;
+      $result.request = request;
     }
     if (success != null) {
-      _result.success = success;
+      $result.success = success;
     }
-    return _result;
+    return $result;
   }
+  WriteCharacteristicResponse._() : super();
   factory WriteCharacteristicResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory WriteCharacteristicResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WriteCharacteristicResponse', createEmptyInstance: create)
+    ..aOM<WriteCharacteristicRequest>(1, _omitFieldNames ? '' : 'request', subBuilder: WriteCharacteristicRequest.create)
+    ..aOB(2, _omitFieldNames ? '' : 'success')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1508,8 +1660,10 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  WriteCharacteristicResponse copyWith(void Function(WriteCharacteristicResponse) updates) => super.copyWith((message) => updates(message as WriteCharacteristicResponse)) as WriteCharacteristicResponse; // ignore: deprecated_member_use
+  WriteCharacteristicResponse copyWith(void Function(WriteCharacteristicResponse) updates) => super.copyWith((message) => updates(message as WriteCharacteristicResponse)) as WriteCharacteristicResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static WriteCharacteristicResponse create() => WriteCharacteristicResponse._();
   WriteCharacteristicResponse createEmptyInstance() => create();
@@ -1540,17 +1694,6 @@ class WriteCharacteristicResponse extends $pb.GeneratedMessage {
 }
 
 class WriteDescriptorRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WriteDescriptorRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'descriptorUuid')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secondaryServiceUuid')
-    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristicUuid')
-    ..a<$core.List<$core.int>>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value', $pb.PbFieldType.OY)
-    ..hasRequiredFields = false
-  ;
-
-  WriteDescriptorRequest._() : super();
   factory WriteDescriptorRequest({
     $core.String? remoteId,
     $core.String? descriptorUuid,
@@ -1559,29 +1702,41 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
     $core.String? characteristicUuid,
     $core.List<$core.int>? value,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (descriptorUuid != null) {
-      _result.descriptorUuid = descriptorUuid;
+      $result.descriptorUuid = descriptorUuid;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (secondaryServiceUuid != null) {
-      _result.secondaryServiceUuid = secondaryServiceUuid;
+      $result.secondaryServiceUuid = secondaryServiceUuid;
     }
     if (characteristicUuid != null) {
-      _result.characteristicUuid = characteristicUuid;
+      $result.characteristicUuid = characteristicUuid;
     }
     if (value != null) {
-      _result.value = value;
+      $result.value = value;
     }
-    return _result;
+    return $result;
   }
+  WriteDescriptorRequest._() : super();
   factory WriteDescriptorRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory WriteDescriptorRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WriteDescriptorRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(2, _omitFieldNames ? '' : 'descriptorUuid')
+    ..aOS(3, _omitFieldNames ? '' : 'serviceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'secondaryServiceUuid')
+    ..aOS(5, _omitFieldNames ? '' : 'characteristicUuid')
+    ..a<$core.List<$core.int>>(6, _omitFieldNames ? '' : 'value', $pb.PbFieldType.OY)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1591,8 +1746,10 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  WriteDescriptorRequest copyWith(void Function(WriteDescriptorRequest) updates) => super.copyWith((message) => updates(message as WriteDescriptorRequest)) as WriteDescriptorRequest; // ignore: deprecated_member_use
+  WriteDescriptorRequest copyWith(void Function(WriteDescriptorRequest) updates) => super.copyWith((message) => updates(message as WriteDescriptorRequest)) as WriteDescriptorRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static WriteDescriptorRequest create() => WriteDescriptorRequest._();
   WriteDescriptorRequest createEmptyInstance() => create();
@@ -1657,28 +1814,29 @@ class WriteDescriptorRequest extends $pb.GeneratedMessage {
 }
 
 class WriteDescriptorResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WriteDescriptorResponse', createEmptyInstance: create)
-    ..aOM<WriteDescriptorRequest>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'request', subBuilder: WriteDescriptorRequest.create)
-    ..aOB(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'success')
-    ..hasRequiredFields = false
-  ;
-
-  WriteDescriptorResponse._() : super();
   factory WriteDescriptorResponse({
     WriteDescriptorRequest? request,
     $core.bool? success,
   }) {
-    final _result = create();
+    final $result = create();
     if (request != null) {
-      _result.request = request;
+      $result.request = request;
     }
     if (success != null) {
-      _result.success = success;
+      $result.success = success;
     }
-    return _result;
+    return $result;
   }
+  WriteDescriptorResponse._() : super();
   factory WriteDescriptorResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory WriteDescriptorResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'WriteDescriptorResponse', createEmptyInstance: create)
+    ..aOM<WriteDescriptorRequest>(1, _omitFieldNames ? '' : 'request', subBuilder: WriteDescriptorRequest.create)
+    ..aOB(2, _omitFieldNames ? '' : 'success')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1688,8 +1846,10 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  WriteDescriptorResponse copyWith(void Function(WriteDescriptorResponse) updates) => super.copyWith((message) => updates(message as WriteDescriptorResponse)) as WriteDescriptorResponse; // ignore: deprecated_member_use
+  WriteDescriptorResponse copyWith(void Function(WriteDescriptorResponse) updates) => super.copyWith((message) => updates(message as WriteDescriptorResponse)) as WriteDescriptorResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static WriteDescriptorResponse create() => WriteDescriptorResponse._();
   WriteDescriptorResponse createEmptyInstance() => create();
@@ -1720,16 +1880,6 @@ class WriteDescriptorResponse extends $pb.GeneratedMessage {
 }
 
 class SetNotificationRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SetNotificationRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'serviceUuid')
-    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'secondaryServiceUuid')
-    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristicUuid')
-    ..aOB(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'enable')
-    ..hasRequiredFields = false
-  ;
-
-  SetNotificationRequest._() : super();
   factory SetNotificationRequest({
     $core.String? remoteId,
     $core.String? serviceUuid,
@@ -1737,26 +1887,37 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
     $core.String? characteristicUuid,
     $core.bool? enable,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (serviceUuid != null) {
-      _result.serviceUuid = serviceUuid;
+      $result.serviceUuid = serviceUuid;
     }
     if (secondaryServiceUuid != null) {
-      _result.secondaryServiceUuid = secondaryServiceUuid;
+      $result.secondaryServiceUuid = secondaryServiceUuid;
     }
     if (characteristicUuid != null) {
-      _result.characteristicUuid = characteristicUuid;
+      $result.characteristicUuid = characteristicUuid;
     }
     if (enable != null) {
-      _result.enable = enable;
+      $result.enable = enable;
     }
-    return _result;
+    return $result;
   }
+  SetNotificationRequest._() : super();
   factory SetNotificationRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SetNotificationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetNotificationRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOS(2, _omitFieldNames ? '' : 'serviceUuid')
+    ..aOS(3, _omitFieldNames ? '' : 'secondaryServiceUuid')
+    ..aOS(4, _omitFieldNames ? '' : 'characteristicUuid')
+    ..aOB(5, _omitFieldNames ? '' : 'enable')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1766,8 +1927,10 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  SetNotificationRequest copyWith(void Function(SetNotificationRequest) updates) => super.copyWith((message) => updates(message as SetNotificationRequest)) as SetNotificationRequest; // ignore: deprecated_member_use
+  SetNotificationRequest copyWith(void Function(SetNotificationRequest) updates) => super.copyWith((message) => updates(message as SetNotificationRequest)) as SetNotificationRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static SetNotificationRequest create() => SetNotificationRequest._();
   SetNotificationRequest createEmptyInstance() => create();
@@ -1823,33 +1986,34 @@ class SetNotificationRequest extends $pb.GeneratedMessage {
 }
 
 class SetNotificationResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'SetNotificationResponse', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOM<BluetoothCharacteristic>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristic', subBuilder: BluetoothCharacteristic.create)
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'success')
-    ..hasRequiredFields = false
-  ;
-
-  SetNotificationResponse._() : super();
   factory SetNotificationResponse({
     $core.String? remoteId,
     BluetoothCharacteristic? characteristic,
     $core.bool? success,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (characteristic != null) {
-      _result.characteristic = characteristic;
+      $result.characteristic = characteristic;
     }
     if (success != null) {
-      _result.success = success;
+      $result.success = success;
     }
-    return _result;
+    return $result;
   }
+  SetNotificationResponse._() : super();
   factory SetNotificationResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory SetNotificationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'SetNotificationResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOM<BluetoothCharacteristic>(2, _omitFieldNames ? '' : 'characteristic', subBuilder: BluetoothCharacteristic.create)
+    ..aOB(3, _omitFieldNames ? '' : 'success')
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1859,8 +2023,10 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  SetNotificationResponse copyWith(void Function(SetNotificationResponse) updates) => super.copyWith((message) => updates(message as SetNotificationResponse)) as SetNotificationResponse; // ignore: deprecated_member_use
+  SetNotificationResponse copyWith(void Function(SetNotificationResponse) updates) => super.copyWith((message) => updates(message as SetNotificationResponse)) as SetNotificationResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static SetNotificationResponse create() => SetNotificationResponse._();
   SetNotificationResponse createEmptyInstance() => create();
@@ -1900,28 +2066,29 @@ class SetNotificationResponse extends $pb.GeneratedMessage {
 }
 
 class OnCharacteristicChanged extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'OnCharacteristicChanged', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..aOM<BluetoothCharacteristic>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'characteristic', subBuilder: BluetoothCharacteristic.create)
-    ..hasRequiredFields = false
-  ;
-
-  OnCharacteristicChanged._() : super();
   factory OnCharacteristicChanged({
     $core.String? remoteId,
     BluetoothCharacteristic? characteristic,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (characteristic != null) {
-      _result.characteristic = characteristic;
+      $result.characteristic = characteristic;
     }
-    return _result;
+    return $result;
   }
+  OnCharacteristicChanged._() : super();
   factory OnCharacteristicChanged.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory OnCharacteristicChanged.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'OnCharacteristicChanged', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..aOM<BluetoothCharacteristic>(2, _omitFieldNames ? '' : 'characteristic', subBuilder: BluetoothCharacteristic.create)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1931,8 +2098,10 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  OnCharacteristicChanged copyWith(void Function(OnCharacteristicChanged) updates) => super.copyWith((message) => updates(message as OnCharacteristicChanged)) as OnCharacteristicChanged; // ignore: deprecated_member_use
+  OnCharacteristicChanged copyWith(void Function(OnCharacteristicChanged) updates) => super.copyWith((message) => updates(message as OnCharacteristicChanged)) as OnCharacteristicChanged;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static OnCharacteristicChanged create() => OnCharacteristicChanged._();
   OnCharacteristicChanged createEmptyInstance() => create();
@@ -1963,33 +2132,34 @@ class OnCharacteristicChanged extends $pb.GeneratedMessage {
 }
 
 class DeviceStateResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeviceStateResponse', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..e<DeviceStateResponse_BluetoothDeviceState>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, valueOf: DeviceStateResponse_BluetoothDeviceState.valueOf, enumValues: DeviceStateResponse_BluetoothDeviceState.values)
-    ..a<$core.int>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.O3)
-    ..hasRequiredFields = false
-  ;
-
-  DeviceStateResponse._() : super();
   factory DeviceStateResponse({
     $core.String? remoteId,
     DeviceStateResponse_BluetoothDeviceState? state,
     $core.int? status,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (state != null) {
-      _result.state = state;
+      $result.state = state;
     }
     if (status != null) {
-      _result.status = status;
+      $result.status = status;
     }
-    return _result;
+    return $result;
   }
+  DeviceStateResponse._() : super();
   factory DeviceStateResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DeviceStateResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeviceStateResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..e<DeviceStateResponse_BluetoothDeviceState>(2, _omitFieldNames ? '' : 'state', $pb.PbFieldType.OE, defaultOrMaker: DeviceStateResponse_BluetoothDeviceState.DISCONNECTED, valueOf: DeviceStateResponse_BluetoothDeviceState.valueOf, enumValues: DeviceStateResponse_BluetoothDeviceState.values)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'status', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -1999,8 +2169,10 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  DeviceStateResponse copyWith(void Function(DeviceStateResponse) updates) => super.copyWith((message) => updates(message as DeviceStateResponse)) as DeviceStateResponse; // ignore: deprecated_member_use
+  DeviceStateResponse copyWith(void Function(DeviceStateResponse) updates) => super.copyWith((message) => updates(message as DeviceStateResponse)) as DeviceStateResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static DeviceStateResponse create() => DeviceStateResponse._();
   DeviceStateResponse createEmptyInstance() => create();
@@ -2038,23 +2210,24 @@ class DeviceStateResponse extends $pb.GeneratedMessage {
 }
 
 class ConnectedDevicesResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ConnectedDevicesResponse', createEmptyInstance: create)
-    ..pc<BluetoothDevice>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'devices', $pb.PbFieldType.PM, subBuilder: BluetoothDevice.create)
-    ..hasRequiredFields = false
-  ;
-
-  ConnectedDevicesResponse._() : super();
   factory ConnectedDevicesResponse({
     $core.Iterable<BluetoothDevice>? devices,
   }) {
-    final _result = create();
+    final $result = create();
     if (devices != null) {
-      _result.devices.addAll(devices);
+      $result.devices.addAll(devices);
     }
-    return _result;
+    return $result;
   }
+  ConnectedDevicesResponse._() : super();
   factory ConnectedDevicesResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ConnectedDevicesResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ConnectedDevicesResponse', createEmptyInstance: create)
+    ..pc<BluetoothDevice>(1, _omitFieldNames ? '' : 'devices', $pb.PbFieldType.PM, subBuilder: BluetoothDevice.create)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -2064,8 +2237,10 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  ConnectedDevicesResponse copyWith(void Function(ConnectedDevicesResponse) updates) => super.copyWith((message) => updates(message as ConnectedDevicesResponse)) as ConnectedDevicesResponse; // ignore: deprecated_member_use
+  ConnectedDevicesResponse copyWith(void Function(ConnectedDevicesResponse) updates) => super.copyWith((message) => updates(message as ConnectedDevicesResponse)) as ConnectedDevicesResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static ConnectedDevicesResponse create() => ConnectedDevicesResponse._();
   ConnectedDevicesResponse createEmptyInstance() => create();
@@ -2079,28 +2254,29 @@ class ConnectedDevicesResponse extends $pb.GeneratedMessage {
 }
 
 class MtuSizeRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MtuSizeRequest', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mtu', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
-
-  MtuSizeRequest._() : super();
   factory MtuSizeRequest({
     $core.String? remoteId,
     $core.int? mtu,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (mtu != null) {
-      _result.mtu = mtu;
+      $result.mtu = mtu;
     }
-    return _result;
+    return $result;
   }
+  MtuSizeRequest._() : super();
   factory MtuSizeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory MtuSizeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MtuSizeRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'mtu', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -2110,8 +2286,10 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  MtuSizeRequest copyWith(void Function(MtuSizeRequest) updates) => super.copyWith((message) => updates(message as MtuSizeRequest)) as MtuSizeRequest; // ignore: deprecated_member_use
+  MtuSizeRequest copyWith(void Function(MtuSizeRequest) updates) => super.copyWith((message) => updates(message as MtuSizeRequest)) as MtuSizeRequest;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static MtuSizeRequest create() => MtuSizeRequest._();
   MtuSizeRequest createEmptyInstance() => create();
@@ -2140,28 +2318,29 @@ class MtuSizeRequest extends $pb.GeneratedMessage {
 }
 
 class MtuSizeResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MtuSizeResponse', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mtu', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
-
-  MtuSizeResponse._() : super();
   factory MtuSizeResponse({
     $core.String? remoteId,
     $core.int? mtu,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (mtu != null) {
-      _result.mtu = mtu;
+      $result.mtu = mtu;
     }
-    return _result;
+    return $result;
   }
+  MtuSizeResponse._() : super();
   factory MtuSizeResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory MtuSizeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MtuSizeResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'mtu', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -2171,8 +2350,10 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  MtuSizeResponse copyWith(void Function(MtuSizeResponse) updates) => super.copyWith((message) => updates(message as MtuSizeResponse)) as MtuSizeResponse; // ignore: deprecated_member_use
+  MtuSizeResponse copyWith(void Function(MtuSizeResponse) updates) => super.copyWith((message) => updates(message as MtuSizeResponse)) as MtuSizeResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static MtuSizeResponse create() => MtuSizeResponse._();
   MtuSizeResponse createEmptyInstance() => create();
@@ -2201,28 +2382,29 @@ class MtuSizeResponse extends $pb.GeneratedMessage {
 }
 
 class RSSIResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'RSSIResponse', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'remoteId')
-    ..a<$core.int>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rssi', $pb.PbFieldType.O3)
-    ..hasRequiredFields = false
-  ;
-
-  RSSIResponse._() : super();
   factory RSSIResponse({
     $core.String? remoteId,
     $core.int? rssi,
   }) {
-    final _result = create();
+    final $result = create();
     if (remoteId != null) {
-      _result.remoteId = remoteId;
+      $result.remoteId = remoteId;
     }
     if (rssi != null) {
-      _result.rssi = rssi;
+      $result.rssi = rssi;
     }
-    return _result;
+    return $result;
   }
+  RSSIResponse._() : super();
   factory RSSIResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory RSSIResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RSSIResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'remoteId')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'rssi', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -2232,8 +2414,10 @@ class RSSIResponse extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  RSSIResponse copyWith(void Function(RSSIResponse) updates) => super.copyWith((message) => updates(message as RSSIResponse)) as RSSIResponse; // ignore: deprecated_member_use
+  RSSIResponse copyWith(void Function(RSSIResponse) updates) => super.copyWith((message) => updates(message as RSSIResponse)) as RSSIResponse;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static RSSIResponse create() => RSSIResponse._();
   RSSIResponse createEmptyInstance() => create();
@@ -2261,3 +2445,6 @@ class RSSIResponse extends $pb.GeneratedMessage {
   void clearRssi() => clearField(2);
 }
 
+
+const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

@@ -5,6 +5,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_blue_example/widgets.dart';
@@ -77,6 +78,7 @@ class FindDevicesScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              TextButton(onPressed: _advertise, child: const Text('Advertise')),
               StreamBuilder<List<BluetoothDevice>>(
                 stream: Stream.periodic(Duration(seconds: 2))
                     .asyncMap((_) => FlutterBlue.instance.connectedDevices),
@@ -149,6 +151,11 @@ class FindDevicesScreen extends StatelessWidget {
         },
       ),
     );
+  }
+  void _advertise() {
+    final guid = Guid('00001111-0000-1000-8000-00805F9B34FB');
+    final list = Uint8List.fromList([1, 2, 3]);
+    FlutterBlue.instance.startAdvertising(guid, 123, list);
   }
 }
 

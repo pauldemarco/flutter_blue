@@ -374,6 +374,89 @@ typedef struct ProtosScanSettings__storage_ {
 
 @end
 
+#pragma mark - ProtosAdvertisingSettings
+
+@implementation ProtosAdvertisingSettings
+
+@dynamic advertisingMode;
+@dynamic manufacturerId;
+@dynamic manufacturerData;
+@dynamic serviceUuid;
+
+typedef struct ProtosAdvertisingSettings__storage_ {
+  uint32_t _has_storage_[1];
+  int32_t advertisingMode;
+  int32_t manufacturerId;
+  NSData *manufacturerData;
+  NSString *serviceUuid;
+} ProtosAdvertisingSettings__storage_;
+
+// This method is threadsafe because it is initially called
+// in +initialize for each subclass.
++ (GPBDescriptor *)descriptor {
+  static GPBDescriptor *descriptor = nil;
+  if (!descriptor) {
+    static GPBMessageFieldDescription fields[] = {
+      {
+        .name = "advertisingMode",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProtosAdvertisingSettings_FieldNumber_AdvertisingMode,
+        .hasIndex = 0,
+        .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, advertisingMode),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "manufacturerId",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProtosAdvertisingSettings_FieldNumber_ManufacturerId,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, manufacturerId),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
+        .name = "manufacturerData",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProtosAdvertisingSettings_FieldNumber_ManufacturerData,
+        .hasIndex = 2,
+        .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, manufacturerData),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeBytes,
+      },
+      {
+        .name = "serviceUuid",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProtosAdvertisingSettings_FieldNumber_ServiceUuid,
+        .hasIndex = 3,
+        .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, serviceUuid),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeString,
+      },
+    };
+    GPBDescriptor *localDescriptor =
+        [GPBDescriptor allocDescriptorForClass:[ProtosAdvertisingSettings class]
+                                     rootClass:[ProtosFlutterblueRoot class]
+                                          file:ProtosFlutterblueRoot_FileDescriptor()
+                                        fields:fields
+                                    fieldCount:(uint32_t)(sizeof(fields) / sizeof(GPBMessageFieldDescription))
+                                   storageSize:sizeof(ProtosAdvertisingSettings__storage_)
+                                         flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
+#if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    static const char *extraTextFormatInfo =
+        "\002\002\016\000\003\020\000";
+    [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
+#endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
+    #if defined(DEBUG) && DEBUG
+      NSAssert(descriptor == nil, @"Startup recursed!");
+    #endif  // DEBUG
+    descriptor = localDescriptor;
+  }
+  return descriptor;
+}
+
+@end
+
 #pragma mark - ProtosScanResult
 
 @implementation ProtosScanResult

@@ -247,6 +247,27 @@ GPB_FINAL @interface ProtosScanSettings : GPBMessage
 
 @end
 
+#pragma mark - ProtosAdvertisingSettings
+
+typedef GPB_ENUM(ProtosAdvertisingSettings_FieldNumber) {
+  ProtosAdvertisingSettings_FieldNumber_AdvertisingMode = 1,
+  ProtosAdvertisingSettings_FieldNumber_ManufacturerId = 2,
+  ProtosAdvertisingSettings_FieldNumber_ManufacturerData = 3,
+  ProtosAdvertisingSettings_FieldNumber_ServiceUuid = 4,
+};
+
+GPB_FINAL @interface ProtosAdvertisingSettings : GPBMessage
+
+@property(nonatomic, readwrite) int32_t advertisingMode;
+
+@property(nonatomic, readwrite) int32_t manufacturerId;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSData *manufacturerData;
+
+@property(nonatomic, readwrite, copy, null_resettable) NSString *serviceUuid;
+
+@end
+
 #pragma mark - ProtosScanResult
 
 typedef GPB_ENUM(ProtosScanResult_FieldNumber) {
