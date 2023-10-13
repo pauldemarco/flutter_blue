@@ -193,9 +193,16 @@ class FlutterBlue {
 //  }) =>
 //      throw UnimplementedError();
 
-  Future<void> startAdvertising(Guid uuid, int manufacturerId, Uint8List manufacturerData) async {
+  Future<void> startAdvertising(
+    AdvertisingMode advertisingMode,
+    AdvertisingTxPower advertisingTxPower,
+    Guid uuid,
+    int manufacturerId,
+    Uint8List manufacturerData,
+  ) async {
     final settings = protos.AdvertisingSettings.create()
-      ..advertisingMode = 0
+      ..advertisingMode = advertisingMode.value
+      ..advertisingTxPower = advertisingTxPower.value
       ..manufacturerId = manufacturerId
       ..manufacturerData = manufacturerData
       ..serviceUuid = uuid.toString();

@@ -251,14 +251,17 @@ GPB_FINAL @interface ProtosScanSettings : GPBMessage
 
 typedef GPB_ENUM(ProtosAdvertisingSettings_FieldNumber) {
   ProtosAdvertisingSettings_FieldNumber_AdvertisingMode = 1,
-  ProtosAdvertisingSettings_FieldNumber_ManufacturerId = 2,
-  ProtosAdvertisingSettings_FieldNumber_ManufacturerData = 3,
-  ProtosAdvertisingSettings_FieldNumber_ServiceUuid = 4,
+  ProtosAdvertisingSettings_FieldNumber_AdvertisingTxPower = 2,
+  ProtosAdvertisingSettings_FieldNumber_ManufacturerId = 3,
+  ProtosAdvertisingSettings_FieldNumber_ManufacturerData = 4,
+  ProtosAdvertisingSettings_FieldNumber_ServiceUuid = 5,
 };
 
 GPB_FINAL @interface ProtosAdvertisingSettings : GPBMessage
 
 @property(nonatomic, readwrite) int32_t advertisingMode;
+
+@property(nonatomic, readwrite) int32_t advertisingTxPower;
 
 @property(nonatomic, readwrite) int32_t manufacturerId;
 

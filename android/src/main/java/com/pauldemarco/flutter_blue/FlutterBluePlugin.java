@@ -285,10 +285,10 @@ public class FlutterBluePlugin implements FlutterPlugin, ActivityAware, MethodCa
                     return;
                 }
                 AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                        .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
+                        .setAdvertiseMode(advSettings.getAdvertisingMode())
                         .setConnectable(false)
                         .setTimeout(0)
-                        .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                        .setTxPowerLevel(advSettings.getAdvertisingTxPower())
                         .build();
                 UUID service = UUID.fromString(advSettings.getServiceUuid());
 

@@ -46,9 +46,10 @@ message ScanSettings {
 
 message AdvertisingSettings {
   int32 advertising_mode = 1;
-  int32 manufacturerId = 2;
-  bytes manufacturerData = 3;
-  string service_uuid = 4;
+  int32 advertising_tx_power = 2;
+  int32 manufacturerId = 3;
+  bytes manufacturerData = 4;
+  string service_uuid = 5;
 }
 
 

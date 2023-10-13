@@ -300,6 +300,7 @@ class ScanSettings extends $pb.GeneratedMessage {
 class AdvertisingSettings extends $pb.GeneratedMessage {
   factory AdvertisingSettings({
     $core.int? advertisingMode,
+    $core.int? advertisingTxPower,
     $core.int? manufacturerId,
     $core.List<$core.int>? manufacturerData,
     $core.String? serviceUuid,
@@ -307,6 +308,9 @@ class AdvertisingSettings extends $pb.GeneratedMessage {
     final $result = create();
     if (advertisingMode != null) {
       $result.advertisingMode = advertisingMode;
+    }
+    if (advertisingTxPower != null) {
+      $result.advertisingTxPower = advertisingTxPower;
     }
     if (manufacturerId != null) {
       $result.manufacturerId = manufacturerId;
@@ -325,9 +329,10 @@ class AdvertisingSettings extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AdvertisingSettings', createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'advertisingMode', $pb.PbFieldType.O3)
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'manufacturerId', $pb.PbFieldType.O3, protoName: 'manufacturerId')
-    ..a<$core.List<$core.int>>(3, _omitFieldNames ? '' : 'manufacturerData', $pb.PbFieldType.OY, protoName: 'manufacturerData')
-    ..aOS(4, _omitFieldNames ? '' : 'serviceUuid')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'advertisingTxPower', $pb.PbFieldType.O3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'manufacturerId', $pb.PbFieldType.O3, protoName: 'manufacturerId')
+    ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'manufacturerData', $pb.PbFieldType.OY, protoName: 'manufacturerData')
+    ..aOS(5, _omitFieldNames ? '' : 'serviceUuid')
     ..hasRequiredFields = false
   ;
 
@@ -362,31 +367,40 @@ class AdvertisingSettings extends $pb.GeneratedMessage {
   void clearAdvertisingMode() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.int get manufacturerId => $_getIZ(1);
+  $core.int get advertisingTxPower => $_getIZ(1);
   @$pb.TagNumber(2)
-  set manufacturerId($core.int v) { $_setSignedInt32(1, v); }
+  set advertisingTxPower($core.int v) { $_setSignedInt32(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasManufacturerId() => $_has(1);
+  $core.bool hasAdvertisingTxPower() => $_has(1);
   @$pb.TagNumber(2)
-  void clearManufacturerId() => clearField(2);
+  void clearAdvertisingTxPower() => clearField(2);
 
   @$pb.TagNumber(3)
-  $core.List<$core.int> get manufacturerData => $_getN(2);
+  $core.int get manufacturerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set manufacturerData($core.List<$core.int> v) { $_setBytes(2, v); }
+  set manufacturerId($core.int v) { $_setSignedInt32(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasManufacturerData() => $_has(2);
+  $core.bool hasManufacturerId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearManufacturerData() => clearField(3);
+  void clearManufacturerId() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get serviceUuid => $_getSZ(3);
+  $core.List<$core.int> get manufacturerData => $_getN(3);
   @$pb.TagNumber(4)
-  set serviceUuid($core.String v) { $_setString(3, v); }
+  set manufacturerData($core.List<$core.int> v) { $_setBytes(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasServiceUuid() => $_has(3);
+  $core.bool hasManufacturerData() => $_has(3);
   @$pb.TagNumber(4)
-  void clearServiceUuid() => clearField(4);
+  void clearManufacturerData() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get serviceUuid => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set serviceUuid($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasServiceUuid() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearServiceUuid() => clearField(5);
 }
 
 class ScanResult extends $pb.GeneratedMessage {

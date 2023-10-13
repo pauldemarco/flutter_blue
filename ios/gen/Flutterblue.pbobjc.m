@@ -379,6 +379,7 @@ typedef struct ProtosScanSettings__storage_ {
 @implementation ProtosAdvertisingSettings
 
 @dynamic advertisingMode;
+@dynamic advertisingTxPower;
 @dynamic manufacturerId;
 @dynamic manufacturerData;
 @dynamic serviceUuid;
@@ -386,6 +387,7 @@ typedef struct ProtosScanSettings__storage_ {
 typedef struct ProtosAdvertisingSettings__storage_ {
   uint32_t _has_storage_[1];
   int32_t advertisingMode;
+  int32_t advertisingTxPower;
   int32_t manufacturerId;
   NSData *manufacturerData;
   NSString *serviceUuid;
@@ -407,10 +409,19 @@ typedef struct ProtosAdvertisingSettings__storage_ {
         .dataType = GPBDataTypeInt32,
       },
       {
+        .name = "advertisingTxPower",
+        .dataTypeSpecific.clazz = Nil,
+        .number = ProtosAdvertisingSettings_FieldNumber_AdvertisingTxPower,
+        .hasIndex = 1,
+        .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, advertisingTxPower),
+        .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
+        .dataType = GPBDataTypeInt32,
+      },
+      {
         .name = "manufacturerId",
         .dataTypeSpecific.clazz = Nil,
         .number = ProtosAdvertisingSettings_FieldNumber_ManufacturerId,
-        .hasIndex = 1,
+        .hasIndex = 2,
         .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, manufacturerId),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeInt32,
@@ -419,7 +430,7 @@ typedef struct ProtosAdvertisingSettings__storage_ {
         .name = "manufacturerData",
         .dataTypeSpecific.clazz = Nil,
         .number = ProtosAdvertisingSettings_FieldNumber_ManufacturerData,
-        .hasIndex = 2,
+        .hasIndex = 3,
         .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, manufacturerData),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldTextFormatNameCustom | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeBytes,
@@ -428,7 +439,7 @@ typedef struct ProtosAdvertisingSettings__storage_ {
         .name = "serviceUuid",
         .dataTypeSpecific.clazz = Nil,
         .number = ProtosAdvertisingSettings_FieldNumber_ServiceUuid,
-        .hasIndex = 3,
+        .hasIndex = 4,
         .offset = (uint32_t)offsetof(ProtosAdvertisingSettings__storage_, serviceUuid),
         .flags = (GPBFieldFlags)(GPBFieldOptional | GPBFieldClearHasIvarOnZero),
         .dataType = GPBDataTypeString,
@@ -444,7 +455,7 @@ typedef struct ProtosAdvertisingSettings__storage_ {
                                          flags:(GPBDescriptorInitializationFlags)(GPBDescriptorInitializationFlag_UsesClassRefs | GPBDescriptorInitializationFlag_Proto3OptionalKnown)];
 #if !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     static const char *extraTextFormatInfo =
-        "\002\002\016\000\003\020\000";
+        "\002\003\016\000\004\020\000";
     [localDescriptor setupExtraTextInfo:extraTextFormatInfo];
 #endif  // !GPBOBJC_SKIP_MESSAGE_TEXTFORMAT_EXTRAS
     #if defined(DEBUG) && DEBUG

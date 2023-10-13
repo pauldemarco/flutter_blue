@@ -122,18 +122,20 @@ const AdvertisingSettings$json = {
   '1': 'AdvertisingSettings',
   '2': [
     {'1': 'advertising_mode', '3': 1, '4': 1, '5': 5, '10': 'advertisingMode'},
-    {'1': 'manufacturerId', '3': 2, '4': 1, '5': 5, '10': 'manufacturerId'},
-    {'1': 'manufacturerData', '3': 3, '4': 1, '5': 12, '10': 'manufacturerData'},
-    {'1': 'service_uuid', '3': 4, '4': 1, '5': 9, '10': 'serviceUuid'},
+    {'1': 'advertising_tx_power', '3': 2, '4': 1, '5': 5, '10': 'advertisingTxPower'},
+    {'1': 'manufacturerId', '3': 3, '4': 1, '5': 5, '10': 'manufacturerId'},
+    {'1': 'manufacturerData', '3': 4, '4': 1, '5': 12, '10': 'manufacturerData'},
+    {'1': 'service_uuid', '3': 5, '4': 1, '5': 9, '10': 'serviceUuid'},
   ],
 };
 
 /// Descriptor for `AdvertisingSettings`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List advertisingSettingsDescriptor = $convert.base64Decode(
     'ChNBZHZlcnRpc2luZ1NldHRpbmdzEikKEGFkdmVydGlzaW5nX21vZGUYASABKAVSD2FkdmVydG'
-    'lzaW5nTW9kZRImCg5tYW51ZmFjdHVyZXJJZBgCIAEoBVIObWFudWZhY3R1cmVySWQSKgoQbWFu'
-    'dWZhY3R1cmVyRGF0YRgDIAEoDFIQbWFudWZhY3R1cmVyRGF0YRIhCgxzZXJ2aWNlX3V1aWQYBC'
-    'ABKAlSC3NlcnZpY2VVdWlk');
+    'lzaW5nTW9kZRIwChRhZHZlcnRpc2luZ190eF9wb3dlchgCIAEoBVISYWR2ZXJ0aXNpbmdUeFBv'
+    'd2VyEiYKDm1hbnVmYWN0dXJlcklkGAMgASgFUg5tYW51ZmFjdHVyZXJJZBIqChBtYW51ZmFjdH'
+    'VyZXJEYXRhGAQgASgMUhBtYW51ZmFjdHVyZXJEYXRhEiEKDHNlcnZpY2VfdXVpZBgFIAEoCVIL'
+    'c2VydmljZVV1aWQ=');
 
 @$core.Deprecated('Use scanResultDescriptor instead')
 const ScanResult$json = {

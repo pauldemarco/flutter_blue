@@ -78,7 +78,7 @@ class FindDevicesScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              TextButton(onPressed: _advertise, child: const Text('Advertise')),
+              AdvertiseWidget(),
               StreamBuilder<List<BluetoothDevice>>(
                 stream: Stream.periodic(Duration(seconds: 2))
                     .asyncMap((_) => FlutterBlue.instance.connectedDevices),
@@ -152,10 +152,40 @@ class FindDevicesScreen extends StatelessWidget {
       ),
     );
   }
-  void _advertise() {
-    final guid = Guid('00001111-0000-1000-8000-00805F9B34FB');
-    final list = Uint8List.fromList([1, 2, 3]);
-    FlutterBlue.instance.startAdvertising(guid, 123, list);
+}
+
+class AdvertiseWidget extends StatefulWidget {
+  @override
+  State<AdvertiseWidget> createState() => _AdvertiseWidgetState();
+}
+
+class _AdvertiseWidgetState extends State<AdvertiseWidget> {
+  var _isAdvertising = false;
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: _advertiseHandle,
+      child: Text(_isAdvertising ? 'Stop advertising' : 'Start advertise'),
+    );
+  }
+
+  void _advertiseHandle() {
+    if (_isAdvertising) {
+      FlutterBlue.instance.stopAdvertising();
+      _isAdvertising = false;
+    } else {
+      final guid = Guid('00001111-0000-1000-8000-00805F9B34FB');
+      final list = Uint8List.fromList([1, 2, 3]);
+      FlutterBlue.instance.startAdvertising(
+        AdvertisingMode.lowLatency(),
+        AdvertisingTxPower.txPowerMedium(),
+        guid,
+        123,
+        list,
+      );
+      _isAdvertising = true;
+    }
+    setState(() {});
   }
 }
 

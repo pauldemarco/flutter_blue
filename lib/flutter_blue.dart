@@ -24,3 +24,5 @@ part 'src/bluetooth_service.dart';
 part 'src/constants.dart';
 part 'src/flutter_blue.dart';
 part 'src/guid.dart';
+part 'src/advertising_mode.dart';
+part 'src/advertising_tx_power.dart';
