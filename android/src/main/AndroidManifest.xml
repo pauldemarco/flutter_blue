@@ -1,6 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.pauldemarco.flutter_blue">
-  <uses-permission android:name="android.permission.BLUETOOTH" />
-  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.pauldemarco.flutter_blue">
+
+  <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" tools:node="replace"/>
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" tools:node="replace"/>
+  <!-- 查找蓝牙设备 -->
+  <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
+  <!-- 当前设备可被其他蓝牙检测到 -->
+  <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE"/>
+  <!-- 与已配对的蓝牙设备通讯 -->
+  <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 </manifest>
